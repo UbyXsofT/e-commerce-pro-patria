@@ -1,0 +1,92 @@
+{
+    "projectTema": "Default",
+    "colors": {
+        "Default": {
+            "white": "#FFFFFF",
+            "black": "#000000",
+            "primary": "#f0cc19",
+            "secondary": "#d0ac17",
+            "info": "#ded413",
+            "accent1": "#3d4246",
+            "accent2": "#62646b",
+            "accent3": "#a2a1a1",
+            "success": "#4ebd05",
+            "warning": "#ffc866",
+            "danger": "#fd025e",
+            "light": {
+                "body": "#e2e2df",
+                "header": "#ff5701",
+                "text1": "#2e3532",
+                "text2": "#636B68",
+                "text3": "#A1A8A6"
+            },
+            "dark": {
+                "body": "#111b16",
+                "header": "#ff5701",
+                "text1": "#E5E5E5",
+                "text2": "#B5B5B5",
+                "text3": "#959595"
+            }
+        }
+    },
+    "typography": {
+        "fontFamily": "Roboto",
+        "fontSize": "16px",
+        "lineHeight": 1.5,
+        "letterSpacing": "0.1px",
+        "fontWeight": {
+            "regular": 400,
+            "bold": 700
+        },
+        "heading": {
+            "h1": {
+                "fontSize": "2.5rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.2,
+                "letterSpacing": "0.1px"
+            },
+            "h2": {
+                "fontSize": "2rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.3,
+                "letterSpacing": "0.1px"
+            },
+            "h3": {
+                "fontSize": "1.75rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.4,
+                "letterSpacing": "0.1px"
+            },
+            "h4": {
+                "fontSize": "1.5rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.5,
+                "letterSpacing": "0.1px"
+            },
+            "h5": {
+                "fontSize": "1.25rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.6,
+                "letterSpacing": "0.1px"
+            },
+            "h6": {
+                "fontSize": "1rem",
+                "fontWeight": "bold",
+                "lineHeight": 1.7,
+                "letterSpacing": "0.1px"
+            }
+        },
+        "paragraph": {
+            "fontSize": "1rem",
+            "fontWeight": "regular",
+            "lineHeight": 1.5,
+            "letterSpacing": "0.1px"
+        },
+        "link": {
+            "fontSize": "1rem",
+            "fontWeight": "regular",
+            "lineHeight": 1.5,
+            "letterSpacing": "0.1px"
+        }
+    }
+}
