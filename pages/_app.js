@@ -1,41 +1,37 @@
-import {useEffect, useState} from "react";
-import {ThemeProvider} from "styled-components";
-import {lightTheme, darkTheme, GlobalStyles} from "../styles/ThemeManager";
-import Header from "../components/Header";
-import ThemeContext from "../contexts/ThemeContext"; // Aggiorna il percorso corretto al file ThemeContext.js
-import DemoTypes from "@/components/DemoTypes";
-import CountrySelect from "../components/CountrySelect";
-function App() {
-	const [userTheme, setUserTheme] = useState(lightTheme);
+import * as React from "react";
+import PropTypes from "prop-types";
+import Head from "next/head";
+import {ThemeProvider} from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import {CacheProvider} from "@emotion/react";
+import theme from "../src/theme";
+import createEmotionCache from "../src/createEmotionCache";
 
-	useEffect(() => {
-		const storedTheme = localStorage.getItem("theme");
-		if (storedTheme) {
-			setUserTheme(storedTheme === "dark" ? darkTheme : lightTheme);
-		} else {
-			const prefersDarkMode =
-				window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-			setUserTheme(prefersDarkMode ? darkTheme : lightTheme);
-		}
-	}, []);
+// Cache lato client, condivisa per l'intera sessione dell'utente nel browser.
+const clientSideEmotionCache = createEmotionCache();
 
-	const toggleTheme = () => {
-		const newTheme = userTheme === lightTheme ? darkTheme : lightTheme;
-		setUserTheme(newTheme);
-		localStorage.setItem("theme", newTheme === darkTheme ? "dark" : "light");
-	};
+export default function MyApp(props) {
+	const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
 
 	return (
-		<ThemeProvider theme={userTheme}>
-			<GlobalStyles />
-			<ThemeContext.Provider value={{theme: userTheme, toggleTheme}}>
-				<Header />
-				<DemoTypes />
-				<CountrySelect />
-			</ThemeContext.Provider>
-			{/* Resto del tuo codice */}
-		</ThemeProvider>
+		<CacheProvider value={emotionCache}>
+			<Head>
+				<meta
+					name='viewport'
+					content='initial-scale=1, width=device-width'
+				/>
+			</Head>
+			<ThemeProvider theme={theme}>
+				{/* CssBaseline dà il via a una linea di base elegante, coerente e semplice su cui basarsi. */}
+				<CssBaseline />
+				<Component {...pageProps} />
+			</ThemeProvider>
+		</CacheProvider>
 	);
 }
 
-export default App;
+MyApp.propTypes = {
+	Component: PropTypes.elementType.isRequired,
+	emotionCache: PropTypes.object,
+	pageProps: PropTypes.object.isRequired,
+};

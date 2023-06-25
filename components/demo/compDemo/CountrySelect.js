@@ -5,20 +5,70 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 import styled from "styled-components";
 
-const StyledBox = styled.div`
-	color: ${(props) => props.theme.text};
+const StyledAutocomplete = styled(Autocomplete).attrs((props) => props)`
+	width: 300px;
+
+	& .MuiInputBase-root {
+		color: ${(props) => props.theme.text};
+	}
+
+	/* Personalizzazione del bordo */
+	& .MuiInputBase-input {
+		border-color: ${(props) => props.theme.text};
+	}
+
+	& .MuiOutlinedInput-root {
+		&.Mui-focused .MuiOutlinedInput-notchedOutline {
+			border-color: ${(props) => props.theme.text};
+		}
+
+		&:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
+			border-color: ${(props) => props.theme.text1}; // Personalizzazione del bordo non in focus
+		}
+	}
+
+	/* Personalizzazione del label etichetta */
+	& .MuiInputLabel-root.Mui-focused {
+		color: ${(props) => props.theme.text};
+	}
+
+	& .MuiInputLabel-root {
+		color: ${(props) => props.theme.text};
+	}
+
+	/* Personalizzazione del bottone */
+	& .MuiIconButton-root {
+		color: ${(props) => props.theme.text} !important;
+	}
+
+	/* Personalizzazione del popper */
+	& .MuiAutocomplete-popper {
+		// personalizza gli stili del popper qui
+	}
+
+	/* Personalizzazione delle opzioni */
+	& .MuiAutocomplete-option {
+		// personalizza gli stili delle opzioni qui
+	}
+
+	/* Personalizzazione delle etichette delle opzioni */
+	& .MuiAutocomplete-option.Mui-selected {
+		// personalizza gli stili delle etichette delle opzioni selezionate qui
+	}
 `;
 
-export default function CountrySelect() {
+export default function CountrySelect(props) {
+	console.log("props: ", props);
+
 	return (
-		<Autocomplete
+		<StyledAutocomplete
 			id='country-select-demo'
-			sx={{width: 300}}
+			{...props} // Passa tutte le props a StyledAutocomplete
 			options={countries}
 			autoHighlight
 			getOptionLabel={(option) => option.label}
 			renderOption={(props, option) => (
-				<StyledBox
+				<Box
 					component='li'
 					sx={{"& > img": {mr: 2, flexShrink: 0}}}
 					{...props}
@@ -31,7 +81,7 @@ export default function CountrySelect() {
 						alt=''
 					/>
 					{option.label} ({option.code}) +{option.phone}
-				</StyledBox>
+				</Box>
 			)}
 			renderInput={(params) => (
 				<TextField

@@ -9,6 +9,12 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({theme}) => theme.text};
     font-family: ${typography.fontFamily};
     transition: all 0.50s ease-in-out;
+	width: 100%;
+		height: 100%;
+  }
+  html {
+		width: 100%;
+		height: 100%;
   }
 `;
 
