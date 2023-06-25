@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
 import {CacheProvider} from "@emotion/react";
-import {theme, darkTheme} from "../src/theme";
+import {lightTheme, darkTheme} from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
-import {ThemeProvider as CustomThemeProvider} from "../src/ThemeContext"; // Importa il CustomThemeProvider
+import {ThemeProvider as CustomThemeProvider} from "../src/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
 
 const clientSideEmotionCache = createEmotionCache();
@@ -32,9 +32,9 @@ export default function MyApp(props) {
 
 	const appTheme = React.useMemo(() => {
 		return {
-			...(themeMode === "dark" ? darkTheme : theme),
+			...(themeMode === "dark" ? darkTheme : lightTheme),
 			palette: {
-				...(themeMode === "dark" ? darkTheme : theme).palette,
+				...(themeMode === "dark" ? darkTheme : lightTheme).palette,
 				mode: themeMode,
 			},
 		};
@@ -50,7 +50,6 @@ export default function MyApp(props) {
 					/>
 				</Head>
 				<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
-					{/* Utilizza il CustomThemeProvider invece del ThemeProvider di MUI */}
 					<CssBaseline />
 					<Component {...pageProps} />
 				</CustomThemeProvider>

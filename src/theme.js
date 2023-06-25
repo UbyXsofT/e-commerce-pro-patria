@@ -9,8 +9,12 @@ export const roboto = Roboto({
 	fallback: ["Helvetica", "Arial", "sans-serif"],
 });
 
+const transitionStyle = {
+	transition: "all 0.50s ease-in-out",
+};
+
 // Create a theme instance.
-const theme = createTheme({
+const lightTheme = createTheme({
 	palette: {
 		mode: "light", // Imposta la modalità predefinita su "light"
 		primary: {
@@ -25,6 +29,17 @@ const theme = createTheme({
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
+	},
+	components: {
+		MuiCssBaseline: {
+			styleOverrides: `
+        body {
+          ${Object.entries(transitionStyle)
+						.map(([prop, value]) => `${prop}: ${value};`)
+						.join(" ")}
+        }
+      `,
+		},
 	},
 });
 
@@ -45,6 +60,17 @@ const darkTheme = createTheme({
 	typography: {
 		fontFamily: roboto.style.fontFamily,
 	},
+	components: {
+		MuiCssBaseline: {
+			styleOverrides: `
+        body {
+          ${Object.entries(transitionStyle)
+						.map(([prop, value]) => `${prop}: ${value};`)
+						.join(" ")}
+        }
+      `,
+		},
+	},
 });
 
-export {theme, darkTheme};
+export {lightTheme, darkTheme};

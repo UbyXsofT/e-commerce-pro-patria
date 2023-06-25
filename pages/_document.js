@@ -4,9 +4,9 @@ import Document, {Html, Head, Main, NextScript} from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import {roboto} from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
-import {ThemeContext} from "../src/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
-import {theme} from "../src/theme";
+import {lightTheme} from "../src/theme";
+
 export default function MyDocument(props) {
 	const {emotionStyleTags} = props;
 
@@ -19,7 +19,7 @@ export default function MyDocument(props) {
 				{/* PWA primary color */}
 				<meta
 					name='theme-color'
-					content={theme.palette.primary.main}
+					content={lightTheme.palette.primary.main}
 				/>
 				<link
 					rel='shortcut icon'
@@ -32,8 +32,7 @@ export default function MyDocument(props) {
 				{emotionStyleTags}
 			</Head>
 			<body>
-				<ThemeProvider theme={theme}>
-					{" "}
+				<ThemeProvider theme={lightTheme}>
 					{/* Avvolgi il contenuto con il ThemeProvider */}
 					<Main />
 					<NextScript />
@@ -44,11 +43,11 @@ export default function MyDocument(props) {
 }
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with static-site generation (SSG).
+// è compatibile con la generazione di siti statici (SSG).
 MyDocument.getInitialProps = async (ctx) => {
-	// Resolution order
+	// Ordine di risoluzione
 	//
-	// On the server:
+	// Sul server:
 	// 1. app.getInitialProps
 	// 2. page.getInitialProps
 	// 3. document.getInitialProps
@@ -56,13 +55,13 @@ MyDocument.getInitialProps = async (ctx) => {
 	// 5. page.render
 	// 6. document.render
 	//
-	// On the server with error:
+	// Sul server con errore:
 	// 1. document.getInitialProps
 	// 2. app.render
 	// 3. page.render
 	// 4. document.render
 	//
-	// On the client
+	// Sul cliente
 	// 1. app.getInitialProps
 	// 2. page.getInitialProps
 	// 3. app.render
@@ -70,8 +69,8 @@ MyDocument.getInitialProps = async (ctx) => {
 
 	const originalRenderPage = ctx.renderPage;
 
-	// You can consider sharing the same Emotion cache between all the SSR requests to speed up performance.
-	// However, be aware that it can have global side effects.
+	// Puoi prendere in considerazione la condivisione della stessa cache Emotion tra tutte le richieste SSR per accelerare le prestazioni.
+	// Tuttavia, tieni presente che può avere effetti collaterali globali.
 	const cache = createEmotionCache();
 	const {extractCriticalToChunks} = createEmotionServer(cache);
 
@@ -89,7 +88,7 @@ MyDocument.getInitialProps = async (ctx) => {
 		});
 
 	const initialProps = await Document.getInitialProps(ctx);
-	// This is important. It prevents Emotion to render invalid HTML.
+	// Questo è importante. Impedisce a Emotion di rendere HTML non valido.
 	// See https://github.com/mui/material-ui/issues/26561#issuecomment-855286153
 	const emotionStyles = extractCriticalToChunks(initialProps.html);
 	const emotionStyleTags = emotionStyles.styles.map((style) => (
