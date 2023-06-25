@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ProTip from "../src/ProTip";
 import Link from "../src/Link";
-import Copyright from "../src/Copyright";
+import StickyFooter from "../src/StickyFooter";
 
 export default function Index() {
 	return (
@@ -15,7 +15,7 @@ export default function Index() {
 					component='h1'
 					gutterBottom
 				>
-					Material UI - Next.js example prova
+					Material UI - Next.js Ecommerce
 				</Typography>
 				<Link
 					href='/about'
@@ -24,8 +24,8 @@ export default function Index() {
 					Go to the about page
 				</Link>
 				<ProTip />
-				<Copyright />
 			</Box>
+			<StickyFooter />
 		</Container>
 	);
 }
