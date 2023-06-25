@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import ProTip from "../src/ProTip";
 import Link from "../src/Link";
 import StickyFooter from "../src/StickyFooter";
-
+import TemaSwitch from "../src/TemaSwitch";
 export default function Index() {
 	return (
 		<Container maxWidth='sm'>
@@ -25,6 +25,7 @@ export default function Index() {
 				</Link>
 				<ProTip />
 			</Box>
+			<TemaSwitch />
 			<StickyFooter />
 		</Container>
 	);

@@ -1,6 +1,8 @@
-import styled from "styled-components";
-import Switch from "@mui/material/Switch";
-const MaterialUISwitch = styled(Switch)(({theme}) => ({
+import * as React from "react";
+import {styled} from "@mui/system";
+import {Switch} from "@mui/material";
+
+const ModSwitch = styled(Switch)(({theme}) => ({
 	width: 62,
 	height: 34,
 	padding: 7,
@@ -18,12 +20,12 @@ const MaterialUISwitch = styled(Switch)(({theme}) => ({
 			},
 			"& + .MuiSwitch-track": {
 				opacity: 1,
-				backgroundColor: theme.mode === "dark" ? "#8796A5" : "#aab4be",
+				backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
 			},
 		},
 	},
 	"& .MuiSwitch-thumb": {
-		backgroundColor: theme.mode === "dark" ? "#003892" : "#001e3c",
+		backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
 		width: 32,
 		height: 32,
 		"&:before": {
@@ -42,9 +44,9 @@ const MaterialUISwitch = styled(Switch)(({theme}) => ({
 	},
 	"& .MuiSwitch-track": {
 		opacity: 1,
-		backgroundColor: theme.mode === "dark" ? "#8796A5" : "#aab4be",
+		backgroundColor: theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
 		borderRadius: 20 / 2,
 	},
 }));
 
-export default MaterialUISwitch;
+export default ModSwitch;
