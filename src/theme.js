@@ -1,6 +1,7 @@
 import {Roboto} from "next/font/google";
 import {createTheme} from "@mui/material/styles";
-import {red} from "@mui/material/colors";
+import {ThemeManager} from "./ThemeManager";
+const {currTema} = ThemeManager();
 
 export const roboto = Roboto({
 	weight: ["300", "400", "500", "700"],
@@ -16,16 +17,7 @@ const transitionStyle = {
 // Create a theme instance.
 const lightTheme = createTheme({
 	palette: {
-		mode: "light", // Imposta la modalità predefinita su "light"
-		primary: {
-			main: "#556cd6",
-		},
-		secondary: {
-			main: "#19857b",
-		},
-		error: {
-			main: red.A400,
-		},
+		...currTema?.Light?.palette, // Unisci le opzioni del tema corrente
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
@@ -46,16 +38,7 @@ const lightTheme = createTheme({
 // Aggiungi un oggetto per la palette dei colori nel tema scuro
 const darkTheme = createTheme({
 	palette: {
-		mode: "dark", // Imposta la modalità su "dark"
-		primary: {
-			main: "#90caf9", // Colori personalizzati per il tema scuro
-		},
-		secondary: {
-			main: "#a5d6a7",
-		},
-		error: {
-			main: red.A400,
-		},
+		...currTema?.Dark?.palette, // Unisci le opzioni del tema corrente
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
@@ -63,12 +46,12 @@ const darkTheme = createTheme({
 	components: {
 		MuiCssBaseline: {
 			styleOverrides: `
-        body {
-          ${Object.entries(transitionStyle)
-						.map(([prop, value]) => `${prop}: ${value};`)
-						.join(" ")}
-        }
-      `,
+			body {
+			  ${Object.entries(transitionStyle)
+					.map(([prop, value]) => `${prop}: ${value};`)
+					.join(" ")}
+			}
+		  `,
 		},
 	},
 });

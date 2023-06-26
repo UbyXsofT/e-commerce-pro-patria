@@ -6,6 +6,7 @@ import ProTip from "../src/ProTip";
 import Link from "../src/Link";
 import StickyFooter from "../src/StickyFooter";
 import TemaSwitch from "../src/TemaSwitch";
+
 export default function Index() {
 	return (
 		<Container maxWidth='sm'>
@@ -15,7 +16,7 @@ export default function Index() {
 					component='h1'
 					gutterBottom
 				>
-					Material UI - Next.js Ecommerce
+					React - Next.js Tema & Config Manager
 				</Typography>
 				<Link
 					href='/about'

@@ -1,29 +1,9 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
-import ecommerceConfig from "../ecommerceConfig.json";
-function Copyright() {
-	return (
-		<Typography
-			variant='body2'
-			color='text.secondary'
-		>
-			{"Copyright © "}
-			<Link
-				color='inherit'
-				href={ecommerceConfig.LinkHomeCenter}
-			>
-				{ecommerceConfig.Copyright}
-			</Link>{" "}
-			{new Date().getFullYear()}
-			{"."}
-		</Typography>
-	);
-}
+import eCommerceConfig from "../eCommerceConfig.json";
+import Copyright from "./Copyright";
 
 function PartitaIva() {
 	return (
@@ -31,7 +11,7 @@ function PartitaIva() {
 			variant='body2'
 			color='text.secondary'
 		>
-			Partita IVA: {ecommerceConfig.PartitaIva}
+			Partita IVA: {eCommerceConfig.PartitaIva}
 		</Typography>
 	);
 }
