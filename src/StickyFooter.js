@@ -1,53 +1,48 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import eCommerceConfig from "../eCommerceConfig.json";
 import Copyright from "./Copyright";
-
-function PartitaIva() {
-	return (
-		<Typography
-			variant='body2'
-			color='text.secondary'
-		>
-			Partita IVA: {eCommerceConfig.PartitaIva}
-		</Typography>
-	);
-}
+import {PartitaIva} from "./PartitaIva";
+import Divider from "@mui/material/Divider";
+import {Typography} from "@mui/material";
+import ScrollToTopButton from "../src/ScrollToTopButton";
 
 export default function StickyFooter() {
+	//console.log("@@@@ theme : ", theme);
 	return (
 		<Box
 			sx={{
-				position: "fixed",
+				//position: "fixed",
+				position: "relative",
 				bottom: 0,
 				left: 0,
 				right: 0,
+				mt: "2rem",
 			}}
 		>
+			<Divider />
 			<Box
 				component='footer'
 				sx={{
 					py: 3,
 					px: 2,
-					mt: "auto",
-					backgroundColor: (theme) =>
-						theme.palette.mode === "light" ? theme.palette.grey[200] : theme.palette.grey[800],
+
+					//backgroundColor: (theme) => theme.palette.background.paper,
 				}}
 			>
 				<Container
 					maxWidth='sm'
 					style={{
 						display: "flex",
-						alignSelf: "center",
-						alignContent: "space-between",
-						justifyContent: "space-evenly",
 						flexDirection: "row",
+						placeContent: "space-between space-evenly",
+						justifyContent: "space-between",
+						alignItems: "center",
 					}}
 				>
 					<Copyright />
 					<PartitaIva />
+					<ScrollToTopButton />
 				</Container>
 			</Box>
 		</Box>

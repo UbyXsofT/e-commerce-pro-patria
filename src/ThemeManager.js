@@ -8,7 +8,7 @@ const listaTemi = [
 				palette: {
 					mode: "light",
 					primary: {
-						main: "#2d2d2d",
+						main: "#ffffff",
 					},
 					secondary: {
 						main: "#e2a300",
@@ -115,7 +115,7 @@ export function ThemeManager() {
 
 	const currTema = listaTemi.find((tema) => tema.key === projectTema);
 
-	console.log(currTema?.value);
+	//console.log(currTema?.value);
 
 	return {currTema: currTema?.value || null};
 }

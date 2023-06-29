@@ -1,4 +1,5 @@
-import * as React from "react";
+// Index.js
+import React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -7,9 +8,20 @@ import Link from "../src/Link";
 import StickyFooter from "../src/StickyFooter";
 import TemaSwitch from "../src/TemaSwitch";
 
-export default function Index() {
+//REDUX-STORE
+import {connect} from "react-redux";
+import {setLoading} from "../src/store/actions";
+
+const Index = ({setLoading}) => {
+	const handleClick = () => {
+		setLoading(true);
+		setTimeout(() => {
+			setLoading(false);
+		}, 5000);
+	};
+
 	return (
-		<Container maxWidth='sm'>
+		<Container maxWidth='xl'>
 			<Box sx={{my: 4}}>
 				<Typography
 					variant='h4'
@@ -25,9 +37,25 @@ export default function Index() {
 					Go to the about page
 				</Link>
 				<ProTip />
+				<Link
+					href='/home'
+					color='secondary'
+				>
+					Go to the Home page
+				</Link>
 			</Box>
+			<div>
+				<button onClick={handleClick}>Set isLoading to true</button>
+			</div>
 			<TemaSwitch />
 			<StickyFooter />
 		</Container>
 	);
-}
+};
+
+//REDUX-STORE
+const mapDispatchToProps = {
+	setLoading,
+};
+
+export default connect(null, mapDispatchToProps)(Index);

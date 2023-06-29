@@ -33,7 +33,6 @@ export default function MyDocument(props) {
 			</Head>
 			<body>
 				<ThemeProvider theme={lightTheme}>
-					{/* Avvolgi il contenuto con il ThemeProvider */}
 					<Main />
 					<NextScript />
 				</ThemeProvider>

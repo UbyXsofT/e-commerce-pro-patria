@@ -16,10 +16,14 @@
     "@mui/icons-material": "5.11.16",
     "@mui/material": "5.13.6",
     "@mui/system": "^5.13.6",
+    "@reduxjs/toolkit": "^1.9.5",
     "next": "13.4.7",
+    "next-redux-wrapper": "^7.0.5",
     "prop-types": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-redux": "^8.1.1",
+    "redux": "^4.2.1"
   },
   "devDependencies": {
     "eslint": "8.43.0",

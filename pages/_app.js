@@ -1,4 +1,5 @@
-import * as React from "react";
+// MyApp.js
+import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -7,21 +8,22 @@ import {lightTheme, darkTheme} from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import {ThemeProvider as CustomThemeProvider} from "../src/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
+import LoadingOverlay from "../src/LoadingOverlay";
+
+//REDUX ---
+import {wrapper} from "../src/store/store";
+import {useSelector} from "react-redux";
 
 const clientSideEmotionCache = createEmotionCache();
 
-export default function MyApp(props) {
+function MyApp(props) {
 	const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
 	const [themeMode, setThemeMode] = React.useState("light");
-
-	const toggleThemeMode = () => {
-		const newThemeMode = themeMode === "light" ? "dark" : "light";
-		setThemeMode(newThemeMode);
-	};
+	const isLoading = useSelector((state) => state.loading);
 
 	React.useEffect(() => {
-		localStorage.setItem("themeMode", themeMode);
-	}, [themeMode]);
+		console.log("isLoading ha cambiato stato: ", isLoading);
+	}, [isLoading]);
 
 	React.useEffect(() => {
 		const savedThemeMode = localStorage.getItem("themeMode");
@@ -29,6 +31,10 @@ export default function MyApp(props) {
 			setThemeMode(savedThemeMode);
 		}
 	}, []);
+	const toggleThemeMode = () => {
+		const newThemeMode = themeMode === "light" ? "dark" : "light";
+		setThemeMode(newThemeMode);
+	};
 
 	const appTheme = React.useMemo(() => {
 		return {
@@ -51,12 +57,16 @@ export default function MyApp(props) {
 				</Head>
 				<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
 					<CssBaseline />
+
+					{isLoading && <LoadingOverlay />}
 					<Component {...pageProps} />
 				</CustomThemeProvider>
 			</ThemeProvider>
 		</CacheProvider>
 	);
 }
+//const wrapper = createWrapper(store);
+export default wrapper.withRedux(MyApp);
 
 MyApp.propTypes = {
 	Component: PropTypes.elementType.isRequired,
