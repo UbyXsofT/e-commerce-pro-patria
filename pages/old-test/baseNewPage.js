@@ -4,7 +4,7 @@ import {useTheme} from "@mui/material/styles";
 import {Container} from "@mui/material";
 //REDUX-STORE
 import {connect} from "react-redux";
-import {setLoading} from "../src/store/actions";
+import {setLoading} from "../../src/store/actions";
 
 const AnotherPage = (setLoading) => {
 	//setLoading(true); rende visibile il loading

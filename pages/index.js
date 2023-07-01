@@ -44,7 +44,7 @@ const AnimatedDiv = () => {
 
 export default function Index() {
 	setTimeout(() => {
-		Router.push("/login");
+		Router.push("/account/login");
 	}, 5000);
 
 	return (

@@ -3,14 +3,14 @@ import React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import ProTip from "../src/components/ProTip";
-import Link from "../src/components/Link";
-import StickyFooter from "../src/components/footer/StickyFooter";
-import TemaSwitch from "../src/theme/TemaSwitch";
+import ProTip from "../../src/components/ProTip";
+import Link from "../../src/components/Link";
+import StickyFooter from "../../src/components/footer/StickyFooter";
+import TemaSwitch from "../../src/theme/TemaSwitch";
 
 //REDUX-STORE
 import {connect} from "react-redux";
-import {setLoading} from "../src/store/actions";
+import {setLoading} from "../../src/store/actions";
 
 const Index = ({setLoading}) => {
 	const handleClick = () => {

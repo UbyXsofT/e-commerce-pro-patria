@@ -19,12 +19,14 @@ import {ThemeProvider} from "@mui/material/styles";
 import {useTheme} from "@mui/material/styles";
 //REDUX-STORE
 import {connect} from "react-redux";
-import {setLoading} from "../src/store/actions";
+import {setLoading} from "/src/store/actions";
 //*-----*//
-import Layout from "../src/components/layout/LayoutLogin";
-import eCommerceConfig from "../eCommerceConfig.json";
+import Layout from "/src/components/layout/LayoutLogin";
+import eCommerceConfig from "/eCommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
+
+import CookieManager from "/src/components/coockie/CoockieManager";
 
 const StyledImageLogo = styled(Image)({
 	padding: "10px",
@@ -34,15 +36,16 @@ const StyledImageLogo = styled(Image)({
 const Login = (setLoading) => {
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
-	const [isRegister, setIsRegister] = useState(false);
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
 
-	const handleSwitchMode = () => {
-		setIsRegister(!isRegister);
-	};
+	const handleLogin = () => {
+		// Esegui la logica di autenticazione e ottieni il token di accesso
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		// Gestisci la logica di autenticazione o registrazione qui
+		// Salva il token di accesso come cookie
+		CookieManager.setCookie("token", "valore-del-token", {expires: 7});
+
+		// Esegui altre azioni dopo il login
 	};
 
 	return (

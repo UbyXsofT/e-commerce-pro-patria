@@ -4,14 +4,14 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
 import {CacheProvider} from "@emotion/react";
-import {lightTheme, darkTheme} from "../src/theme/theme";
-import createEmotionCache from "../src/components/createEmotionCache";
+import {lightTheme, darkTheme} from "/src/theme/theme";
+import createEmotionCache from "/src/components/utils/createEmotionCache";
 import {ThemeProvider as CustomThemeProvider} from "../src/theme/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
-import LoadingOverlay from "../src/components/LoadingOverlay";
+import LoadingOverlay from "/src/components/LoadingOverlay";
 
 //REDUX ---
-import {wrapper} from "../src/store/store";
+import {wrapper} from "/src/store/store";
 import {useSelector} from "react-redux";
 
 const clientSideEmotionCache = createEmotionCache();
