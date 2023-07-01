@@ -1,10 +1,10 @@
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import eCommerceConfig from "../eCommerceConfig.json";
+import eCommerceConfig from "../../../eCommerceConfig.json";
 export default function Copyright() {
 	return (
 		<Typography
-			variant='body2'
+			variant='caption'
 			color='text.secondary'
 		>
 			{"Copyright © "}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ThemeContext} from "../src/ThemeContext";
+import {ThemeContext} from "./ThemeContext";
 import ModSwitch from "./ModSwitch";
 const TemaSwitch = () => {
 	const {toggleThemeMode} = React.useContext(ThemeContext);

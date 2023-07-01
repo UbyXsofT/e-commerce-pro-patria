@@ -14,46 +14,49 @@ const transitionStyle = {
 	transition: "all 0.50s ease-in-out",
 };
 
-// Create a theme instance.
 const lightTheme = createTheme({
 	palette: {
-		...currTema?.Light?.palette, // Unisci le opzioni del tema corrente
+		...currTema?.Light?.palette,
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
 	},
 	components: {
 		MuiCssBaseline: {
-			styleOverrides: `
-        body {
-          ${Object.entries(transitionStyle)
-						.map(([prop, value]) => `${prop}: ${value};`)
-						.join(" ")}
-        }
-      `,
+			styleOverrides: {
+				body: {
+					...transitionStyle,
+				},
+			},
+		},
+		MuiAppBar: {
+			styleOverrides: {
+				...currTema?.Light?.components?.MuiAppBar?.styleOverrides, // Estendi gli overrides esistenti
+			},
 		},
 	},
 });
 
-// Aggiungi un oggetto per la palette dei colori nel tema scuro
 const darkTheme = createTheme({
 	palette: {
-		...currTema?.Dark?.palette, // Unisci le opzioni del tema corrente
+		...currTema?.Dark?.palette,
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
 	},
 	components: {
 		MuiCssBaseline: {
-			styleOverrides: `
-			body {
-			  ${Object.entries(transitionStyle)
-					.map(([prop, value]) => `${prop}: ${value};`)
-					.join(" ")}
-			}
-		  `,
+			styleOverrides: {
+				body: {
+					...transitionStyle,
+				},
+			},
+		},
+		MuiAppBar: {
+			styleOverrides: {
+				...currTema?.Dark?.components?.MuiAppBar?.styleOverrides, // Estendi gli overrides esistenti
+			},
 		},
 	},
 });
-
 export {lightTheme, darkTheme};

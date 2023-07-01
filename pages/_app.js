@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
 import {CacheProvider} from "@emotion/react";
-import {lightTheme, darkTheme} from "../src/theme";
-import createEmotionCache from "../src/createEmotionCache";
-import {ThemeProvider as CustomThemeProvider} from "../src/ThemeContext";
+import {lightTheme, darkTheme} from "../src/theme/theme";
+import createEmotionCache from "../src/components/createEmotionCache";
+import {ThemeProvider as CustomThemeProvider} from "../src/theme/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
-import LoadingOverlay from "../src/LoadingOverlay";
+import LoadingOverlay from "../src/components/LoadingOverlay";
 
 //REDUX ---
 import {wrapper} from "../src/store/store";
@@ -21,9 +21,9 @@ function MyApp(props) {
 	const [themeMode, setThemeMode] = React.useState("light");
 	const isLoading = useSelector((state) => state.loading);
 
-	React.useEffect(() => {
-		console.log("isLoading ha cambiato stato: ", isLoading);
-	}, [isLoading]);
+	// React.useEffect(() => {
+	// 	console.log("isLoading ha cambiato stato: ", isLoading);
+	// }, [isLoading]);
 
 	React.useEffect(() => {
 		const savedThemeMode = localStorage.getItem("themeMode");
@@ -49,6 +49,7 @@ function MyApp(props) {
 	return (
 		<CacheProvider value={emotionCache}>
 			<ThemeProvider theme={appTheme}>
+				{/* {console.log("appTheme: ", appTheme)} */}
 				<Head>
 					<meta
 						name='viewport'

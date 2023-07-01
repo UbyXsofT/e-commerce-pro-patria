@@ -26,7 +26,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Router from "next/router";
-import StickyFooter from "../src/StickyFooter";
+import StickyFooter from "../src/components/footer/StickyFooter";
 
 const drawerWidth = 240;
 

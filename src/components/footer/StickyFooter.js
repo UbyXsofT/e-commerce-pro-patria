@@ -5,7 +5,7 @@ import Copyright from "./Copyright";
 import {PartitaIva} from "./PartitaIva";
 import Divider from "@mui/material/Divider";
 import {Typography} from "@mui/material";
-import ScrollToTopButton from "../src/ScrollToTopButton";
+import ScrollToTopButton from "./ScrollToTopBtn";
 
 export default function StickyFooter() {
 	//console.log("@@@@ theme : ", theme);
@@ -31,7 +31,7 @@ export default function StickyFooter() {
 				}}
 			>
 				<Container
-					maxWidth='sm'
+					maxWidth='xl'
 					style={{
 						display: "flex",
 						flexDirection: "row",
