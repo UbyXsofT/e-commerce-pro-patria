@@ -26,7 +26,7 @@ import eCommerceConfig from "/eCommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 
-import CookieManager from "/src/components/coockie/CoockieManager";
+import CookieManager from "/src/components/cookie/CookieManager";
 
 const StyledImageLogo = styled(Image)({
 	padding: "10px",
