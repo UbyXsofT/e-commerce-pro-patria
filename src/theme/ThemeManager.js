@@ -16,14 +16,14 @@ const listaTemi = [
 					},
 					background: {
 						default: "#eeeeee",
-						paper: "#eeeeee",
+						paper: "#E6E6E6",
 					},
 				},
 				components: {
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#ff5701",
+								backgroundColor: "#5E5E5E",
 								color: "#fff",
 							},
 						},

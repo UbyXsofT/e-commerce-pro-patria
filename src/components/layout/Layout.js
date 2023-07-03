@@ -1,50 +1,53 @@
+// Layout.js
+import React from "react";
+import {
+	Box,
+	CssBaseline,
+	Divider,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Toolbar,
+} from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import {styled, useTheme} from "@mui/material/styles";
+import MuiDrawer from "@mui/material/Drawer";
+
+import Router from "next/router";
+import DriwerLeft from "./DrawerLeft";
 import Header from "./Header";
 import Footer from "./Footer";
-import Head from "next/head";
 
-const Layout = ({children, title, description, ogImage, url}) => {
-	// website Url
-	const pageUrl = "https://tommysgest.com/";
-	// when you share this page on facebook you'll see this image
-	const ogImg = "https://i.imgur.com/1H2TK2B.png";
+const Layout = ({children}) => {
 	return (
-		<>
-			<Head>
-				<title>{title ? title : "E-commerce per il tuo centro fitness in React Next MUI"}</title>
-				<meta
-					name='description'
-					key='description'
-					content={
-						description ? description : "E-commerce per il tuo centro fitness in React Next MUI"
-					}
-				/>
-				<meta
-					property='og:title'
-					content={title ? title : "E-commerce per il tuo centro fitness in React Next MUI"}
-					key='og:title'
-				/>
-				<meta
-					property='og:url'
-					content={url ? url : pageUrl}
-					key='og:url'
-				/>
-				<meta
-					property='og:image'
-					content={ogImage ? ogImage : ogImg}
-					key='og:image'
-				/>
-				<meta
-					property='og:description'
-					content={
-						description ? description : "E-commerce per il tuo centro fitness in React Next MUI."
-					}
-					key='og:description'
-				/>
-			</Head>
-			<Header />
-			<main>{children}</main>
-			<Footer />
-		</>
+		<Box sx={{display: "flex"}}>
+			<CssBaseline />
+			<Header
+			// open={open}
+			// handleDrawerOpen={handleDrawerOpen}
+			/>
+
+			{/* INSERIAMO DRAVER */}
+			<DriwerLeft />
+
+			<Box
+				component='main'
+				sx={{
+					flexGrow: 1,
+					p: 3,
+					transition: "margin-left 0.2s ease-in-out",
+					//marginLeft: open ? `${drawerWidth}px` : 0,
+				}}
+			>
+				<Toolbar />
+				{children}
+				<Footer />
+			</Box>
+		</Box>
 	);
 };
 

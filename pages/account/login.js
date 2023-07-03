@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {
 	Container,
 	Grid,
@@ -25,27 +25,34 @@ import Layout from "/src/components/layout/LayoutLogin";
 import eCommerceConfig from "/eCommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
-
 import CookieManager from "/src/components/cookie/CookieManager";
 
-const StyledImageLogo = styled(Image)({
-	padding: "10px",
-	maxWidth: 300,
-});
+//*-- API---*//
+import login from "../api/login";
+import Router from "next/router";
 
 const Login = (setLoading) => {
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
+	const [username, setUsername] = React.useState("Admin");
+	const [password, setPassword] = React.useState("Psw");
+	const [rememberMe, setRememberMe] = React.useState(true);
 
-	const handleLogin = () => {
-		// Esegui la logica di autenticazione e ottieni il token di accesso
+	const handleLogin = async () => {
+		const {token, error, success} = await login(username, password, rememberMe);
+		console.log("token: ", token);
+		console.log("error: ", error);
+		console.log("success: ", success);
 
-		// Salva il token di accesso come cookie
-		CookieManager.setCookie("token", "valore-del-token", {expires: 7});
-
-		// Esegui altre azioni dopo il login
+		//Client gestisce il token e i cookie qui
+		if (success) {
+			// Salva il token di accesso come cookie o nello stato dell'applicazione
+			CookieManager.setCookie("token", token, {expires: 7});
+			// Esegui altre azioni dopo il login
+			Router.push("/auth/home");
+		} else {
+			// Gestisci l'errore di autenticazione o l'errore di connessione
+		}
 	};
 
 	return (
@@ -55,24 +62,8 @@ const Login = (setLoading) => {
 				title={`Login | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
 				description='This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
-				<AppBar
-					position='static'
-					sx={{
-						backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
-					}}
-				>
-					<Container>
-						<Toolbar>
-							<StyledImageLogo
-								src='/images/LogoO.png'
-								alt='Logo'
-								width={200}
-								height={70}
-								priority={true}
-							/>
-						</Toolbar>
-					</Container>
-				</AppBar>
+				{/* // Esempio di utilizzo del metodo handleLogin al click del bottone */}
+				<button onClick={handleLogin}>Login: </button>
 			</Layout>
 		</ThemeProvider>
 	);
