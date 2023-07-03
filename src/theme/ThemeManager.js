@@ -23,7 +23,7 @@ const listaTemi = [
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#5E5E5E",
+								backgroundColor: "#ff5701",
 								color: "#fff",
 							},
 						},

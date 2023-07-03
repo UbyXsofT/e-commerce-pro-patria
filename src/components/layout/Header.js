@@ -1,11 +1,21 @@
 // Header.js
 import * as React from "react";
 import {styled, useTheme} from "@mui/material/styles";
-import {Box, CssBaseline, Toolbar, Typography} from "@mui/material";
+import {Badge, Box, CssBaseline, Toolbar, Typography} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import UserMenu from "./menu/UserMenu";
 import Image from "next/image";
 import {IconButton} from "@mui/material";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MoreIcon from "@mui/icons-material/MoreVert";
+const menuId = "up-account-menu";
+const mobileMenuId = "up-account-menu-mobile";
 const StyledImageLogo = styled(Image)({
 	padding: "10px",
 	maxWidth: 300,
@@ -33,6 +43,27 @@ const AppBar = styled(MuiAppBar, {
 
 const Header = ({open}) => {
 	const theme = useTheme();
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+	const isMenuOpen = Boolean(anchorEl);
+	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+	const handleProfileMenuOpen = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleMobileMenuClose = () => {
+		setMobileMoreAnchorEl(null);
+	};
+
+	const handleMenuClose = () => {
+		setAnchorEl(null);
+		handleMobileMenuClose();
+	};
+
+	const handleMobileMenuOpen = (event) => {
+		setMobileMoreAnchorEl(event.currentTarget);
+	};
 
 	return (
 		<>
