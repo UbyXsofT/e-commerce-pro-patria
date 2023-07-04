@@ -18,224 +18,162 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { width } from "@mui/system";
 import TemaSwitch from "../../src/theme/TemaSwitch";
-import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import {
+  AppBar,
+  FormControl,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Step,
+  StepLabel,
+  Stepper,
+  Toolbar,
+} from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+
+import Step1 from "./register/Step1";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import Step2 from "./register/Step2";
+import Step3 from "./register/Step3";
+import Router from "next/router";
 
 export default function SignUp() {
   const theme = useTheme();
 
-  const handleSubmit = (event) => {};
+  const StyledImageLogo = styled(Image)({
+    padding: "10px",
+    maxWidth: 300,
+  });
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const steps = ["Dati Personali", "Utente", "Finalizza"];
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <Step1 />;
+      case 1:
+        return <Step2 />;
+      case 2:
+        return <Step3 />;
+      default:
+        throw new Error("Unknown step");
+    }
+  }
+
+  const handleNext = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Iscriviti
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid container spacing={2}>
-              <Grid container item spacing={2} sm={12} md={6}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="codiceFiscale"
-                    label="Codice Fiscale"
-                    name="codiceFiscale"
-                    autoComplete="codiceFiscale"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="Nome"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Cognome"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <FormControl required>
-                    <FormLabel id="sesso">Sesso</FormLabel>
-                    <RadioGroup
-                      aria-labelledby="sesso"
-                      defaultValue="female"
-                      name="sesso"
-                      row
-                    >
-                      <FormControlLabel
-                        value="femmina"
-                        control={<Radio />}
-                        label="Femmina"
-                      />
-                      <FormControlLabel
-                        value="maschio"
-                        control={<Radio />}
-                        label="Maschio"
-                      />
-                      <FormControlLabel
-                        value="altro"
-                        control={<Radio />}
-                        label="Altro"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <LocalizationProvider
-                    dateAdapter={AdapterDayjs}
-                    adapterLocale="it"
-                  >
-                    <DatePicker
-                      required
-                      label="Data di Nascita"
-                      sx={{
-                        width: "100%",
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} sm={8}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="luogoNascita"
-                    label="Luogo di Nascita"
-                    name="luogoNascita"
-                    autoComplete="luogoNascita"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="provinciaNascita"
-                    label="Provincia"
-                    name="provinciaNascita"
-                    autoComplete="provinciaNascita"
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid container item spacing={2} sm={12} md={6}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="indirizzo"
-                    label="Indirizzo"
-                    name="indirizzo"
-                    autoComplete="indirizzo"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={8}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="città"
-                    label="Città"
-                    name="città"
-                    autoComplete="città"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="cap"
-                    label="CAP"
-                    name="cap"
-                    autoComplete="cap"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="provincia"
-                    label="Provincia"
-                    name="provincia"
-                    autoComplete="provincia"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Indirizzo Email"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <MuiTelInput
-                    sx={{ width: "100%" }}
-                    defaultCountry="it"
-                    value="+39"
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControlLabel
-                  required
-                  control={<Checkbox value="accettaPrivacy" color="primary" />}
-                  label="Iscrivendoti dichiari di aver preso visione dell'Informativa sulla Privacy"
-                />
-              </Grid>
-            </Grid>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor:
+            theme.components.MuiAppBar.styleOverrides.colorInherit,
+        }}
+      >
+        <Container sx={{ display: "flex", alignItems: "center" }}>
+          <Toolbar>
+            <StyledImageLogo
+              src="/images/LogoO.png"
+              alt="Logo"
+              width={200}
+              height={70}
+              priority={true}
+            />
+          </Toolbar>
+          <TemaSwitch />
+        </Container>
+      </AppBar>
+      <Container maxWidth={"md"}>
+        {/* Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
+        <Stepper activeStep={activeStep} sx={{ pt: 3 }}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length ? (
+          <React.Fragment>
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{ marginTop: 3 }}
+              textAlign={"center"}
+            >
+              Registrazione Completata
+            </Typography>
+            <Typography variant="subtitle1" textAlign={"center"}>
+              Il tuo account è stato registrato con successo
+            </Typography>
             <Button
-              type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              onClick={() => Router.push("/account/login")}
+              sx={{
+                mt: 3,
+                mb: 2,
+                width: 500,
+                marginLeft: "auto",
+                marginRight: "auto",
+                display: "flex",
+              }}
             >
-              Iscriviti
+              Accedi
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                {/* TODO: React Router? */}
-                <Link href="login" variant="body2">
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {getStepContent(activeStep)}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignContent: "space-between",
+                marginTop: "2em",
+              }}
+            >
+              {activeStep == 0 && (
+                <Link
+                  onClick={() => Router.push("/account/login")}
+                  variant="body2"
+                  sx={{
+                    marginRight: "auto",
+                    marginTop: "auto",
+                    marginBottom: "auto",
+                  }}
+                >
                   Hai già un account? Accedi
                 </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
+              )}
+              {activeStep !== 0 && (
+                <Button
+                  onClick={handleBack}
+                  sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
+                >
+                  Precedente
+                </Button>
+              )}
+
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                sx={{ mt: "auto", ml: 1 }}
+              >
+                {activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
       </Container>
-      <TemaSwitch />
     </ThemeProvider>
   );
 }
