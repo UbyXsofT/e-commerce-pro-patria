@@ -1,53 +1,54 @@
 // Layout.js
 import React from "react";
-import {
-	Box,
-	CssBaseline,
-	Divider,
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-	Toolbar,
-} from "@mui/material";
+import {Box, CssBaseline, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import {styled, useTheme} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 
+import {useSpring, animated} from "@react-spring/web";
 import Router from "next/router";
 import DriwerLeft from "./DrawerLeft";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout = ({children}) => {
+const Layout = ({children, title, description, ogImage, url}) => {
+	const mainAnimation = useSpring({
+		opacity: 1,
+		from: {opacity: 0},
+		config: {
+			duration: 1000,
+		},
+	});
+
 	return (
-		<Box sx={{display: "flex"}}>
-			<CssBaseline />
-			<Header
-			// open={open}
-			// handleDrawerOpen={handleDrawerOpen}
-			/>
+		<animated.main style={mainAnimation}>
+			<Box sx={{display: "flex"}}>
+				<CssBaseline />
+				<Header
+				// open={open}
+				// handleDrawerOpen={handleDrawerOpen}
+				/>
 
-			{/* INSERIAMO DRAVER */}
-			<DriwerLeft />
+				{/* INSERIAMO DRAVER */}
+				<DriwerLeft />
 
-			<Box
-				component='main'
-				sx={{
-					flexGrow: 1,
-					p: 3,
-					transition: "margin-left 0.2s ease-in-out",
-					//marginLeft: open ? `${drawerWidth}px` : 0,
-				}}
-			>
-				<Toolbar />
-				{children}
-				<Footer />
+				<Box
+					component='main'
+					sx={{
+						flexGrow: 1,
+						p: 3,
+						transition: "margin-left 0.2s ease-in-out",
+						//marginLeft: open ? `${drawerWidth}px` : 0,
+					}}
+				>
+					<Toolbar />
+					{children}
+					<Footer />
+				</Box>
 			</Box>
-		</Box>
+		</animated.main>
 	);
 };
 

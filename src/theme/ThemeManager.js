@@ -18,6 +18,10 @@ const listaTemi = [
 						default: "#eeeeee",
 						paper: "#E6E6E6",
 					},
+					text: {
+						primary: "#101010",
+						secondary: "#373737",
+					},
 				},
 				components: {
 					MuiAppBar: {
@@ -46,6 +50,7 @@ const listaTemi = [
 					},
 					text: {
 						primary: "#f1f1f1",
+						secondary: "#CFCFCF",
 					},
 				},
 				components: {

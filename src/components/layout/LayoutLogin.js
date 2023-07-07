@@ -1,8 +1,16 @@
 // import Header from "./Header";
 // import Footer from "./Footer";
 import Head from "next/head";
+import {useSpring, animated} from "@react-spring/web";
 
 const Layout = ({children, title, description, ogImage, url}) => {
+	const mainAnimation = useSpring({
+		opacity: 1,
+		from: {opacity: 0},
+		config: {
+			duration: 1000,
+		},
+	});
 	// website Url
 	const pageUrl = "https://tommysgest.com/";
 	// quando condividi questa pagina su facebook vedrai questa immagine
@@ -14,9 +22,7 @@ const Layout = ({children, title, description, ogImage, url}) => {
 				<meta
 					name='description'
 					key='description'
-					content={
-						description ? description : "E-commerce per il tuo centro fitness in React Next MUI"
-					}
+					content={description ? description : "E-commerce per il tuo centro fitness in React Next MUI"}
 				/>
 				<meta
 					property='og:title'
@@ -35,14 +41,12 @@ const Layout = ({children, title, description, ogImage, url}) => {
 				/>
 				<meta
 					property='og:description'
-					content={
-						description ? description : "E-commerce per il tuo centro fitness in React Next MUI."
-					}
+					content={description ? description : "E-commerce per il tuo centro fitness in React Next MUI."}
 					key='og:description'
 				/>
 			</Head>
 
-			<main>{children}</main>
+			<animated.main style={mainAnimation}>{children}</animated.main>
 		</>
 	);
 };
