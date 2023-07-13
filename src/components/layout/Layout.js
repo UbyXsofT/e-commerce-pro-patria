@@ -1,15 +1,8 @@
 // Layout.js
 import React from "react";
-import {Box, CssBaseline, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar} from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import {styled, useTheme} from "@mui/material/styles";
-import MuiDrawer from "@mui/material/Drawer";
-
+import {Box, Toolbar} from "@mui/material";
 import {useSpring, animated} from "@react-spring/web";
-import Router from "next/router";
-import DriwerLeft from "./DrawerLeft";
+import DrawerSx from "./menu/drawer/miniDrawer/DrawerSx";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -25,14 +18,10 @@ const Layout = ({children, title, description, ogImage, url}) => {
 	return (
 		<animated.main style={mainAnimation}>
 			<Box sx={{display: "flex"}}>
-				<CssBaseline />
-				<Header
-				// open={open}
-				// handleDrawerOpen={handleDrawerOpen}
-				/>
+				<Header />
 
-				{/* INSERIAMO DRAVER */}
-				<DriwerLeft />
+				{/* INSERIAMO DRAWER */}
+				<DrawerSx />
 
 				<Box
 					component='main'

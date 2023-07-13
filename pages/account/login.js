@@ -1,20 +1,5 @@
 import React from "react";
-import {
-	Container,
-	Grid,
-	Typography,
-	TextField,
-	Button,
-	Checkbox,
-	FormControlLabel,
-	AppBar,
-	Toolbar,
-	CssBaseline,
-	Paper,
-	Box,
-	Avatar,
-	Link,
-} from "@mui/material";
+import {Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {ThemeProvider} from "@mui/material/styles";
 import {useTheme} from "@mui/material/styles";
@@ -75,7 +60,7 @@ const Login = (setLoading) => {
 	};
 
 	const overlayStyle = {
-		backgroundColor: "rgba(255, 255, 255, 0.8)", // Imposta il colore grigio e l'opacità desiderati
+		backgroundColor: "rgba(255, 255, 255, 0.5)", // Imposta il colore grigio e l'opacità desiderati
 		position: "absolute",
 		top: 0,
 		left: 0,
@@ -124,7 +109,7 @@ const Login = (setLoading) => {
 						sx={{py: 2, px: 2}}
 					>
 						{/* TODO There has to be a better way to implement this */}
-						<CssBaseline />
+
 						<Grid
 							container
 							justifyContent='center'
@@ -137,7 +122,7 @@ const Login = (setLoading) => {
 							elevation={6}
 							square
 							sx={{
-								backgroundImage: "url(https://upload.wikimedia.org/wikipedia/commons/3/36/Gym_Free-weights_Area.jpg)",
+								backgroundImage: "url(/images/wallpaper.jpg)",
 								backgroundRepeat: "no-repeat",
 								backgroundSize: "cover",
 								backgroundPosition: "center",
@@ -152,7 +137,6 @@ const Login = (setLoading) => {
 									fill={true}
 									sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 									style={{objectFit: "contain"}}
-									//objectFit='contain'
 									priority={true}
 								/>
 							</div>

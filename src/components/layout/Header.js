@@ -1,7 +1,7 @@
 // Header.js
 import * as React from "react";
 import {styled, useTheme} from "@mui/material/styles";
-import {Badge, Box, CssBaseline, Toolbar, Typography} from "@mui/material";
+import {Badge, Box, Toolbar, Typography} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import UserMenu from "./menu/UserMenu";
 import Image from "next/image";
@@ -67,7 +67,6 @@ const Header = ({open}) => {
 
 	return (
 		<>
-			<CssBaseline />
 			<AppBar
 				position='fixed'
 				open={open}

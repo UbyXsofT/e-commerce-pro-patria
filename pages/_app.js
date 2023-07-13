@@ -51,23 +51,25 @@ function MyApp(props) {
 	}, [themeMode]);
 
 	return (
-		<CacheProvider value={emotionCache}>
-			<ThemeProvider theme={appTheme}>
-				{/* {console.log("appTheme: ", appTheme)} */}
-				<Head>
-					<meta
-						name='viewport'
-						content='initial-scale=1, width=device-width'
-					/>
-				</Head>
-				<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
-					<CssBaseline />
-					<ThemeColorListener setThemeMode={setThemeMode} />
-					{isLoading && <LoadingOverlay />}
-					<Component {...pageProps} />
-				</CustomThemeProvider>
-			</ThemeProvider>
-		</CacheProvider>
+		<>
+			<CacheProvider value={emotionCache}>
+				<ThemeProvider theme={appTheme}>
+					{/* {console.log("appTheme: ", appTheme)} */}
+					<Head>
+						<meta
+							name='viewport'
+							content='initial-scale=1, width=device-width'
+						/>
+					</Head>
+					<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
+						<ThemeColorListener setThemeMode={setThemeMode} />
+						<CssBaseline />
+						{isLoading && <LoadingOverlay />}
+						<Component {...pageProps} />
+					</CustomThemeProvider>
+				</ThemeProvider>
+			</CacheProvider>
+		</>
 	);
 }
 //const wrapper = createWrapper(store);
