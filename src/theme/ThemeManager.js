@@ -1,4 +1,4 @@
-import eCommerceConfig from "./../../ecommerceConfig.json";
+import eCommerceConfig from "/eCommerceConfig.json";
 
 const listaTemi = [
 	{
@@ -15,11 +15,11 @@ const listaTemi = [
 						contrastText: "#000000",
 					},
 					background: {
-						default: "#eeeeee",
-						paper: "#E6E6E6",
+						default: "#F3F3F3",
+						paper: "#E9E9E9",
 					},
 					text: {
-						primary: "#101010",
+						primary: "#1A1A1A",
 						secondary: "#373737",
 					},
 				},
@@ -38,15 +38,15 @@ const listaTemi = [
 				palette: {
 					mode: "dark",
 					primary: {
-						main: "#ffba00",
+						main: "#ff5701",
 					},
 					secondary: {
-						main: "#f57c00",
+						main: "#ffba00",
 						contrastText: "#000000",
 					},
 					background: {
-						default: "#121212",
-						paper: "#121212",
+						default: "#202020",
+						paper: "#202020",
 					},
 					text: {
 						primary: "#f1f1f1",

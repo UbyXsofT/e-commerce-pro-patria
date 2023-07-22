@@ -2,6 +2,18 @@ import {TreeView, TreeItem} from "@mui/lab";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // Componente TreeViewItem
+
+export function TreeViewComp({menuItem}) {
+	return (
+		<TreeView
+			defaultCollapseIcon={<ExpandMoreIcon />}
+			defaultExpandIcon={<ChevronRightIcon />}
+		>
+			<TreeViewItem item={menuItem} />
+		</TreeView>
+	);
+}
+
 function TreeViewItem({item}) {
 	return (
 		<TreeItem
@@ -19,16 +31,5 @@ function TreeViewItem({item}) {
 					/>
 				))}
 		</TreeItem>
-	);
-}
-
-export function TreeViewComp({menuItem}) {
-	return (
-		<TreeView
-			defaultCollapseIcon={<ExpandMoreIcon />}
-			defaultExpandIcon={<ChevronRightIcon />}
-		>
-			<TreeViewItem item={menuItem} />
-		</TreeView>
 	);
 }

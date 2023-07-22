@@ -3,9 +3,5 @@ import Typography from "@mui/material/Typography";
 import eCommerceConfig from "./../../../../ecommerceConfig.json";
 
 export function PartitaIva() {
-  return (
-    <Typography variant="caption" color="text.secondary">
-      Partita IVA: {eCommerceConfig.PartitaIva}
-    </Typography>
-  );
+	return <Typography variant='caption'>Partita IVA: {eCommerceConfig.PartitaIva}</Typography>;
 }

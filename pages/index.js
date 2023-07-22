@@ -2,7 +2,6 @@
 import * as React from "react";
 import Router from "next/router";
 import {useSpring, animated, easings} from "@react-spring/web";
-
 import {useTheme, styled} from "@mui/material/styles";
 import Image from "next/image";
 import {Lato, Poppins} from "next/font/google";

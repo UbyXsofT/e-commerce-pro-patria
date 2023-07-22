@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {setLoading} from "/src/store/actions";
 //*-----*//
 import Layout from "/src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConfig from "../../ecommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "/src/components/cookie/CookieManager";
@@ -15,7 +15,7 @@ import CookieManager from "/src/components/cookie/CookieManager";
 //*-- API---*//
 //import home from "../api/home";
 
-const Home = (setLoading) => {
+const Messaggi = (setLoading) => {
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
 
@@ -23,15 +23,15 @@ const Home = (setLoading) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Home | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
-				description='This is a E-Commerce home page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
+				title={`Messaggi | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				description='This is a E-Commerce Messaggi page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<Typography
 					variant='h5'
 					component='h1'
 					gutterBottom
 				>
-					HOME PAGE
+					MESSAGGI PAGE
 				</Typography>
 				<Typography paragraph>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper
@@ -54,4 +54,4 @@ const Home = (setLoading) => {
 const mapDispatchToProps = {
 	setLoading,
 };
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(null, mapDispatchToProps)(Messaggi);

@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
 import {CacheProvider} from "@emotion/react";
-import {lightTheme, darkTheme} from "/src/theme/theme";
-import createEmotionCache from "/src/components/utils/createEmotionCache";
-import {ThemeProvider as CustomThemeProvider} from "../src/theme/ThemeContext";
+import {lightTheme, darkTheme} from "../src/components/theme/theme";
+import createEmotionCache from "../src/components/utils/createEmotionCache";
+import {ThemeProvider as CustomThemeProvider} from "../src/components/theme/ThemeContext";
 import {ThemeProvider} from "@mui/material/styles";
-import LoadingOverlay from "/src/components/LoadingOverlay";
-import ThemeColorListener from "../src/theme/ThemeColorListener"; // Importa il componente
+import LoadingOverlay from "../src/components/utils/LoadingOverlay";
+import ThemeColorListener from "../src/components/theme/ThemeColorListener"; // Importa il componente
 
 //REDUX ---
 import {wrapper} from "/src/store/store";

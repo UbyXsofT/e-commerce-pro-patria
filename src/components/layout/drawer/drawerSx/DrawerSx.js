@@ -2,31 +2,34 @@ import React, {useState} from "react";
 import {Divider, Typography} from "@mui/material";
 import {useSpring, animated} from "@react-spring/web";
 import {styled, useTheme} from "@mui/material/styles";
-import CreateMenu from "../../CreateMenu";
+import CreateMenu from "/src/menu/CreateMenu";
 import {MiniDrawer} from "./MiniDrawer";
 import {TreeViewComp} from "./TreeViewComp";
 
-export default function DrawerSx() {
+export function DrawerSx({onOpen}) {
 	const theme = useTheme();
 	const [openDrawer, setOpenDrawer] = useState(false);
-	const [curDrawerWidth, setCurDrawerWidth] = useState(200);
+	const [curDrawerWidth, setCurDrawerWidth] = useState(205);
 	const [expandedDrawerItem, setExpandedDrawerItem] = useState(null);
 	const [showBox, setShowBox] = useState(false);
-	const menuItems = CreateMenu("menuDriverSX");
+	const menuItems = React.useMemo(() => CreateMenu("menuDriverSX"), []);
 	const boxWidth = 300;
 	const boxContainerRef = React.useRef(false);
+	const [curItemSelect, setCurItemSelect] = React.useState(0);
 
 	React.useEffect(() => {
 		const handleClickOutsideBox = (event) => {
 			if (boxContainerRef.current && !boxContainerRef.current.contains(event.target)) {
 				setExpandedDrawerItem(null);
 				setShowBox(false);
+				setOpenDrawer(false);
 			}
 		};
 		const handleEscapeKey = (event) => {
 			if (event.key === "Escape") {
 				setExpandedDrawerItem(null);
 				setShowBox(false);
+				setCurItemSelect(0);
 			}
 		};
 		document.addEventListener("mousedown", handleClickOutsideBox);
@@ -38,24 +41,36 @@ export default function DrawerSx() {
 	}, []);
 
 	React.useEffect(() => {
-		openDrawer ? setCurDrawerWidth(200) : setCurDrawerWidth(65);
+		openDrawer ? setCurDrawerWidth(185) : setCurDrawerWidth(65);
+		onOpen(openDrawer); // Imposta la funzione onOpen per impostare manualmente il valore a true
 	}, [openDrawer]);
 
 	const handleDrawerOpen = () => {
+		console.log("Opening Drawer.. Current openDrawer state:", openDrawer);
 		setOpenDrawer(true);
 	};
 
 	const handleDrawerClose = () => {
+		console.log("Closing Drawer.. Current openDrawer state:", openDrawer);
 		setOpenDrawer(false);
 	};
 
 	const handleDrawerItemClick = (menuItem) => {
-		if (expandedDrawerItem ? expandedDrawerItem.id : null === menuItem.id) {
+		if (expandedDrawerItem ? expandedDrawerItem : null === menuItem) {
 			setExpandedDrawerItem(null);
 			setShowBox(false);
+			setCurItemSelect(0);
 		} else {
-			setExpandedDrawerItem(menuItem);
-			setShowBox(true);
+			if (curItemSelect !== menuItem.id) {
+				setExpandedDrawerItem(menuItem);
+				setShowBox(true);
+
+				setCurItemSelect(menuItem.id);
+			} else {
+				setExpandedDrawerItem(null);
+				setShowBox(false);
+				setCurItemSelect(0);
+			}
 		}
 	};
 
@@ -82,7 +97,7 @@ export default function DrawerSx() {
 	const BoxSubItemsAnimation = useSpring({
 		left: showBox ? curDrawerWidth : -boxWidth - curDrawerWidth,
 		config: {
-			duration: 150,
+			duration: 200,
 		},
 	});
 
@@ -98,7 +113,9 @@ export default function DrawerSx() {
 						handleDrawerItemClick={handleDrawerItemClick}
 						expandedDrawerItem={expandedDrawerItem}
 						titleDrawer='MENU'
+						drawerWidth='auto'
 					/>
+
 					{showBox && (
 						<BoxSubItems
 							style={{...BoxSubItemsAnimation}}

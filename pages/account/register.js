@@ -16,7 +16,7 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import {width} from "@mui/system";
-import TemaSwitch from "../../src/theme/TemaSwitch";
+import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import {AppBar, FormControl, FormLabel, Radio, RadioGroup, Step, StepLabel, Stepper, Toolbar} from "@mui/material";
 import {MuiTelInput} from "mui-tel-input";
 

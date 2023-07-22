@@ -27,8 +27,9 @@ export function MiniDrawerItem({item, openDrawer, handleDrawerItemClick, expande
 							alignItems: "center",
 						}}
 					>
+						{item.subItems.length > 0 && <ChevronRightIcon sx={{fontSize: "small", marginLeft: "-0.8rem"}} />}
 						<ListItemIcon>{item.icon}</ListItemIcon>
-						{item.subItems.length > 0 && <ChevronRightIcon sx={{fontSize: "small"}} />}
+
 						<ListItemText
 							primary={item.label}
 							sx={{opacity: openDrawer ? 1 : 0}}

@@ -5,15 +5,15 @@ import {ThemeProvider} from "@mui/material/styles";
 import {useTheme} from "@mui/material/styles";
 //REDUX-STORE
 import {connect} from "react-redux";
-import {setLoading} from "/src/store/actions";
+import {setLoading} from "../../src/store/actions";
 //*-----*//
-import Layout from "/src/components/layout/LayoutLogin";
-import eCommerceConfig from "./../../ecommerceConfig.json";
+import Layout from "../../src/components/layout/LayoutLogin";
+import eCommerceConfig from "../../ecommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import {useMediaQuery} from "@mui/material";
-import CookieManager from "/src/components/cookie/CookieManager";
-import TemaSwitch from "../../src/theme/TemaSwitch";
+import CookieManager from "../../src/components/cookie/CookieManager";
+
 import login from "../api/login";
 import Router from "next/router";
 
@@ -48,6 +48,7 @@ const Login = (setLoading) => {
 		console.log("error: ", error);
 		console.log("success: ", success);
 
+		Router.push("/auth/home");
 		//Client gestisce il token e i cookie qui
 		if (success) {
 			// Salva il token di accesso come cookie o nello stato dell'applicazione
@@ -95,7 +96,7 @@ const Login = (setLoading) => {
 								style={{padding: "10px", maxWidth: 300}}
 							/>
 						</Toolbar>
-						<TemaSwitch />
+						{/* <TemaSwitch /> */}
 					</Container>
 				</AppBar>
 
