@@ -4,30 +4,30 @@ const listaTemi = [
 	{
 		key: "Default",
 		value: {
-			Light: {
-				palette: {
-					mode: "light",
-					primary: {
-						main: "#ff5701",
-					},
-					secondary: {
-						main: "#ffba00",
-						contrastText: "#000000",
-					},
-					background: {
-						default: "#F3F3F3",
-						paper: "#E9E9E9",
-					},
-					text: {
-						primary: "#1A1A1A",
-						secondary: "#373737",
-					},
+			palette: {
+				mode: "light",
+				primary: {
+					main: "#30FF01",
 				},
-				components: {
+				secondary: {
+					main: "#ffba00",
+					contrastText: "#000000",
+				},
+				background: {
+					default: "#F3F3F3",
+					paper: "#E9E9E9",
+				},
+				text: {
+					primary: "#1A1A1A",
+					secondary: "#373737",
+				},
+			},
+			components: {
+				Light: {
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#ff5701",
+								backgroundColor: "#30FF01",
 								color: "#fff",
 							},
 						},
@@ -38,7 +38,7 @@ const listaTemi = [
 				palette: {
 					mode: "dark",
 					primary: {
-						main: "#ff5701",
+						main: "#30FF01",
 					},
 					secondary: {
 						main: "#ffba00",
@@ -57,7 +57,7 @@ const listaTemi = [
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#ff5701",
+								backgroundColor: "#30FF01",
 								color: "#fff",
 							},
 						},

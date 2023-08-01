@@ -5,12 +5,13 @@ import {PartitaIva} from "./PartitaIva";
 import Divider from "@mui/material/Divider";
 import {useTheme} from "@mui/material/styles";
 import {Typography} from "@mui/material";
-import ScrollToTopButton from "./ScrollToTopBtn";
+import {ScrollToTopBtn} from "./ScrollToTopBtn";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import {Facebook, Instagram, Twitter, HowToReg, PrivacyTip, Cookie} from "@mui/icons-material";
 import {Box} from "@mui/material";
 import {useSpring, animated} from "react-spring";
+import {PrivacyCookie} from "./PrivacyCookie";
 
 export function Footer() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
@@ -126,43 +127,9 @@ export function Footer() {
 				</Grid>
 
 				<Divider sx={{mb: "1rem", mt: "1rem"}} />
-				<Grid
-					item
-					xs={12}
-					sm={4}
-					// mt={5}
-				>
-					<Box sx={{display: "flex", flexDirection: "column"}}>
-						<Box>
-							<HowToReg sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
-							<Link
-								href='https://www.condizioni-generali.com/'
-								sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-							>
-								Condizioni generali di uso e vendita
-							</Link>
-						</Box>
-						<Box>
-							<PrivacyTip sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
-							<Link
-								href='https://www.privacy.com/'
-								sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-							>
-								Informativa sulla privacy
-							</Link>
-						</Box>
-						<Box>
-							<Cookie sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
-							<Link
-								href='https://www.facebook.com/'
-								sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-							>
-								Cookie
-							</Link>
-						</Box>
-					</Box>
-					<ScrollToTopButton />
-				</Grid>
+				<PrivacyCookie>
+					<ScrollToTopBtn />
+				</PrivacyCookie>
 				<Divider sx={{mb: "1rem", mt: "1rem"}} />
 				<Typography
 					variant='body2'

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ThemeContext} from "./ThemeContext";
+import {ThemeContext} from "../theme/ThemeContext";
 import ModSwitch from "./ModSwitch";
 
 const TemaSwitch = () => {

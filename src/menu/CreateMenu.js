@@ -7,9 +7,12 @@ import CategoryIcon from "@mui/icons-material/Category";
 import WorkIcon from "@mui/icons-material/BorderBottom";
 import HomeIcon from "@mui/icons-material/Home";
 import Router from "next/router";
-
-export default function CreateMenu(tipoMenu) {
-	function generateMenuItem(id, label, onClick, icon, badgeContent, badgeColor, subItems) {
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
+import LogoutIcon from "@mui/icons-material/Logout";
+import {Divider} from "@mui/material";
+export function CreateMenu(tipoMenu) {
+	function generateMenuItem(id, label, onClick, icon, badgeContent, badgeColor, subItems, control) {
 		return {
 			id,
 			label,
@@ -18,6 +21,7 @@ export default function CreateMenu(tipoMenu) {
 			badgeContent,
 			badgeColor,
 			subItems: subItems ? subItems.map((subItem) => generateMenuItem(...Object.values(subItem))) : [],
+			control,
 		};
 	}
 
@@ -31,7 +35,8 @@ export default function CreateMenu(tipoMenu) {
 			<HomeIcon />,
 			null,
 			null,
-			[]
+			[],
+			null
 		),
 		generateMenuItem("2", "Area di lavoro", null, <WorkIcon />, null, null, [
 			generateMenuItem("2_1", "WORKOUT", null, null, null, null, [
@@ -44,7 +49,8 @@ export default function CreateMenu(tipoMenu) {
 					null,
 					null,
 					null,
-					[]
+					[],
+					null
 				),
 				generateMenuItem(
 					"2_1_2",
@@ -55,7 +61,8 @@ export default function CreateMenu(tipoMenu) {
 					null,
 					null,
 					null,
-					[]
+					[],
+					null
 				),
 			]),
 			generateMenuItem("2_2", "SPINNING", null, null, null, null, [
@@ -69,7 +76,8 @@ export default function CreateMenu(tipoMenu) {
 						null,
 						null,
 						null,
-						[]
+						[],
+						null
 					),
 					generateMenuItem(
 						"2_2_2_2",
@@ -80,7 +88,8 @@ export default function CreateMenu(tipoMenu) {
 						null,
 						null,
 						null,
-						[]
+						[],
+						null
 					),
 				]),
 			]),
@@ -94,7 +103,8 @@ export default function CreateMenu(tipoMenu) {
 			<CategoryIcon />,
 			null,
 			null,
-			[]
+			[],
+			null
 		),
 		generateMenuItem("4", "Documenti", null, <DocumentIcon />, null, null, [
 			generateMenuItem("4_1", "Doc1", null, null, null, null, [
@@ -107,7 +117,8 @@ export default function CreateMenu(tipoMenu) {
 					null,
 					null,
 					null,
-					[]
+					[],
+					null
 				),
 				generateMenuItem(
 					"4_1_2",
@@ -118,7 +129,8 @@ export default function CreateMenu(tipoMenu) {
 					null,
 					null,
 					null,
-					[]
+					[],
+					null
 				),
 			]),
 		]),
@@ -131,7 +143,8 @@ export default function CreateMenu(tipoMenu) {
 			<UtilityIcon />,
 			null,
 			null,
-			[]
+			[],
+			null
 		),
 		// Altri elementi del menu...
 	];
@@ -139,26 +152,42 @@ export default function CreateMenu(tipoMenu) {
 	const menuUtenteDx = [
 		generateMenuItem(
 			"1",
-			"Test",
+			"Il mio account",
 			() => {
-				Router.push("/Test");
+				Router.push("/auth/account");
 			},
+			<ManageAccountsIcon />,
 			null,
 			null,
-			null,
-			[]
+			[],
+			null
 		),
 		generateMenuItem(
-			"1",
-			"Home",
+			"2",
+			"I miei ordini",
 			() => {
-				Router.push("/auth/home");
+				Router.push("/auth/ordini");
 			},
-			<HomeIcon />,
+			<ManageHistoryIcon />,
 			null,
 			null,
-			[]
+			[],
+			null
 		),
+		generateMenuItem("3", null, null, null, null, null, [], <Divider style={{width: "100%"}} />),
+		generateMenuItem(
+			"4",
+			"Esci",
+			() => {
+				Router.push("/account/login");
+			},
+			<LogoutIcon />,
+			null,
+			null,
+			[],
+			null
+		),
+		generateMenuItem("5", null, null, null, null, null, [], <Divider style={{width: "100%"}} />),
 	];
 
 	const menuOptions = {

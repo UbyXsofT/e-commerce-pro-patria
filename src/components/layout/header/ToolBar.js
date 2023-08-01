@@ -8,7 +8,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AlertMeContext from "../AlertMeContext";
+import AlertMeContext from "../alert/AlertMeContext";
 import Router from "next/router";
 
 const menuId = "up-account-menu";
@@ -19,15 +19,27 @@ const StyledImageLogo = styled(Image)({
 	marginLeft: -30,
 });
 
-export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto}) => {
+export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen}) => {
 	const theme = useTheme();
 	const {alertInfo, setAlertInfo} = React.useContext(AlertMeContext);
 	const {variant, severity, title, desc, openAlertMe} = alertInfo;
+	const [drawerLocked, setDrawerLocked] = React.useState(false);
 
-	// Funzione per gestire il click
-	const handleButtonClick = (tipo) => {
-		toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
-		setTipoContesto(tipo);
+	const handleButtonClick = (target) => {
+		setDrawerLocked(!drawerLocked);
+		//toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
+	};
+
+	const handleMouseEnter = () => {
+		if (!drawerLocked) {
+			setDrawerDxOpen(true);
+		}
+	};
+
+	const handleMouseLeave = () => {
+		if (!drawerLocked) {
+			setDrawerDxOpen(false);
+		}
 	};
 
 	return (
@@ -68,6 +80,14 @@ export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto}) => {
 						aria-label='show 1 item'
 						color='inherit'
 						onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+						onMouseEnter={() => {
+							setTipoContesto("carrello");
+							handleMouseEnter();
+						}}
+						onMouseLeave={() => {
+							setTipoContesto("carrello");
+							handleMouseLeave();
+						}}
 					>
 						<Badge
 							badgeContent={1}
@@ -83,10 +103,17 @@ export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto}) => {
 						aria-controls={menuId}
 						aria-haspopup='true'
 						onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
+						onMouseEnter={() => {
+							setTipoContesto("utente");
+							handleMouseEnter();
+						}}
+						onMouseLeave={() => {
+							setTipoContesto("utente");
+							handleMouseLeave();
+						}}
 						color='inherit'
 					>
 						<AccountCircle />
-						{/* <Avatar>H</Avatar> */}
 					</IconButton>
 				</Box>
 			</Toolbar>

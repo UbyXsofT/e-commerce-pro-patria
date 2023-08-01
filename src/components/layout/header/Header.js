@@ -9,7 +9,7 @@ const AppBar = styled(MuiAppBar)(({theme}) => ({
 	width: "100%",
 }));
 
-export const Header = ({drawerDxOpen, toggleDrawerDx, setTipoContesto}) => {
+export const Header = ({drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen}) => {
 	const theme = useTheme();
 	return (
 		<>
@@ -23,6 +23,7 @@ export const Header = ({drawerDxOpen, toggleDrawerDx, setTipoContesto}) => {
 					drawerDxOpen={drawerDxOpen}
 					toggleDrawerDx={toggleDrawerDx}
 					setTipoContesto={setTipoContesto}
+					setDrawerDxOpen={setDrawerDxOpen}
 				/>
 			</AppBar>
 		</>

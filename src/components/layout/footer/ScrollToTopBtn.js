@@ -3,7 +3,7 @@ import {styled} from "@mui/system";
 import Button from "@mui/material/Button";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-const ScrollToTopButton = () => {
+export function ScrollToTopBtn() {
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
@@ -49,6 +49,4 @@ const ScrollToTopButton = () => {
 			)}
 		</>
 	);
-};
-
-export default ScrollToTopButton;
+}

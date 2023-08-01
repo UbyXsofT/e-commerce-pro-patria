@@ -22,22 +22,26 @@ function MyApp(props) {
 	const [themeMode, setThemeMode] = React.useState("light");
 	const isLoading = useSelector((state) => state.loading);
 
-	// React.useEffect(() => {
-	// 	console.log("isLoading ha cambiato stato: ", isLoading);
-	// }, [isLoading]);
+	const [autoMode, setAutoMode] = React.useState("false");
 
 	React.useEffect(() => {
-		const savedThemeMode = localStorage.getItem("themeMode");
-		if (savedThemeMode) {
-			setThemeMode(savedThemeMode);
+		if (typeof window !== "undefined" && window.localStorage) {
+			const savedThemeMode = localStorage.getItem("themeMode");
+			setAutoMode(localStorage.getItem("autoMode"));
+			if (savedThemeMode) {
+				setThemeMode(savedThemeMode);
+			}
 		}
 	}, []);
 
-	const toggleThemeMode = () => {
-		console.log("APP TOGGLE THEME MODE", themeMode);
-		const newThemeMode = themeMode === "light" ? "dark" : "light";
-		localStorage.setItem("themeMode", newThemeMode);
-		setThemeMode(newThemeMode);
+	const toggleThemeMode = (newThemeMode) => {
+		//modificabile tramite context
+		if (typeof window !== "undefined" && window.localStorage) {
+			console.log("APP TOGGLE THEME MODE", themeMode);
+			localStorage.setItem("themeMode", newThemeMode);
+			setThemeMode(newThemeMode);
+			setAutoMode(localStorage.getItem("autoMode"));
+		}
 	};
 
 	const appTheme = React.useMemo(() => {
@@ -54,7 +58,6 @@ function MyApp(props) {
 		<>
 			<CacheProvider value={emotionCache}>
 				<ThemeProvider theme={appTheme}>
-					{/* {console.log("appTheme: ", appTheme)} */}
 					<Head>
 						<meta
 							name='viewport'
@@ -62,7 +65,7 @@ function MyApp(props) {
 						/>
 					</Head>
 					<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
-						<ThemeColorListener setThemeMode={setThemeMode} />
+						{autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
 						<CssBaseline />
 						{isLoading && <LoadingOverlay />}
 						<Component {...pageProps} />

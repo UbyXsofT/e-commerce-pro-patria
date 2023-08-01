@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link} from "@mui/material";
+import {Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, Divider} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {ThemeProvider} from "@mui/material/styles";
 import {useTheme} from "@mui/material/styles";
@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/LayoutLogin";
-import eCommerceConfig from "../../ecommerceConfig.json";
+import eCommerceConfig from "../../eCommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import {useMediaQuery} from "@mui/material";
@@ -16,6 +16,11 @@ import CookieManager from "../../src/components/cookie/CookieManager";
 
 import login from "../api/login";
 import Router from "next/router";
+
+import {PrivacyCookie} from "../../src/components/layout/footer/PrivacyCookie";
+import {ScrollToTopBtn} from "../../src/components/layout/footer/ScrollToTopBtn";
+import {PartitaIva} from "../../src/components/layout/footer/PartitaIva";
+import Copyright from "../../src/components/layout/footer/Copyright";
 
 const Login = (setLoading) => {
 	//setLoading(true); rende visibile il loading
@@ -49,6 +54,7 @@ const Login = (setLoading) => {
 		console.log("success: ", success);
 
 		Router.push("/auth/home");
+
 		//Client gestisce il token e i cookie qui
 		if (success) {
 			// Salva il token di accesso come cookie o nello stato dell'applicazione
@@ -59,6 +65,12 @@ const Login = (setLoading) => {
 			// Gestisci l'errore di autenticazione o l'errore di connessione
 		}
 	};
+	const StyledImageLogo = styled(Image)({
+		padding: "5px",
+		maxWidth: 190,
+		maxHeight: 60,
+		marginLeft: -30,
+	});
 
 	const overlayStyle = {
 		backgroundColor: "rgba(255, 255, 255, 0.5)", // Imposta il colore grigio e l'opacità desiderati
@@ -87,16 +99,21 @@ const Login = (setLoading) => {
 				>
 					<Container sx={{display: "flex", alignItems: "center"}}>
 						<Toolbar>
-							<Image
+							<StyledImageLogo
+								// src='/images/LogoO.png'
+								// alt='Logo'
+								// width={200}
+								// height={70}
+								// priority={true}
+								// style={{padding: "10px", maxWidth: 300}}
 								src='/images/LogoO.png'
 								alt='Logo'
-								width={200}
+								width={190}
 								height={70}
 								priority={true}
-								style={{padding: "10px", maxWidth: 300}}
+								sx={{cursor: "pointer"}}
 							/>
 						</Toolbar>
-						{/* <TemaSwitch /> */}
 					</Container>
 				</AppBar>
 
@@ -246,6 +263,29 @@ const Login = (setLoading) => {
 							</Box>
 						</Grid>
 					</Grid>
+
+					<Box style={{bottom: 0, paddingTop: 20, position: "relative"}}>
+						<Box style={{paddingLeft: "20px"}}>
+							<PrivacyCookie>
+								<ScrollToTopBtn />
+							</PrivacyCookie>
+						</Box>
+						<Divider sx={{mb: "1rem", mt: "1rem"}} />
+						<Typography
+							variant='body2'
+							align='center'
+						>
+							<PartitaIva />
+						</Typography>
+
+						<Typography
+							variant='body2'
+							align='center'
+							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white"), paddingBottom: "10px"}}
+						>
+							<Copyright />
+						</Typography>
+					</Box>
 				</Box>
 			</Layout>
 		</ThemeProvider>

@@ -6,8 +6,8 @@ import {DrawerSx} from "./drawer/drawerSx/DrawerSx";
 import {DrawerDx} from "./drawer/drawerDx/DrawerDx";
 import {Header} from "./header/Header";
 import {Footer} from "./footer/Footer";
-import {AlertMe} from "./AlertMe";
-import {AlertMeProvider} from "./AlertMeContext";
+import {AlertMe} from "./alert/AlertMe";
+import {AlertMeProvider} from "./alert/AlertMeContext";
 import {Typography} from "@mui/material";
 import {UserDrawerContentDx} from "./drawer/drawerDx/UserDrawerContentDx";
 import {CarrelloDrawerContentDx} from "./drawer/drawerDx/CarrelloDrawerContentDx";
@@ -49,6 +49,7 @@ const Layout = ({children}) => {
 						drawerDxOpen={drawerDxOpen}
 						toggleDrawerDx={toggleDrawerDx}
 						setTipoContesto={setTipoContesto}
+						setDrawerDxOpen={setDrawerDxOpen}
 					/>
 					<DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
 					<DrawerDx
