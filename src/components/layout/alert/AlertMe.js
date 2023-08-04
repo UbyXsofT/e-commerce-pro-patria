@@ -7,13 +7,12 @@ import Stack from "@mui/material/Stack";
 import {useTheme} from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
-import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import AlertMeContext from "./AlertMeContext";
 
 export function AlertMe() {
-	const {alertInfo, setAlertInfo} = React.useContext(AlertMeContext);
-	const {variant, severity, title, desc, openAlertMe} = alertInfo;
+	const {alertParams, setAlertParams} = React.useContext(AlertMeContext);
+	const {variant, severity, title, desc, openAlertMe} = alertParams;
 	const theme = useTheme();
 	//variant: filled - outlined
 	//severity: error - warning - info - success
@@ -21,12 +20,11 @@ export function AlertMe() {
 		<div
 			style={{
 				position: "fixed",
-				top: `calc(${theme.mixins.toolbar.minHeight + 20}px)`,
+				top: `calc(${theme.mixins.toolbar.minHeight + 60}px)`,
 				left: 0,
 				right: 0,
 				bottom: 0,
 				display: openAlertMe ? "flex" : "none", // Imposta display su "flex" quando openAlertMe è true, altrimenti su "none"
-				alignItems: "flex-start",
 				justifyContent: "center",
 				zIndex: theme.zIndex.drawer + 1,
 			}}
@@ -35,6 +33,8 @@ export function AlertMe() {
 				sx={{
 					width: "80%",
 					marginBottom: "20px",
+					flexDirection: "row",
+					justifyContent: "center",
 				}}
 				spacing={2}
 			>
@@ -42,14 +42,15 @@ export function AlertMe() {
 					<Alert
 						variant={variant}
 						severity={severity}
+						sx={{color: theme.palette.mode === "dark" ? "#EAEAEA" : "#EAEAEA"}}
 						action={
 							<IconButton
 								aria-label='close'
-								color='inherit'
 								size='small'
+								color='inherit'
 								onClick={() => {
-									setAlertInfo({
-										...alertInfo,
+									setAlertParams({
+										...alertParams,
 										openAlertMe: false,
 									});
 								}}
@@ -62,27 +63,6 @@ export function AlertMe() {
 						{desc}
 					</Alert>
 				</Collapse>
-
-				{/* <Button
-				disabled={openAlertMe}
-				variant='outlined'
-				onClick={() => {
-							setAlertInfo({
-								...alertInfo,
-								variant: "filled",
-								severity: "success",
-								title: "Titolo prova",
-								desc: (
-									<React.Fragment>
-										Questo è un avviso di {alertInfo.severity}: — <strong>dai un'occhiata!</strong>
-									</React.Fragment>
-								),
-								openAlertMe: true,
-							});
-						}}
-			>
-				Re-open Alert
-			</Button> */}
 			</Stack>
 		</div>
 	);

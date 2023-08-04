@@ -10,6 +10,7 @@ import {ThemeProvider as CustomThemeProvider} from "../src/components/theme/Them
 import {ThemeProvider} from "@mui/material/styles";
 import LoadingOverlay from "../src/components/utils/LoadingOverlay";
 import ThemeColorListener from "../src/components/theme/ThemeColorListener"; // Importa il componente
+import {AlertMeProvider} from "../src/components/layout/alert/AlertMeContext";
 
 //REDUX ---
 import {wrapper} from "/src/store/store";
@@ -58,18 +59,20 @@ function MyApp(props) {
 		<>
 			<CacheProvider value={emotionCache}>
 				<ThemeProvider theme={appTheme}>
-					<Head>
-						<meta
-							name='viewport'
-							content='initial-scale=1, width=device-width'
-						/>
-					</Head>
-					<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
-						{autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
-						<CssBaseline />
-						{isLoading && <LoadingOverlay />}
-						<Component {...pageProps} />
-					</CustomThemeProvider>
+					<AlertMeProvider>
+						<Head>
+							<meta
+								name='viewport'
+								content='initial-scale=1, width=device-width'
+							/>
+						</Head>
+						<CustomThemeProvider toggleThemeMode={toggleThemeMode}>
+							{autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
+							<CssBaseline />
+							{isLoading && <LoadingOverlay />}
+							<Component {...pageProps} />
+						</CustomThemeProvider>
+					</AlertMeProvider>
 				</ThemeProvider>
 			</CacheProvider>
 		</>

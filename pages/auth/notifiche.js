@@ -4,20 +4,30 @@ import {ThemeProvider} from "@mui/material/styles";
 import {useTheme} from "@mui/material/styles";
 //REDUX-STORE
 import {connect} from "react-redux";
-import {setLoading} from "/src/store/actions";
+import {setLoading} from "../../src/store/actions";
 //*-----*//
-import Layout from "/src/components/layout/Layout";
+import Layout from "../../src/components/layout/Layout";
 import eCommerceConfig from "../../eCommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
-import CookieManager from "/src/components/cookie/CookieManager";
-import NotificationItem from "/src/components/notifiche/NotificheItem";
+import CookieManager from "../../src/components/cookie/CookieManager";
+import NotificationItem from "../../src/components/notifiche/NotificheItem";
 
 //*-- API---*//
 //import home from "../api/home";
 
-const Notifiche = (setLoading) => {
-	//setLoading(true); rende visibile il loading
+const Notifiche = ({setLoading}) => {
+	// Rendi visibile il loading impostando setLoading su true
+	React.useEffect(() => {
+		setLoading(true);
+		// Effettua le operazioni di caricamento, se necessario
+		// Qui puoi fare richieste API, ottenere i dati, ecc.
+		// Quando hai completato il caricamento, imposta isLoading su false:
+		setTimeout(() => {
+			console.log("Esempio ritardo nel caricare i dati di secondi");
+			setLoading(false);
+		}, 3000);
+	}, []);
 	const theme = useTheme();
 
 	const [notifications, setNotifications] = React.useState([

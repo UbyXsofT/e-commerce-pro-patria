@@ -7,10 +7,10 @@ import {DrawerDx} from "./drawer/drawerDx/DrawerDx";
 import {Header} from "./header/Header";
 import {Footer} from "./footer/Footer";
 import {AlertMe} from "./alert/AlertMe";
-import {AlertMeProvider} from "./alert/AlertMeContext";
 import {Typography} from "@mui/material";
 import {UserDrawerContentDx} from "./drawer/drawerDx/UserDrawerContentDx";
 import {CarrelloDrawerContentDx} from "./drawer/drawerDx/CarrelloDrawerContentDx";
+import CookieConsent from "../cookie/CookieConsent";
 
 const Layout = ({children}) => {
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
@@ -42,41 +42,41 @@ const Layout = ({children}) => {
 	});
 
 	return (
-		<AlertMeProvider>
-			<animated.main style={mainAnimation}>
-				<Box sx={{display: "flex"}}>
-					<Header
-						drawerDxOpen={drawerDxOpen}
-						toggleDrawerDx={toggleDrawerDx}
-						setTipoContesto={setTipoContesto}
-						setDrawerDxOpen={setDrawerDxOpen}
-					/>
-					<DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
-					<DrawerDx
-						drawerDxOpen={drawerDxOpen}
-						toggleDrawerDx={toggleDrawerDx}
-						tipoContesto={tipoContesto}
-					>
-						{tipoContesto === "utente" ? <UserDrawerContentDx /> : <CarrelloDrawerContentDx />}
-					</DrawerDx>
-					<Box
-						component='main'
-						sx={{
-							flexGrow: 1,
-							pr: 3,
-							pt: 3,
-							pb: 3,
-							marginTop: (theme) => `calc(${theme.mixins.toolbar.minHeight + 5}px)`,
-							paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
-						}}
-					>
-						<AlertMe />
-						{children}
-						<Footer />
-					</Box>
+		<animated.main style={mainAnimation}>
+			<Box sx={{display: "flex"}}>
+				<Header
+					drawerDxOpen={drawerDxOpen}
+					toggleDrawerDx={toggleDrawerDx}
+					setTipoContesto={setTipoContesto}
+					setDrawerDxOpen={setDrawerDxOpen}
+				/>
+				<DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
+				<DrawerDx
+					drawerDxOpen={drawerDxOpen}
+					toggleDrawerDx={toggleDrawerDx}
+					tipoContesto={tipoContesto}
+				>
+					{tipoContesto === "utente" ? <UserDrawerContentDx /> : <CarrelloDrawerContentDx />}
+				</DrawerDx>
+				<Box
+					component='main'
+					sx={{
+						flexGrow: 1,
+						pr: 3,
+						pt: 3,
+						pb: 3,
+						marginTop: (theme) => `calc(${theme.mixins.toolbar.minHeight + 5}px)`,
+						paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
+					}}
+				>
+					<AlertMe />
+					{children}
+					<Footer />
 				</Box>
-			</animated.main>
-		</AlertMeProvider>
+				{/* Componente CookieConsent */}
+				<CookieConsent />
+			</Box>
+		</animated.main>
 	);
 };
 

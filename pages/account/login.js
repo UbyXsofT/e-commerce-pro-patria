@@ -22,6 +22,8 @@ import {ScrollToTopBtn} from "../../src/components/layout/footer/ScrollToTopBtn"
 import {PartitaIva} from "../../src/components/layout/footer/PartitaIva";
 import Copyright from "../../src/components/layout/footer/Copyright";
 
+import CookieConsent from "../../src/components/cookie/CookieConsent";
+
 const Login = (setLoading) => {
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
@@ -245,6 +247,7 @@ const Login = (setLoading) => {
 											<Link
 												href=''
 												variant='body2'
+												sx={{cursor: "pointer", color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 											>
 												Password dimenticata?
 											</Link>
@@ -253,6 +256,7 @@ const Login = (setLoading) => {
 											<Link
 												onClick={() => Router.push("/account/register")}
 												variant='body2'
+												sx={{cursor: "pointer", color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 											>
 												Non hai un account? Iscriviti
 											</Link>
@@ -264,28 +268,39 @@ const Login = (setLoading) => {
 						</Grid>
 					</Grid>
 
-					<Box style={{bottom: 0, paddingTop: 20, position: "relative"}}>
+					<Box style={{bottom: 0, position: "relative"}}>
 						<Box style={{paddingLeft: "20px"}}>
 							<PrivacyCookie>
 								<ScrollToTopBtn />
 							</PrivacyCookie>
 						</Box>
-						<Divider sx={{mb: "1rem", mt: "1rem"}} />
-						<Typography
-							variant='body2'
-							align='center'
+						{/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
+						<Box
+							sx={{
+								backgroundColor: (theme) => theme.palette.primary.main,
+								borderRadius: 1,
+								p: 2,
+								m: 2,
+							}}
 						>
-							<PartitaIva />
-						</Typography>
+							<Typography
+								variant='body2'
+								align='center'
+								sx={{color: "white"}}
+							>
+								<PartitaIva />
+							</Typography>
 
-						<Typography
-							variant='body2'
-							align='center'
-							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white"), paddingBottom: "10px"}}
-						>
-							<Copyright />
-						</Typography>
+							<Typography
+								variant='body2'
+								align='center'
+								sx={{color: "white"}}
+							>
+								<Copyright />
+							</Typography>
+						</Box>
 					</Box>
+					{/* <CookieConsent /> */}
 				</Box>
 			</Layout>
 		</ThemeProvider>

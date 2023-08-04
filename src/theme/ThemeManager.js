@@ -4,30 +4,30 @@ const listaTemi = [
 	{
 		key: "Default",
 		value: {
-			palette: {
-				mode: "light",
-				primary: {
-					main: "#30FF01",
+			Light: {
+				palette: {
+					mode: "light",
+					primary: {
+						main: "#127bd1",
+					},
+					secondary: {
+						main: "#b51b16",
+						contrastText: "#000000",
+					},
+					background: {
+						default: "#F3F3F3",
+						paper: "#E9E9E9",
+					},
+					text: {
+						primary: "#1A1A1A",
+						secondary: "#373737",
+					},
 				},
-				secondary: {
-					main: "#ffba00",
-					contrastText: "#000000",
-				},
-				background: {
-					default: "#F3F3F3",
-					paper: "#E9E9E9",
-				},
-				text: {
-					primary: "#1A1A1A",
-					secondary: "#373737",
-				},
-			},
-			components: {
-				Light: {
+				components: {
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#30FF01",
+								backgroundColor: "#127bd1",
 								color: "#fff",
 							},
 						},
@@ -38,10 +38,10 @@ const listaTemi = [
 				palette: {
 					mode: "dark",
 					primary: {
-						main: "#30FF01",
+						main: "#127bd1",
 					},
 					secondary: {
-						main: "#ffba00",
+						main: "#b51b16",
 						contrastText: "#000000",
 					},
 					background: {
@@ -57,127 +57,7 @@ const listaTemi = [
 					MuiAppBar: {
 						styleOverrides: {
 							colorInherit: {
-								backgroundColor: "#30FF01",
-								color: "#fff",
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-	{
-		key: "Tema1",
-		value: {
-			Light: {
-				palette: {
-					mode: "light",
-					primary: {
-						main: "#ff5701",
-					},
-					secondary: {
-						main: "#ffba00",
-						contrastText: "#000000",
-					},
-					background: {
-						default: "#eeeeee",
-						paper: "#eeeeee",
-					},
-				},
-				components: {
-					MuiAppBar: {
-						styleOverrides: {
-							colorInherit: {
-								backgroundColor: "#689f38",
-								color: "#fff",
-							},
-						},
-					},
-				},
-			},
-			Dark: {
-				palette: {
-					mode: "dark",
-					primary: {
-						main: "#ffba00",
-					},
-					secondary: {
-						main: "#f57c00",
-						contrastText: "#000000",
-					},
-					background: {
-						default: "#121212",
-						paper: "#121212",
-					},
-					text: {
-						primary: "#f1f1f1",
-					},
-				},
-				components: {
-					MuiAppBar: {
-						styleOverrides: {
-							colorInherit: {
-								backgroundColor: "#385C9F",
-								color: "#fff",
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-	{
-		key: "Tema2",
-		value: {
-			Light: {
-				palette: {
-					mode: "light",
-					primary: {
-						main: "#ff5701",
-					},
-					secondary: {
-						main: "#ffba00",
-						contrastText: "#000000",
-					},
-					background: {
-						default: "#eeeeee",
-						paper: "#eeeeee",
-					},
-				},
-				components: {
-					MuiAppBar: {
-						styleOverrides: {
-							colorInherit: {
-								backgroundColor: "#689f38",
-								color: "#fff",
-							},
-						},
-					},
-				},
-			},
-			Dark: {
-				palette: {
-					mode: "dark",
-					primary: {
-						main: "#ffba00",
-					},
-					secondary: {
-						main: "#f57c00",
-						contrastText: "#000000",
-					},
-					background: {
-						default: "#121212",
-						paper: "#121212",
-					},
-					text: {
-						primary: "#f1f1f1",
-					},
-				},
-				components: {
-					MuiAppBar: {
-						styleOverrides: {
-							colorInherit: {
-								backgroundColor: "#385C9F",
+								backgroundColor: "#127bd1",
 								color: "#fff",
 							},
 						},

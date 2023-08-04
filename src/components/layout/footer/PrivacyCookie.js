@@ -3,8 +3,9 @@ import {useTheme} from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import {HowToReg, PrivacyTip, Cookie} from "@mui/icons-material";
-import {Box} from "@mui/material";
+import {Box, Button} from "@mui/material";
 import eCommerceConfig from "../../../../eCommerceConfig.json";
+import Router from "next/router";
 
 export function PrivacyCookie() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
@@ -20,12 +21,24 @@ export function PrivacyCookie() {
 			<Box sx={{display: "flex", flexDirection: "column"}}>
 				<Box>
 					<HowToReg sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
-					<Link
-						href={eCommerceConfig.LinkCondizioni}
-						sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-					>
-						Condizioni generali di uso e vendita
-					</Link>
+
+					{eCommerceConfig.LinkCondizioni !== null ? (
+						<Link
+							href={eCommerceConfig.LinkCondizioni}
+							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
+						>
+							Condizioni generali di uso e vendita
+						</Link>
+					) : (
+						<Link
+							onClick={() => {
+								Router.push("/policy/termini-condizioni");
+							}}
+							sx={{cursor: "pointer", color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
+						>
+							Condizioni generali di uso e vendita
+						</Link>
+					)}
 				</Box>
 				<Box>
 					<PrivacyTip sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
@@ -38,12 +51,24 @@ export function PrivacyCookie() {
 				</Box>
 				<Box>
 					<Cookie sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
-					<Link
-						href={eCommerceConfig.LinkCookie}
-						sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-					>
-						Cookie
-					</Link>
+
+					{eCommerceConfig.LinkCookie !== null ? (
+						<Link
+							href={eCommerceConfig.LinkCookie}
+							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
+						>
+							Cookie
+						</Link>
+					) : (
+						<Link
+							onClick={() => {
+								Router.push("/policy/cookie-policy");
+							}}
+							sx={{cursor: "pointer", color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
+						>
+							Cookie
+						</Link>
+					)}
 				</Box>
 			</Box>
 		</Grid>

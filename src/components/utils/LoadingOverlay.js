@@ -6,7 +6,7 @@ export default function LoadingOverlay() {
 	return (
 		<div>
 			<Backdrop
-				sx={{color: "#FF0000", zIndex: (theme) => theme.zIndex.drawer + 1}}
+				sx={{color: "#FF0000", zIndex: (theme) => theme.zIndex.drawer + 2}}
 				open={true}
 			>
 				<CircularProgress color='inherit' />

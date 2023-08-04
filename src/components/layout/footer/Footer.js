@@ -127,24 +127,35 @@ export function Footer() {
 				</Grid>
 
 				<Divider sx={{mb: "1rem", mt: "1rem"}} />
+
 				<PrivacyCookie>
 					<ScrollToTopBtn />
 				</PrivacyCookie>
 				<Divider sx={{mb: "1rem", mt: "1rem"}} />
-				<Typography
-					variant='body2'
-					align='center'
-				>
-					<PartitaIva />
-				</Typography>
 
-				<Typography
-					variant='body2'
-					align='center'
-					sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
+				<Box
+					sx={{
+						backgroundColor: (theme) => theme.palette.primary.main,
+						borderRadius: 1,
+						p: 2,
+					}}
 				>
-					<Copyright />
-				</Typography>
+					<Typography
+						variant='body2'
+						align='center'
+						sx={{color: "white"}}
+					>
+						<PartitaIva />
+					</Typography>
+
+					<Typography
+						variant='body2'
+						align='center'
+						sx={{color: "white"}}
+					>
+						<Copyright />
+					</Typography>
+				</Box>
 			</Container>
 		</animated.footer>
 	);
