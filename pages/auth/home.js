@@ -6,8 +6,8 @@ import {useTheme} from "@mui/material/styles";
 import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
-import Layout from "../../src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import Layout from "/src/components/layout/Layout";
+import eCommerceConfig from "../../ecommerceConfig.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";

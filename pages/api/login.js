@@ -1,6 +1,6 @@
 // /api/login.js
 import axios from "axios";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConfig from "../../ecommerceConfig.json";
 
 export default async function login(username, password, rememberMe) {
 	console.log("Call EndPoint: ", `${eCommerceConfig.UrlServerNode}/api/login`);
