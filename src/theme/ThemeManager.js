@@ -1,4 +1,4 @@
-import eCommerceConfig from "/eCommerceConfig.json";
+import eCommerceConf from "/eCommerceConf.json";
 
 const listaTemi = [
 	{
@@ -69,7 +69,7 @@ const listaTemi = [
 ];
 
 export function ThemeManager() {
-	const projectTema = eCommerceConfig.Tema;
+	const projectTema = eCommerceConf.Tema;
 	console.log("projectTema: ", projectTema);
 
 	const currTema = listaTemi.find((tema) => tema.key === projectTema);

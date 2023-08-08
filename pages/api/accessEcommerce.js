@@ -1,17 +1,17 @@
 // /api/login.js
 import axios from "axios";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 
 export default async function login(clienteKey) {
-	console.log("Call EndPoint: ", `${eCommerceConfig.UrlServerNode}/api/login`);
+	console.log("Call EndPoint: ", `${eCommerceConf.UrlServerNode}/api/login`);
 
 	try {
-		const response = await axios.post(`${eCommerceConfig.UrlServerNode}/api/login`, {
+		const response = await axios.post(`${eCommerceConf.UrlServerNode}/api/login`, {
 			username: username,
 			password: password,
 			rememberMe: rememberMe,
 			token: null,
-			clientKey: eCommerceConfig.ClientKey,
+			clientKey: eCommerceConf.ClientKey,
 		});
 		console.log("response: ", response);
 		if (response.status === 200) {

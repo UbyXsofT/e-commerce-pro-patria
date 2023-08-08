@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
@@ -33,7 +33,7 @@ const TerminiCondizioni = ({setLoading}) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Condizioni Generali di Uso e Vendita | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				title={`Condizioni Generali di Uso e Vendita | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description='This is a E-Commerce Info-Privacy page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<Typography
@@ -47,7 +47,7 @@ const TerminiCondizioni = ({setLoading}) => {
 					component='p'
 					paragraph={true}
 				>
-					Benvenuto su {eCommerceConfig.NomeEcommerce}! Ti invitiamo a leggere attentamente le seguenti Condizioni Generali di Uso e Vendita, poiché l'utilizzo del nostro sito e l'acquisto dei nostri prodotti implicano l'accettazione di queste
+					Benvenuto su {eCommerceConf.NomeEcommerce}! Ti invitiamo a leggere attentamente le seguenti Condizioni Generali di Uso e Vendita, poiché l'utilizzo del nostro sito e l'acquisto dei nostri prodotti implicano l'accettazione di queste
 					condizioni.
 				</Typography>
 
@@ -72,7 +72,7 @@ const TerminiCondizioni = ({setLoading}) => {
 
 						<ListItem>
 							<ListItemText
-								primary={`1.3 Proprietà Intellettuale: Tutti i contenuti del sito, inclusi testi, grafica, loghi, immagini, video, sono di proprietà esclusiva di ${eCommerceConfig.NomeEcommerce} e sono protetti dalle leggi sulla proprietà intellettuale.`}
+								primary={`1.3 Proprietà Intellettuale: Tutti i contenuti del sito, inclusi testi, grafica, loghi, immagini, video, sono di proprietà esclusiva di ${eCommerceConf.NomeEcommerce} e sono protetti dalle leggi sulla proprietà intellettuale.`}
 							/>
 						</ListItem>
 					</List>
@@ -142,7 +142,7 @@ const TerminiCondizioni = ({setLoading}) => {
 
 						<ListItem>
 							<ListItemText
-								primary={`4.2 In nessun caso ${eCommerceConfig.NomeEcommerce} o i suoi rappresentanti saranno responsabili per danni diretti, indiretti, speciali o consequenziali derivanti dall'utilizzo o dall'incapacità di utilizzare i nostri prodotti.`}
+								primary={`4.2 In nessun caso ${eCommerceConf.NomeEcommerce} o i suoi rappresentanti saranno responsabili per danni diretti, indiretti, speciali o consequenziali derivanti dall'utilizzo o dall'incapacità di utilizzare i nostri prodotti.`}
 							/>
 						</ListItem>
 					</List>
@@ -174,7 +174,7 @@ const TerminiCondizioni = ({setLoading}) => {
 					<List>
 						<ListItem>
 							<ListItemText
-								primary={`6.1 Le presenti Condizioni Generali di Uso e Vendita sono regolate dalla legge in ${eCommerceConfig.PaeseRegione}. Eventuali controversie saranno devolute alla competenza esclusiva dei tribunali di ${eCommerceConfig.CittaGiurisdizione}.`}
+								primary={`6.1 Le presenti Condizioni Generali di Uso e Vendita sono regolate dalla legge in ${eCommerceConf.PaeseRegione}. Eventuali controversie saranno devolute alla competenza esclusiva dei tribunali di ${eCommerceConf.CittaGiurisdizione}.`}
 							/>
 						</ListItem>
 					</List>

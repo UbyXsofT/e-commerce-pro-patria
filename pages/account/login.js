@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/LayoutLogin";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import {useMediaQuery} from "@mui/material";
@@ -114,7 +114,7 @@ const Login = (setLoading) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Login | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description='This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<AlertMe />
@@ -259,7 +259,7 @@ const Login = (setLoading) => {
 
 									{/* Add the reCAPTCHA component */}
 									<ReCAPTCHA
-										sitekey={eCommerceConfig.YOUR_RECAPTCHA_SITE_KEY}
+										sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
 										onChange={(value) => setCaptchaValue(value)}
 									/>
 

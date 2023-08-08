@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
@@ -141,7 +141,7 @@ const Notifiche = ({setLoading}) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Avvisi | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description='This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<Typography

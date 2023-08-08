@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
@@ -53,7 +53,7 @@ const CookiePolicy = ({setLoading}) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Cookie-Policy | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				title={`Cookie-Policy | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description='This is a E-Commerce Cookie-Policy page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<Typography
@@ -184,7 +184,7 @@ const CookiePolicy = ({setLoading}) => {
 				>
 					Per ulteriori dettagli sulla nostra politica sulla privacy, ti invitiamo a leggere{" "}
 					<Link
-						href={eCommerceConfig.LinkPrivacy}
+						href={eCommerceConf.LinkPrivacy}
 						sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 					>
 						la nostra Informativa sulla Privacy completa

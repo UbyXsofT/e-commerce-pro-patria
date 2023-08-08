@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {setLoading} from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
-import eCommerceConfig from "../../eCommerceConfig.json";
+import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import {styled} from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
@@ -27,7 +27,7 @@ const Home = ({setLoading}) => {
 				<br />
 				<Link
 					color='inherit'
-					href={eCommerceConfig.LinkHomeCenter}
+					href={eCommerceConf.LinkHomeCenter}
 				>
 					Per maggiori informazioni clicca qui!
 				</Link>
@@ -67,7 +67,7 @@ const Home = ({setLoading}) => {
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Home | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
+				title={`Home | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description='This is a E-Commerce home page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
 				<Typography

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import eCommerceConfig from "./../../../../eCommerceConfig.json";
+import eCommerceConf from "./../../../../eCommerceConf.json";
 
 export function PartitaIva() {
-	return <Typography variant='caption'>Partita IVA: {eCommerceConfig.PartitaIva}</Typography>;
+	return <Typography variant='caption'>Partita IVA: {eCommerceConf.PartitaIva}</Typography>;
 }

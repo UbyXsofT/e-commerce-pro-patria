@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import {HowToReg, PrivacyTip, Cookie} from "@mui/icons-material";
 import {Box, Button} from "@mui/material";
-import eCommerceConfig from "../../../../eCommerceConfig.json";
+import eCommerceConf from "../../../../eCommerceConf.json";
 import Router from "next/router";
 
 export function PrivacyCookie() {
@@ -22,9 +22,9 @@ export function PrivacyCookie() {
 				<Box>
 					<HowToReg sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
 
-					{eCommerceConfig.LinkCondizioni !== null ? (
+					{eCommerceConf.LinkCondizioni !== null ? (
 						<Link
-							href={eCommerceConfig.LinkCondizioni}
+							href={eCommerceConf.LinkCondizioni}
 							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 						>
 							Condizioni generali di uso e vendita
@@ -43,7 +43,7 @@ export function PrivacyCookie() {
 				<Box>
 					<PrivacyTip sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
 					<Link
-						href={eCommerceConfig.LinkPrivacy}
+						href={eCommerceConf.LinkPrivacy}
 						sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 					>
 						Informativa sulla privacy
@@ -52,9 +52,9 @@ export function PrivacyCookie() {
 				<Box>
 					<Cookie sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
 
-					{eCommerceConfig.LinkCookie !== null ? (
+					{eCommerceConf.LinkCookie !== null ? (
 						<Link
-							href={eCommerceConfig.LinkCookie}
+							href={eCommerceConf.LinkCookie}
 							sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
 						>
 							Cookie
