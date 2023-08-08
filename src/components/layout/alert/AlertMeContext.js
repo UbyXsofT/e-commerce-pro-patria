@@ -1,3 +1,4 @@
+//AlertMeContext.js
 import React, {createContext, useState} from "react";
 
 const AlertMeContext = createContext();
@@ -35,30 +36,3 @@ export const useAlertMe = () => {
 };
 
 export default AlertMeContext;
-
-// //AlertMeContext.js
-// import React, {createContext, useState} from "react";
-
-// const AlertMeContext = createContext();
-
-// export const AlertMeProvider = ({children}) => {
-// 	const [alertParams, setAlertParams] = useState({
-// 		variant: "filled",
-// 		severity: "error",
-// 		title: "",
-// 		desc: "",
-// 		openAlertMe: false,
-// 	});
-
-// 	return <AlertMeContext.Provider value={{alertParams, setAlertParams}}>{children}</AlertMeContext.Provider>;
-// };
-
-// export const useAlertMe = () => {
-// 	const context = React.useContext(AlertMeContext);
-// 	if (!context) {
-// 		throw new Error("useAlertMe deve essere utilizzato all'interno di un AlertMeProvider");
-// 	}
-// 	return context;
-// };
-
-// export default AlertMeContext;

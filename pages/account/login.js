@@ -1,4 +1,6 @@
 import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import {Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, Divider} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {ThemeProvider} from "@mui/material/styles";
@@ -23,6 +25,8 @@ import {PartitaIva} from "../../src/components/layout/footer/PartitaIva";
 import Copyright from "../../src/components/layout/footer/Copyright";
 
 import CookieConsent from "../../src/components/cookie/CookieConsent";
+import {useAlertMe} from "../../src/components/layout/alert/AlertMeContext";
+import {AlertMe} from "../../src/components/layout/alert/AlertMe";
 
 const Login = (setLoading) => {
 	//setLoading(true); rende visibile il loading
@@ -31,7 +35,6 @@ const Login = (setLoading) => {
 	const [username, setUsername] = React.useState("Admin");
 	const [password, setPassword] = React.useState("Psw");
 	const [rememberMe, setRememberMe] = React.useState(true);
-
 	const [paddingTop, setPaddingTop] = React.useState(0);
 	React.useEffect(() => {
 		const calculatePaddingTop = () => {
@@ -40,22 +43,36 @@ const Login = (setLoading) => {
 			const calculatedPaddingTop = (windowHeight - mainHeight) / 2;
 			setPaddingTop(calculatedPaddingTop);
 		};
-
 		calculatePaddingTop();
 		window.addEventListener("resize", calculatePaddingTop);
-
 		return () => {
 			window.removeEventListener("resize", calculatePaddingTop);
 		};
 	}, []);
 
+	const [captchaValue, setCaptchaValue] = React.useState(null);
+	const {showAlert} = useAlertMe();
+
 	const handleLogin = async () => {
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			console.log("Si prega di completare il reCAPTCHA.");
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>Si prega di completare il reCAPTCHA.</strong>
+					</h3>
+				</React.Fragment>
+			);
+			await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+			return;
+		}
+
 		const {token, error, success} = await login(username, password, rememberMe);
 		console.log("token: ", token);
 		console.log("error: ", error);
 		console.log("success: ", success);
-
-		Router.push("/auth/home");
+		//Router.push("/auth/home");
 
 		//Client gestisce il token e i cookie qui
 		if (success) {
@@ -65,6 +82,14 @@ const Login = (setLoading) => {
 			Router.push("/auth/home");
 		} else {
 			// Gestisci l'errore di autenticazione o l'errore di connessione
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{error}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert(null, "error", "ATTENZIONE!", textAlert, true);
 		}
 	};
 	const StyledImageLogo = styled(Image)({
@@ -92,6 +117,7 @@ const Login = (setLoading) => {
 				title={`Login | E-Commerce ${eCommerceConfig.NomeEcommerce}`}
 				description='This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl.'
 			>
+				<AlertMe />
 				<AppBar
 					position='static'
 					sx={{
@@ -230,6 +256,13 @@ const Login = (setLoading) => {
 										}
 										label='Ricordati di me'
 									/>
+
+									{/* Add the reCAPTCHA component */}
+									<ReCAPTCHA
+										sitekey={eCommerceConfig.YOUR_RECAPTCHA_SITE_KEY}
+										onChange={(value) => setCaptchaValue(value)}
+									/>
+
 									<Button
 										//   type="submit"
 										fullWidth
@@ -266,41 +299,41 @@ const Login = (setLoading) => {
 								</Box>
 							</Box>
 						</Grid>
-					</Grid>
 
-					<Box style={{bottom: 0, position: "relative"}}>
-						<Box style={{paddingLeft: "20px"}}>
+						<Box style={{width: "100%", marginTop: 30}}>
+							{/* <Box style={{paddingLeft: "20px"}}>
 							<PrivacyCookie>
 								<ScrollToTopBtn />
 							</PrivacyCookie>
-						</Box>
-						{/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
-						<Box
-							sx={{
-								backgroundColor: (theme) => theme.palette.primary.main,
-								borderRadius: 1,
-								p: 2,
-								m: 2,
-							}}
-						>
-							<Typography
-								variant='body2'
-								align='center'
-								sx={{color: "white"}}
+						</Box> */}
+							{/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
+							<Box
+								sx={{
+									backgroundColor: (theme) => theme.palette.primary.main,
+									borderRadius: 1,
+									p: 2,
+									m: 2,
+								}}
 							>
-								<PartitaIva />
-							</Typography>
+								<Typography
+									variant='body2'
+									align='center'
+									sx={{color: "white"}}
+								>
+									<PartitaIva />
+								</Typography>
 
-							<Typography
-								variant='body2'
-								align='center'
-								sx={{color: "white"}}
-							>
-								<Copyright />
-							</Typography>
+								<Typography
+									variant='body2'
+									align='center'
+									sx={{color: "white"}}
+								>
+									<Copyright />
+								</Typography>
+							</Box>
 						</Box>
-					</Box>
-					{/* <CookieConsent /> */}
+						{/* <CookieConsent /> */}
+					</Grid>
 				</Box>
 			</Layout>
 		</ThemeProvider>
