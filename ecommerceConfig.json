@@ -1,9 +1,9 @@
 {
-    "NomeEcommerce": "Byteware",
-    "ClientKey": "Byteware",
-    "Copyright": "Byteware",
-    "LinkHomeCenter": "https://www.tommysgest.com",
-    "PartitaIva": "02565720543",
-    "Tema": "Default",
-    "UrlServerNode": "http://localhost:8000"
+  "NomeEcommerce": "Byteware",
+  "ClientKey": "Byteware",
+  "Copyright": "Byteware",
+  "LinkHomeCenter": "https://www.tommysgest.com",
+  "PartitaIva": "02565720543",
+  "Tema": "Default",
+  "UrlServerNode": "http://localhost:8000"
 }

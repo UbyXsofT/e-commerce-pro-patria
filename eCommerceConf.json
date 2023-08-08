@@ -1,15 +1,15 @@
 {
-    "ClientKey": "ProPatria",
-    "NomeEcommerce": "SG PRO PATRIA 1883",
-    "PaeseRegione": "Italia",
-    "CittaGiurisdizione": "Milano",
-    "Copyright": "SG PRO PATRIA 1883 SRL",
-    "LinkHomeCenter": "https://propatria1883.it/",
-    "LinkPrivacy": "https://propatria1883.it/privacy/",
-    "LinkCondizioni": null,
-    "LinkCookie": null,
-    "PartitaIva": "09778190158",
-    "YOUR_RECAPTCHA_SITE_KEY": "6Lc0Rn0nAAAAAJTW76-BDPjrCQWGeVpvfNqjC6zB",
-    "Tema": "Default",
-    "UrlServerNode": "http://localhost:8000"
+  "ClientKey": "ProPatria",
+  "NomeEcommerce": "SG PRO PATRIA 1883",
+  "PaeseRegione": "Italia",
+  "CittaGiurisdizione": "Milano",
+  "Copyright": "SG PRO PATRIA 1883 SRL",
+  "LinkHomeCenter": "https://propatria1883.it/",
+  "LinkPrivacy": "https://propatria1883.it/privacy/",
+  "LinkCondizioni": null,
+  "LinkCookie": null,
+  "PartitaIva": "09778190158",
+  "YOUR_RECAPTCHA_SITE_KEY": "6Lc0Rn0nAAAAAJTW76-BDPjrCQWGeVpvfNqjC6zB",
+  "Tema": "Default",
+  "UrlServerNode": "http://localhost:8000"
 }
