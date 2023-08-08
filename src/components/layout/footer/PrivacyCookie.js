@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import {HowToReg, PrivacyTip, Cookie} from "@mui/icons-material";
@@ -8,19 +8,25 @@ import eCommerceConf from "../../../../eCommerceConf.json";
 import Router from "next/router";
 
 export function PrivacyCookie() {
-	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
-	const theme = useTheme();
+  const [isFooterFixed, setIsFooterFixed] = React.useState(false);
+  const theme = useTheme();
 
-	return (
-		<Grid
-			item
-			xs={12}
-			sm={4}
-			// mt={5}
-		>
-			<Box sx={{display: "flex", flexDirection: "column"}}>
-				<Box>
-					<HowToReg sx={{mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main}} />
+  return (
+    <Grid
+      item
+      xs={12}
+      sm={4}
+      // mt={5}
+    >
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box>
+          <HowToReg
+            sx={{
+              mr: 1,
+              fontSize: "1rem",
+              color: (theme) => theme.palette.primary.main,
+            }}
+          />
 
 					{eCommerceConf.LinkCondizioni !== null ? (
 						<Link
