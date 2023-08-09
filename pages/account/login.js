@@ -213,15 +213,33 @@ const Login = (setLoading) => {
                     label="Nome Utente"
                     name="username"
                     autoComplete="username"
+                    value={username}
+                    onChange={(event) => {
+                      setUsername(event.target.value);
+                    }}
                     InputProps={{
                       style: {
                         backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#ffffff",
-                        color: "#ffffff",
+                        color: theme.palette.mode === "dark" ? "#ffffff" : "#121212",
                       },
                     }}
                   />
-                  <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-                  <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Ricordati di me" />
+                  <TextField
+                    value={password}
+                    onChange={(event) => {
+                      console.log(event.target.value);
+                      return setPassword(event.target.value);
+                    }}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                  />
+                  <FormControlLabel control={<Checkbox value="remember" color="primary" checked={rememberMe} onClick={() => setRememberMe(!rememberMe)} />} label="Ricordati di me" />
 
                   {/* Add the reCAPTCHA component */}
                   <ReCAPTCHA sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY} onChange={(value) => setCaptchaValue(value)} />
