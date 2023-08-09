@@ -20,6 +20,9 @@ import Image from "next/image";
 import Step2 from "./register/Step2";
 import Step3 from "./register/Step3";
 import Router from "next/router";
+import { PrivacyTip } from "@mui/icons-material";
+
+import eCommerceConf from "./../../eCommerceConf.json";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -32,14 +35,103 @@ export default function SignUp() {
 
   const steps = ["Dati Personali", "Utente", "Finalizza"];
 
+  const [underage, setUnderage] = React.useState(false);
+
+  const [codiceFiscale, setCodiceFiscale] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+
+  const [gender, setGender] = React.useState("male");
+  const [dateOfBirth, setDateOfBirth] = React.useState({});
+  const [placeOfBirth, setPlaceOfBirth] = React.useState("");
+  const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
+
+  const [address, setAddress] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [cap, setCap] = React.useState("");
+  const [province, setProvince] = React.useState("");
+
+  const [email, setEmail] = React.useState("");
+  const [phoneNumber, setPhoneNumber] = React.useState("+39");
+
+  const [privacy, setPrivacy] = React.useState(false);
+
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const privacyLabel = (
+    <Typography>
+      Iscrivendoti dichiari di aver preso visione dell'
+      {
+        <span>
+          <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
+            Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: (theme) => theme.palette.primary.main }}></PrivacyTip>}
+          </Link>
+        </span>
+      }
+    </Typography>
+  );
+
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Step1 />;
+        return (
+          <Step1
+            codiceFiscale={codiceFiscale}
+            setCodiceFiscale={setCodiceFiscale}
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
+            gender={gender}
+            setGender={setGender}
+            dateOfBirth={dateOfBirth}
+            setDateOfBirth={setDateOfBirth}
+            placeOfBirth={placeOfBirth}
+            setPlaceOfBirth={setPlaceOfBirth}
+            provinceOfBirth={provinceOfBirth}
+            setProvinceOfBirth={setProvinceOfBirth}
+            address={address}
+            setAddress={setAddress}
+            city={city}
+            setCity={setCity}
+            cap={cap}
+            setCap={setCap}
+            province={province}
+            setProvince={setProvince}
+            email={email}
+            setEmail={setEmail}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            privacy={privacy}
+            setPrivacy={setPrivacy}
+            privacyLabel={privacyLabel}
+          />
+        );
       case 1:
-        return <Step2 />;
+        return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
       case 2:
-        return <Step3 />;
+        return (
+          <Step3
+            codiceFiscale={codiceFiscale}
+            firstName={firstName}
+            lastName={lastName}
+            gender={gender}
+            dateOfBirth={dateOfBirth}
+            placeOfBirth={placeOfBirth}
+            provinceOfBirth={provinceOfBirth}
+            address={address}
+            city={city}
+            cap={cap}
+            province={province}
+            email={email}
+            phoneNumber={phoneNumber}
+            privacy={privacy}
+            username={username}
+            privacyLabel={privacyLabel}
+          />
+        );
       default:
         throw new Error("Unknown step");
     }

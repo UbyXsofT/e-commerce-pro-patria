@@ -12,7 +12,7 @@ import "dayjs/locale/it";
 import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 
-const Step3 = () => {
+const Step3 = ({ codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, provinceOfBirth, address, city, cap, province, email, phoneNumber, privacy, username, privacyLabel }) => {
   const handleSubmit = () => {};
 
   return (
@@ -32,22 +32,22 @@ const Step3 = () => {
           <Grid container spacing={2}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField disabled fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+                <TextField value={codiceFiscale} disabled fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField disabled autoComplete="given-name" name="firstName" fullWidth id="firstName" label="Nome" autoFocus />
+                <TextField value={firstName} disabled name="firstName" fullWidth id="firstName" label="Nome" autoFocus />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField disabled fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
+                <TextField value={lastName} disabled fullWidth id="lastName" label="Cognome" name="lastName" />
               </Grid>
 
               <Grid item xs={12}>
                 <FormControl disabled>
                   <FormLabel id="sesso">Sesso</FormLabel>
-                  <RadioGroup aria-labelledby="sesso" defaultValue="female" name="sesso" row>
-                    <FormControlLabel value="femmina" control={<Radio />} label="Femmina" />
-                    <FormControlLabel value="maschio" control={<Radio />} label="Maschio" />
-                    <FormControlLabel value="altro" control={<Radio />} label="Altro" />
+                  <RadioGroup value={gender} aria-labelledby="sesso" name="gender" row>
+                    <FormControlLabel value="female" control={<Radio />} label="Femmina" />
+                    <FormControlLabel value="male" control={<Radio />} label="Maschio" />
+                    <FormControlLabel value="other" control={<Radio />} label="Altro" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
@@ -55,6 +55,7 @@ const Step3 = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
                     disabled
+                    value={dateOfBirth}
                     label="Data di Nascita"
                     sx={{
                       width: "100%",
@@ -63,44 +64,43 @@ const Step3 = () => {
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField disabled fullWidth id="luogoNascita" label="Luogo di Nascita" name="luogoNascita" autoComplete="luogoNascita" />
+                <TextField value={placeOfBirth} disabled fullWidth id="placeOfBirth" label="Luogo di Nascita" name="placeOfBirth" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField disabled fullWidth id="provinciaNascita" label="Provincia" name="provinciaNascita" autoComplete="provinciaNascita" />
+                <TextField value={provinceOfBirth} disabled fullWidth id="provinceOfBirth" label="Provincia" name="provinceOfBirth" />
               </Grid>
             </Grid>
 
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField disabled fullWidth id="indirizzo" label="Indirizzo" name="indirizzo" autoComplete="indirizzo" />
+                <TextField value={address} disabled fullWidth id="address" label="Indirizzo" name="address" />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField disabled fullWidth id="città" label="Città" name="città" autoComplete="città" />
+                <TextField value={city} disabled fullWidth id="city" label="Città" name="city" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField disabled fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
+                <TextField value={cap} disabled fullWidth id="cap" label="CAP" name="cap" />
               </Grid>
               <Grid item xs={12}>
-                <TextField disabled fullWidth id="provincia" label="Provincia di Residenza" name="provincia" autoComplete="provincia" />
+                <TextField value={province} disabled fullWidth id="province" label="Provincia di Residenza" name="province" />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput disabled sx={{ width: "100%" }} defaultCountry="it" value="+39" />
+                <MuiTelInput value={phoneNumber} disabled sx={{ width: "100%" }} defaultCountry="it" />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField disabled fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+                <TextField value={email} disabled fullWidth id="email" label="Indirizzo Email" name="email" />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField disabled autoComplete="username" name="username" fullWidth id="username" label="Nome Utente" autoFocus />
+                <TextField value={username} disabled name="username" fullWidth id="username" label="Nome Utente" autoFocus />
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
-              <FormControlLabel disabled control={<Checkbox value="accettaPrivacy" color="primary" />} label="Iscrivendoti dichiari di aver preso visione dell'Informativa sulla Privacy" />
+              <FormControlLabel checked={privacy} disabled control={<Checkbox color="primary" />} label={privacyLabel} />
             </Grid>
           </Grid>
         </Box>
       </Box>
-      {/* <Copyright sx={{ mt: 5 }} /> */}
     </Container>
   );
 };

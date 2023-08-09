@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "dayjs/locale/it";
 
-const Step2 = () => {
+const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword }) => {
   const handleSubmit = () => {};
 
   return (
@@ -26,18 +26,18 @@ const Step2 = () => {
           <Grid container spacing={2} xs={12}>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
-                <TextField required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+                <TextField value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
               </Grid>
               <Grid item xs={12}>
-                <TextField autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" autoFocus />
+                <TextField value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" autoFocus />
               </Grid>
             </Grid>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
-                <TextField autoComplete="password" name="password" type="password" required fullWidth id="password" label="Password" />
+                <TextField value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="password" name="password" type="password" required fullWidth id="password" label="Password" />
               </Grid>
               <Grid item xs={12}>
-                <TextField autoComplete="confirmPassword" name="confirmPassword" type="password" required fullWidth id="confirmPassword" label="Conferma Password" />
+                <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="confirmPassword" name="confirmPassword" type="password" required fullWidth id="confirmPassword" label="Conferma Password" />
               </Grid>
             </Grid>
           </Grid>

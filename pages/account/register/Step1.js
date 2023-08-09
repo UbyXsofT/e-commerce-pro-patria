@@ -11,25 +11,39 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
-import { PrivacyTip } from "@mui/icons-material";
 
-import eCommerceConf from "./../../../eCommerceConf.json";
-
-const Step1 = () => {
+const Step1 = ({
+  codiceFiscale,
+  setCodiceFiscale,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  gender,
+  setGender,
+  dateOfBirth,
+  setDateOfBirth,
+  placeOfBirth,
+  setPlaceOfBirth,
+  provinceOfBirth,
+  setProvinceOfBirth,
+  address,
+  setAddress,
+  city,
+  setCity,
+  cap,
+  setCap,
+  province,
+  setProvince,
+  email,
+  setEmail,
+  phoneNumber,
+  setPhoneNumber,
+  privacy,
+  setPrivacy,
+  privacyLabel,
+}) => {
   const handleSubmit = () => {};
-
-  const privacyLabel = (
-    <Typography>
-      Iscrivendoti dichiari di aver preso visione dell'
-      {
-        <span>
-          <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
-            Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: (theme) => theme.palette.primary.main }}></PrivacyTip>}
-          </Link>
-        </span>
-      }
-    </Typography>
-  );
 
   return (
     <Container component="main" maxWidth="md">
@@ -48,28 +62,32 @@ const Step1 = () => {
           <Grid container spacing={2}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+                <TextField value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName" label="Nome" autoFocus />
+                <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="firstName" name="firstName" required fullWidth id="firstName" label="Nome" autoFocus />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField required fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
+                <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} required fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
               </Grid>
 
               <Grid item xs={12}>
                 <FormControl required>
                   <FormLabel id="sesso">Sesso</FormLabel>
-                  <RadioGroup aria-labelledby="sesso" defaultValue="female" name="sesso" row>
-                    <FormControlLabel value="femmina" control={<Radio />} label="Femmina" />
-                    <FormControlLabel value="maschio" control={<Radio />} label="Maschio" />
-                    <FormControlLabel value="altro" control={<Radio />} label="Altro" />
+                  <RadioGroup value={gender} onChange={(e) => setGender(e.target.value)} aria-labelledby="gender" name="gender" row>
+                    <FormControlLabel value="female" control={<Radio />} label="Femmina" />
+                    <FormControlLabel value="male" control={<Radio />} label="Maschio" />
+                    <FormControlLabel value="other" control={<Radio />} label="Altro" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
+                    value={dateOfBirth}
+                    onChange={(e) => {
+                      setDateOfBirth(e);
+                    }}
                     required
                     label="Data di Nascita"
                     sx={{
@@ -79,37 +97,37 @@ const Step1 = () => {
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField required fullWidth id="luogoNascita" label="Luogo di Nascita" name="luogoNascita" autoComplete="luogoNascita" />
+                <TextField value={placeOfBirth} onChange={(e) => setPlaceOfBirth(e.target.value)} required fullWidth id="placeOfBirth" label="Luogo di Nascita" name="placeOfBirth" autoComplete="placeOfBirth" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField required fullWidth id="provinciaNascita" label="Provincia" name="provinciaNascita" autoComplete="provinciaNascita" />
+                <TextField value={provinceOfBirth} onChange={(e) => setProvinceOfBirth(e.target.value)} required fullWidth id="provinceOfBirth" label="Provincia" name="provinceOfBirth" autoComplete="ProvinceOfBirth" />
               </Grid>
             </Grid>
 
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField required fullWidth id="indirizzo" label="Indirizzo" name="indirizzo" autoComplete="indirizzo" />
+                <TextField value={address} onChange={(e) => setAddress(e.target.value)} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField required fullWidth id="città" label="Città" name="città" autoComplete="città" />
+                <TextField value={city} onChange={(e) => setCity(e.target.value)} required fullWidth id="city" label="Città" name="city" autoComplete="city" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
+                <TextField value={cap} onChange={(e) => setCap(e.target.value)} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
               </Grid>
               <Grid item xs={12}>
-                <TextField required fullWidth id="provincia" label="Provincia" name="provincia" autoComplete="provincia" />
+                <TextField value={province} onChange={(e) => setProvince(e.target.value)} required fullWidth id="province" label="Provincia" name="province" autoComplete="province" />
               </Grid>
               <Grid item xs={12}>
-                <TextField required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+                <TextField value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value="+39" />
+                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} />
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
               <Box>
-                <FormControlLabel required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+                <FormControlLabel value={privacy} onChange={() => setPrivacy(!privacy)} required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
               </Box>
             </Grid>
           </Grid>
