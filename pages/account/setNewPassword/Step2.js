@@ -7,10 +7,10 @@ const Step2 = () => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
       <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }} textAlign={"center"}>
-        Password Dimenticata
+        Password Modificata
       </Typography>
       <Typography variant="subtitle1" textAlign={"center"}>
-        È stata inviata una mail di recupero
+        È possibile fare il Login
       </Typography>
       <Button
         fullWidth

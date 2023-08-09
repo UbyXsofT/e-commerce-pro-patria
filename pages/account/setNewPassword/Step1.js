@@ -1,6 +1,5 @@
-import React from "react";
-import { Container, Grid, Typography, TextField, Button, Paper, Link, CssBaseline } from "@mui/material";
-
+import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@mui/material";
+import { Container } from "@mui/system";
 import Router from "next/router";
 
 const Step1 = ({ setDone }) => {
@@ -10,17 +9,17 @@ const Step1 = ({ setDone }) => {
 
       <Grid container spacing={2}>
         <Typography variant="h4" sx={{ margin: "auto", padding: 3 }}>
-          Password Dimenticata
+          Imposta una Nuova Password
         </Typography>
         <Grid item xs={12}>
-          <Typography variant="subtitle">Ti verrà inviata una mail per il recupero</Typography>
+          <Typography variant="subtitle">Crea una Nuova Password per il tuo Account</Typography>
         </Grid>
 
         <Grid item xs={12}>
-          <TextField required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+          <TextField required fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
         </Grid>
         <Grid item xs={12}>
-          <TextField required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+          <TextField required fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
         </Grid>
 
         <Grid item xs={12}>
@@ -46,7 +45,7 @@ const Step1 = ({ setDone }) => {
               Annulla
             </Link>
             <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)}>
-              Invia
+              Conferma
             </Button>
           </div>
         </Grid>

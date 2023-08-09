@@ -1,7 +1,7 @@
 import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
-import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, CssBaseline, Divider } from "@mui/material";
+import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, CssBaseline } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -20,12 +20,9 @@ import CookieManager from "/src/components/cookie/CookieManager";
 import login from "../api/login";
 import Router from "next/router";
 
-import { PrivacyCookie } from "../../src/components/layout/footer/PrivacyCookie";
-import { ScrollToTopBtn } from "../../src/components/layout/footer/ScrollToTopBtn";
 import { PartitaIva } from "../../src/components/layout/footer/PartitaIva";
 import Copyright from "../../src/components/layout/footer/Copyright";
 
-import CookieConsent from "../../src/components/cookie/CookieConsent";
 import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "../../src/components/layout/alert/AlertMe";
 

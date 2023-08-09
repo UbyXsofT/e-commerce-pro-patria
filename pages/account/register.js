@@ -5,32 +5,14 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@emotion/react";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { width } from "@mui/system";
 
-import {
-  AppBar,
-  CssBaseline,
-  FormControl,
-  FormLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Step,
-  StepLabel,
-  Stepper,
-  Toolbar,
-} from "@mui/material";
-import { MuiTelInput } from "mui-tel-input";
+import { AppBar, CssBaseline, Paper, Step, StepLabel, Stepper, Toolbar } from "@mui/material";
 
 import Step1 from "./register/Step1";
 import styled from "@emotion/styled";
@@ -77,27 +59,16 @@ export default function SignUp() {
       <AppBar
         position="static"
         sx={{
-          backgroundColor:
-            theme.components.MuiAppBar.styleOverrides.colorInherit,
+          backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
         }}
       >
         <Container sx={{ display: "flex", alignItems: "center" }}>
           <Toolbar>
-            <StyledImageLogo
-              src="/images/LogoO.png"
-              alt="Logo"
-              width={200}
-              height={70}
-              priority={true}
-            />
+            <StyledImageLogo src="/images/LogoO.png" alt="Logo" width={200} height={70} priority={true} />
           </Toolbar>
         </Container>
       </AppBar>
-      <Container
-        maxWidth={"md"}
-        component={Paper}
-        sx={{ padding: 3, marginTop: 3 }}
-      >
+      <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
         {/* Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
         <Stepper activeStep={activeStep} sx={{ pt: 3 }}>
           {steps.map((label) => (
@@ -108,12 +79,7 @@ export default function SignUp() {
         </Stepper>
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Typography
-              variant="h5"
-              gutterBottom
-              sx={{ marginTop: 3 }}
-              textAlign={"center"}
-            >
+            <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }} textAlign={"center"}>
               Registrazione Completata
             </Typography>
             <Typography variant="subtitle1" textAlign={"center"}>
@@ -163,19 +129,12 @@ export default function SignUp() {
                 </Link>
               )}
               {activeStep !== 0 && (
-                <Button
-                  onClick={handleBack}
-                  sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
-                >
+                <Button onClick={handleBack} sx={{ mt: "auto", ml: 1, marginRight: "auto" }}>
                   Precedente
                 </Button>
               )}
 
-              <Button
-                variant="contained"
-                onClick={handleNext}
-                sx={{ mt: "auto", ml: 1 }}
-              >
+              <Button variant="contained" onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
                 {activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
               </Button>
             </Box>
