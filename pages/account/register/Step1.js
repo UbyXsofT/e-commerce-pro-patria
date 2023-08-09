@@ -9,11 +9,27 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+import { PrivacyTip } from "@mui/icons-material";
+
+import eCommerceConf from "./../../../eCommerceConf.json";
 
 const Step1 = () => {
   const handleSubmit = () => {};
+
+  const privacyLabel = (
+    <Typography>
+      Iscrivendoti dichiari di aver preso visione dell'
+      {
+        <span>
+          <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
+            Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: (theme) => theme.palette.primary.main }}></PrivacyTip>}
+          </Link>
+        </span>
+      }
+    </Typography>
+  );
 
   return (
     <Container component="main" maxWidth="md">
@@ -92,7 +108,9 @@ const Step1 = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <FormControlLabel required control={<Checkbox value="accettaPrivacy" color="primary" />} label="Iscrivendoti dichiari di aver preso visione dell'Informativa sulla Privacy" />
+              <Box>
+                <FormControlLabel required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+              </Box>
             </Grid>
           </Grid>
         </Box>

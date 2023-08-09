@@ -46,7 +46,7 @@ export function PrivacyCookie() {
         <Box>
           <PrivacyTip sx={{ mr: 1, fontSize: "1rem", color: (theme) => theme.palette.primary.main }} />
           <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
-            Informativa sulla privacy
+            Informativa sulla Privacy
           </Link>
         </Box>
         <Box>
