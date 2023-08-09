@@ -172,35 +172,22 @@ const CookiePolicy = ({setLoading}) => {
 					Rispettiamo il tuo diritto di scegliere i cookie che desideri consentire. Puoi modificare le tue preferenze sui cookie in qualsiasi momento accedendo alle impostazioni del tuo browser.
 				</Typography>
 
-				<Typography
-					variant='h5'
-					component='h3'
-				>
-					Informazioni Aggiuntive
-				</Typography>
-				<Typography
-					component='p'
-					paragraph={true}
-				>
-					Per ulteriori dettagli sulla nostra politica sulla privacy, ti invitiamo a leggere{" "}
-					<Link
-						href={eCommerceConf.LinkPrivacy}
-						sx={{color: (theme) => (theme.palette.mode === "light" ? "black" : "white")}}
-					>
-						la nostra Informativa sulla Privacy completa
-					</Link>
-					.
-				</Typography>
-				<Typography
-					variant='h5'
-					component='h3'
-					gutterBottom
-				>
-					Grazie per la tua fiducia e per aver scelto di visitare il nostro sito.
-				</Typography>
-			</Layout>
-		</ThemeProvider>
-	);
+        <Typography variant="h5" component="h3">
+          Informazioni Aggiuntive
+        </Typography>
+        <Typography component="p" paragraph={true}>
+          Per ulteriori dettagli sulla nostra politica sulla privacy, ti invitiamo a leggere
+          <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
+            la nostra Informativa sulla Privacy completa
+          </Link>
+          .
+        </Typography>
+        <Typography variant="h5" component="h3" gutterBottom>
+          Grazie per la tua fiducia e per aver scelto di visitare il nostro sito.
+        </Typography>
+      </Layout>
+    </ThemeProvider>
+  );
 };
 
 //REDUX-STORE

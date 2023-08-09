@@ -7,7 +7,7 @@ export default function Copyright() {
       {"Copyright © "}
       <Link color="inherit" href={eCommerceConf.LinkHomeCenter}>
         {eCommerceConf.Copyright}
-      </Link>{" "}
+      </Link>
       {new Date().getFullYear()}
       {"."}
     </Typography>

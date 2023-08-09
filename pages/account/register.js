@@ -151,6 +151,9 @@ export default function SignUp() {
                   onClick={() => Router.push("/account/login")}
                   variant="body2"
                   sx={{
+                    cursor: "pointer",
+                    color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
+
                     marginRight: "auto",
                     marginTop: "auto",
                     marginBottom: "auto",
