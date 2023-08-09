@@ -2,7 +2,7 @@ import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@
 import { Container } from "@mui/system";
 import Router from "next/router";
 
-const Step1 = ({ setDone }) => {
+const Step1 = ({ setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }) => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
       <CssBaseline />
@@ -16,10 +16,10 @@ const Step1 = ({ setDone }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField required fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
+          <TextField value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
         </Grid>
         <Grid item xs={12}>
-          <TextField required fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
+          <TextField value={confirmNewPassword} onChange={(event) => setConfirmNewPassword(event.target.value)} required fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
         </Grid>
 
         <Grid item xs={12}>

@@ -17,6 +17,9 @@ const setNewPassword = () => {
 
   const [done, setDone] = useState(false);
 
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -37,7 +40,7 @@ const setNewPassword = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      {done ? <Step2 /> : <Step1 setDone={setDone} />}
+      {done ? <Step2 /> : <Step1 setDone={setDone} newPassword={newPassword} setNewPassword={setNewPassword} confirmNewPassword={confirmNewPassword} setConfirmNewPassword={setConfirmNewPassword} />}
     </ThemeProvider>
   );
 };
