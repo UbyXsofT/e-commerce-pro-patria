@@ -34,8 +34,9 @@ export default function SignUp() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const steps = ["Dati Personali", "Utente", "Finalizza"];
+  const underageSteps = ["Dati Personali", "Dati Genitore", "Utente", "Finalizza"];
 
-  const [underage, setUnderage] = React.useState(false);
+  const [underage, setUnderage] = React.useState(true);
 
   const [codiceFiscale, setCodiceFiscale] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
@@ -74,66 +75,164 @@ export default function SignUp() {
   );
 
   function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return (
-          <Step1
-            codiceFiscale={codiceFiscale}
-            setCodiceFiscale={setCodiceFiscale}
-            firstName={firstName}
-            setFirstName={setFirstName}
-            lastName={lastName}
-            setLastName={setLastName}
-            gender={gender}
-            setGender={setGender}
-            dateOfBirth={dateOfBirth}
-            setDateOfBirth={setDateOfBirth}
-            placeOfBirth={placeOfBirth}
-            setPlaceOfBirth={setPlaceOfBirth}
-            provinceOfBirth={provinceOfBirth}
-            setProvinceOfBirth={setProvinceOfBirth}
-            address={address}
-            setAddress={setAddress}
-            city={city}
-            setCity={setCity}
-            cap={cap}
-            setCap={setCap}
-            province={province}
-            setProvince={setProvince}
-            email={email}
-            setEmail={setEmail}
-            phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
-            privacy={privacy}
-            setPrivacy={setPrivacy}
-            privacyLabel={privacyLabel}
-          />
-        );
-      case 1:
-        return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
-      case 2:
-        return (
-          <Step3
-            codiceFiscale={codiceFiscale}
-            firstName={firstName}
-            lastName={lastName}
-            gender={gender}
-            dateOfBirth={dateOfBirth}
-            placeOfBirth={placeOfBirth}
-            provinceOfBirth={provinceOfBirth}
-            address={address}
-            city={city}
-            cap={cap}
-            province={province}
-            email={email}
-            phoneNumber={phoneNumber}
-            privacy={privacy}
-            username={username}
-            privacyLabel={privacyLabel}
-          />
-        );
-      default:
-        throw new Error("Unknown step");
+    if (underage) {
+      switch (step) {
+        case 0:
+          return (
+            <Step1
+              codiceFiscale={codiceFiscale}
+              setCodiceFiscale={setCodiceFiscale}
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              gender={gender}
+              setGender={setGender}
+              dateOfBirth={dateOfBirth}
+              setDateOfBirth={setDateOfBirth}
+              placeOfBirth={placeOfBirth}
+              setPlaceOfBirth={setPlaceOfBirth}
+              provinceOfBirth={provinceOfBirth}
+              setProvinceOfBirth={setProvinceOfBirth}
+              address={address}
+              setAddress={setAddress}
+              city={city}
+              setCity={setCity}
+              cap={cap}
+              setCap={setCap}
+              province={province}
+              setProvince={setProvince}
+              email={email}
+              setEmail={setEmail}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
+              privacy={privacy}
+              setPrivacy={setPrivacy}
+              privacyLabel={privacyLabel}
+            />
+          );
+        case 1:
+          return (
+            <Step1
+              codiceFiscale={codiceFiscale}
+              setCodiceFiscale={setCodiceFiscale}
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              gender={gender}
+              setGender={setGender}
+              dateOfBirth={dateOfBirth}
+              setDateOfBirth={setDateOfBirth}
+              placeOfBirth={placeOfBirth}
+              setPlaceOfBirth={setPlaceOfBirth}
+              provinceOfBirth={provinceOfBirth}
+              setProvinceOfBirth={setProvinceOfBirth}
+              address={address}
+              setAddress={setAddress}
+              city={city}
+              setCity={setCity}
+              cap={cap}
+              setCap={setCap}
+              province={province}
+              setProvince={setProvince}
+              email={email}
+              setEmail={setEmail}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
+              privacy={privacy}
+              setPrivacy={setPrivacy}
+              privacyLabel={privacyLabel}
+            />
+          );
+        case 2:
+          return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
+        case 3:
+          return (
+            <Step3
+              codiceFiscale={codiceFiscale}
+              firstName={firstName}
+              lastName={lastName}
+              gender={gender}
+              dateOfBirth={dateOfBirth}
+              placeOfBirth={placeOfBirth}
+              provinceOfBirth={provinceOfBirth}
+              address={address}
+              city={city}
+              cap={cap}
+              province={province}
+              email={email}
+              phoneNumber={phoneNumber}
+              privacy={privacy}
+              username={username}
+              privacyLabel={privacyLabel}
+            />
+          );
+        default:
+          throw new Error("Unknown step");
+      }
+    } else {
+      switch (step) {
+        case 0:
+          return (
+            <Step1
+              codiceFiscale={codiceFiscale}
+              setCodiceFiscale={setCodiceFiscale}
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              gender={gender}
+              setGender={setGender}
+              dateOfBirth={dateOfBirth}
+              setDateOfBirth={setDateOfBirth}
+              placeOfBirth={placeOfBirth}
+              setPlaceOfBirth={setPlaceOfBirth}
+              provinceOfBirth={provinceOfBirth}
+              setProvinceOfBirth={setProvinceOfBirth}
+              address={address}
+              setAddress={setAddress}
+              city={city}
+              setCity={setCity}
+              cap={cap}
+              setCap={setCap}
+              province={province}
+              setProvince={setProvince}
+              email={email}
+              setEmail={setEmail}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
+              privacy={privacy}
+              setPrivacy={setPrivacy}
+              privacyLabel={privacyLabel}
+            />
+          );
+        case 1:
+          return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
+        case 2:
+          return (
+            <Step3
+              codiceFiscale={codiceFiscale}
+              firstName={firstName}
+              lastName={lastName}
+              gender={gender}
+              dateOfBirth={dateOfBirth}
+              placeOfBirth={placeOfBirth}
+              provinceOfBirth={provinceOfBirth}
+              address={address}
+              city={city}
+              cap={cap}
+              province={province}
+              email={email}
+              phoneNumber={phoneNumber}
+              privacy={privacy}
+              username={username}
+              privacyLabel={privacyLabel}
+            />
+          );
+        default:
+          throw new Error("Unknown step");
+      }
     }
   }
 
@@ -163,11 +262,17 @@ export default function SignUp() {
       <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
         {/* Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
         <Stepper activeStep={activeStep} sx={{ pt: 3 }}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
+          {underage
+            ? underageSteps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))
+            : steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
         </Stepper>
         {activeStep === steps.length ? (
           <React.Fragment>
