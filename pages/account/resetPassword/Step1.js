@@ -3,7 +3,7 @@ import { Container, Grid, Typography, TextField, Button, Paper, Link, CssBaselin
 
 import Router from "next/router";
 
-const Step1 = ({ setDone }) => {
+const Step1 = ({ setDone, email, setEmail, codiceFiscale, setCodiceFiscale }) => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
       <CssBaseline />
@@ -17,10 +17,10 @@ const Step1 = ({ setDone }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+          <TextField value={email} onChange={(event) => setEmail(event.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
         </Grid>
         <Grid item xs={12}>
-          <TextField required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+          <TextField value={codiceFiscale} onChange={(event) => setCodiceFiscale(event.target.value)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
         </Grid>
 
         <Grid item xs={12}>

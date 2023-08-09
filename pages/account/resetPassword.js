@@ -24,6 +24,9 @@ const resetPassword = (setLoading) => {
 
   const [done, setDone] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [codiceFiscale, setCodiceFiscale] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -44,7 +47,7 @@ const resetPassword = (setLoading) => {
           </Toolbar>
         </Container>
       </AppBar>
-      {done ? <Step2 /> : <Step1 setDone={setDone} />}
+      {done ? <Step2 /> : <Step1 setDone={setDone} email={email} setEmail={setEmail} codiceFiscale={codiceFiscale} setCodiceFiscale={setCodiceFiscale} />}
     </ThemeProvider>
   );
 };
