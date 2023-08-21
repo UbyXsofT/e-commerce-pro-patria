@@ -41,6 +41,7 @@ const Step1 = ({
   setPhoneNumber,
   privacy,
   setPrivacy,
+  updateDate,
   privacyLabel,
 }) => {
   const handleSubmit = () => {};
@@ -85,9 +86,7 @@ const Step1 = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
                     value={dateOfBirth}
-                    onChange={(e) => {
-                      setDateOfBirth(e);
-                    }}
+                    onChange={(e) => updateDate(e)}
                     required
                     label="Data di Nascita"
                     sx={{

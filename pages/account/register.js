@@ -37,7 +37,7 @@ export default function SignUp() {
   const steps = ["Dati Personali", "Utente", "Finalizza"];
   const underageSteps = ["Dati Personali", "Dati Genitore", "Utente", "Finalizza"];
 
-  const [underage, setUnderage] = React.useState(false);
+  const [underage, setUnderage] = React.useState(true);
 
   const [codiceFiscale, setCodiceFiscale] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
@@ -80,6 +80,41 @@ export default function SignUp() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const updateDate = (e) => {
+    const currentDate = new Date();
+    setDateOfBirth(e);
+
+    switch (true) {
+      case currentDate.getFullYear() - e.$y >= 19:
+        setUnderage(false);
+        break;
+
+      case currentDate.getFullYear() - e.$y === 18:
+        switch (true) {
+          case currentDate.getMonth() - e.$M > 0:
+            setUnderage(false);
+            break;
+
+          case currentDate.getMonth() - e.$M === 0:
+            if (currentDate.getDate() - e.$D >= 0) {
+              setUnderage(false);
+            } else {
+              setUnderage(true);
+            }
+            break;
+
+          default:
+            setUnderage(true);
+            break;
+        }
+        break;
+
+      default:
+        setUnderage(true);
+        break;
+    }
+  };
 
   const privacyLabel = (
     <Typography>
@@ -128,6 +163,7 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
+              updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
           );
@@ -239,6 +275,7 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
+              updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
           );
