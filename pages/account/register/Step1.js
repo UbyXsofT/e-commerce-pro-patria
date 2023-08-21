@@ -14,6 +14,7 @@ import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 
 const Step1 = ({
+  stringUpperCase,
   codiceFiscale,
   codiceFiscaleInvalid,
   setCodiceFiscale,
@@ -79,11 +80,12 @@ const Step1 = ({
                   autoComplete="codiceFiscale"
                 />
               </Grid>
+              {/* TODO: "Advanced" trimming to allow inner spaces */}
               <Grid item xs={12} sm={6}>
-                <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="firstName" name="firstName" required fullWidth id="firstName" label="Nome" autoFocus />
+                <TextField value={firstName} onChange={(e) => setFirstName(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} autoComplete="firstName" name="firstName" required fullWidth id="firstName" label="Nome" autoFocus />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} required fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
+                <TextField value={lastName} onChange={(e) => setLastName(stringUpperCase(e.target.value))} inputProps={{ maxLength: 40 }} required fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
               </Grid>
 
               <Grid item xs={12}>
@@ -110,31 +112,51 @@ const Step1 = ({
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField value={placeOfBirth} onChange={(e) => setPlaceOfBirth(e.target.value)} required fullWidth id="placeOfBirth" label="Luogo di Nascita" name="placeOfBirth" autoComplete="placeOfBirth" />
+                <TextField
+                  value={placeOfBirth}
+                  onChange={(e) => setPlaceOfBirth(stringUpperCase(e.target.value))}
+                  inputProps={{ maxLength: 35 }}
+                  required
+                  fullWidth
+                  id="placeOfBirth"
+                  label="Luogo di Nascita"
+                  name="placeOfBirth"
+                  autoComplete="placeOfBirth"
+                />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField value={provinceOfBirth} onChange={(e) => setProvinceOfBirth(e.target.value)} required fullWidth id="provinceOfBirth" label="Provincia" name="provinceOfBirth" autoComplete="ProvinceOfBirth" />
+                <TextField
+                  value={provinceOfBirth}
+                  onChange={(e) => setProvinceOfBirth(e.target.value.trim().toUpperCase().replace(/[0-9]/g, ""))}
+                  inputProps={{ maxLength: 2 }}
+                  required
+                  fullWidth
+                  id="provinceOfBirth"
+                  label="Provincia"
+                  name="provinceOfBirth"
+                  autoComplete="ProvinceOfBirth"
+                />
               </Grid>
             </Grid>
 
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField value={address} onChange={(e) => setAddress(e.target.value)} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
+                <TextField value={address} onChange={(e) => setAddress(stringUpperCase(e.target.value))} inputProps={{ maxLength: 60 }} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField value={city} onChange={(e) => setCity(e.target.value)} required fullWidth id="city" label="Città" name="city" autoComplete="city" />
+                <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField value={cap} onChange={(e) => setCap(e.target.value)} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
+                <TextField value={cap} onChange={(e) => setCap(e.target.value.trim().replace(/\D/g, ""))} inputProps={{ maxLength: 5 }} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
               </Grid>
               <Grid item xs={12}>
-                <TextField value={province} onChange={(e) => setProvince(e.target.value)} required fullWidth id="province" label="Provincia" name="province" autoComplete="province" />
+                <TextField value={province} onChange={(e) => setProvince(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="province" label="Provincia" name="province" autoComplete="province" />
               </Grid>
               <Grid item xs={12}>
-                <TextField value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+                <TextField value={email} onChange={(e) => setEmail(e.target.value)} inputProps={{ maxLength: 319 }} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} />
+                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} />
               </Grid>
             </Grid>
 

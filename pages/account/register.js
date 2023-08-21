@@ -85,6 +85,14 @@ export default function SignUp() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  const stringUpperCase = (string) => {
+    const arr = string.split(" ");
+    for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+    }
+    return arr.join(" ");
+  };
+
   const updateCodiceFiscale = (e) => {
     setCodiceFiscale(e.target.value.trim().toUpperCase());
     if (CodiceFiscale.check(e.target.value)) {
@@ -153,6 +161,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
@@ -267,6 +276,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
