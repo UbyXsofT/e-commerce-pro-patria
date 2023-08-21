@@ -42,6 +42,8 @@ export default function SignUp() {
   const [underage, setUnderage] = React.useState(true);
 
   const [codiceFiscale, setCodiceFiscale] = React.useState("");
+  const [codiceFiscaleInvalid, setCodiceFiscaleInvalid] = React.useState(false);
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
 
@@ -84,14 +86,16 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const updateCodiceFiscale = (e) => {
-    setCodiceFiscale(e.target.value);
+    setCodiceFiscale(e.target.value.trim().toUpperCase());
     if (CodiceFiscale.check(e.target.value)) {
+      setCodiceFiscaleInvalid(false);
       const cf = new CodiceFiscale(e.target.value);
       setGender(cf.gender === "M" ? "male" : "female");
       setPlaceOfBirth(cf.birthplace.nome);
       setProvinceOfBirth(cf.birthplace.prov);
-      // setDateOfBirth(dayjs(cf.birthday));
       updateDate(dayjs(cf.birthday));
+    } else {
+      setCodiceFiscaleInvalid(true);
     }
   };
 
@@ -150,6 +154,7 @@ export default function SignUp() {
           return (
             <Step1
               codiceFiscale={codiceFiscale}
+              codiceFiscaleInvalid={codiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
               firstName={firstName}
               setFirstName={setFirstName}
@@ -263,6 +268,7 @@ export default function SignUp() {
           return (
             <Step1
               codiceFiscale={codiceFiscale}
+              codiceFiscaleInvalid={codiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
               firstName={firstName}
               setFirstName={setFirstName}
