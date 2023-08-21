@@ -11,8 +11,41 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+import Genitore from "./Genitore";
 
-const Step3 = ({ codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, provinceOfBirth, address, city, cap, province, email, phoneNumber, privacy, username, privacyLabel }) => {
+const Step3 = ({
+  codiceFiscale,
+  firstName,
+  lastName,
+  gender,
+  dateOfBirth,
+  placeOfBirth,
+  provinceOfBirth,
+  address,
+  city,
+  cap,
+  province,
+  email,
+  phoneNumber,
+  privacy,
+  username,
+  privacyLabel,
+  underage,
+  parentCodiceFiscale,
+  parentFirstName,
+  parentLastName,
+  parentGender,
+  parentDateOfBirth,
+  parentPlaceOfBirth,
+  parentProvinceOfBirth,
+  parentAddress,
+  parentCity,
+  parentCap,
+  parentProvince,
+  parentEmail,
+  parentPhoneNumber,
+  parentPrivacy,
+}) => {
   const handleSubmit = () => {};
 
   return (
@@ -100,6 +133,89 @@ const Step3 = ({ codiceFiscale, firstName, lastName, gender, dateOfBirth, placeO
             </Grid>
           </Grid>
         </Box>
+        {underage ? (
+          <div>
+            <Typography component="h1" variant="h5" sx={{ marginRight: "auto", marginTop: 1 }}>
+              Controlla i Dati del Genitore
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                <Grid container item spacing={2} sm={12} md={6}>
+                  <Grid item xs={12}>
+                    <TextField value={parentCodiceFiscale} disabled required fullWidth id="parentCodiceFiscale" label="Codice Fiscale" name="parentCodiceFiscale" autoComplete="parentCodiceFiscale" />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField value={parentFirstName} disabled autoComplete="parentFirstName" name="parentFirstName" required fullWidth id="parentFirstName" label="Nome" autoFocus />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField value={parentLastName} disabled required fullWidth id="parentLastName" label="Cognome" name="parentLastName" autoComplete="family-name" />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <FormControl required>
+                      <FormLabel disabled id="sesso">
+                        Sesso
+                      </FormLabel>
+                      <RadioGroup value={parentGender} aria-labelledby="parentGender" name="parentGender" row>
+                        <FormControlLabel disabled value="female" control={<Radio />} label="Femmina" />
+                        <FormControlLabel disabled value="male" control={<Radio />} label="Maschio" />
+                        <FormControlLabel disabled value="other" control={<Radio />} label="Altro" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
+                      <DatePicker
+                        value={parentDateOfBirth}
+                        disabled
+                        required
+                        label="Data di Nascita"
+                        sx={{
+                          width: "100%",
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <TextField disabled value={parentPlaceOfBirth} required fullWidth id="parentPlaceOfBirth" label="Luogo di Nascita" name="parentPlaceOfBirth" autoComplete="parentPlaceOfBirth" />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField disabled value={parentProvinceOfBirth} required fullWidth id="parentProvinceOfBirth" label="Provincia" name="parentProvinceOfBirth" autoComplete="ProvinceOfBirth" />
+                  </Grid>
+                </Grid>
+
+                <Grid container item spacing={2} sm={12} md={6}>
+                  <Grid item xs={12}>
+                    <TextField disabled value={parentAddress} required fullWidth id="parentAddress" label="Indirizzo" name="parentAddress" autoComplete="parentAddress" />
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <TextField disabled value={parentCity} required fullWidth id="parentCity" label="Città" name="parentCity" autoComplete="parentCity" />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField disabled value={parentCap} required fullWidth id="parentCap" label="CAP" name="parentCap" autoComplete="parentCap" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField disabled value={parentProvince} required fullWidth id="parentProvince" label="Provincia" name="parentProvince" autoComplete="parentProvince" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField disabled value={parentEmail} required fullWidth id="parentEmail" label="Indirizzo Email" name="parentEmail" autoComplete="parentEmail" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MuiTelInput disabled sx={{ width: "100%" }} defaultCountry="it" value={parentPhoneNumber} />
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box>
+                    <FormControlLabel disabled value={parentPrivacy} required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </Box>
     </Container>
   );

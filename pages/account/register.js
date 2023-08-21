@@ -23,6 +23,7 @@ import Router from "next/router";
 import { PrivacyTip } from "@mui/icons-material";
 
 import eCommerceConf from "./../../eCommerceConf.json";
+import Genitore from "./register/Genitore";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -36,26 +37,45 @@ export default function SignUp() {
   const steps = ["Dati Personali", "Utente", "Finalizza"];
   const underageSteps = ["Dati Personali", "Dati Genitore", "Utente", "Finalizza"];
 
-  const [underage, setUnderage] = React.useState(true);
+  const [underage, setUnderage] = React.useState(false);
 
   const [codiceFiscale, setCodiceFiscale] = React.useState("");
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
+
+  const [parentCodiceFiscale, setParentCodiceFiscale] = React.useState("");
+  const [parentFirstName, setParentFirstName] = React.useState("");
+  const [parentLastName, setParentLastName] = React.useState("");
 
   const [gender, setGender] = React.useState("male");
   const [dateOfBirth, setDateOfBirth] = React.useState({});
   const [placeOfBirth, setPlaceOfBirth] = React.useState("");
   const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
 
+  const [parentGender, setParentGender] = React.useState("male");
+  const [parentDateOfBirth, setParentDateOfBirth] = React.useState("");
+  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState("");
+  const [parentProvinceOfBirth, setParentProvinceOfBirth] = React.useState("");
+
   const [address, setAddress] = React.useState("");
   const [city, setCity] = React.useState("");
   const [cap, setCap] = React.useState("");
   const [province, setProvince] = React.useState("");
 
+  const [parentAddress, setParentAddress] = React.useState("");
+  const [parentCity, setParentCity] = React.useState("");
+  const [parentCap, setParentCap] = React.useState("");
+  const [parentProvince, setParentProvince] = React.useState("");
+
   const [email, setEmail] = React.useState("");
   const [phoneNumber, setPhoneNumber] = React.useState("+39");
 
+  const [parentEmail, setParentEmail] = React.useState("");
+  const [parentPhoneNumber, setParentPhoneNumber] = React.useState("");
+
   const [privacy, setPrivacy] = React.useState(false);
+
+  const [parentPrivacy, setParentPrivacy] = React.useState(false);
 
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -113,35 +133,35 @@ export default function SignUp() {
           );
         case 1:
           return (
-            <Step1
-              codiceFiscale={codiceFiscale}
-              setCodiceFiscale={setCodiceFiscale}
-              firstName={firstName}
-              setFirstName={setFirstName}
-              lastName={lastName}
-              setLastName={setLastName}
-              gender={gender}
-              setGender={setGender}
-              dateOfBirth={dateOfBirth}
-              setDateOfBirth={setDateOfBirth}
-              placeOfBirth={placeOfBirth}
-              setPlaceOfBirth={setPlaceOfBirth}
-              provinceOfBirth={provinceOfBirth}
-              setProvinceOfBirth={setProvinceOfBirth}
-              address={address}
-              setAddress={setAddress}
-              city={city}
-              setCity={setCity}
-              cap={cap}
-              setCap={setCap}
-              province={province}
-              setProvince={setProvince}
-              email={email}
-              setEmail={setEmail}
-              phoneNumber={phoneNumber}
-              setPhoneNumber={setPhoneNumber}
-              privacy={privacy}
-              setPrivacy={setPrivacy}
+            <Genitore
+              parentCodiceFiscale={parentCodiceFiscale}
+              setParentCodiceFiscale={setParentCodiceFiscale}
+              parentFirstName={parentFirstName}
+              setParentFirstName={setParentFirstName}
+              parentLastName={parentLastName}
+              setParentLastName={setParentLastName}
+              parentGender={parentGender}
+              setParentGender={setParentGender}
+              parentDateOfBirth={parentDateOfBirth}
+              setParentDateOfBirth={setParentDateOfBirth}
+              parentPlaceOfBirth={parentPlaceOfBirth}
+              setParentPlaceOfBirth={setParentPlaceOfBirth}
+              parentProvinceOfBirth={parentProvinceOfBirth}
+              setParentProvinceOfBirth={setParentProvinceOfBirth}
+              parentAddress={parentAddress}
+              setParentAddress={setParentAddress}
+              parentCity={parentCity}
+              setParentCity={setParentCity}
+              parentCap={parentCap}
+              setParentCap={setParentCap}
+              parentProvince={parentProvince}
+              setParentProvince={setParentProvince}
+              parentEmail={parentEmail}
+              setParentEmail={setParentEmail}
+              parentPhoneNumber={parentPhoneNumber}
+              setParentPhoneNumber={setParentPhoneNumber}
+              parentPrivacy={parentPrivacy}
+              setParentPrivacy={setParentPrivacy}
               privacyLabel={privacyLabel}
             />
           );
@@ -166,6 +186,21 @@ export default function SignUp() {
               privacy={privacy}
               username={username}
               privacyLabel={privacyLabel}
+              underage={underage}
+              parentCodiceFiscale={parentCodiceFiscale}
+              parentFirstName={parentFirstName}
+              parentLastName={parentLastName}
+              parentGender={parentGender}
+              parentDateOfBirth={parentDateOfBirth}
+              parentPlaceOfBirth={parentPlaceOfBirth}
+              parentProvinceOfBirth={parentProvinceOfBirth}
+              parentAddress={parentAddress}
+              parentCity={parentCity}
+              parentCap={parentCap}
+              parentProvince={parentProvince}
+              parentEmail={parentEmail}
+              parentPhoneNumber={parentPhoneNumber}
+              parentPrivacy={parentPrivacy}
             />
           );
         default:
@@ -274,7 +309,7 @@ export default function SignUp() {
                 </Step>
               ))}
         </Stepper>
-        {activeStep === steps.length ? (
+        {activeStep === (underage ? underageSteps.length : steps.length) ? (
           <React.Fragment>
             <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }} textAlign={"center"}>
               Registrazione Completata
