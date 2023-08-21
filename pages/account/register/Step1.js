@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+import CodiceFiscale from "codice-fiscale-js";
 
 const Step1 = ({
   codiceFiscale,
@@ -41,6 +42,7 @@ const Step1 = ({
   setPhoneNumber,
   privacy,
   setPrivacy,
+  updateCodiceFiscale,
   updateDate,
   privacyLabel,
 }) => {
@@ -63,7 +65,7 @@ const Step1 = ({
           <Grid container spacing={2}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField value={codiceFiscale} onChange={(e) => setCodiceFiscale(e.target.value)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+                <TextField value={codiceFiscale} onChange={(e) => updateCodiceFiscale(e)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="firstName" name="firstName" required fullWidth id="firstName" label="Nome" autoFocus />

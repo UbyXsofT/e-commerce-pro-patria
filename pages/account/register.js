@@ -24,6 +24,8 @@ import { PrivacyTip } from "@mui/icons-material";
 
 import eCommerceConf from "./../../eCommerceConf.json";
 import Genitore from "./register/Genitore";
+import CodiceFiscale from "codice-fiscale-js";
+import dayjs from "dayjs";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -80,6 +82,18 @@ export default function SignUp() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const updateCodiceFiscale = (e) => {
+    setCodiceFiscale(e.target.value);
+    if (CodiceFiscale.check(e.target.value)) {
+      const cf = new CodiceFiscale(e.target.value);
+      setGender(cf.gender === "M" ? "male" : "female");
+      setPlaceOfBirth(cf.birthplace.nome);
+      setProvinceOfBirth(cf.birthplace.prov);
+      // setDateOfBirth(dayjs(cf.birthday));
+      updateDate(dayjs(cf.birthday));
+    }
+  };
 
   const updateDate = (e) => {
     const currentDate = new Date();
@@ -163,6 +177,7 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
+              updateCodiceFiscale={updateCodiceFiscale}
               updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
@@ -275,6 +290,7 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
+              updateCodiceFiscale={updateCodiceFiscale}
               updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
