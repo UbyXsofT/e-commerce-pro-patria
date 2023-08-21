@@ -71,7 +71,7 @@ export default function SignUp() {
   const [phoneNumber, setPhoneNumber] = React.useState("+39");
 
   const [parentEmail, setParentEmail] = React.useState("");
-  const [parentPhoneNumber, setParentPhoneNumber] = React.useState("");
+  const [parentPhoneNumber, setParentPhoneNumber] = React.useState("+39");
 
   const [privacy, setPrivacy] = React.useState(false);
 
