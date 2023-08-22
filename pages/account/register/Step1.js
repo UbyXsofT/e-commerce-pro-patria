@@ -17,6 +17,10 @@ const Step1 = ({
   comuni,
   setComuni,
   getComuni,
+  selectedComune,
+  setSelectedComune,
+  comuneResidenza,
+  setComuneResidenza,
   stringUpperCase,
   codiceFiscale,
   codiceFiscaleInvalid,
@@ -54,7 +58,7 @@ const Step1 = ({
   const handleSubmit = () => {};
 
   React.useEffect(() => {
-    const data = getComuni();
+    getComuni();
   }, []);
 
   return (
@@ -133,14 +137,17 @@ const Step1 = ({
 
                 {/* TODO: Conflicts with setCodiceFiscale... */}
                 <Autocomplete
-                  value={placeOfBirth}
-                  inputValue={placeOfBirth}
-                  onChange={(e, comune) => {
+                  value={selectedComune}
+                  onChange={(_, comune) => {
+                    if (!comune) {
+                      return;
+                    }
                     console.log(comune);
+                    setSelectedComune(comune);
                     setPlaceOfBirth(comune.nome);
                     setProvinceOfBirth(comune.provincia.nome);
                   }}
-                  // freeSolo
+                  freeSolo
                   inputProps={{ maxLength: 35 }}
                   required
                   id="placeOfBirth"
@@ -173,13 +180,18 @@ const Step1 = ({
               <Grid item xs={12} sm={8}>
                 {/* <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" /> */}
                 <Autocomplete
-                  value={city}
-                  onChange={(e, comune) => {
+                  value={comuneResidenza}
+                  onChange={(_, comune) => {
+                    if (!comune) {
+                      return;
+                    }
                     console.log(comune);
+                    setComuneResidenza(comune);
                     setCity(comune.nome);
                     setCap(comune.cap);
                     setProvince(comune.provincia.nome);
                   }}
+                  freeSolo
                   autoComplete
                   getOptionLabel={(comune) => comune.nome}
                   options={comuni}

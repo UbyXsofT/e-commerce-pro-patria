@@ -54,6 +54,7 @@ export default function SignUp() {
   const [gender, setGender] = React.useState("male");
   const [dateOfBirth, setDateOfBirth] = React.useState({});
   const [placeOfBirth, setPlaceOfBirth] = React.useState();
+  const [selectedComune, setSelectedComune] = React.useState(null);
   const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
 
   const [parentGender, setParentGender] = React.useState("male");
@@ -62,6 +63,7 @@ export default function SignUp() {
   const [parentProvinceOfBirth, setParentProvinceOfBirth] = React.useState("");
 
   const [address, setAddress] = React.useState("");
+  const [comuneResidenza, setComuneResidenza] = React.useState(null);
   const [city, setCity] = React.useState();
   const [cap, setCap] = React.useState("");
   const [province, setProvince] = React.useState("");
@@ -100,9 +102,12 @@ export default function SignUp() {
     if (CodiceFiscale.check(e.target.value)) {
       setCodiceFiscaleInvalid(false);
       const cf = new CodiceFiscale(e.target.value);
+      const placeOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
+      const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === placeOfBirth.toLocaleLowerCase());
       setGender(cf.gender === "M" ? "male" : "female");
-      setPlaceOfBirth(stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase()));
-      setProvinceOfBirth(cf.birthplace.prov);
+      setPlaceOfBirth(placeOfBirth);
+      setSelectedComune(comune);
+      setProvinceOfBirth(comune.provincia.nome);
       updateDate(dayjs(cf.birthday));
     } else {
       setCodiceFiscaleInvalid(true);
@@ -175,7 +180,11 @@ export default function SignUp() {
             <Step1
               comuni={comuni}
               setComuni={setComuni}
+              comuneResidenza={comuneResidenza}
+              setComuneResidenza={setComuneResidenza}
               getComuni={getComuni}
+              selectedComune={selectedComune}
+              setSelectedComune={setSelectedComune}
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
@@ -294,6 +303,10 @@ export default function SignUp() {
               comuni={comuni}
               setComuni={setComuni}
               getComuni={getComuni}
+              selectedComune={selectedComune}
+              setSelectedComune={setSelectedComune}
+              comuneResidenza={comuneResidenza}
+              setComuneResidenza={setComuneResidenza}
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
