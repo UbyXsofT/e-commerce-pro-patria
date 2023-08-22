@@ -154,6 +154,7 @@ const Step1 = ({
 
                 {/* TODO: Conflicts with setCodiceFiscale... */}
                 <Autocomplete
+                  required
                   value={selectedComune}
                   onChange={(_, comune) => {
                     if (!comune) {
@@ -165,7 +166,6 @@ const Step1 = ({
                   }}
                   freeSolo
                   inputProps={{ maxLength: 35 }}
-                  required
                   id="placeOfBirth"
                   name="placeOfBirth"
                   autoComplete
@@ -198,6 +198,7 @@ const Step1 = ({
               <Grid item xs={12} sm={8}>
                 {/* <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" /> */}
                 <Autocomplete
+                  required
                   value={comuneResidenza}
                   onChange={(_, comune) => {
                     if (!comune) {
@@ -225,13 +226,13 @@ const Step1 = ({
                 <TextField value={email} onChange={(e) => setEmail(e.target.value)} inputProps={{ maxLength: 319 }} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} />
+                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
               <Box>
-                <FormControlLabel value={privacy} onChange={() => setPrivacy(!privacy)} required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+                <FormControlLabel required control={<Checkbox color="primary" checked={privacy} onChange={() => setPrivacy(!privacy)} />} label={privacyLabel} />
               </Box>
             </Grid>
           </Grid>
