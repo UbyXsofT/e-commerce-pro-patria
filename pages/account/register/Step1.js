@@ -121,7 +121,6 @@ const Step1 = ({
                   <RadioGroup value={gender} onChange={(e) => setGender(e.target.value)} aria-labelledby="gender" name="gender" row>
                     <FormControlLabel value="female" control={<Radio />} label="Femmina" />
                     <FormControlLabel value="male" control={<Radio />} label="Maschio" />
-                    <FormControlLabel value="other" control={<Radio />} label="Altro" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
