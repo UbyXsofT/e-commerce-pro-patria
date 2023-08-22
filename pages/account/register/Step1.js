@@ -127,6 +127,7 @@ const Step1 = ({
               <Grid item xs={12}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
+                    disableFuture
                     value={dateOfBirth}
                     onChange={(e) => updateDate(e)}
                     required
