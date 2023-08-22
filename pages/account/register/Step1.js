@@ -125,6 +125,7 @@ const Step1 = ({
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
+                {/* TODO: fix invalid initial state */}
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
                     disableFuture
@@ -189,8 +190,10 @@ const Step1 = ({
             </Grid>
 
             <Grid container item spacing={2} sm={12} md={6}>
+              {/* TODO: Hide FormHelperText on width <= sm  */}
               <Grid item xs={12}>
                 <TextField value={address} onChange={(e) => setAddress(stringUpperCase(e.target.value))} inputProps={{ maxLength: 60 }} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
+                <FormHelperText> </FormHelperText>
               </Grid>
               <Grid item xs={12} sm={8}>
                 {/* <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" /> */}
