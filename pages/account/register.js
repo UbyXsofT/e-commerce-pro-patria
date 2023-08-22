@@ -166,7 +166,15 @@ export default function SignUp() {
     try {
       const response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
       const jsonData = await response.json();
-      setComuni(jsonData);
+      const filteredData = [jsonData[0]];
+      for (let i = 1; i < jsonData.length; i++) {
+        // Compare the current object's name with the previous object's name
+        if (jsonData[i].nome !== jsonData[i - 1].nome) {
+          filteredData.push(jsonData[i]); // If names are different, add the current object to the result
+        }
+      }
+      console.log(filteredData);
+      setComuni(filteredData);
     } catch (error) {
       alert(error);
     }
