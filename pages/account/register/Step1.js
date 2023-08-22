@@ -9,11 +9,14 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
+import { Autocomplete, FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 
 const Step1 = ({
+  comuni,
+  setComuni,
+  getComuni,
   stringUpperCase,
   codiceFiscale,
   codiceFiscaleInvalid,
@@ -49,6 +52,10 @@ const Step1 = ({
   privacyLabel,
 }) => {
   const handleSubmit = () => {};
+
+  React.useEffect(() => {
+    const data = getComuni();
+  }, []);
 
   return (
     <Container component="main" maxWidth="md">
@@ -112,7 +119,7 @@ const Step1 = ({
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField
+                {/* <TextField
                   value={placeOfBirth}
                   onChange={(e) => setPlaceOfBirth(stringUpperCase(e.target.value))}
                   inputProps={{ maxLength: 35 }}
@@ -122,13 +129,33 @@ const Step1 = ({
                   label="Luogo di Nascita"
                   name="placeOfBirth"
                   autoComplete="placeOfBirth"
+                /> */}
+
+                {/* TODO: Conflicts with setCodiceFiscale... */}
+                <Autocomplete
+                  value={placeOfBirth}
+                  inputValue={placeOfBirth}
+                  onChange={(e, comune) => {
+                    console.log(comune);
+                    setPlaceOfBirth(comune.nome);
+                    setProvinceOfBirth(comune.provincia.nome);
+                  }}
+                  // freeSolo
+                  inputProps={{ maxLength: 35 }}
+                  required
+                  id="placeOfBirth"
+                  name="placeOfBirth"
+                  autoComplete
+                  getOptionLabel={(comune) => comune.nome}
+                  options={comuni}
+                  renderInput={(params) => <TextField {...params} label="Luogo Di Nascita" />}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
                   value={provinceOfBirth}
-                  onChange={(e) => setProvinceOfBirth(e.target.value.trim().toUpperCase().replace(/[0-9]/g, ""))}
-                  inputProps={{ maxLength: 2 }}
+                  onChange={(e) => setProvinceOfBirth(stringUpperCase(e.target.value))}
+                  inputProps={{ maxLength: 35 }}
                   required
                   fullWidth
                   id="provinceOfBirth"
@@ -144,7 +171,20 @@ const Step1 = ({
                 <TextField value={address} onChange={(e) => setAddress(stringUpperCase(e.target.value))} inputProps={{ maxLength: 60 }} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" />
+                {/* <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" /> */}
+                <Autocomplete
+                  value={city}
+                  onChange={(e, comune) => {
+                    console.log(comune);
+                    setCity(comune.nome);
+                    setCap(comune.cap);
+                    setProvince(comune.provincia.nome);
+                  }}
+                  autoComplete
+                  getOptionLabel={(comune) => comune.nome}
+                  options={comuni}
+                  renderInput={(params) => <TextField {...params} label="Città" />}
+                />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField value={cap} onChange={(e) => setCap(e.target.value.trim().replace(/\D/g, ""))} inputProps={{ maxLength: 5 }} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />

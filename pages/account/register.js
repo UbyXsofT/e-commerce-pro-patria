@@ -53,21 +53,21 @@ export default function SignUp() {
 
   const [gender, setGender] = React.useState("male");
   const [dateOfBirth, setDateOfBirth] = React.useState({});
-  const [placeOfBirth, setPlaceOfBirth] = React.useState("");
+  const [placeOfBirth, setPlaceOfBirth] = React.useState();
   const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
 
   const [parentGender, setParentGender] = React.useState("male");
   const [parentDateOfBirth, setParentDateOfBirth] = React.useState("");
-  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState("");
+  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState();
   const [parentProvinceOfBirth, setParentProvinceOfBirth] = React.useState("");
 
   const [address, setAddress] = React.useState("");
-  const [city, setCity] = React.useState("");
+  const [city, setCity] = React.useState();
   const [cap, setCap] = React.useState("");
   const [province, setProvince] = React.useState("");
 
   const [parentAddress, setParentAddress] = React.useState("");
-  const [parentCity, setParentCity] = React.useState("");
+  const [parentCity, setParentCity] = React.useState();
   const [parentCap, setParentCap] = React.useState("");
   const [parentProvince, setParentProvince] = React.useState("");
 
@@ -85,6 +85,8 @@ export default function SignUp() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  const [comuni, setComuni] = React.useState([]);
+
   const stringUpperCase = (string) => {
     const arr = string.split(" ");
     for (var i = 0; i < arr.length; i++) {
@@ -99,7 +101,7 @@ export default function SignUp() {
       setCodiceFiscaleInvalid(false);
       const cf = new CodiceFiscale(e.target.value);
       setGender(cf.gender === "M" ? "male" : "female");
-      setPlaceOfBirth(cf.birthplace.nome);
+      setPlaceOfBirth(stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase()));
       setProvinceOfBirth(cf.birthplace.prov);
       updateDate(dayjs(cf.birthday));
     } else {
@@ -155,12 +157,25 @@ export default function SignUp() {
     </Typography>
   );
 
+  const getComuni = async () => {
+    try {
+      const response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
+      const jsonData = await response.json();
+      setComuni(jsonData);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   function getStepContent(step) {
     if (underage) {
       switch (step) {
         case 0:
           return (
             <Step1
+              comuni={comuni}
+              setComuni={setComuni}
+              getComuni={getComuni}
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
@@ -276,6 +291,9 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              comuni={comuni}
+              setComuni={setComuni}
+              getComuni={getComuni}
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
