@@ -27,7 +27,7 @@ const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, 
           Crea l'Utente
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2} xs={12}>
+          <Grid container spacing={2} xs={12} alignItems={"flex-start"}>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
                 <TextField value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
@@ -35,8 +35,6 @@ const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, 
               <Grid item xs={12}>
                 <TextField value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" autoFocus />
               </Grid>
-              {/* TODO: Alignement Without Hardcoding */}
-              <Grid item xs={12} sx={{ height: "161.333px" }}></Grid>
             </Grid>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
