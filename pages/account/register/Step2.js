@@ -5,9 +5,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "dayjs/locale/it";
+import SecurePassword from "../../../src/components/account/SecurePassword";
+import { height } from "@mui/system";
 
 const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword }) => {
   const handleSubmit = () => {};
+
+  const [passwordSafety, setPasswordSafety] = React.useState({ correct: false, detail: "" });
 
   return (
     <Container component="main" maxWidth="md">
@@ -31,13 +35,40 @@ const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, 
               <Grid item xs={12}>
                 <TextField value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" autoFocus />
               </Grid>
+              {/* TODO: Alignement Without Hardcoding */}
+              <Grid item xs={12} sx={{ height: "161.333px" }}></Grid>
             </Grid>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
-                <TextField value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="password" name="password" type="password" required fullWidth id="password" label="Password" />
+                <TextField
+                  error={!passwordSafety.correct && password.length > 0}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="password"
+                  name="password"
+                  type="password"
+                  required
+                  fullWidth
+                  id="password"
+                  label="Password"
+                />
               </Grid>
               <Grid item xs={12}>
-                <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="confirmPassword" name="confirmPassword" type="password" required fullWidth id="confirmPassword" label="Conferma Password" />
+                <TextField
+                  error={password !== confirmPassword && password.length > 0}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  fullWidth
+                  id="confirmPassword"
+                  label="Conferma Password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <SecurePassword password={password} passwordSafety={passwordSafety} setPasswordSafety={setPasswordSafety}></SecurePassword>
               </Grid>
             </Grid>
           </Grid>

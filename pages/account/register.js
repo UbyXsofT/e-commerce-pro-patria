@@ -52,7 +52,7 @@ export default function SignUp() {
   const [parentLastName, setParentLastName] = React.useState("");
 
   const [gender, setGender] = React.useState("male");
-  const [dateOfBirth, setDateOfBirth] = React.useState({});
+  const [dateOfBirth, setDateOfBirth] = React.useState();
   const [placeOfBirth, setPlaceOfBirth] = React.useState();
   const [selectedComune, setSelectedComune] = React.useState(null);
   const [provinceOfBirth, setProvinceOfBirth] = React.useState("");

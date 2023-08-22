@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { Autocomplete, FormControl, FormHelperText, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
+import { Autocomplete, FormHelperText, FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 
@@ -62,7 +62,7 @@ const Step1 = ({
   }, []);
 
   React.useEffect(() => {
-    if (firstName && lastName !== "" && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && placeOfBirth !== undefined) {
+    if (firstName && lastName !== "" && dateOfBirth !== undefined && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && placeOfBirth !== undefined) {
       const cf = new CodiceFiscale({
         name: firstName,
         surname: lastName,
@@ -115,7 +115,7 @@ const Step1 = ({
                 <TextField value={lastName} onChange={(e) => setLastName(stringUpperCase(e.target.value))} inputProps={{ maxLength: 40 }} required fullWidth id="lastName" label="Cognome" name="lastName" autoComplete="family-name" />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ height: "72px" }}>
                 <FormControl required>
                   <FormLabel id="sesso">Sesso</FormLabel>
                   <RadioGroup value={gender} onChange={(e) => setGender(e.target.value)} aria-labelledby="gender" name="gender" row>
@@ -191,6 +191,7 @@ const Step1 = ({
 
             <Grid container item spacing={2} sm={12} md={6}>
               {/* TODO: Hide FormHelperText on width <= sm  */}
+
               <Grid item xs={12}>
                 <TextField value={address} onChange={(e) => setAddress(stringUpperCase(e.target.value))} inputProps={{ maxLength: 60 }} required fullWidth id="address" label="Indirizzo" name="address" autoComplete="address" />
                 <FormHelperText> </FormHelperText>
