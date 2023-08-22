@@ -395,7 +395,8 @@ export default function SignUp() {
         </Container>
       </AppBar>
       <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
-        {/* Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
+        {/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
+        {/* TODO: Icons are not centered properly */}
         <Stepper activeStep={activeStep} sx={{ pt: 3 }}>
           {underage
             ? underageSteps.map((label) => (
