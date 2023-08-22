@@ -11,7 +11,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
-import Genitore from "./Genitore";
 
 const Step3 = ({
   codiceFiscale,

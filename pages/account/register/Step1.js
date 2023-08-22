@@ -188,7 +188,6 @@ const Step1 = ({
                 <FormHelperText> </FormHelperText>
               </Grid>
               <Grid item xs={12} sm={8}>
-                {/* <TextField value={city} onChange={(e) => setCity(stringUpperCase(e.target.value))} inputProps={{ maxLength: 35 }} required fullWidth id="city" label="Città" name="city" autoComplete="city" /> */}
                 <Autocomplete
                   required
                   value={comuneResidenza}
@@ -230,7 +229,6 @@ const Step1 = ({
           </Grid>
         </Box>
       </Box>
-      {/* <Copyright sx={{ mt: 5 }} /> */}
     </Container>
   );
 };
