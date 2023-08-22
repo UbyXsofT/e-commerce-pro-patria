@@ -61,6 +61,21 @@ const Step1 = ({
     getComuni();
   }, []);
 
+  React.useEffect(() => {
+    if (firstName && lastName !== "" && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && placeOfBirth !== undefined) {
+      const cf = new CodiceFiscale({
+        name: firstName,
+        surname: lastName,
+        gender: gender === "male" ? "M" : "F",
+        day: dateOfBirth.$D,
+        month: dateOfBirth.$M + 1,
+        year: dateOfBirth.$y,
+        birthplace: placeOfBirth,
+      });
+      setCodiceFiscale(cf.code);
+    }
+  }, [firstName, lastName, gender, dateOfBirth, placeOfBirth]);
+
   return (
     <Container component="main" maxWidth="md">
       <Box
@@ -142,7 +157,6 @@ const Step1 = ({
                     if (!comune) {
                       return;
                     }
-                    console.log(comune);
                     setSelectedComune(comune);
                     setPlaceOfBirth(comune.nome);
                     setProvinceOfBirth(comune.provincia.nome);
@@ -185,7 +199,6 @@ const Step1 = ({
                     if (!comune) {
                       return;
                     }
-                    console.log(comune);
                     setComuneResidenza(comune);
                     setCity(comune.nome);
                     setCap(comune.cap);
