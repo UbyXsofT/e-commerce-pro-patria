@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { Autocomplete, FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
+import { Autocomplete, FormControl, FormHelperText, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 
@@ -105,6 +105,7 @@ const Step1 = ({
                   name="codiceFiscale"
                   autoComplete="codiceFiscale"
                 />
+                <FormHelperText>Il Codice Fiscale verrà completato automaticamente con gli altri dati</FormHelperText>
               </Grid>
               {/* TODO: "Advanced" trimming to allow inner spaces */}
               <Grid item xs={12} sm={6}>
