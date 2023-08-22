@@ -97,10 +97,17 @@ export default function SignUp() {
     return arr.join(" ");
   };
 
+  const isCodiceFiscaleInvalid = (codiceFiscale) => {
+    if (CodiceFiscale.check(codiceFiscale)) {
+      setCodiceFiscaleInvalid(false);
+    } else {
+      setCodiceFiscaleInvalid(true);
+    }
+  };
+
   const updateCodiceFiscale = (e) => {
     setCodiceFiscale(e.target.value.trim().toUpperCase());
     if (CodiceFiscale.check(e.target.value)) {
-      setCodiceFiscaleInvalid(false);
       const cf = new CodiceFiscale(e.target.value);
       const placeOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
       const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === placeOfBirth.toLocaleLowerCase());
@@ -109,8 +116,6 @@ export default function SignUp() {
       setSelectedComune(comune);
       setProvinceOfBirth(comune.provincia.nome);
       updateDate(dayjs(cf.birthday));
-    } else {
-      setCodiceFiscaleInvalid(true);
     }
   };
 
@@ -196,6 +201,7 @@ export default function SignUp() {
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
+              isCodiceFiscaleInvalid={isCodiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
               firstName={firstName}
               setFirstName={setFirstName}
@@ -318,6 +324,7 @@ export default function SignUp() {
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
+              isCodiceFiscaleInvalid={isCodiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
               firstName={firstName}
               setFirstName={setFirstName}

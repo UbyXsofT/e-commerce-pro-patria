@@ -24,6 +24,7 @@ const Step1 = ({
   stringUpperCase,
   codiceFiscale,
   codiceFiscaleInvalid,
+  isCodiceFiscaleInvalid,
   setCodiceFiscale,
   firstName,
   setFirstName,
@@ -62,6 +63,10 @@ const Step1 = ({
   }, []);
 
   React.useEffect(() => {
+    isCodiceFiscaleInvalid(codiceFiscale);
+  }, [codiceFiscale]);
+
+  React.useEffect(() => {
     if (firstName && lastName !== "" && dateOfBirth !== undefined && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && placeOfBirth !== undefined) {
       const cf = new CodiceFiscale({
         name: firstName,
@@ -94,7 +99,7 @@ const Step1 = ({
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
                 <TextField
-                  error={codiceFiscaleInvalid}
+                  error={codiceFiscaleInvalid && codiceFiscale !== ""}
                   value={codiceFiscale}
                   inputProps={{ minLength: 16, maxLength: 16 }}
                   onChange={(e) => updateCodiceFiscale(e)}
@@ -125,7 +130,6 @@ const Step1 = ({
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                {/* TODO: fix invalid initial state */}
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
                   <DatePicker
                     disableFuture
@@ -140,19 +144,6 @@ const Step1 = ({
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                {/* <TextField
-                  value={placeOfBirth}
-                  onChange={(e) => setPlaceOfBirth(stringUpperCase(e.target.value))}
-                  inputProps={{ maxLength: 35 }}
-                  required
-                  fullWidth
-                  id="placeOfBirth"
-                  label="Luogo di Nascita"
-                  name="placeOfBirth"
-                  autoComplete="placeOfBirth"
-                /> */}
-
-                {/* TODO: Conflicts with setCodiceFiscale... */}
                 <Autocomplete
                   required
                   value={selectedComune}
