@@ -10,8 +10,8 @@ import { setLoading } from "/src/store/actions";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
-import Step1 from "./resetPassword/Step1";
-import Step2 from "./resetPassword/Step2";
+import Step1 from "/src/components/account/resetPassword/Step1";
+import Step2 from "/src/components/account/resetPassword/Step2";
 
 const StyledImageLogo = styled(Image)({
   padding: "10px",

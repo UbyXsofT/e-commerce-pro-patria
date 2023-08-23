@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "dayjs/locale/it";
-import SecurePassword from "../../../src/components/account/SecurePassword";
+import SecurePassword from "/src/components/account/SecurePassword";
 import { height } from "@mui/system";
 
 const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword }) => {

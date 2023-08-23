@@ -8,7 +8,7 @@ import { Typography } from "@mui/material";
 import { ScrollToTopBtn } from "./ScrollToTopBtn";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import { Facebook, Instagram, Twitter, HowToReg, PrivacyTip, Cookie } from "@mui/icons-material";
+import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useSpring, animated } from "react-spring";
 import { PrivacyCookie } from "./PrivacyCookie";

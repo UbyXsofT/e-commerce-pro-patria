@@ -1,9 +1,5 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,16 +10,16 @@ import "dayjs/locale/it";
 
 import { AppBar, CssBaseline, Paper, Step, StepLabel, Stepper, Toolbar } from "@mui/material";
 
-import Step1 from "./register/Step1";
+import Step1 from "/src/components/account/register/Step1";
 import styled from "@emotion/styled";
 import Image from "next/image";
-import Step2 from "./register/Step2";
-import Step3 from "./register/Step3";
+import Step2 from "/src/components/account/register/Step2";
+import Step3 from "/src/components/account/register/Step3";
 import Router from "next/router";
 import { PrivacyTip } from "@mui/icons-material";
 
-import eCommerceConf from "./../../eCommerceConf.json";
-import Genitore from "./register/Genitore";
+import eCommerceConf from "/eCommerceConf.json";
+import Genitore from "/src/components/account/register/Genitore";
 import CodiceFiscale from "codice-fiscale-js";
 import dayjs from "dayjs";
 

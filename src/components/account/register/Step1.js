@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { Autocomplete, FormHelperText, FormControl, FormLabel, Link, Radio, RadioGroup } from "@mui/material";
+import { Autocomplete, FormHelperText, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 

@@ -5,7 +5,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
 import { IconButton } from "@mui/material";
-import { TemaControls } from "../../../theme/TemaControls";
+import { TemaControls } from "/src/components/theme/TemaControls";
 
 const handleDrawerItemClick = (menuItem) => {
   console.log("handleDrawerItemClick : ", menuItem);

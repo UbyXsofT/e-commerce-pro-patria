@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import { HowToReg, PrivacyTip, Cookie } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
-import eCommerceConf from "../../../../eCommerceConf.json";
+import { Box } from "@mui/material";
+import eCommerceConf from "/eCommerceConf.json";
 import Router from "next/router";
 
 export function PrivacyCookie() {

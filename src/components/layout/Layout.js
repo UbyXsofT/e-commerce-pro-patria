@@ -8,9 +8,9 @@ import { Header } from "./header/Header";
 import { Footer } from "./footer/Footer";
 import { AlertMe } from "./alert/AlertMe";
 import { Typography } from "@mui/material";
-import { UserDrawerContentDx } from "./drawer/drawerDx/UserDrawerContentDx";
-import { CarrelloDrawerContentDx } from "./drawer/drawerDx/CarrelloDrawerContentDx";
-import CookieConsent from "../cookie/CookieConsent";
+import { UserDrawerContentDx } from "/src/components/layout/drawer/drawerDx/UserDrawerContentDx";
+import { CarrelloDrawerContentDx } from "/src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
+import CookieConsent from "/src/components/cookie/CookieConsent";
 
 const Layout = ({ children }) => {
   const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
