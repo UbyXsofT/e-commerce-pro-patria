@@ -479,7 +479,7 @@ export default function SignUp() {
               )}
 
               <Button variant="contained" onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
-                {activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
+                {underage ? (activeStep === underageSteps.length - 1 ? "Finalizza" : "Successivo") : activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
               </Button>
             </Box>
           </React.Fragment>
