@@ -1,5 +1,5 @@
 {
-  "ClientKey": "ProPatria",
+  "ClienteKey": "ProPatria",
   "NomeEcommerce": "SG PRO PATRIA 1883",
   "PaeseRegione": "Italia",
   "CittaGiurisdizione": "Milano",
@@ -11,5 +11,7 @@
   "PartitaIva": "09778190158",
   "YOUR_RECAPTCHA_SITE_KEY": "6Lc0Rn0nAAAAAJTW76-BDPjrCQWGeVpvfNqjC6zB",
   "Tema": "Default",
-  "UrlServerNode": "http://localhost:8000"
+  "UrlServerNode": "http://localhost:8000",
+  "MsgErrConvEcommerce": "Sembra che attualmente l'applicazione non abbia una configurazione valida. Ti invitiamo a contattare il tuo centro fitness, per ottenere ulteriori informazioni e supporto in merito a questa situazione. Grazie per la tua collaborazione.",
+  "MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!"
 }

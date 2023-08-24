@@ -1,9 +1,9 @@
 //ToolBar.js
 import * as React from "react";
-import {styled, useTheme} from "@mui/material/styles";
-import {Badge, Box, Toolbar, Typography, Avatar} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
+import { Badge, Box, Toolbar, Popper, Typography } from "@mui/material";
 import Image from "next/image";
-import {IconButton} from "@mui/material";
+import { IconButton } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -18,9 +18,19 @@ const StyledImageLogo = styled(Image)({
 	marginLeft: -30,
 });
 
-export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen}) => {
+export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen }) => {
 	const theme = useTheme();
 	const [drawerLocked, setDrawerLocked] = React.useState(false);
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const handlePopperOpen = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handlePopperClose = () => {
+		setAnchorEl(null);
+	};
+
+	const openPopper = Boolean(anchorEl);
 
 	const handleButtonClick = (target) => {
 		setDrawerLocked(!drawerLocked);
@@ -48,18 +58,20 @@ export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawe
 					width={190}
 					height={70}
 					priority={true}
-					sx={{cursor: "pointer"}}
+					sx={{ cursor: "pointer" }}
 					onClick={() => {
 						Router.push("/auth/home");
 					}}
 				/>
-				<Box sx={{flexGrow: 1}} />
-				{/* <Box sx={{display: {xs: "none", md: "flex"}}}> */}
-				<Box sx={{display: "flex"}}>
+				<Box sx={{ flexGrow: 1 }} />
+
+				<Box sx={{ display: "flex" }}>
 					<IconButton
 						size='large'
-						aria-label='show 4 new mails'
+						aria-label='mostra 4 nuovi messaggi'
 						color='inherit'
+						onMouseEnter={handlePopperOpen}
+						onMouseLeave={handlePopperClose}
 						onClick={() => {
 							Router.push("/auth/notifiche");
 						}}
@@ -71,6 +83,52 @@ export const ToolBar = ({drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawe
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>
+					<Popper
+						sx={{
+							backgroundColor: theme.palette.mode !== "dark" ? "#1B1B1B" : "#F2F2F2",
+							color: theme.palette.mode !== "dark" ? "#F2F2F2" : "#1B1B1B",
+							borderRadius: 1,
+							padding: 1,
+							zIndex: 1201,
+						}}
+						placement='bottom'
+						disablePortal={false}
+						open={openPopper}
+						anchorEl={anchorEl}
+						modifiers={[
+							{
+								name: "flip",
+								enabled: true,
+								options: {
+									altBoundary: true,
+									rootBoundary: "document",
+									padding: 8,
+								},
+							},
+							{
+								name: "preventOverflow",
+								enabled: true,
+								options: {
+									altAxis: true,
+									altBoundary: true,
+									tether: true,
+									rootBoundary: "document",
+									padding: 8,
+								},
+							},
+							{
+								name: "arrow",
+								enabled: false,
+								options: {
+									// Se hai bisogno di una freccia, puoi specificare un elemento qui.
+									// element: arrowRef,
+								},
+							},
+						]}
+					>
+						{/* Contenuto del Popper */}
+						<Typography sx={{ p: 1 }}>Visualizza messaggi e avvisi</Typography>
+					</Popper>
 
 					<IconButton
 						size='large'

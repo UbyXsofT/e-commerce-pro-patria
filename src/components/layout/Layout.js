@@ -1,18 +1,18 @@
 // Layout.js
 import React from "react";
-import {Box, Toolbar, Button} from "@mui/material";
-import {useSpring, animated} from "@react-spring/web";
-import {DrawerSx} from "./drawer/drawerSx/DrawerSx";
-import {DrawerDx} from "./drawer/drawerDx/DrawerDx";
-import {Header} from "./header/Header";
-import {Footer} from "./footer/Footer";
-import {AlertMe} from "./alert/AlertMe";
-import {Typography} from "@mui/material";
-import {UserDrawerContentDx} from "./drawer/drawerDx/UserDrawerContentDx";
-import {CarrelloDrawerContentDx} from "./drawer/drawerDx/CarrelloDrawerContentDx";
+import { Box, Toolbar, Button } from "@mui/material";
+import { useSpring, animated } from "@react-spring/web";
+import { DrawerSx } from "./drawer/drawerSx/DrawerSx";
+import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
+import { Header } from "./header/Header";
+import { Footer } from "./footer/Footer";
+import { AlertMe } from "./alert/AlertMe";
+import { Typography } from "@mui/material";
+import { UserDrawerContentDx } from "./drawer/drawerDx/UserDrawerContentDx";
+import { CarrelloDrawerContentDx } from "./drawer/drawerDx/CarrelloDrawerContentDx";
 import CookieConsent from "../cookie/CookieConsent";
 
-const Layout = ({children}) => {
+const Layout = ({ children }) => {
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
 	const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
@@ -35,7 +35,7 @@ const Layout = ({children}) => {
 
 	const mainAnimation = useSpring({
 		opacity: 1,
-		from: {opacity: 0},
+		from: { opacity: 0 },
 		config: {
 			duration: 200,
 		},
@@ -43,7 +43,7 @@ const Layout = ({children}) => {
 
 	return (
 		<animated.main style={mainAnimation}>
-			<Box sx={{display: "flex"}}>
+			<Box sx={{ display: "flex" }}>
 				<Header
 					drawerDxOpen={drawerDxOpen}
 					toggleDrawerDx={toggleDrawerDx}

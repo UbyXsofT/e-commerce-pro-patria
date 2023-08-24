@@ -26,6 +26,7 @@
     "next": "13.4.7",
     "next-redux-wrapper": "^7.0.5",
     "prop-types": "latest",
+    "qs": "^6.11.2",
     "react": "latest",
     "react-dom": "latest",
     "react-google-recaptcha": "^3.1.0",
