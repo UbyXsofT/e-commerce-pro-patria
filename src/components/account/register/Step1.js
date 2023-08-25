@@ -12,11 +12,11 @@ import "dayjs/locale/it";
 import { Autocomplete, FormHelperText, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
+import dayjs from "dayjs";
+import { display } from "@mui/system";
 
 const Step1 = ({
   comuni,
-  setComuni,
-  getComuni,
   selectedComune,
   setSelectedComune,
   comuneResidenza,
@@ -24,8 +24,8 @@ const Step1 = ({
   stringUpperCase,
   codiceFiscale,
   codiceFiscaleInvalid,
-  isCodiceFiscaleInvalid,
   setCodiceFiscale,
+  setCodiceFiscaleInvalid,
   firstName,
   setFirstName,
   lastName,
@@ -40,7 +40,6 @@ const Step1 = ({
   setProvinceOfBirth,
   address,
   setAddress,
-  city,
   setCity,
   cap,
   setCap,
@@ -52,22 +51,38 @@ const Step1 = ({
   setPhoneNumber,
   privacy,
   setPrivacy,
-  updateCodiceFiscale,
-  updateDate,
   privacyLabel,
 }) => {
   const handleSubmit = () => {};
 
-  React.useEffect(() => {
-    getComuni();
-  }, []);
+  const updateCodiceFiscale = (e) => {
+    setCodiceFiscale(e.target.value.trim().toUpperCase());
+    if (CodiceFiscale.check(e.target.value)) {
+      const cf = new CodiceFiscale(e.target.value);
+      const placeOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
+      const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === placeOfBirth.toLocaleLowerCase());
+      !gender ? setGender(cf.gender === "M" ? "male" : "female") : {};
+      setPlaceOfBirth(placeOfBirth);
+      setSelectedComune(comune);
+      setProvinceOfBirth(comune.provincia.nome);
+      !dateOfBirth ? setDateOfBirth(dayjs(cf.birthday)) : {};
+    }
+  };
+
+  const isCodiceFiscaleInvalid = (codiceFiscale) => {
+    if (CodiceFiscale.check(codiceFiscale)) {
+      setCodiceFiscaleInvalid(false);
+    } else {
+      setCodiceFiscaleInvalid(true);
+    }
+  };
 
   React.useEffect(() => {
     isCodiceFiscaleInvalid(codiceFiscale);
   }, [codiceFiscale]);
 
   React.useEffect(() => {
-    if (firstName && lastName !== "" && dateOfBirth !== undefined && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && placeOfBirth !== undefined) {
+    if (firstName && lastName !== "" && dateOfBirth !== null && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && selectedComune !== null) {
       const cf = new CodiceFiscale({
         name: firstName,
         surname: lastName,
@@ -75,11 +90,12 @@ const Step1 = ({
         day: dateOfBirth.$D,
         month: dateOfBirth.$M + 1,
         year: dateOfBirth.$y,
-        birthplace: placeOfBirth,
+        birthplace: selectedComune.nome,
       });
+
       setCodiceFiscale(cf.code);
     }
-  }, [firstName, lastName, gender, dateOfBirth, placeOfBirth]);
+  }, [firstName, lastName, gender, dateOfBirth, selectedComune]);
 
   return (
     <Container component="main" maxWidth="md">
@@ -134,7 +150,7 @@ const Step1 = ({
                   <DatePicker
                     disableFuture
                     value={dateOfBirth}
-                    onChange={(e) => updateDate(e)}
+                    onChange={(e) => setDateOfBirth(e)}
                     required
                     label="Data di Nascita"
                     sx={{
@@ -146,22 +162,40 @@ const Step1 = ({
               <Grid item xs={12} sm={8}>
                 <Autocomplete
                   required
-                  value={selectedComune}
+                  value={placeOfBirth ? selectedComune : null}
                   onChange={(_, comune) => {
                     if (!comune) {
+                      return;
+                    }
+
+                    if (typeof comune === "string") {
+                      setPlaceOfBirth(comune);
+
                       return;
                     }
                     setSelectedComune(comune);
                     setPlaceOfBirth(comune.nome);
                     setProvinceOfBirth(comune.provincia.nome);
                   }}
+                  inputValue={placeOfBirth ? placeOfBirth : ""}
+                  onInputChange={(e, newInput) => setPlaceOfBirth(newInput)}
                   freeSolo
-                  inputProps={{ maxLength: 35 }}
                   id="placeOfBirth"
                   name="placeOfBirth"
                   autoComplete
-                  getOptionLabel={(comune) => comune.nome}
+                  getOptionLabel={(comune) => (typeof comune === "string" ? comune : comune.nome)}
                   options={comuni}
+                  renderOption={(props, comune) => {
+                    return (
+                      <div {...props} style={{ display: "flex", justifyContent: "space-between", gap: "1em", borderBottom: "1px solid rgba(255,255,255,0.1)" }} key={comune.key}>
+                        {/* TODO: I DON'T UNDERSTAND WHY MY MATH HACK WORKS BUT IT DOES! */}
+                        <span key={comune.key * -1}>{comune.nome}</span>
+                        <span key={comune.key ^ -1} style={{ fontWeight: "bold", textAlign: "right" }}>
+                          {comune.provincia.nome}
+                        </span>
+                      </div>
+                    );
+                  }}
                   renderInput={(params) => <TextField {...params} label="Luogo Di Nascita" />}
                 />
               </Grid>

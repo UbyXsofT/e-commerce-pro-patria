@@ -21,7 +21,6 @@ import { PrivacyTip } from "@mui/icons-material";
 import eCommerceConf from "/eCommerceConf.json";
 import Genitore from "/src/components/account/register/Genitore";
 import CodiceFiscale from "codice-fiscale-js";
-import dayjs from "dayjs";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -44,18 +43,21 @@ export default function SignUp() {
   const [lastName, setLastName] = React.useState("");
 
   const [parentCodiceFiscale, setParentCodiceFiscale] = React.useState("");
+  const [parentCodiceFiscaleInvalid, setParentCodiceFiscaleInvalid] = React.useState(false);
+
   const [parentFirstName, setParentFirstName] = React.useState("");
   const [parentLastName, setParentLastName] = React.useState("");
 
-  const [gender, setGender] = React.useState("male");
-  const [dateOfBirth, setDateOfBirth] = React.useState();
-  const [placeOfBirth, setPlaceOfBirth] = React.useState();
+  const [gender, setGender] = React.useState(null);
+  const [dateOfBirth, setDateOfBirth] = React.useState(null);
+  const [placeOfBirth, setPlaceOfBirth] = React.useState(null);
   const [selectedComune, setSelectedComune] = React.useState(null);
   const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
 
   const [parentGender, setParentGender] = React.useState("male");
-  const [parentDateOfBirth, setParentDateOfBirth] = React.useState("");
-  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState();
+  const [parentDateOfBirth, setParentDateOfBirth] = React.useState(null);
+  const [parentSelectedComune, setParentSelectedComune] = React.useState(null);
+  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState(null);
   const [parentProvinceOfBirth, setParentProvinceOfBirth] = React.useState("");
 
   const [address, setAddress] = React.useState("");
@@ -65,6 +67,7 @@ export default function SignUp() {
   const [province, setProvince] = React.useState("");
 
   const [parentAddress, setParentAddress] = React.useState("");
+  const [parentComuneResidenza, setParentComuneResidenza] = React.useState(null);
   const [parentCity, setParentCity] = React.useState();
   const [parentCap, setParentCap] = React.useState("");
   const [parentProvince, setParentProvince] = React.useState("");
@@ -93,31 +96,8 @@ export default function SignUp() {
     return arr.join(" ");
   };
 
-  const isCodiceFiscaleInvalid = (codiceFiscale) => {
-    if (CodiceFiscale.check(codiceFiscale)) {
-      setCodiceFiscaleInvalid(false);
-    } else {
-      setCodiceFiscaleInvalid(true);
-    }
-  };
-
-  const updateCodiceFiscale = (e) => {
-    setCodiceFiscale(e.target.value.trim().toUpperCase());
-    if (CodiceFiscale.check(e.target.value)) {
-      const cf = new CodiceFiscale(e.target.value);
-      const placeOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
-      const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === placeOfBirth.toLocaleLowerCase());
-      setGender(cf.gender === "M" ? "male" : "female");
-      setPlaceOfBirth(placeOfBirth);
-      setSelectedComune(comune);
-      setProvinceOfBirth(comune.provincia.nome);
-      updateDate(dayjs(cf.birthday));
-    }
-  };
-
-  const updateDate = (e) => {
+  const updateUnderage = (e) => {
     const currentDate = new Date();
-    setDateOfBirth(e);
 
     switch (true) {
       case currentDate.getFullYear() - e.$y >= 19:
@@ -165,21 +145,23 @@ export default function SignUp() {
 
   const getComuni = async () => {
     try {
-      const response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
-      const jsonData = await response.json();
-      const filteredData = [jsonData[0]];
-      for (let i = 1; i < jsonData.length; i++) {
-        // Compare the current object's name with the previous object's name
-        if (jsonData[i].nome !== jsonData[i - 1].nome) {
-          filteredData.push(jsonData[i]); // If names are different, add the current object to the result
-        }
-      }
-      console.log(filteredData);
-      setComuni(filteredData);
+      let response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
+      let jsonData = await response.json();
+
+      let keyFulData = jsonData.map((comune, idx) => {
+        let updatedComune = { ...comune, key: idx };
+        return updatedComune;
+      });
+
+      setComuni(keyFulData);
     } catch (error) {
       alert(error);
     }
   };
+
+  React.useEffect(() => {
+    getComuni();
+  }, []);
 
   function getStepContent(step) {
     if (underage) {
@@ -188,17 +170,15 @@ export default function SignUp() {
           return (
             <Step1
               comuni={comuni}
-              setComuni={setComuni}
               comuneResidenza={comuneResidenza}
               setComuneResidenza={setComuneResidenza}
-              getComuni={getComuni}
               selectedComune={selectedComune}
               setSelectedComune={setSelectedComune}
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
-              isCodiceFiscaleInvalid={isCodiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
+              setCodiceFiscaleInvalid={setCodiceFiscaleInvalid}
               firstName={firstName}
               setFirstName={setFirstName}
               lastName={lastName}
@@ -225,42 +205,48 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
-              updateCodiceFiscale={updateCodiceFiscale}
-              updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
           );
         case 1:
           return (
-            <Genitore
-              parentCodiceFiscale={parentCodiceFiscale}
-              setParentCodiceFiscale={setParentCodiceFiscale}
-              parentFirstName={parentFirstName}
-              setParentFirstName={setParentFirstName}
-              parentLastName={parentLastName}
-              setParentLastName={setParentLastName}
-              parentGender={parentGender}
-              setParentGender={setParentGender}
-              parentDateOfBirth={parentDateOfBirth}
-              setParentDateOfBirth={setParentDateOfBirth}
-              parentPlaceOfBirth={parentPlaceOfBirth}
-              setParentPlaceOfBirth={setParentPlaceOfBirth}
-              parentProvinceOfBirth={parentProvinceOfBirth}
-              setParentProvinceOfBirth={setParentProvinceOfBirth}
-              parentAddress={parentAddress}
-              setParentAddress={setParentAddress}
-              parentCity={parentCity}
-              setParentCity={setParentCity}
-              parentCap={parentCap}
-              setParentCap={setParentCap}
-              parentProvince={parentProvince}
-              setParentProvince={setParentProvince}
-              parentEmail={parentEmail}
-              setParentEmail={setParentEmail}
-              parentPhoneNumber={parentPhoneNumber}
-              setParentPhoneNumber={setParentPhoneNumber}
-              parentPrivacy={parentPrivacy}
-              setParentPrivacy={setParentPrivacy}
+            <Step1
+              comuni={comuni}
+              comuneResidenza={parentComuneResidenza}
+              setComuneResidenza={setParentComuneResidenza}
+              selectedComune={parentSelectedComune}
+              setSelectedComune={setParentSelectedComune}
+              stringUpperCase={stringUpperCase}
+              codiceFiscale={parentCodiceFiscale}
+              codiceFiscaleInvalid={parentCodiceFiscaleInvalid}
+              setCodiceFiscale={setParentCodiceFiscale}
+              setCodiceFiscaleInvalid={setParentCodiceFiscaleInvalid}
+              firstName={parentFirstName}
+              setFirstName={setParentFirstName}
+              lastName={parentLastName}
+              setLastName={setParentLastName}
+              gender={parentGender}
+              setGender={setParentGender}
+              dateOfBirth={parentDateOfBirth}
+              setDateOfBirth={setParentDateOfBirth}
+              placeOfBirth={parentPlaceOfBirth}
+              setPlaceOfBirth={setParentPlaceOfBirth}
+              provinceOfBirth={parentProvinceOfBirth}
+              setProvinceOfBirth={setParentProvinceOfBirth}
+              address={parentAddress}
+              setAddress={setParentAddress}
+              city={parentCity}
+              setCity={setParentCity}
+              cap={parentCap}
+              setCap={setParentCap}
+              province={parentProvince}
+              setProvince={setParentProvince}
+              email={parentEmail}
+              setEmail={setParentEmail}
+              phoneNumber={parentPhoneNumber}
+              setPhoneNumber={setParentPhoneNumber}
+              privacy={parentPrivacy}
+              setPrivacy={setParentPrivacy}
               privacyLabel={privacyLabel}
             />
           );
@@ -311,8 +297,6 @@ export default function SignUp() {
           return (
             <Step1
               comuni={comuni}
-              setComuni={setComuni}
-              getComuni={getComuni}
               selectedComune={selectedComune}
               setSelectedComune={setSelectedComune}
               comuneResidenza={comuneResidenza}
@@ -320,8 +304,8 @@ export default function SignUp() {
               stringUpperCase={stringUpperCase}
               codiceFiscale={codiceFiscale}
               codiceFiscaleInvalid={codiceFiscaleInvalid}
-              isCodiceFiscaleInvalid={isCodiceFiscaleInvalid}
               setCodiceFiscale={setCodiceFiscale}
+              setCodiceFiscaleInvalid={setCodiceFiscaleInvalid}
               firstName={firstName}
               setFirstName={setFirstName}
               lastName={lastName}
@@ -348,8 +332,6 @@ export default function SignUp() {
               setPhoneNumber={setPhoneNumber}
               privacy={privacy}
               setPrivacy={setPrivacy}
-              updateCodiceFiscale={updateCodiceFiscale}
-              updateDate={updateDate}
               privacyLabel={privacyLabel}
             />
           );
@@ -381,6 +363,12 @@ export default function SignUp() {
       }
     }
   }
+
+  React.useEffect(() => {
+    if (dateOfBirth) {
+      updateUnderage(dateOfBirth);
+    }
+  }, [dateOfBirth]);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
