@@ -14,6 +14,7 @@ import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 import dayjs from "dayjs";
 import { display } from "@mui/system";
+import VirtualizedAutocomplete from "./VirtualizedAutocomplete";
 
 const Step1 = ({
   comuni,
@@ -40,6 +41,7 @@ const Step1 = ({
   setProvinceOfBirth,
   address,
   setAddress,
+  city,
   setCity,
   cap,
   setCap,
@@ -160,7 +162,16 @@ const Step1 = ({
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <Autocomplete
+                <VirtualizedAutocomplete
+                  label={"Luogo di Nascita"}
+                  comuni={comuni}
+                  placeOfBirth={placeOfBirth}
+                  setPlaceOfBirth={setPlaceOfBirth}
+                  selectedComune={selectedComune}
+                  setSelectedComune={setSelectedComune}
+                  setProvinceOfBirth={setProvinceOfBirth}
+                />
+                {/* <Autocomplete
                   required
                   value={placeOfBirth ? selectedComune : null}
                   onChange={(_, comune) => {
@@ -188,7 +199,7 @@ const Step1 = ({
                   renderOption={(props, comune) => {
                     return (
                       <div {...props} style={{ display: "flex", justifyContent: "space-between", gap: "1em", borderBottom: "1px solid rgba(255,255,255,0.1)" }} key={comune.key}>
-                        {/* TODO: I DON'T UNDERSTAND WHY MY MATH HACK WORKS BUT IT DOES! */}
+                        TODO: I DON'T UNDERSTAND WHY MY MATH HACK WORKS BUT IT DOES!
                         <span key={comune.key * -1}>{comune.nome}</span>
                         <span key={comune.key ^ -1} style={{ fontWeight: "bold", textAlign: "right" }}>
                           {comune.provincia.nome}
@@ -197,7 +208,7 @@ const Step1 = ({
                     );
                   }}
                   renderInput={(params) => <TextField {...params} label="Luogo Di Nascita" />}
-                />
+                /> */}
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
@@ -222,7 +233,7 @@ const Step1 = ({
                 <FormHelperText> </FormHelperText>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <Autocomplete
+                {/* <Autocomplete
                   required
                   value={comuneResidenza}
                   onChange={(_, comune) => {
@@ -239,7 +250,8 @@ const Step1 = ({
                   getOptionLabel={(comune) => comune.nome}
                   options={comuni}
                   renderInput={(params) => <TextField {...params} label="Città" />}
-                />
+                /> */}
+                <VirtualizedAutocomplete label={"Residenza"} comuni={comuni} placeOfBirth={city} setPlaceOfBirth={setCity} selectedComune={comuneResidenza} setSelectedComune={setComuneResidenza} setProvinceOfBirth={setProvince} setCap={setCap} />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField value={cap} onChange={(e) => setCap(e.target.value.trim().replace(/\D/g, ""))} inputProps={{ maxLength: 5 }} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
