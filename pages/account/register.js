@@ -61,13 +61,13 @@ export default function SignUp() {
 
   const [address, setAddress] = useState("");
   const [comuneResidenza, setComuneResidenza] = useState(null);
-  const [city, setCity] = useState();
+  const [city, setCity] = useState(null);
   const [cap, setCap] = useState("");
   const [province, setProvince] = useState("");
 
   const [parentAddress, setParentAddress] = useState("");
   const [parentComuneResidenza, setParentComuneResidenza] = useState(null);
-  const [parentCity, setParentCity] = useState();
+  const [parentCity, setParentCity] = useState(null);
   const [parentCap, setParentCap] = useState("");
   const [parentProvince, setParentProvince] = useState("");
 
@@ -84,6 +84,11 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSafety, setPasswordSafety] = useState({ correct: false, detail: "" });
+
+  const [readyToSend, setReadyToSend] = useState({ status: false });
+
+  const [disableButton, setDisablebutton] = useState(false);
 
   const [comuni, setComuni] = useState([]);
 
@@ -252,7 +257,20 @@ export default function SignUp() {
             />
           );
         case 2:
-          return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
+          return (
+            <Step2
+              email={email}
+              setEmail={setEmail}
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              passwordSafety={passwordSafety}
+              setPasswordSafety={setPasswordSafety}
+            />
+          );
         case 3:
           return (
             <Step3
@@ -338,7 +356,20 @@ export default function SignUp() {
             />
           );
         case 1:
-          return <Step2 email={email} setEmail={setEmail} username={username} setUsername={setUsername} password={password} setPassword={setPassword} confirmPassword={confirmPassword} setConfirmPassword={setConfirmPassword} />;
+          return (
+            <Step2
+              email={email}
+              setEmail={setEmail}
+              username={username}
+              setUsername={setUsername}
+              password={password}
+              setPassword={setPassword}
+              confirmPassword={confirmPassword}
+              setConfirmPassword={setConfirmPassword}
+              passwordSafety={passwordSafety}
+              setPasswordSafety={setPasswordSafety}
+            />
+          );
         case 2:
           return (
             <Step3
@@ -372,13 +403,65 @@ export default function SignUp() {
     }
   }, [dateOfBirth]);
 
+  const sendData = (data) => {
+    console.log("YES!");
+  };
+
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if ((underage && activeStep === 2) || (!underage && activeStep === 1)) {
+      const data = {
+        user: { codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, provinceOfBirth, address, city, cap, province, email, phoneNumber, privacy, username, password },
+        parent: {
+          parentCodiceFiscale,
+          parentFirstName,
+          parentLastName,
+          parentGender,
+          parentDateOfBirth,
+          parentPlaceOfBirth,
+          parentProvinceOfBirth,
+          parentAddress,
+          parentCity,
+          parentCap,
+          parentProvince,
+          parentEmail,
+          parentPhoneNumber,
+          parentPrivacy,
+        },
+      };
+
+      const userCheckPassed = Object.values(data.user).every((value) => value !== null && value !== "" && value !== false);
+      const parentCheckPassed = Object.values(data.parent).every((value) => value !== null && value !== "" && value !== false);
+
+      if (underage ? userCheckPassed && parentCheckPassed : userCheckPassed) {
+        setReadyToSend({ status: true, data });
+      } else {
+        setReadyToSend({ status: false, data });
+      }
+
+      setActiveStep(activeStep + 1);
+    } else if ((underage && activeStep === 3) || (!underage && activeStep === 2)) {
+      sendData(readyToSend.data);
+      setActiveStep(activeStep + 1);
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  useEffect(() => {
+    let correctStep = (underage && activeStep === 2) || (!underage && activeStep === 1);
+    (password !== confirmPassword || (passwordSafety && !passwordSafety.correct)) && correctStep ? setDisablebutton(true) : setDisablebutton(false);
+
+    if (correctStep) {
+      return;
+    }
+
+    let correctStepFinalize = (underage && activeStep === 3) || (!underage && activeStep === 2);
+    !readyToSend.status && correctStepFinalize ? setDisablebutton(true) : setDisablebutton(false);
+  }, [password, confirmPassword, passwordSafety, activeStep]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -468,7 +551,7 @@ export default function SignUp() {
                 </Button>
               )}
 
-              <Button variant="contained" onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
+              <Button variant="contained" disabled={disableButton} onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
                 {underage ? (activeStep === underageSteps.length - 1 ? "Finalizza" : "Successivo") : activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
               </Button>
             </Box>

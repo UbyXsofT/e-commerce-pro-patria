@@ -8,10 +8,8 @@ import "dayjs/locale/it";
 import SecurePassword from "/src/components/account/SecurePassword";
 import { height } from "@mui/system";
 
-const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword }) => {
+const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, passwordSafety, setPasswordSafety }) => {
   const handleSubmit = () => {};
-
-  const [passwordSafety, setPasswordSafety] = React.useState({ correct: false, detail: "" });
 
   return (
     <Container component="main" maxWidth="md">
