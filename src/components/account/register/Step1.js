@@ -9,14 +9,15 @@ import Container from "@mui/material/Container";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
-import { Autocomplete, FormHelperText, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { FormHelperText, FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 import dayjs from "dayjs";
-import { display } from "@mui/system";
 import VirtualizedAutocomplete from "./VirtualizedAutocomplete";
+import { useEffect } from "react";
 
 const Step1 = ({
+  parent,
   comuni,
   selectedComune,
   setSelectedComune,
@@ -79,11 +80,11 @@ const Step1 = ({
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     isCodiceFiscaleInvalid(codiceFiscale);
   }, [codiceFiscale]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (firstName && lastName !== "" && dateOfBirth !== null && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && selectedComune !== null) {
       const cf = new CodiceFiscale({
         name: firstName,
@@ -152,6 +153,7 @@ const Step1 = ({
                   <DatePicker
                     disableFuture
                     value={dateOfBirth}
+                    maxDate={parent ? dayjs().subtract(18, "year") : null}
                     onChange={(e) => setDateOfBirth(e)}
                     required
                     label="Data di Nascita"

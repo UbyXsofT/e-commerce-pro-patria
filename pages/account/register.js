@@ -17,10 +17,9 @@ import Step2 from "/src/components/account/register/Step2";
 import Step3 from "/src/components/account/register/Step3";
 import Router from "next/router";
 import { PrivacyTip } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 
 import eCommerceConf from "/eCommerceConf.json";
-import Genitore from "/src/components/account/register/Genitore";
-import CodiceFiscale from "codice-fiscale-js";
 
 export default function SignUp() {
   const theme = useTheme();
@@ -29,64 +28,64 @@ export default function SignUp() {
     padding: "10px",
     maxWidth: 300,
   });
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const steps = ["Dati Personali", "Utente", "Finalizza"];
   const underageSteps = ["Dati Personali", "Dati Genitore", "Utente", "Finalizza"];
 
-  const [underage, setUnderage] = React.useState(true);
+  const [underage, setUnderage] = useState(true);
 
-  const [codiceFiscale, setCodiceFiscale] = React.useState("");
-  const [codiceFiscaleInvalid, setCodiceFiscaleInvalid] = React.useState(false);
+  const [codiceFiscale, setCodiceFiscale] = useState("");
+  const [codiceFiscaleInvalid, setCodiceFiscaleInvalid] = useState(false);
 
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  const [parentCodiceFiscale, setParentCodiceFiscale] = React.useState("");
-  const [parentCodiceFiscaleInvalid, setParentCodiceFiscaleInvalid] = React.useState(false);
+  const [parentCodiceFiscale, setParentCodiceFiscale] = useState("");
+  const [parentCodiceFiscaleInvalid, setParentCodiceFiscaleInvalid] = useState(false);
 
-  const [parentFirstName, setParentFirstName] = React.useState("");
-  const [parentLastName, setParentLastName] = React.useState("");
+  const [parentFirstName, setParentFirstName] = useState("");
+  const [parentLastName, setParentLastName] = useState("");
 
-  const [gender, setGender] = React.useState(null);
-  const [dateOfBirth, setDateOfBirth] = React.useState(null);
-  const [placeOfBirth, setPlaceOfBirth] = React.useState(null);
-  const [selectedComune, setSelectedComune] = React.useState(null);
-  const [provinceOfBirth, setProvinceOfBirth] = React.useState("");
+  const [gender, setGender] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [placeOfBirth, setPlaceOfBirth] = useState(null);
+  const [selectedComune, setSelectedComune] = useState(null);
+  const [provinceOfBirth, setProvinceOfBirth] = useState("");
 
-  const [parentGender, setParentGender] = React.useState(null);
-  const [parentDateOfBirth, setParentDateOfBirth] = React.useState(null);
-  const [parentSelectedComune, setParentSelectedComune] = React.useState(null);
-  const [parentPlaceOfBirth, setParentPlaceOfBirth] = React.useState(null);
-  const [parentProvinceOfBirth, setParentProvinceOfBirth] = React.useState("");
+  const [parentGender, setParentGender] = useState(null);
+  const [parentDateOfBirth, setParentDateOfBirth] = useState(null);
+  const [parentSelectedComune, setParentSelectedComune] = useState(null);
+  const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState(null);
+  const [parentProvinceOfBirth, setParentProvinceOfBirth] = useState("");
 
-  const [address, setAddress] = React.useState("");
-  const [comuneResidenza, setComuneResidenza] = React.useState(null);
-  const [city, setCity] = React.useState();
-  const [cap, setCap] = React.useState("");
-  const [province, setProvince] = React.useState("");
+  const [address, setAddress] = useState("");
+  const [comuneResidenza, setComuneResidenza] = useState(null);
+  const [city, setCity] = useState();
+  const [cap, setCap] = useState("");
+  const [province, setProvince] = useState("");
 
-  const [parentAddress, setParentAddress] = React.useState("");
-  const [parentComuneResidenza, setParentComuneResidenza] = React.useState(null);
-  const [parentCity, setParentCity] = React.useState();
-  const [parentCap, setParentCap] = React.useState("");
-  const [parentProvince, setParentProvince] = React.useState("");
+  const [parentAddress, setParentAddress] = useState("");
+  const [parentComuneResidenza, setParentComuneResidenza] = useState(null);
+  const [parentCity, setParentCity] = useState();
+  const [parentCap, setParentCap] = useState("");
+  const [parentProvince, setParentProvince] = useState("");
 
-  const [email, setEmail] = React.useState("");
-  const [phoneNumber, setPhoneNumber] = React.useState("+39");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("+39");
 
-  const [parentEmail, setParentEmail] = React.useState("");
-  const [parentPhoneNumber, setParentPhoneNumber] = React.useState("+39");
+  const [parentEmail, setParentEmail] = useState("");
+  const [parentPhoneNumber, setParentPhoneNumber] = useState("+39");
 
-  const [privacy, setPrivacy] = React.useState(false);
+  const [privacy, setPrivacy] = useState(false);
 
-  const [parentPrivacy, setParentPrivacy] = React.useState(false);
+  const [parentPrivacy, setParentPrivacy] = useState(false);
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [comuni, setComuni] = React.useState([]);
+  const [comuni, setComuni] = useState([]);
 
   const stringUpperCase = (string) => {
     const arr = string.split(" ");
@@ -159,7 +158,7 @@ export default function SignUp() {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getComuni();
   }, []);
 
@@ -169,6 +168,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              parent={false}
               comuni={comuni}
               comuneResidenza={comuneResidenza}
               setComuneResidenza={setComuneResidenza}
@@ -211,6 +211,7 @@ export default function SignUp() {
         case 1:
           return (
             <Step1
+              parent={true}
               comuni={comuni}
               comuneResidenza={parentComuneResidenza}
               setComuneResidenza={setParentComuneResidenza}
@@ -296,6 +297,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              parent={false}
               comuni={comuni}
               selectedComune={selectedComune}
               setSelectedComune={setSelectedComune}
@@ -364,7 +366,7 @@ export default function SignUp() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (dateOfBirth) {
       updateUnderage(dateOfBirth);
     }
