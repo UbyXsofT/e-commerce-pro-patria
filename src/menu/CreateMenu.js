@@ -10,7 +10,7 @@ import Router from "next/router";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {Divider} from "@mui/material";
+import { Divider } from "@mui/material";
 export function CreateMenu(tipoMenu) {
 	function generateMenuItem(id, label, onClick, icon, badgeContent, badgeColor, subItems, control) {
 		return {
@@ -174,7 +174,7 @@ export function CreateMenu(tipoMenu) {
 			[],
 			null
 		),
-		generateMenuItem("3", null, null, null, null, null, [], <Divider style={{width: "100%"}} />),
+		generateMenuItem("3", null, null, null, null, null, [], <Divider style={{ width: "100%" }} />),
 		generateMenuItem(
 			"4",
 			"Esci",
@@ -187,7 +187,7 @@ export function CreateMenu(tipoMenu) {
 			[],
 			null
 		),
-		generateMenuItem("5", null, null, null, null, null, [], <Divider style={{width: "100%"}} />),
+		generateMenuItem("5", null, null, null, null, null, [], <Divider style={{ width: "100%" }} />),
 	];
 
 	const menuOptions = {

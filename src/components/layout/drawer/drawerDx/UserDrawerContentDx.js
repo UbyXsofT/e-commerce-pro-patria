@@ -1,34 +1,34 @@
-import {Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider} from "@mui/material";
+import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider } from "@mui/material";
 import * as React from "react";
-import {CreateMenu} from "../../../../menu/CreateMenu";
+import { CreateMenu } from "../../../../menu/CreateMenu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
-import {IconButton} from "@mui/material";
-import {TemaControls} from "../../../theme/TemaControls";
+import { IconButton } from "@mui/material";
+import { TemaControls } from "../../../theme/TemaControls";
 
 const handleDrawerItemClick = (menuItem) => {
 	console.log("handleDrawerItemClick : ", menuItem);
 };
 
-export const UserDrawerContentDx = ({theme}) => {
+export const UserDrawerContentDx = ({ theme }) => {
 	const menuItems = React.useMemo(() => CreateMenu("menuUtenteDx"), []);
 	console.log(menuItems);
 	return (
 		<>
-			<Box sx={{display: "flex", alignItems: "center", flexDirection: "column", padding: "15px"}}>
+			<Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", padding: "15px" }}>
 				<Typography
 					variant='body1'
 					noWrap
 					component='div'
-					sx={{display: "block", marginBottom: "20px"}}
+					sx={{ display: "block", marginBottom: "20px" }}
 				>
 					Ciao Ubaldo Formichetti
 				</Typography>
 				<Avatar
 					alt='Ualdo Formichetti'
 					src='/images/utente.jpg'
-					sx={{width: 56, height: 56}}
+					sx={{ width: 56, height: 56 }}
 				/>
 			</Box>
 			<List>

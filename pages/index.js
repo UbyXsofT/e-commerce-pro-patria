@@ -8,7 +8,9 @@ import { Lato, Poppins } from "next/font/google";
 import eCommerceConf from "../eCommerceConf.json";
 import callNodeService from "./api/callNodeService";
 import CookieManager from "../src/components/cookie/CookieManager";
-import ApiWrapper from "../src/components/utils/ApiWrapper";
+//redux
+import { setAuthEcommerce, setAuthUser } from "../src/store/actions";
+import { useDispatch } from "react-redux";
 
 export const lato = Lato({
 	weight: ["300", "400"],
@@ -27,27 +29,129 @@ export const poppins = Poppins({
 const Index = () => {
 	const theme = useTheme();
 	console.log("theme: ", theme);
+	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
+
+	const [isAuthEcommerce, setIsAuthEcommerce] = React.useState(false);
+
+	const startRedirect = () => {
+		if (isAuthEcommerce === true) {
+			if (CookieManager.getCookie("accessToken") || CookieManager.getCookie("refreshToken")) {
+				//TODO prima di mandarlo nella home, nel caso di un accesso per un utente che possiede un token salvato
+				//bisogna simulare un login con utente e password recuperati e decriptati dai cookie
+				if (CookieManager.getCookie("userName") || CookieManager.getCookie("password") || CookieManager.getCookie("ricordami")) {
+					const username = CookieManager.getDecryptedCookie("userName");
+					const password = CookieManager.getDecryptedCookie("password");
+					const ricordami = CookieManager.getDecryptedCookie("ricordami");
+
+					const fetchData = async () => {
+						//setVisLoader(true);
+						const obyPostData = {
+							clienteKey: eCommerceConf.ClienteKey,
+							userName: username,
+							password: password,
+							ricordami: ricordami,
+						};
+
+						try {
+							const respCall = await callNodeService("login", obyPostData, null);
+							console.log("respCall: ", respCall);
+							const msg_Resp = respCall.messageCli.message;
+							if (respCall.successCli) {
+								if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+									//****** TOKENS
+									// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
+									CookieManager.setCookie("accessToken", msg_Resp.accessToken);
+									if (msg_Resp.refreshToken) {
+										// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
+										CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
+									} else {
+										//rimuovo l'eventuale refreshToken
+										CookieManager.removeCookie("refreshToken");
+									}
+									//****** UTENTE
+									// Aggiorna lo stato dell'OGGETTO utente
+									try {
+										console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+										dispatch(setAuthUser(msg_Resp.respWCF));
+										//setVisLoader(false);
+										//TODO prima di mandarlo nella home,
+										//cookie criptati di utente e password e ricordami questi cookie servono nell'index
+										//per recuperare l'oggetto utente (nel caso di tokens presenti e validi) simulando una chiamata login
+										//per salvare poi i dati in authUser
+										CookieManager.setEncryptedCookie("userName", username);
+										CookieManager.setEncryptedCookie("password", password);
+										CookieManager.setEncryptedCookie("ricordami", ricordami);
+										Router.push("/auth/home");
+									} catch (error) {
+										console.log("Aggiorna Redux AuthUser:", error);
+									}
+								} else {
+									console.log("msg_Resp: ", msg_Resp);
+									// Gestisci l'errore di autenticazione o l'errore di connessione
+									const textAlert = (
+										<React.Fragment>
+											<h3>
+												<strong>Errore nel recupero dei dati, dati incompleti!</strong>
+											</h3>
+										</React.Fragment>
+									);
+									//setVisLoader(false);
+									await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+								}
+							} else {
+								// Gestisci l'errore di autenticazione o l'errore di connessione
+								const textAlert = (
+									<React.Fragment>
+										<h3>
+											<strong>{respCall.messageCli}</strong>
+										</h3>
+									</React.Fragment>
+								);
+								//setVisLoader(false);
+								await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+							}
+						} catch (error) {
+							//setVisLoader(false);
+							console.error("Errore nella chiamata:", error);
+						}
+					};
+					fetchData();
+				} else {
+					Router.push("/auth/home");
+				}
+			} else {
+				Router.push("/account/login");
+			}
+		} else {
+			Router.push(`/blockPage?titolo=CONVALIDA ECOMMERCE&descrizione=${eCommerceConf.MsgErrConvEcommerce}&desc_azione=${eCommerceConf.MsgChkAgainConvEcommerce}&redirectTo=/`);
+		}
+		// 6000 millisecondi = 6 secondi)
+	};
 
 	React.useEffect(() => {
-		CookieManager.setCookie("appBlocked", false);
 		const fetchData = async () => {
 			try {
 				const respCall = await callNodeService("access-ecommerce", { clienteKey: eCommerceConf.ClienteKey }, null);
 				console.log("respCall: ", respCall);
-				if (respCall.success) {
-					CookieManager.setCookie("appBlocked", false);
+				if (respCall.successCli) {
+					// Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
+					dispatch(setAuthEcommerce(true));
+					setIsAuthEcommerce(true);
 				} else {
-					CookieManager.setCookie("appBlocked", true);
+					// Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
+					dispatch(setAuthEcommerce(false));
+					setIsAuthEcommerce(false);
 				}
 			} catch (error) {
 				console.error("Errore nella chiamata:", error);
-				CookieManager.setCookie("appBlocked", true);
-			} finally {
+				// Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
+				dispatch(setAuthEcommerce(false));
+				setIsAuthEcommerce(false);
 			}
 		};
 
 		fetchData();
-	}, []);
+	}, [dispatch]);
 
 	const Container = styled("div")({
 		width: "100%",
@@ -231,12 +335,7 @@ const Index = () => {
 		},
 		delay: 6000,
 		onRest: () => {
-			console.log("CookieManager.getCookie(appBlocked) : ", CookieManager.getCookie("appBlocked"));
-			if (CookieManager.getCookie("appBlocked") === "false") {
-				Router.push("/account/login");
-			} else {
-				Router.push(`/blockPage?titolo=CONVALIDA ECOMMERCE&descrizione=${eCommerceConf.MsgErrConvEcommerce}&desc_azione=${eCommerceConf.MsgChkAgainConvEcommerce}&redirectTo=/`);
-			}
+			startRedirect();
 		},
 	});
 

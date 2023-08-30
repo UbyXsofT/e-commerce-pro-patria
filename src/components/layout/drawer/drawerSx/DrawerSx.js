@@ -1,12 +1,12 @@
-import React, {useState} from "react";
-import {Divider, Typography} from "@mui/material";
-import {useSpring, animated} from "@react-spring/web";
-import {styled, useTheme} from "@mui/material/styles";
-import {CreateMenu} from "/src/menu/CreateMenu";
-import {MiniDrawer} from "./MiniDrawer";
-import {TreeViewComp} from "./TreeViewComp";
+import React, { useState } from "react";
+import { Divider, Typography } from "@mui/material";
+import { useSpring, animated } from "@react-spring/web";
+import { styled, useTheme } from "@mui/material/styles";
+import { CreateMenu } from "/src/menu/CreateMenu";
+import { MiniDrawer } from "./MiniDrawer";
+import { TreeViewComp } from "./TreeViewComp";
 
-export function DrawerSx({onOpen}) {
+export function DrawerSx({ onOpen }) {
 	const theme = useTheme();
 	const [openDrawer, setOpenDrawer] = useState(false);
 	const [curDrawerWidth, setCurDrawerWidth] = useState(205);
@@ -74,14 +74,14 @@ export function DrawerSx({onOpen}) {
 		}
 	};
 
-	const StyledTitleBoxSubItem = styled(Typography)(({theme}) => ({
+	const StyledTitleBoxSubItem = styled(Typography)(({ theme }) => ({
 		color: theme.palette.text,
 		display: "flex",
 		justifyContent: "center",
 		backgroundColor: theme.palette.primary.main,
 	}));
 
-	const BoxSubItems = styled(animated.div)(({theme}) => ({
+	const BoxSubItems = styled(animated.div)(({ theme }) => ({
 		width: boxWidth,
 		height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
 		position: "fixed",
@@ -118,7 +118,7 @@ export function DrawerSx({onOpen}) {
 
 					{showBox && (
 						<BoxSubItems
-							style={{...BoxSubItemsAnimation}}
+							style={{ ...BoxSubItemsAnimation }}
 							ref={boxContainerRef}
 						>
 							<StyledTitleBoxSubItem variant='subtitle1'>{expandedDrawerItem ? expandedDrawerItem.label : ""}</StyledTitleBoxSubItem>

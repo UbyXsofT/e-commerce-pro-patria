@@ -2851,6 +2851,11 @@
     "shebang-command" "^2.0.0"
     "which" "^2.0.1"
 
+"crypto-js@^4.1.1":
+  "integrity" "sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw=="
+  "resolved" "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
+  "version" "4.1.1"
+
 "csstype@^3.0.2", "csstype@^3.1.2":
   "integrity" "sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ=="
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.2.tgz"

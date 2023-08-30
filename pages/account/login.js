@@ -1,13 +1,9 @@
 import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-
 import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, Divider } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-//REDUX-STORE
-import { connect } from "react-redux";
-import { setLoading } from "../../src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/LayoutLogin";
 import eCommerceConf from "../../eCommerceConf.json";
@@ -15,11 +11,7 @@ import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import CookieManager from "../../src/components/cookie/CookieManager";
-
 import Router from "next/router";
-
-import { PrivacyCookie } from "../../src/components/layout/footer/PrivacyCookie";
-import { ScrollToTopBtn } from "../../src/components/layout/footer/ScrollToTopBtn";
 import { PartitaIva } from "../../src/components/layout/footer/PartitaIva";
 import Copyright from "../../src/components/layout/footer/Copyright";
 
@@ -27,20 +19,30 @@ import CookieConsent from "../../src/components/cookie/CookieConsent";
 import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "../../src/components/layout/alert/AlertMe";
 import callNodeService from "../api/callNodeService";
-import ApiWrapper from "../../src/components/utils/ApiWrapper";
+import LoadingWrapper from "../../src/components/utils/LoadingWrapper";
+import logOutUser from "../../src/components/utils/logOutUser";
+//redux
+import { setAuthUser } from "../../src/store/actions";
+import { useDispatch } from "react-redux";
 
-const Login = ({ setLoading }) => {
-	//setLoading(true); //rende visibile il loading
+const Login = () => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-	const [username, setUsername] = React.useState("Admin");
-	const [password, setPassword] = React.useState("Psw");
+	const [username, setUsername] = React.useState("Nome");
+	const [password, setPassword] = React.useState("password");
 	const [ricordami, setRicordami] = React.useState(false);
 	const [paddingTop, setPaddingTop] = React.useState(0);
-
 	const [visLoader, setVisLoader] = React.useState(false);
 
+	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
+
 	React.useEffect(() => {
+		try {
+			logOutUser(dispatch);
+		} catch (error) {
+			console.log("logoutSuccess error: ", error);
+		}
+
 		const calculatePaddingTop = () => {
 			const windowHeight = window.innerHeight;
 			const mainHeight = document.getElementById("main").offsetHeight;
@@ -93,24 +95,72 @@ const Login = ({ setLoading }) => {
 				password: password,
 				ricordami: ricordami,
 			};
+
 			try {
 				const respCall = await callNodeService("login", obyPostData, null);
+				//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
+				// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo
+				// messageCli conterra eventuale messaggio di errore, oppure la risposta dal server node.js che avrà anche lui la stessa struttura di oggetti success e message qui message conterrà eventuali errori in risposta oppure conterrà l'oggetto respWCF che conterrà la risposta ottenuta al servizio wcf del centro fitness
+				//-> "successCli":true,
+				//-> "messageCli":{
+				//----> "success":true,
+				//----> "message":{
+				//-------> "respWCF":{
+				//---------->	 "KEY1":"VALORE",
+				//---------->	 "KEY2":"VALORE2",
+				//----------> },
+				//------> }
+				//-> }
 				console.log("respCall: ", respCall);
-				const msg_Resp = respCall.message;
-				console.log("msg_Resp: ", msg_Resp);
-				//Client gestisce il accessToken e i cookie qui
-				if (respCall.success) {
-					// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
-					//	CookieManager.setCookie("accessToken", accessToken, { expires: 7 });
-					// Esegui altre azioni dopo il login
-					setVisLoader(false);
-					Router.push("/auth/home");
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+						//****** TOKENS
+						// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
+						CookieManager.setCookie("accessToken", msg_Resp.accessToken);
+						if (msg_Resp.refreshToken) {
+							// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
+							CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
+						} else {
+							//rimuovo l'eventuale refreshToken
+							CookieManager.removeCookie("refreshToken");
+						}
+						//****** UTENTE
+						// Aggiorna lo stato dell'OGGETTO utente
+						try {
+							console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+							dispatch(setAuthUser(msg_Resp.respWCF));
+							setVisLoader(false);
+							//TODO prima di mandarlo nella home,
+							//cookie criptati di utente e password e ricordami questi cookie servono nell'index
+							//per recuperare l'oggetto utente (nel caso di tokens presenti e validi) simulando una chiamata login
+							//per salvare poi i dati in authUser
+							CookieManager.setEncryptedCookie("userName", username);
+							CookieManager.setEncryptedCookie("password", password);
+							CookieManager.setEncryptedCookie("ricordami", ricordami);
+							Router.push("/auth/home");
+						} catch (error) {
+							console.log("Aggiorna Redux AuthUser:", error);
+						}
+					} else {
+						console.log("msg_Resp: ", msg_Resp);
+						// Gestisci l'errore di autenticazione o l'errore di connessione
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>Errore nel recupero dei dati, dati incompleti!</strong>
+								</h3>
+							</React.Fragment>
+						);
+						setVisLoader(false);
+						await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+					}
 				} else {
 					// Gestisci l'errore di autenticazione o l'errore di connessione
 					const textAlert = (
 						<React.Fragment>
 							<h3>
-								<strong>{msg_Resp}</strong>
+								<strong>{respCall.messageCli}</strong>
 							</h3>
 						</React.Fragment>
 					);
@@ -145,7 +195,7 @@ const Login = ({ setLoading }) => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<ApiWrapper visualizzaLoading={visLoader}>
+			<LoadingWrapper visualizzaLoading={visLoader}>
 				<Layout
 					//digitare il titolo della pagina e la descrizione della pagina.
 					title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
@@ -338,12 +388,6 @@ const Login = ({ setLoading }) => {
 							</Grid>
 
 							<Box style={{ width: "100%", marginTop: 30 }}>
-								{/* <Box style={{paddingLeft: "20px"}}>
-							<PrivacyCookie>
-								<ScrollToTopBtn />
-							</PrivacyCookie>
-						</Box> */}
-								{/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
 								<Box
 									sx={{
 										backgroundColor: (theme) => theme.palette.primary.main,
@@ -373,7 +417,7 @@ const Login = ({ setLoading }) => {
 						</Grid>
 					</Box>
 				</Layout>
-			</ApiWrapper>
+			</LoadingWrapper>
 		</ThemeProvider>
 	);
 };

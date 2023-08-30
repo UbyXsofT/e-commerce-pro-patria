@@ -1,8 +1,7 @@
-// /api/login.js
+//api/callNodeService.js
 import axios from "axios";
 import eCommerceConf from "../../eCommerceConf.json";
 import qs from "qs";
-//import { setLoading } from "../../src/store/actions";
 
 export default async function callNodeService(endPoint, obyPostData, token) {
 	console.log("@@@ callNodeService ...");
@@ -32,21 +31,18 @@ export default async function callNodeService(endPoint, obyPostData, token) {
 		return axios
 			.request(config)
 			.then((response) => {
-				//setLoading(false);
-				console.log("callNodeService then ok: ", JSON.stringify(response.data));
+				console.log("callNodeService then ok: ", response.data);
 				if (response.status === 200) {
-					return { success: true, message: JSON.stringify(response.data) };
+					return { successCli: true, messageCli: response.data };
 				} else {
-					return { success: false, message: JSON.stringify(response.data) };
+					return { successCli: false, messageCli: response.data };
 				}
 			})
 			.catch((error) => {
 				console.log(error);
-				//setLoading(false);
-				return { success: false, message: error.response.data.message ? error.response.data.message : `errore: ${error}` };
+				return { successCli: false, messageCli: error.response.data.message ? error.response.data.message : `errore: ${error}` };
 			});
 	} catch (error) {
-		//setLoading(false);
-		return { success: false, message: error };
+		return { successCli: false, messageCli: error };
 	}
 }

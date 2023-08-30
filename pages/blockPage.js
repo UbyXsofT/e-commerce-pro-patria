@@ -22,28 +22,25 @@ import { ScrollToTopBtn } from "../src/components/layout/footer/ScrollToTopBtn";
 import { PartitaIva } from "../src/components/layout/footer/PartitaIva";
 import Copyright from "../src/components/layout/footer/Copyright";
 import { AlertMe } from "../src/components/layout/alert/AlertMe";
-
-const BlockPage = ({ setLoading }) => {
+import logOutUser from "../src/components/utils/logOutUser";
+import { useDispatch } from "react-redux";
+const BlockPage = () => {
 	const Router = useRouter();
 	const { titolo, descrizione, desc_azione, redirectTo } = Router.query;
-
-	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const [paddingTop, setPaddingTop] = React.useState(100);
+	const dispatch = useDispatch();
+
 	React.useEffect(() => {
-		// const calculatePaddingTop = () => {
-		// 	const windowHeight = window.innerHeight;
-		// 	const mainHeight = document.getElementById("main").offsetHeight;
-		// 	const calculatedPaddingTop = (windowHeight - mainHeight) / 2;
-		// 	setPaddingTop(calculatedPaddingTop);
-		// };
-		// calculatePaddingTop();
-		// window.addEventListener("resize", calculatePaddingTop);
-		// return () => {
-		// 	window.removeEventListener("resize", calculatePaddingTop);
-		// };
+		//TODO qui forzo la rimozione dei cookie per non avere problemi, costringo l'utente ad un nuovo login
+		try {
+			logOutUser(dispatch);
+		} catch (error) {
+			console.log("logoutSuccess error: ", error);
+		}
 	}, []);
+
 	const StyledImageLogo = styled(Image)({
 		padding: "5px",
 		maxWidth: 190,
