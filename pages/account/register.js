@@ -47,27 +47,27 @@ export default function SignUp() {
   const [parentFirstName, setParentFirstName] = useState("");
   const [parentLastName, setParentLastName] = useState("");
 
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
-  const [placeOfBirth, setPlaceOfBirth] = useState(null);
+  const [placeOfBirth, setPlaceOfBirth] = useState("");
   const [selectedComune, setSelectedComune] = useState(null);
   const [provinceOfBirth, setProvinceOfBirth] = useState("");
 
-  const [parentGender, setParentGender] = useState(null);
+  const [parentGender, setParentGender] = useState("");
   const [parentDateOfBirth, setParentDateOfBirth] = useState(null);
   const [parentSelectedComune, setParentSelectedComune] = useState(null);
-  const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState(null);
+  const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState("");
   const [parentProvinceOfBirth, setParentProvinceOfBirth] = useState("");
 
   const [address, setAddress] = useState("");
   const [comuneResidenza, setComuneResidenza] = useState(null);
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState("");
   const [cap, setCap] = useState("");
   const [province, setProvince] = useState("");
 
   const [parentAddress, setParentAddress] = useState("");
   const [parentComuneResidenza, setParentComuneResidenza] = useState(null);
-  const [parentCity, setParentCity] = useState(null);
+  const [parentCity, setParentCity] = useState("");
   const [parentCap, setParentCap] = useState("");
   const [parentProvince, setParentProvince] = useState("");
 
