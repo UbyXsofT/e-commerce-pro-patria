@@ -152,12 +152,12 @@ export default function SignUp() {
       let response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
       let jsonData = await response.json();
 
-      let keyFulData = jsonData.map((comune, idx) => {
-        let updatedComune = { ...comune, key: idx };
-        return updatedComune;
-      });
+      // let keyFulData = jsonData.map((comune, idx) => {
+      //   let updatedComune = { ...comune, key: idx };
+      //   return updatedComune;
+      // });
 
-      setComuni(keyFulData);
+      setComuni(jsonData);
     } catch (error) {
       alert(error);
     }

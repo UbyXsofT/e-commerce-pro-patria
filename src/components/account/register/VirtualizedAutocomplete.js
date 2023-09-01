@@ -54,17 +54,13 @@ function useResetCache(data) {
 // Adapter for react-window
 const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
   const { children, ...other } = props;
-  const itemData = [];
-  children.forEach((item) => {
-    itemData.push(item);
-    itemData.push(...(item.children || []));
-  });
 
-  const theme = useTheme();
-  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
-    noSsr: true,
-  });
-  const itemCount = itemData.length;
+  // Unused
+  // const theme = useTheme();
+  // const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+  //   noSsr: true,
+  // });
+  const itemCount = children.length;
   const itemSize = 48;
 
   const getChildSize = (child) => {
@@ -79,7 +75,7 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
     if (itemCount > 8) {
       return 8 * itemSize;
     }
-    return itemData.map(getChildSize).reduce((a, b) => a + b, 0);
+    return children.map(getChildSize).reduce((a, b) => a + b, 0);
   };
 
   const gridRef = useResetCache(itemCount);
@@ -88,13 +84,13 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
     <div ref={ref}>
       <OuterElementContext.Provider value={other}>
         <VariableSizeList
-          itemData={itemData}
+          itemData={children}
           height={getHeight() + 2 * LISTBOX_PADDING}
           width="100%"
           ref={gridRef}
           outerElementType={OuterElementType}
           innerElementType="ul"
-          itemSize={(index) => getChildSize(itemData[index])}
+          itemSize={(index) => getChildSize(children[index])}
           overscanCount={5}
           itemCount={itemCount}
         >
@@ -105,9 +101,10 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
   );
 });
 
-ListboxComponent.propTypes = {
-  children: PropTypes.node,
-};
+// This fixes a Warning... probably not a good idea to ignore this?
+// ListboxComponent.propTypes = {
+//   children: PropTypes.node,
+// };
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
@@ -122,13 +119,20 @@ const StyledPopper = styled(Popper)({
 const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth, selectedComune, setSelectedComune, setProvinceOfBirth, setCap }) => {
   return (
     <Autocomplete
+      loading
       freeSolo
       disableListWrap
       value={selectedComune}
       inputValue={placeOfBirth ? placeOfBirth : ""}
-      onInputChange={(_, newInput) => setPlaceOfBirth(newInput)}
-      onChange={(_, comune) => {
+      onInputChange={(e, newInput) => {
+        if (!e) {
+          return;
+        }
+        setPlaceOfBirth(newInput);
+      }}
+      onChange={(e, comune) => {
         if (!comune) {
+          setSelectedComune(null);
           return;
         }
 
