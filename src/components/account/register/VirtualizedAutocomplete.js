@@ -146,6 +146,7 @@ const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth,
         setProvinceOfBirth(comune.provincia.nome);
         setCap ? setCap(comune.cap) : {};
       }}
+      onBlur={(e) => setPlaceOfBirth(e.target.value.trim())}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={comuni}

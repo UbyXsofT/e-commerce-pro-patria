@@ -8,7 +8,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@emotion/react";
 import "dayjs/locale/it";
 
-import { AppBar, CssBaseline, Paper, Step, StepLabel, Stepper, Toolbar } from "@mui/material";
+import { AppBar, CssBaseline, Paper, Step, StepLabel, Stepper, Toolbar, useMediaQuery } from "@mui/material";
 
 import Step1 from "/src/components/account/register/Step1";
 import styled from "@emotion/styled";
@@ -17,7 +17,7 @@ import Step2 from "/src/components/account/register/Step2";
 import Step3 from "/src/components/account/register/Step3";
 import Router from "next/router";
 import { PrivacyTip } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import eCommerceConf from "/eCommerceConf.json";
 
@@ -139,7 +139,7 @@ export default function SignUp() {
       Iscrivendoti dichiari di aver preso visione dell'
       {
         <span>
-          <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
+          <Link href={eCommerceConf.LinkPrivacy} sx={{ userSelect: "none", color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
             Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: (theme) => theme.palette.primary.main }}></PrivacyTip>}
           </Link>
         </span>
@@ -173,6 +173,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              focus={focus}
               parent={false}
               comuni={comuni}
               comuneResidenza={comuneResidenza}
@@ -216,6 +217,7 @@ export default function SignUp() {
         case 1:
           return (
             <Step1
+              focus={focus}
               parent={true}
               comuni={comuni}
               comuneResidenza={parentComuneResidenza}
@@ -259,6 +261,7 @@ export default function SignUp() {
         case 2:
           return (
             <Step2
+              focus={focus}
               email={email}
               setEmail={setEmail}
               username={username}
@@ -274,6 +277,7 @@ export default function SignUp() {
         case 3:
           return (
             <Step3
+              focus={focus}
               codiceFiscale={codiceFiscale}
               firstName={firstName}
               lastName={lastName}
@@ -315,6 +319,7 @@ export default function SignUp() {
         case 0:
           return (
             <Step1
+              focus={focus}
               parent={false}
               comuni={comuni}
               selectedComune={selectedComune}
@@ -358,6 +363,7 @@ export default function SignUp() {
         case 1:
           return (
             <Step2
+              focus={focus}
               email={email}
               setEmail={setEmail}
               username={username}
@@ -373,6 +379,7 @@ export default function SignUp() {
         case 2:
           return (
             <Step3
+              focus={focus}
               codiceFiscale={codiceFiscale}
               firstName={firstName}
               lastName={lastName}
@@ -396,6 +403,10 @@ export default function SignUp() {
       }
     }
   }
+
+  const mdUp = useMediaQuery(theme.breakpoints.up("md"), {
+    noSsr: false,
+  });
 
   useEffect(() => {
     if (dateOfBirth) {
@@ -463,6 +474,12 @@ export default function SignUp() {
     !readyToSend.status && correctStepFinalize ? setDisablebutton(true) : setDisablebutton(false);
   }, [password, confirmPassword, passwordSafety, activeStep]);
 
+  const focus = useRef(null);
+
+  useEffect(() => {
+    focus.current.children[1].children[0].focus();
+  }, [activeStep]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -478,10 +495,10 @@ export default function SignUp() {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
+      <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: mdUp ? 3 : 0 }}>
         {/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
         {/* TODO: Icons are not centered properly */}
-        <Stepper activeStep={activeStep} sx={{ pt: 3 }}>
+        <Stepper activeStep={activeStep} alternativeLabel>
           {underage
             ? underageSteps.map((label) => (
                 <Step key={label}>
@@ -534,6 +551,7 @@ export default function SignUp() {
                   onClick={() => Router.push("/account/login")}
                   variant="body2"
                   sx={{
+                    userSelect: "none",
                     cursor: "pointer",
                     color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
 

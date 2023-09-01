@@ -3,9 +3,9 @@ import { Container, Grid, Typography, TextField, Button, Paper, Link, CssBaselin
 
 import Router from "next/router";
 
-const Step1 = ({ setDone, email, setEmail, codiceFiscale, setCodiceFiscale }) => {
+const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale }) => {
   return (
-    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
+    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <CssBaseline />
 
       <Grid container spacing={2}>
@@ -35,6 +35,7 @@ const Step1 = ({ setDone, email, setEmail, codiceFiscale, setCodiceFiscale }) =>
               onClick={() => Router.push("/account/login")}
               variant="body2"
               sx={{
+                userSelect: "none",
                 cursor: "pointer",
                 color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
 

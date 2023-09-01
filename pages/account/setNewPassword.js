@@ -1,11 +1,11 @@
 import { useTheme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { AppBar, CssBaseline, Toolbar } from "@mui/material";
+import { AppBar, CssBaseline, Toolbar, useMediaQuery } from "@mui/material";
 import { Container, ThemeProvider } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
-import Step1 from "./setNewPassword/Step1";
-import Step2 from "./setNewPassword/Step2";
+import Step1 from "/src/components/account/setNewPassword/Step1";
+import Step2 from "/src/components/account/setNewPassword/Step2";
 
 const StyledImageLogo = styled(Image)({
   padding: "10px",
@@ -19,6 +19,10 @@ const setNewPassword = () => {
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+    noSsr: false,
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -40,7 +44,7 @@ const setNewPassword = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      {done ? <Step2 /> : <Step1 setDone={setDone} newPassword={newPassword} setNewPassword={setNewPassword} confirmNewPassword={confirmNewPassword} setConfirmNewPassword={setConfirmNewPassword} />}
+      {done ? <Step2 smUp={smUp} /> : <Step1 smUp={smUp} setDone={setDone} newPassword={newPassword} setNewPassword={setNewPassword} confirmNewPassword={confirmNewPassword} setConfirmNewPassword={setConfirmNewPassword} />}
     </ThemeProvider>
   );
 };

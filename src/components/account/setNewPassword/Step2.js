@@ -3,9 +3,9 @@ import { Container, Typography, Button, Paper } from "@mui/material";
 
 import Router from "next/router";
 
-const Step2 = () => {
+const Step2 = ({ smUp }) => {
   return (
-    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
+    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }} textAlign={"center"}>
         Password Modificata
       </Typography>

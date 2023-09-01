@@ -13,6 +13,7 @@ import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
 
 const Step3 = ({
+  focus,
   codiceFiscale,
   firstName,
   lastName,
@@ -47,6 +48,12 @@ const Step3 = ({
 }) => {
   const handleSubmit = () => {};
 
+  const [codeFocus, setCodeFocus] = React.useState(true);
+
+  React.useEffect(() => {
+    setCodeFocus(false);
+  }, []);
+
   return (
     <Container component="main" maxWidth="md">
       <Box
@@ -57,17 +64,17 @@ const Step3 = ({
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ marginRight: "auto" }}>
+        <Typography autoFocus component="h1" variant="h5" sx={{ marginRight: "auto" }}>
           Controlla i tuoi dati
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
-                <TextField value={codiceFiscale} disabled fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" />
+                <TextField value={codiceFiscale} disabled={!codeFocus} fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" ref={focus} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField value={firstName} disabled name="firstName" fullWidth id="firstName" label="Nome" autoFocus />
+                <TextField value={firstName} disabled name="firstName" fullWidth id="firstName" label="Nome" />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField value={lastName} disabled fullWidth id="lastName" label="Cognome" name="lastName" />
@@ -123,7 +130,7 @@ const Step3 = ({
                 <TextField value={email} disabled fullWidth id="email" label="Indirizzo Email" name="email" />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField value={username} disabled name="username" fullWidth id="username" label="Nome Utente" autoFocus />
+                <TextField value={username} disabled name="username" fullWidth id="username" label="Nome Utente" />
               </Grid>
             </Grid>
 
@@ -144,7 +151,7 @@ const Step3 = ({
                     <TextField value={parentCodiceFiscale} disabled required fullWidth id="parentCodiceFiscale" label="Codice Fiscale" name="parentCodiceFiscale" autoComplete="parentCodiceFiscale" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField value={parentFirstName} disabled autoComplete="parentFirstName" name="parentFirstName" required fullWidth id="parentFirstName" label="Nome" autoFocus />
+                    <TextField value={parentFirstName} disabled autoComplete="parentFirstName" name="parentFirstName" required fullWidth id="parentFirstName" label="Nome" />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField value={parentLastName} disabled required fullWidth id="parentLastName" label="Cognome" name="parentLastName" autoComplete="family-name" />

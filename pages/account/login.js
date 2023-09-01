@@ -108,6 +108,37 @@ const Login = (setLoading) => {
 
   const handleSubmit = () => {};
 
+  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+    noSsr: false,
+  });
+
+  const copyright = (
+    <Box style={{ width: "100%", marginTop: 30 }}>
+      {/* <Box style={{paddingLeft: "20px"}}>
+<PrivacyCookie>
+  <ScrollToTopBtn />
+</PrivacyCookie>
+</Box> */}
+      {/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
+      <Box
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          borderRadius: 1,
+          p: 2,
+          m: 2,
+        }}
+      >
+        <Typography variant="body2" align="center" sx={{ color: "white" }}>
+          <PartitaIva />
+        </Typography>
+
+        <Typography variant="body2" align="center" sx={{ color: "white" }}>
+          <Copyright />
+        </Typography>
+      </Box>
+    </Box>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Layout
@@ -143,8 +174,8 @@ const Login = (setLoading) => {
           </Container>
         </AppBar>
 
-        <Box id="main" sx={{ paddingTop: `${paddingTop}px` }}>
-          <Grid container component="main" sx={{ py: 2, px: 2 }}>
+        <Box id="main" sx={{ paddingTop: smUp ? `${paddingTop}px` : 0 }}>
+          <Grid container component="main" sx={{ padding: smUp ? 2 : 0 }}>
             {/* TODO There has to be a better way to implement this */}
             <CssBaseline />
             <Grid
@@ -259,6 +290,7 @@ const Login = (setLoading) => {
                         onClick={() => Router.push("/account/resetPassword")}
                         variant="body2"
                         sx={{
+                          userSelect: "none",
                           cursor: "pointer",
                           color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
                         }}
@@ -271,6 +303,7 @@ const Login = (setLoading) => {
                         onClick={() => Router.push("/account/register")}
                         variant="body2"
                         sx={{
+                          userSelect: "none",
                           cursor: "pointer",
                           color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
                         }}
@@ -280,34 +313,12 @@ const Login = (setLoading) => {
                     </Grid>
                   </Grid>
                   {/* <Copyright sx={{ mt: 5 }} /> */}
+                  {!smUp ? copyright : <div></div>}
                 </Box>
               </Box>
             </Grid>
 
-            <Box style={{ width: "100%", marginTop: 30 }}>
-              {/* <Box style={{paddingLeft: "20px"}}>
-							<PrivacyCookie>
-								<ScrollToTopBtn />
-							</PrivacyCookie>
-						</Box> */}
-              {/* <Divider sx={{mb: "1rem", mt: "1rem"}} /> */}
-              <Box
-                sx={{
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  borderRadius: 1,
-                  p: 2,
-                  m: 2,
-                }}
-              >
-                <Typography variant="body2" align="center" sx={{ color: "white" }}>
-                  <PartitaIva />
-                </Typography>
-
-                <Typography variant="body2" align="center" sx={{ color: "white" }}>
-                  <Copyright />
-                </Typography>
-              </Box>
-            </Box>
+            {smUp ? copyright : <div></div>}
             {/* <CookieConsent /> */}
           </Grid>
         </Box>

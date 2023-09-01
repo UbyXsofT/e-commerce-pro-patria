@@ -8,7 +8,7 @@ import "dayjs/locale/it";
 import SecurePassword from "/src/components/account/SecurePassword";
 import { height } from "@mui/system";
 
-const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, passwordSafety, setPasswordSafety }) => {
+const Step2 = ({ focus, email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, passwordSafety, setPasswordSafety }) => {
   const handleSubmit = () => {};
 
   return (
@@ -28,10 +28,10 @@ const Step2 = ({ email, setEmail, username, setUsername, password, setPassword, 
           <Grid container spacing={2} alignItems={"flex-start"}>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
-                <TextField value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+                <TextField value={email} onBlur={(e) => setEmail(e.target.value.trim())} onChange={(e) => setEmail(e.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" ref={focus} />
               </Grid>
               <Grid item xs={12}>
-                <TextField value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" autoFocus />
+                <TextField value={username} onBlur={(e) => setUsername(e.target.value.trim())} onChange={(e) => setUsername(e.target.value)} autoComplete="username" name="username" required fullWidth id="username" label="Nome Utente" />
               </Grid>
             </Grid>
             <Grid container item xs={12} md={6} spacing={2}>

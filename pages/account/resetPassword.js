@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, CssBaseline, Paper, Box, Avatar, Link } from "@mui/material";
+import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, CssBaseline, Paper, Box, Avatar, Link, useMediaQuery } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -27,6 +27,10 @@ const resetPassword = (setLoading) => {
   const [email, setEmail] = useState("");
   const [codiceFiscale, setCodiceFiscale] = useState("");
 
+  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
+    noSsr: false,
+  });
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -47,7 +51,7 @@ const resetPassword = (setLoading) => {
           </Toolbar>
         </Container>
       </AppBar>
-      {done ? <Step2 /> : <Step1 setDone={setDone} email={email} setEmail={setEmail} codiceFiscale={codiceFiscale} setCodiceFiscale={setCodiceFiscale} />}
+      {done ? <Step2 smUp={smUp} /> : <Step1 smUp={smUp} setDone={setDone} email={email} setEmail={setEmail} codiceFiscale={codiceFiscale} setCodiceFiscale={setCodiceFiscale} />}
     </ThemeProvider>
   );
 };

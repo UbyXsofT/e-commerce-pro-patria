@@ -2,9 +2,9 @@ import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@
 import { Container } from "@mui/system";
 import Router from "next/router";
 
-const Step1 = ({ setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }) => {
+const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }) => {
   return (
-    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: 3 }}>
+    <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <CssBaseline />
 
       <Grid container spacing={2}>
@@ -34,6 +34,7 @@ const Step1 = ({ setDone, newPassword, setNewPassword, confirmNewPassword, setCo
               onClick={() => Router.push("/account/login")}
               variant="body2"
               sx={{
+                userSelect: "none",
                 cursor: "pointer",
                 color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
 
