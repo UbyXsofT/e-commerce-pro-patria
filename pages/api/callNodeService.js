@@ -5,7 +5,19 @@ import qs from "qs";
 
 export default async function callNodeService(endPoint, obyPostData, token) {
 	console.log("@@@ callNodeService ...");
-
+	//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
+	// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo
+	// messageCli conterra eventuale messaggio di errore, oppure la risposta dal server node.js che avrà anche lui la stessa struttura di oggetti success e message qui message conterrà eventuali errori in risposta oppure conterrà l'oggetto respWCF che conterrà la risposta ottenuta al servizio wcf del centro fitness
+	//-> "successCli":true,
+	//-> "messageCli":{
+	//----> "success":true,
+	//----> "message":{
+	//-------> "respWCF":{
+	//---------->	 "KEY1":"VALORE",
+	//---------->	 "KEY2":"VALORE2",
+	//----------> },
+	//------> }
+	//-> }
 	try {
 		let headersData = {
 			"Content-Type": "application/x-www-form-urlencoded",

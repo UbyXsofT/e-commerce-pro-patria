@@ -28,105 +28,87 @@ export const poppins = Poppins({
 
 const Index = () => {
 	const theme = useTheme();
-	console.log("theme: ", theme);
+	// console.log("theme: ", theme);
 	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
-
 	const [isAuthEcommerce, setIsAuthEcommerce] = React.useState(false);
+	const [routerToPush, setRouterToPush] = React.useState(false);
 
 	const startRedirect = () => {
+		if (isAuthEcommerce === true && routerToPush !== false) {
+			Router.push(routerToPush);
+		}
+	};
+
+	React.useEffect(() => {
 		if (isAuthEcommerce === true) {
-			if (CookieManager.getCookie("accessToken") || CookieManager.getCookie("refreshToken")) {
+			const accessToken = CookieManager.getCookie("accessToken");
+			const refreshToken = CookieManager.getCookie("refreshToken");
+
+			if (accessToken || refreshToken) {
 				//TODO prima di mandarlo nella home, nel caso di un accesso per un utente che possiede un token salvato
-				//bisogna simulare un login con utente e password recuperati e decriptati dai cookie
-				if (CookieManager.getCookie("userName") || CookieManager.getCookie("password") || CookieManager.getCookie("ricordami")) {
-					const username = CookieManager.getDecryptedCookie("userName");
-					const password = CookieManager.getDecryptedCookie("password");
-					const ricordami = CookieManager.getDecryptedCookie("ricordami");
+				//bisogna simulare un login passando i token alla chiamata login
+				console.log("FORZO LA VERIFICA DEL TOKEN CON CHIAMATA AL SERVER PER EFFETTUARE UN LOGIN");
+				const fetchData = async () => {
+					//setVisLoader(true);
+					const obyPostData = {
+						clienteKey: eCommerceConf.ClienteKey,
+						userName: null,
+						password: null,
+						ricordami: null,
+						accessToken: accessToken,
+						refreshToken: refreshToken,
+					};
 
-					const fetchData = async () => {
-						//setVisLoader(true);
-						const obyPostData = {
-							clienteKey: eCommerceConf.ClienteKey,
-							userName: username,
-							password: password,
-							ricordami: ricordami,
-						};
+					try {
+						const respCall = await callNodeService("login", obyPostData, null);
+						console.log("respCall: ", respCall);
+						const msg_Resp = respCall.messageCli.message;
 
-						try {
-							const respCall = await callNodeService("login", obyPostData, null);
-							console.log("respCall: ", respCall);
-							const msg_Resp = respCall.messageCli.message;
-							if (respCall.successCli) {
-								if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
-									//****** TOKENS
-									// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
-									CookieManager.setCookie("accessToken", msg_Resp.accessToken);
-									if (msg_Resp.refreshToken) {
-										// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
-										CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
-									} else {
-										//rimuovo l'eventuale refreshToken
-										CookieManager.removeCookie("refreshToken");
-									}
-									//****** UTENTE
-									// Aggiorna lo stato dell'OGGETTO utente
-									try {
-										console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
-										dispatch(setAuthUser(msg_Resp.respWCF));
-										//setVisLoader(false);
-										//TODO prima di mandarlo nella home,
-										//cookie criptati di utente e password e ricordami questi cookie servono nell'index
-										//per recuperare l'oggetto utente (nel caso di tokens presenti e validi) simulando una chiamata login
-										//per salvare poi i dati in authUser
-										CookieManager.setEncryptedCookie("userName", username);
-										CookieManager.setEncryptedCookie("password", password);
-										CookieManager.setEncryptedCookie("ricordami", ricordami);
-										Router.push("/auth/home");
-									} catch (error) {
-										console.log("Aggiorna Redux AuthUser:", error);
-									}
+						if (respCall.successCli) {
+							if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+								//****** TOKENS
+								// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
+								CookieManager.setCookie("accessToken", msg_Resp.accessToken);
+								if (msg_Resp.refreshToken) {
+									// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
+									CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
 								} else {
-									console.log("msg_Resp: ", msg_Resp);
-									// Gestisci l'errore di autenticazione o l'errore di connessione
-									const textAlert = (
-										<React.Fragment>
-											<h3>
-												<strong>Errore nel recupero dei dati, dati incompleti!</strong>
-											</h3>
-										</React.Fragment>
-									);
-									//setVisLoader(false);
-									await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+									//rimuovo l'eventuale refreshToken
+									CookieManager.removeCookie("refreshToken");
+								}
+								//****** UTENTE
+								// Aggiorna lo stato dell'OGGETTO utente
+								try {
+									console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+									dispatch(setAuthUser(msg_Resp.respWCF));
+									//Router.push("/auth/home");
+									setRouterToPush("/auth/home");
+								} catch (error) {
+									console.log("Aggiorna Redux AuthUser:", error);
 								}
 							} else {
-								// Gestisci l'errore di autenticazione o l'errore di connessione
-								const textAlert = (
-									<React.Fragment>
-										<h3>
-											<strong>{respCall.messageCli}</strong>
-										</h3>
-									</React.Fragment>
-								);
-								//setVisLoader(false);
-								await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+								console.log("msg_Resp: ", msg_Resp);
+								setRouterToPush("/account/login");
+								//Router.push("/account/login");
 							}
-						} catch (error) {
-							//setVisLoader(false);
-							console.error("Errore nella chiamata:", error);
+						} else {
+							setRouterToPush("/account/login");
+							//Router.push("/account/login");
 						}
-					};
-					fetchData();
-				} else {
-					Router.push("/auth/home");
-				}
+					} catch (error) {
+						//setVisLoader(false);
+						console.error("Errore nella chiamata:", error);
+					}
+				};
+				fetchData();
 			} else {
-				Router.push("/account/login");
+				setRouterToPush("/account/login");
+				//Router.push("/account/login");
 			}
 		} else {
-			Router.push(`/blockPage?titolo=CONVALIDA ECOMMERCE&descrizione=${eCommerceConf.MsgErrConvEcommerce}&desc_azione=${eCommerceConf.MsgChkAgainConvEcommerce}&redirectTo=/`);
+			setRouterToPush(`/blockPage?titolo=CONVALIDA ECOMMERCE&descrizione=${eCommerceConf.MsgErrConvEcommerce}&desc_azione=${eCommerceConf.MsgChkAgainConvEcommerce}&redirectTo=/`);
 		}
-		// 6000 millisecondi = 6 secondi)
-	};
+	}, [isAuthEcommerce]);
 
 	React.useEffect(() => {
 		const fetchData = async () => {

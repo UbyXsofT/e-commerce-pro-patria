@@ -1,6 +1,6 @@
 import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, Divider } from "@mui/material";
+import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -14,8 +14,6 @@ import CookieManager from "../../src/components/cookie/CookieManager";
 import Router from "next/router";
 import { PartitaIva } from "../../src/components/layout/footer/PartitaIva";
 import Copyright from "../../src/components/layout/footer/Copyright";
-
-import CookieConsent from "../../src/components/cookie/CookieConsent";
 import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "../../src/components/layout/alert/AlertMe";
 import callNodeService from "../api/callNodeService";
@@ -94,23 +92,12 @@ const Login = () => {
 				userName: username,
 				password: password,
 				ricordami: ricordami,
+				accessToken: null,
+				refreshToken: null,
 			};
 
 			try {
 				const respCall = await callNodeService("login", obyPostData, null);
-				//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
-				// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo
-				// messageCli conterra eventuale messaggio di errore, oppure la risposta dal server node.js che avrà anche lui la stessa struttura di oggetti success e message qui message conterrà eventuali errori in risposta oppure conterrà l'oggetto respWCF che conterrà la risposta ottenuta al servizio wcf del centro fitness
-				//-> "successCli":true,
-				//-> "messageCli":{
-				//----> "success":true,
-				//----> "message":{
-				//-------> "respWCF":{
-				//---------->	 "KEY1":"VALORE",
-				//---------->	 "KEY2":"VALORE2",
-				//----------> },
-				//------> }
-				//-> }
 				console.log("respCall: ", respCall);
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
@@ -131,13 +118,6 @@ const Login = () => {
 							console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
 							dispatch(setAuthUser(msg_Resp.respWCF));
 							setVisLoader(false);
-							//TODO prima di mandarlo nella home,
-							//cookie criptati di utente e password e ricordami questi cookie servono nell'index
-							//per recuperare l'oggetto utente (nel caso di tokens presenti e validi) simulando una chiamata login
-							//per salvare poi i dati in authUser
-							CookieManager.setEncryptedCookie("userName", username);
-							CookieManager.setEncryptedCookie("password", password);
-							CookieManager.setEncryptedCookie("ricordami", ricordami);
 							Router.push("/auth/home");
 						} catch (error) {
 							console.log("Aggiorna Redux AuthUser:", error);
