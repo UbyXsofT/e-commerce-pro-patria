@@ -213,7 +213,7 @@ const Step3 = ({
 
                 <Grid item xs={12}>
                   <Box>
-                    <FormControlLabel disabled value={parentPrivacy} required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+                    <FormControlLabel disabled required control={<Checkbox checked={parentPrivacy} color="primary" />} label={privacyLabel} />
                   </Box>
                 </Grid>
               </Grid>

@@ -3,7 +3,16 @@
 import Head from "next/head";
 import { useSpring, animated } from "@react-spring/web";
 
-const Layout = ({ children, title, description, ogImage, url }) => {
+// TODO: Spec out Children and think about Optionals
+type LayoutType = {
+  children?: any[];
+  title: string;
+  description: string;
+  ogImage?: undefined;
+  url?: undefined;
+};
+
+const Layout = ({ children, title, description, ogImage, url }: LayoutType) => {
   const mainAnimation = useSpring({
     opacity: 1,
     from: { opacity: 0 },

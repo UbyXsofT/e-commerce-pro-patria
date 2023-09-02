@@ -1,11 +1,11 @@
-import { useTheme } from "@emotion/react";
+import { useTheme } from "@mui/material/styles";
 import styled from "@emotion/styled";
 import { AppBar, CssBaseline, Toolbar, useMediaQuery } from "@mui/material";
 import { Container, ThemeProvider } from "@mui/system";
 import Image from "next/image";
 import { useState } from "react";
-import Step1 from "/src/components/account/setNewPassword/Step1";
-import Step2 from "/src/components/account/setNewPassword/Step2";
+import Step1 from "src/components/account/setNewPassword/Step1";
+import Step2 from "src/components/account/setNewPassword/Step2";
 
 const StyledImageLogo = styled(Image)({
   padding: "10px",
@@ -35,7 +35,7 @@ const setNewPassword = () => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
+          backgroundColor: (theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as { backgroundColor?: string })?.backgroundColor,
         }}
       >
         <Container sx={{ display: "flex", alignItems: "center" }}>

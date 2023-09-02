@@ -3,14 +3,18 @@ import { Container, Typography, Button, Paper } from "@mui/material";
 
 import Router from "next/router";
 
-const Step2 = ({ smUp }) => {
+type Step2Props = {
+  smUp: boolean;
+};
+
+const Step2 = ({ smUp }: Step2Props) => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <Typography variant="h5" gutterBottom sx={{ marginTop: 3 }} textAlign={"center"}>
-        Password Modificata
+        Password Dimenticata
       </Typography>
       <Typography variant="subtitle1" textAlign={"center"}>
-        È possibile fare il Login
+        È stata inviata una mail di recupero
       </Typography>
       <Button
         fullWidth
@@ -19,7 +23,7 @@ const Step2 = ({ smUp }) => {
         sx={{
           mt: 3,
           mb: 2,
-          width: 500,
+          maxWidth: 500,
           marginLeft: "auto",
           marginRight: "auto",
           display: "flex",

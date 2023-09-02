@@ -1,25 +1,35 @@
-import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@mui/material";
-import { Container } from "@mui/system";
+import React from "react";
+import { Container, Grid, Typography, TextField, Button, Paper, Link, CssBaseline } from "@mui/material";
+
 import Router from "next/router";
 
-const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }) => {
+type Step1Props = {
+  smUp: boolean;
+  setDone: Function;
+  email: string;
+  setEmail: Function;
+  codiceFiscale: string;
+  setCodiceFiscale: Function;
+};
+
+const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale }: Step1Props) => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <CssBaseline />
 
       <Grid container spacing={2}>
         <Typography variant="h4" sx={{ margin: "auto", padding: 3 }}>
-          Imposta una Nuova Password
+          Password Dimenticata
         </Typography>
         <Grid item xs={12}>
-          <Typography variant="subtitle">Crea una Nuova Password per il tuo Account</Typography>
+          <Typography variant="subtitle1">Ti verrà inviata una mail per il recupero</Typography>
         </Grid>
 
         <Grid item xs={12}>
-          <TextField value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
+          <TextField value={email} onChange={(event) => setEmail(event.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
         </Grid>
         <Grid item xs={12}>
-          <TextField value={confirmNewPassword} onChange={(event) => setConfirmNewPassword(event.target.value)} required fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
+          <TextField value={codiceFiscale} onChange={(event) => setCodiceFiscale(event.target.value)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
         </Grid>
 
         <Grid item xs={12}>
@@ -46,7 +56,7 @@ const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword,
               Annulla
             </Link>
             <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)}>
-              Conferma
+              Invia
             </Button>
           </div>
         </Grid>

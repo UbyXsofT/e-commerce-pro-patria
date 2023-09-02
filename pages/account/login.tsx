@@ -7,7 +7,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 //REDUX-STORE
 import { connect } from "react-redux";
-import { setLoading } from "/src/store/actions";
+import { setLoading } from "src/store/actions";
 //*-----*//
 import Layout from "../../src/components/layout/LayoutLogin";
 import eCommerceConf from "../../eCommerceConf.json";
@@ -15,18 +15,18 @@ import Image from "next/image";
 
 import { styled } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import CookieManager from "/src/components/cookie/CookieManager";
+import CookieManager from "src/components/cookie/CookieManager";
 // import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import login from "../api/login";
 import Router from "next/router";
 
-import { PartitaIva } from "../../src/components/layout/footer/PartitaIva";
-import Copyright from "../../src/components/layout/footer/Copyright";
+import { PartitaIva } from "src/components/layout/footer/PartitaIva";
+import Copyright from "src/components/layout/footer/Copyright";
 
-import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
-import { AlertMe } from "../../src/components/layout/alert/AlertMe";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { AlertMe } from "src/components/layout/alert/AlertMe";
 
-const Login = (setLoading) => {
+const Login = (_setLoading: any) => {
   //setLoading(true); rende visibile il loading
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -37,8 +37,8 @@ const Login = (setLoading) => {
   React.useEffect(() => {
     const calculatePaddingTop = () => {
       const windowHeight = window.innerHeight;
-      const mainHeight = document.getElementById("main").offsetHeight;
-      const calculatedPaddingTop = (windowHeight - mainHeight) / 2;
+      const mainHeight = document.getElementById("main")?.offsetHeight;
+      const calculatedPaddingTop = (windowHeight - (mainHeight ? mainHeight : 0)) / 2;
       setPaddingTop(calculatedPaddingTop);
     };
     calculatePaddingTop();
@@ -48,7 +48,7 @@ const Login = (setLoading) => {
     };
   }, []);
 
-  const [captchaValue, setCaptchaValue] = React.useState(null);
+  const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
   const { showAlert } = useAlertMe();
 
   const handleLogin = async () => {
@@ -151,7 +151,7 @@ const Login = (setLoading) => {
           position="static"
           sx={{
             display: isMobile ? "block" : "none",
-            backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
+            backgroundColor: (theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as { backgroundColor?: string })?.backgroundColor,
           }}
         >
           <Container sx={{ display: "flex", alignItems: "center" }}>
@@ -273,7 +273,12 @@ const Login = (setLoading) => {
                   <FormControlLabel control={<Checkbox value="remember" color="primary" checked={rememberMe} onClick={() => setRememberMe(!rememberMe)} />} label="Ricordati di me" />
 
                   {/* Add the reCAPTCHA component */}
-                  <ReCAPTCHA sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY} onChange={(value) => setCaptchaValue(value)} />
+                  <ReCAPTCHA
+                    sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+                    onChange={(value) => {
+                      setCaptchaValue(value);
+                    }}
+                  />
 
                   <Button
                     //   type="submit"

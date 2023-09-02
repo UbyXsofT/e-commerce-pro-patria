@@ -1,4 +1,4 @@
-import eCommerceConf from "/eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 
 const listaTemi = [
   {
