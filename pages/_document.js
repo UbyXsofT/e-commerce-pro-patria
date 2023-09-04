@@ -1,14 +1,14 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import Document, {Html, Head, Main, NextScript} from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import {roboto} from "../src/components/theme/theme";
+import { roboto } from "../src/components/theme/theme";
 import createEmotionCache from "../src/components/utils/createEmotionCache";
-import {ThemeProvider} from "@mui/material/styles";
-import {lightTheme} from "../src/components/theme/theme";
+import { ThemeProvider } from "@mui/material/styles";
+import { lightTheme } from "../src/components/theme/theme";
 
 export default function MyDocument(props) {
-	const {emotionStyleTags} = props;
+	const { emotionStyleTags } = props;
 
 	return (
 		<Html
@@ -115,6 +115,17 @@ export default function MyDocument(props) {
 					content=''
 				/>
 				{emotionStyleTags}
+				{/* Precaricamento immagini */}
+				<link
+					rel='preload'
+					href='/images/wallpaper.jpg'
+					as='image'
+				/>
+				<link
+					rel='preload'
+					href='/images/LogoQ.png'
+					as='image'
+				/>
 			</Head>
 			<body>
 				<ThemeProvider theme={lightTheme}>
@@ -156,7 +167,7 @@ MyDocument.getInitialProps = async (ctx) => {
 	// Puoi prendere in considerazione la condivisione della stessa cache Emotion tra tutte le richieste SSR per accelerare le prestazioni.
 	// Tuttavia, tieni presente che può avere effetti collaterali globali.
 	const cache = createEmotionCache();
-	const {extractCriticalToChunks} = createEmotionServer(cache);
+	const { extractCriticalToChunks } = createEmotionServer(cache);
 
 	ctx.renderPage = () =>
 		originalRenderPage({
@@ -180,7 +191,7 @@ MyDocument.getInitialProps = async (ctx) => {
 			data-emotion={`${style.key} ${style.ids.join(" ")}`}
 			key={style.key}
 			// eslint-disable-next-line react/no-danger
-			dangerouslySetInnerHTML={{__html: style.css}}
+			dangerouslySetInnerHTML={{ __html: style.css }}
 		/>
 	));
 
