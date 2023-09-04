@@ -5,12 +5,12 @@ import { authMiddleware } from "./_middleware"; // Aggiungi il percorso corretto
 
 // Definisci i riduttori per gestire gli stati
 const loadingReducer = (state = false, action) => {
-	switch (action.type) {
-		case "SET_LOADING":
-			return action.payload;
-		default:
-			return state;
-	}
+  switch (action.type) {
+    case "SET_LOADING":
+      return action.payload;
+    default:
+      return state;
+  }
 };
 
 const authEcommerceReducer = (state = false, action) => {

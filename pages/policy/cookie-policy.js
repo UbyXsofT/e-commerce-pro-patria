@@ -107,7 +107,7 @@ const CookiePolicy = ({ setLoading }) => {
           Informazioni Aggiuntive
         </Typography>
         <Typography component="p" paragraph={true}>
-          Per ulteriori dettagli sulla nostra politica sulla privacy, ti invitiamo a leggere{" "}
+          Per ulteriori dettagli sulla nostra politica sulla privacy, ti invitiamo a leggere
           <Link href={eCommerceConf.LinkPrivacy} sx={{ color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
             la nostra Informativa sulla Privacy completa
           </Link>

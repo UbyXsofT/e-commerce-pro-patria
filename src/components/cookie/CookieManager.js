@@ -39,9 +39,9 @@ const CookieManager = {
 		return null;
 	},
 
-	removeCookie: (name) => {
-		Cookies.remove(name);
-	},
+  removeCookie: (name) => {
+    Cookies.remove(name);
+  },
 };
 
 export default CookieManager;

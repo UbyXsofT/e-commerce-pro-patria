@@ -12,166 +12,160 @@ import Router from "next/router";
 
 const menuId = "up-account-menu";
 const StyledImageLogo = styled(Image)({
-	padding: "5px",
-	maxWidth: 190,
-	maxHeight: 60,
-	marginLeft: -30,
+  padding: "5px",
+  maxWidth: 190,
+  maxHeight: 60,
+  marginLeft: -30,
 });
 
 export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen }) => {
-	const theme = useTheme();
-	const [drawerLocked, setDrawerLocked] = React.useState(false);
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const handlePopperOpen = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
+  const theme = useTheme();
+  const [drawerLocked, setDrawerLocked] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handlePopperOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-	const handlePopperClose = () => {
-		setAnchorEl(null);
-	};
+  const handlePopperClose = () => {
+    setAnchorEl(null);
+  };
 
-	const openPopper = Boolean(anchorEl);
+  const openPopper = Boolean(anchorEl);
 
-	const handleButtonClick = (target) => {
-		setDrawerLocked(!drawerLocked);
-		//toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
-	};
+  const handleButtonClick = (target) => {
+    setDrawerLocked(!drawerLocked);
+    //toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
+  };
 
-	const handleMouseEnter = () => {
-		if (!drawerLocked) {
-			setDrawerDxOpen(true);
-		}
-	};
+  const handleMouseEnter = () => {
+    if (!drawerLocked) {
+      setDrawerDxOpen(true);
+    }
+  };
 
-	const handleMouseLeave = () => {
-		if (!drawerLocked) {
-			setDrawerDxOpen(false);
-		}
-	};
+  const handleMouseLeave = () => {
+    if (!drawerLocked) {
+      setDrawerDxOpen(false);
+    }
+  };
 
-	return (
-		<>
-			<Toolbar>
-				<StyledImageLogo
-					src='/images/LogoO.png'
-					alt='Logo'
-					width={190}
-					height={70}
-					priority={true}
-					sx={{ cursor: "pointer" }}
-					onClick={() => {
-						Router.push("/auth/home");
-					}}
-				/>
-				<Box sx={{ flexGrow: 1 }} />
+  return (
+    <>
+      <Toolbar>
+        <StyledImageLogo
+          src="/images/LogoO.png"
+          alt="Logo"
+          width={190}
+          height={70}
+          priority={true}
+          sx={{ cursor: "pointer" }}
+          onClick={() => {
+            Router.push("/auth/home");
+          }}
+        />
+        <Box sx={{ flexGrow: 1 }} />
 
-				<Box sx={{ display: "flex" }}>
-					<IconButton
-						size='large'
-						aria-label='mostra 4 nuovi messaggi'
-						color='inherit'
-						onMouseEnter={handlePopperOpen}
-						onMouseLeave={handlePopperClose}
-						onClick={() => {
-							Router.push("/auth/notifiche");
-						}}
-					>
-						<Badge
-							badgeContent={4}
-							color='error'
-						>
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
-					<Popper
-						sx={{
-							backgroundColor: theme.palette.mode !== "dark" ? "#1B1B1B" : "#F2F2F2",
-							color: theme.palette.mode !== "dark" ? "#F2F2F2" : "#1B1B1B",
-							borderRadius: 1,
-							padding: 1,
-							zIndex: 1201,
-						}}
-						placement='bottom'
-						disablePortal={false}
-						open={openPopper}
-						anchorEl={anchorEl}
-						modifiers={[
-							{
-								name: "flip",
-								enabled: true,
-								options: {
-									altBoundary: true,
-									rootBoundary: "document",
-									padding: 8,
-								},
-							},
-							{
-								name: "preventOverflow",
-								enabled: true,
-								options: {
-									altAxis: true,
-									altBoundary: true,
-									tether: true,
-									rootBoundary: "document",
-									padding: 8,
-								},
-							},
-							{
-								name: "arrow",
-								enabled: false,
-								options: {
-									// Se hai bisogno di una freccia, puoi specificare un elemento qui.
-									// element: arrowRef,
-								},
-							},
-						]}
-					>
-						{/* Contenuto del Popper */}
-						<Typography sx={{ p: 1 }}>Visualizza messaggi e avvisi</Typography>
-					</Popper>
+        <Box sx={{ display: "flex" }}>
+          <IconButton
+            size="large"
+            aria-label="mostra 4 nuovi messaggi"
+            color="inherit"
+            onMouseEnter={handlePopperOpen}
+            onMouseLeave={handlePopperClose}
+            onClick={() => {
+              Router.push("/auth/notifiche");
+            }}
+          >
+            <Badge badgeContent={4} color="error">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <Popper
+            sx={{
+              backgroundColor: theme.palette.mode !== "dark" ? "#1B1B1B" : "#F2F2F2",
+              color: theme.palette.mode !== "dark" ? "#F2F2F2" : "#1B1B1B",
+              borderRadius: 1,
+              padding: 1,
+              zIndex: 1201,
+            }}
+            placement="bottom"
+            disablePortal={false}
+            open={openPopper}
+            anchorEl={anchorEl}
+            modifiers={[
+              {
+                name: "flip",
+                enabled: true,
+                options: {
+                  altBoundary: true,
+                  rootBoundary: "document",
+                  padding: 8,
+                },
+              },
+              {
+                name: "preventOverflow",
+                enabled: true,
+                options: {
+                  altAxis: true,
+                  altBoundary: true,
+                  tether: true,
+                  rootBoundary: "document",
+                  padding: 8,
+                },
+              },
+              {
+                name: "arrow",
+                enabled: false,
+                options: {
+                  // Se hai bisogno di una freccia, puoi specificare un elemento qui.
+                  // element: arrowRef,
+                },
+              },
+            ]}
+          >
+            {/* Contenuto del Popper */}
+            <Typography sx={{ p: 1 }}>Visualizza messaggi e avvisi</Typography>
+          </Popper>
 
-					<IconButton
-						size='large'
-						aria-label='show 1 item'
-						color='inherit'
-						onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
-						onMouseEnter={() => {
-							setTipoContesto("carrello");
-							handleMouseEnter();
-						}}
-						onMouseLeave={() => {
-							setTipoContesto("carrello");
-							handleMouseLeave();
-						}}
-					>
-						<Badge
-							badgeContent={1}
-							color='error'
-						>
-							<ShoppingCartIcon />
-						</Badge>
-					</IconButton>
-					<IconButton
-						size='large'
-						edge='end'
-						aria-label='account of current user'
-						aria-controls={menuId}
-						aria-haspopup='true'
-						onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
-						onMouseEnter={() => {
-							setTipoContesto("utente");
-							handleMouseEnter();
-						}}
-						onMouseLeave={() => {
-							setTipoContesto("utente");
-							handleMouseLeave();
-						}}
-						color='inherit'
-					>
-						<AccountCircle />
-					</IconButton>
-				</Box>
-			</Toolbar>
-		</>
-	);
+          <IconButton
+            size="large"
+            aria-label="show 1 item"
+            color="inherit"
+            onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+            onMouseEnter={() => {
+              setTipoContesto("carrello");
+              handleMouseEnter();
+            }}
+            onMouseLeave={() => {
+              setTipoContesto("carrello");
+              handleMouseLeave();
+            }}
+          >
+            <Badge badgeContent={1} color="error">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
+            onMouseEnter={() => {
+              setTipoContesto("utente");
+              handleMouseEnter();
+            }}
+            onMouseLeave={() => {
+              setTipoContesto("utente");
+              handleMouseLeave();
+            }}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </>
+  );
 };
