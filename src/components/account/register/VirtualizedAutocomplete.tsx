@@ -1,13 +1,15 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
 import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Popper from "@mui/material/Popper";
-import { useTheme, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 import Typography from "@mui/material/Typography";
-import { AutocompleteSelected, Comune, Focus } from "src/components/CommonTypesInterfaces";
+import {
+  AutocompleteSelected,
+  Comune,
+  Focus,
+} from "src/components/CommonTypesInterfaces";
 import { RefProp } from "react-spring";
 
 const LISTBOX_PADDING = 8; // px
@@ -39,7 +41,9 @@ const renderRow = ({ data, index, style }: renderRowType) => {
       }}
     >
       <Typography>{dataSet[1].nome}</Typography>
-      <Typography style={{ fontWeight: "bold", textAlign: "right" }}>{dataSet[1].provincia.nome}</Typography>
+      <Typography style={{ fontWeight: "bold", textAlign: "right" }}>
+        {dataSet[1].provincia.nome}
+      </Typography>
     </div>
   );
 };
@@ -47,8 +51,6 @@ const renderRow = ({ data, index, style }: renderRowType) => {
 const OuterElementContext = React.createContext({});
 
 const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
-  // console.log(props);
-
   const outerProps = React.useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
@@ -65,16 +67,16 @@ const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
 // }
 
 type ListboxComponentProps = {
-  children: renderRowData[];
+  children?: any;
   other?: object;
 };
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef<HTMLDivElement, ListboxComponentProps>(function ListboxComponent(props, ref) {
-  // console.log(props);
-
+const ListboxComponent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLElement>
+>(function ListboxComponent(props, ref) {
   const { children, ...other }: ListboxComponentProps = props;
-  // console.log(other);
 
   // Unused
   // const theme = useTheme();
@@ -96,7 +98,9 @@ const ListboxComponent = React.forwardRef<HTMLDivElement, ListboxComponentProps>
     if (itemCount > 8) {
       return 8 * itemSize;
     }
-    return children.map(getChildSize).reduce((a, b) => a + b, 0);
+    return children
+      .map(getChildSize)
+      .reduce((a: number, b: number) => a + b, 0);
   };
 
   // const gridRef = useResetCache(itemCount);
@@ -149,7 +153,16 @@ type VirtualizedAutocompleteTypes = {
   setCap: React.Dispatch<React.SetStateAction<string>> | null;
 };
 
-const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth, selectedComune, setSelectedComune, setProvinceOfBirth, setCap }: VirtualizedAutocompleteTypes) => {
+const VirtualizedAutocomplete = ({
+  label,
+  comuni,
+  placeOfBirth,
+  setPlaceOfBirth,
+  selectedComune,
+  setSelectedComune,
+  setProvinceOfBirth,
+  setCap,
+}: VirtualizedAutocompleteTypes) => {
   return (
     <Autocomplete
       freeSolo
@@ -178,14 +191,20 @@ const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth,
         setProvinceOfBirth(comune.provincia.nome);
         setCap ? setCap(comune.cap) : {};
       }}
-      onBlur={(e: React.FocusEvent<HTMLInputElement>) => setPlaceOfBirth(e.target.value.trim())}
+      onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+        setPlaceOfBirth(e.target.value.trim())
+      }
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={comuni}
       renderInput={(params) => <TextField {...params} label={label} />}
-      renderOption={(props, option, state) => [props, option, state.index]}
+      renderOption={(props, option, state) =>
+        [props, option, state.index] as React.ReactNode
+      }
       // TODO: Post React 18 update - validate this conversion, look like a hidden bug
-      getOptionLabel={(comune) => (typeof comune === "string" ? comune : comune.nome)}
+      getOptionLabel={(comune) =>
+        typeof comune === "string" ? comune : comune.nome
+      }
     />
   );
 };
