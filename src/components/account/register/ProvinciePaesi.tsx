@@ -157,7 +157,7 @@ export const Paesi = [
   },
   {
     codice: "Z529",
-    nome: "Anguilla (isola)",
+    nome: "Anguilla (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -269,7 +269,7 @@ export const Paesi = [
   },
   {
     codice: "Z502",
-    nome: "Bahama (isole)",
+    nome: "Bahama (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -339,7 +339,7 @@ export const Paesi = [
   },
   {
     codice: "Z400",
-    nome: "Bermuda (isole)",
+    nome: "Bermuda (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -465,14 +465,14 @@ export const Paesi = [
   },
   {
     codice: "Z701",
-    nome: "Caroline (isole)",
+    nome: "Caroline (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z530",
-    nome: "Cayman (isole)",
+    nome: "Cayman (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -521,7 +521,7 @@ export const Paesi = [
   },
   {
     codice: "Z702",
-    nome: "Christmas (isola)",
+    nome: "Christmas (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -577,7 +577,7 @@ export const Paesi = [
   },
   {
     codice: "Z212",
-    nome: "Cocos (isole)",
+    nome: "Cocos (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -591,7 +591,7 @@ export const Paesi = [
   },
   {
     codice: "Z310",
-    nome: "Comore (isole)",
+    nome: "Comore (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -626,7 +626,7 @@ export const Paesi = [
   },
   {
     codice: "Z703",
-    nome: "Cook (isole)",
+    nome: "Cook (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -654,7 +654,7 @@ export const Paesi = [
   },
   {
     codice: "Z215",
-    nome: "Costa Dei Pirati=trucial States",
+    nome: "Costa Dei Pirati=Trucial States",
     provincia: {
       nome: "Estero",
     },
@@ -682,7 +682,7 @@ export const Paesi = [
   },
   {
     codice: "Z314",
-    nome: "Dahomey=benin",
+    nome: "Dahomey=Benin",
     provincia: {
       nome: "Estero",
     },
@@ -836,14 +836,14 @@ export const Paesi = [
   },
   {
     codice: "Z108",
-    nome: "Faer Oer (isole)",
+    nome: "Faer Oer (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z609",
-    nome: "Falkland (isole)",
+    nome: "Falkland (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -857,7 +857,7 @@ export const Paesi = [
   },
   {
     codice: "Z704",
-    nome: "Figi=viti",
+    nome: "Figi=Viti",
     provincia: {
       nome: "Estero",
     },
@@ -878,7 +878,7 @@ export const Paesi = [
   },
   {
     codice: "Z217",
-    nome: "Formosa=taiwan",
+    nome: "Formosa=Taiwan",
     provincia: {
       nome: "Estero",
     },
@@ -983,7 +983,7 @@ export const Paesi = [
   },
   {
     codice: "Z705",
-    nome: "Gilbert E Ellice (isole)",
+    nome: "Gilbert E Ellice (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1032,7 +1032,7 @@ export const Paesi = [
   },
   {
     codice: "Z706",
-    nome: "Guam (isola)",
+    nome: "Guam (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -1053,14 +1053,7 @@ export const Paesi = [
   },
   {
     codice: "Z607",
-    nome: "Guayana=guyana Francese",
-    provincia: {
-      nome: "Estero",
-    },
-  },
-  {
-    codice: "Z607",
-    nome: "Guiana Francese",
+    nome: "Guayana=Guyana Francese",
     provincia: {
       nome: "Estero",
     },
@@ -1298,7 +1291,7 @@ export const Paesi = [
   },
   {
     codice: "Z324",
-    nome: "La Reunion (isola)",
+    nome: "La Reunion (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -1389,7 +1382,7 @@ export const Paesi = [
   },
   {
     codice: "Z708",
-    nome: "Macquarie (isole)",
+    nome: "Macquarie (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1445,28 +1438,28 @@ export const Paesi = [
   },
   {
     codice: "Z609",
-    nome: "Malvine=falkland (isole)",
+    nome: "Malvine=Falkland (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z122",
-    nome: "Man (isola)",
+    nome: "Man (Isola)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z709",
-    nome: "Marcus (isole)",
+    nome: "Marcus (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z710",
-    nome: "Marianne (isole)",
+    nome: "Marianne (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1480,7 +1473,7 @@ export const Paesi = [
   },
   {
     codice: "Z711",
-    nome: "Marshall (isole)",
+    nome: "Marshall (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1501,14 +1494,14 @@ export const Paesi = [
   },
   {
     codice: "Z332",
-    nome: "Maurizio (isole)",
+    nome: "Maurizio (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z360",
-    nome: "Mayotte (isola)",
+    nome: "Mayotte (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -1529,7 +1522,7 @@ export const Paesi = [
   },
   {
     codice: "Z712",
-    nome: "Midway (isole)",
+    nome: "Midway (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1592,7 +1585,7 @@ export const Paesi = [
   },
   {
     codice: "Z713",
-    nome: "Nauru (isole)",
+    nome: "Nauru (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1627,21 +1620,21 @@ export const Paesi = [
   },
   {
     codice: "Z714",
-    nome: "Niue=savage (isole)",
+    nome: "Niue=Savage (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z715",
-    nome: "Norfolk (isole E Isole Del Mar Dei Coralli)",
+    nome: "Norfolk (Isole E Isole Del Mar Dei Coralli)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z124",
-    nome: "Normanne (isole)=isole Del Canale",
+    nome: "Normanne (Isole)=Isole Del Canale",
     provincia: {
       nome: "Estero",
     },
@@ -1655,7 +1648,7 @@ export const Paesi = [
   },
   {
     codice: "Z716",
-    nome: "Nuova Caledonia (isole E Dipendenze)",
+    nome: "Nuova Caledonia (Isole E Dipendenze)",
     provincia: {
       nome: "Estero",
     },
@@ -1676,7 +1669,7 @@ export const Paesi = [
   },
   {
     codice: "Z717",
-    nome: "Nuove Ebridi (isole Condominio Franco-inglese)",
+    nome: "Nuove Ebridi (Isole Condominio Franco-inglese)",
     provincia: {
       nome: "Estero",
     },
@@ -1746,7 +1739,7 @@ export const Paesi = [
   },
   {
     codice: "Z721",
-    nome: "Pasqua (isola)",
+    nome: "Pasqua (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -1767,7 +1760,7 @@ export const Paesi = [
   },
   {
     codice: "Z723",
-    nome: "Polinesia Francese (isole)",
+    nome: "Polinesia Francese (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1858,14 +1851,14 @@ export const Paesi = [
   },
   {
     codice: "Z154",
-    nome: "Russia=federazione Russa",
+    nome: "Russia=Federazione Russa",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z238",
-    nome: "Ryukyu (isole)",
+    nome: "Ryukyu (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1907,7 +1900,7 @@ export const Paesi = [
   },
   {
     codice: "Z403",
-    nome: "Saint Pierre Et Miquelon (isole)",
+    nome: "Saint Pierre Et Miquelon (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1921,7 +1914,7 @@ export const Paesi = [
   },
   {
     codice: "Z724",
-    nome: "Salomone (isole)",
+    nome: "Salomone (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1935,7 +1928,7 @@ export const Paesi = [
   },
   {
     codice: "Z725",
-    nome: "Samoa Americane (isole)",
+    nome: "Samoa Americane (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -1949,28 +1942,28 @@ export const Paesi = [
   },
   {
     codice: "Z340",
-    nome: "Sant'elena (isola)",
+    nome: "Sant'elena (Isola)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z341",
-    nome: "Sao Tome' E Principe (isole)",
+    nome: "Sao Tome' E Principe (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z714",
-    nome: "Savage (isole)",
+    nome: "Savage (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z342",
-    nome: "Seicelle (isole)",
+    nome: "Seicelle (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -2180,7 +2173,7 @@ export const Paesi = [
   },
   {
     codice: "Z242",
-    nome: "Timor (isola)",
+    nome: "Timor (Isola)",
     provincia: {
       nome: "Estero",
     },
@@ -2194,7 +2187,7 @@ export const Paesi = [
   },
   {
     codice: "Z727",
-    nome: "Tokelau=isole Dell'unione",
+    nome: "Tokelau=Isole Dell'Unione",
     provincia: {
       nome: "Estero",
     },
@@ -2250,7 +2243,7 @@ export const Paesi = [
   },
   {
     codice: "Z519",
-    nome: "Turks E Caicos (isole)",
+    nome: "Turks E Caicos (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -2334,14 +2327,14 @@ export const Paesi = [
   },
   {
     codice: "Z520",
-    nome: "Vergini Americane (isole)",
+    nome: "Vergini Americane (Isole)",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z525",
-    nome: "Vergini Britanniche (isole)",
+    nome: "Vergini Britanniche (Isole)",
     provincia: {
       nome: "Estero",
     },
@@ -2376,14 +2369,14 @@ export const Paesi = [
   },
   {
     codice: "Z354",
-    nome: "Volta=altovolta",
+    nome: "Volta=Altovolta",
     provincia: {
       nome: "Estero",
     },
   },
   {
     codice: "Z729",
-    nome: "Wallis E Futuna (isole)",
+    nome: "Wallis E Futuna (Isole)",
     provincia: {
       nome: "Estero",
     },
