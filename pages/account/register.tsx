@@ -16,16 +16,18 @@ import Image from "next/image";
 import Step2 from "src/components/account/register/Step2";
 import Step3 from "src/components/account/register/Step3";
 import Router from "next/router";
-import { PrivacyTip } from "@mui/icons-material";
 import { useEffect, useState, useRef } from "react";
 
 import eCommerceConf from "eCommerceConf.json";
 import dayjs, { Dayjs } from "dayjs";
 
-export default function SignUp() {
+import { Sex, Focus, AutocompleteSelected, Date, Comune } from "src/components/CommonTypesInterfaces";
+import PrivacyLabel from "src/components/utils/PrivacyLabel";
+
+const SignUp = () => {
   const theme = useTheme();
 
-  const focus = useRef<HTMLDivElement | null>(null);
+  const focus = useRef<Focus>(null);
 
   const StyledImageLogo = styled(Image)({
     padding: "10px",
@@ -43,7 +45,6 @@ export default function SignUp() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
   const [parentCodiceFiscale, setParentCodiceFiscale] = useState("");
   const [parentCodiceFiscaleInvalid, setParentCodiceFiscaleInvalid] = useState(false);
 
@@ -51,25 +52,25 @@ export default function SignUp() {
   const [parentLastName, setParentLastName] = useState("");
 
   const [gender, setGender] = useState<Sex>(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState<Date>(null);
   const [placeOfBirth, setPlaceOfBirth] = useState("");
-  const [selectedComune, setSelectedComune] = useState(null);
+  const [selectedComune, setSelectedComune] = useState<AutocompleteSelected>(null);
   const [provinceOfBirth, setProvinceOfBirth] = useState("");
 
   const [parentGender, setParentGender] = useState<Sex>(null);
-  const [parentDateOfBirth, setParentDateOfBirth] = useState(null);
-  const [parentSelectedComune, setParentSelectedComune] = useState(null);
+  const [parentDateOfBirth, setParentDateOfBirth] = useState<Date>(null);
+  const [parentSelectedComune, setParentSelectedComune] = useState<AutocompleteSelected>(null);
   const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState("");
   const [parentProvinceOfBirth, setParentProvinceOfBirth] = useState("");
 
   const [address, setAddress] = useState("");
-  const [comuneResidenza, setComuneResidenza] = useState(null);
+  const [comuneResidenza, setComuneResidenza] = useState<AutocompleteSelected>(null);
   const [city, setCity] = useState("");
   const [cap, setCap] = useState("");
   const [province, setProvince] = useState("");
 
   const [parentAddress, setParentAddress] = useState("");
-  const [parentComuneResidenza, setParentComuneResidenza] = useState(null);
+  const [parentComuneResidenza, setParentComuneResidenza] = useState<AutocompleteSelected>(null);
   const [parentCity, setParentCity] = useState("");
   const [parentCap, setParentCap] = useState("");
   const [parentProvince, setParentProvince] = useState("");
@@ -90,7 +91,6 @@ export default function SignUp() {
   const [passwordSafety, setPasswordSafety] = useState({ correct: false, detail: "" });
 
   const [readyToSend, setReadyToSend] = useState<ReadyToSend>({ status: false, data: null });
-
   interface ReadyToSend {
     status: boolean;
     data: UserData | null;
@@ -98,7 +98,7 @@ export default function SignUp() {
 
   const [disableButton, setDisablebutton] = useState(false);
 
-  const [comuni, setComuni] = useState([]);
+  const [comuni, setComuni] = useState<Comune[]>([]);
 
   const stringUpperCase = (string: string) => {
     const arr = string.split(" ");
@@ -117,19 +117,6 @@ export default function SignUp() {
       setUnderage(false);
     }
   };
-
-  const privacyLabel = (
-    <Typography>
-      Iscrivendoti dichiari di aver preso visione dell'
-      {
-        <span>
-          <Link href={eCommerceConf.LinkPrivacy} sx={{ userSelect: "none", color: (theme) => (theme.palette.mode === "light" ? "black" : "white") }}>
-            Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: (theme) => theme.palette.primary.main }}></PrivacyTip>}
-          </Link>
-        </span>
-      }
-    </Typography>
-  );
 
   const getComuni = async () => {
     try {
@@ -191,7 +178,6 @@ export default function SignUp() {
       setPhoneNumber={setPhoneNumber}
       privacy={privacy}
       setPrivacy={setPrivacy}
-      privacyLabel={privacyLabel}
     />
   );
 
@@ -235,7 +221,6 @@ export default function SignUp() {
       setPhoneNumber={setParentPhoneNumber}
       privacy={parentPrivacy}
       setPrivacy={setParentPrivacy}
-      privacyLabel={privacyLabel}
     />
   );
 
@@ -273,7 +258,6 @@ export default function SignUp() {
       phoneNumber={phoneNumber}
       privacy={privacy}
       username={username}
-      privacyLabel={privacyLabel}
       underage={underage}
       parentCodiceFiscale={parentCodiceFiscale}
       parentFirstName={parentFirstName}
@@ -326,8 +310,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (dateOfBirth) {
-      const date = dayjs(dateOfBirth);
-      updateUnderage(date);
+      updateUnderage(dateOfBirth);
     }
   }, [dateOfBirth]);
 
@@ -335,7 +318,6 @@ export default function SignUp() {
     console.log("YES!");
   };
 
-  type Sex = null | "male" | "female";
   // TODO: Handle dateOfBirth and Cap
 
   interface UserData {
@@ -344,7 +326,7 @@ export default function SignUp() {
       firstName: string;
       lastName: string;
       gender: Sex;
-      dateOfBirth: any;
+      dateOfBirth: Date;
       placeOfBirth: string;
       provinceOfBirth: string;
       address: string;
@@ -362,7 +344,7 @@ export default function SignUp() {
       parentFirstName: string;
       parentLastName: string;
       parentGender: Sex;
-      parentDateOfBirth: any;
+      parentDateOfBirth: Date;
       parentPlaceOfBirth: string;
       parentProvinceOfBirth: string;
       parentAddress: string;
@@ -544,4 +526,5 @@ export default function SignUp() {
       </Container>
     </ThemeProvider>
   );
-}
+};
+export default SignUp;

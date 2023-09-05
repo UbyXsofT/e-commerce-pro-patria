@@ -7,15 +7,25 @@ import Popper from "@mui/material/Popper";
 import { useTheme, styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 import Typography from "@mui/material/Typography";
+import { AutocompleteSelected, Comune, Focus } from "src/components/CommonTypesInterfaces";
+import { RefProp } from "react-spring";
 
 const LISTBOX_PADDING = 8; // px
 
-function renderRow(props) {
-  const { data, index, style } = props;
+type renderRowData = [object, Comune, number];
+
+type renderRowType = {
+  data: renderRowData[];
+  index: number;
+  style: React.CSSProperties;
+};
+
+const renderRow = ({ data, index, style }: renderRowType) => {
   const dataSet = data[index];
+
   const inlineStyle = {
     ...style,
-    top: style.top + LISTBOX_PADDING,
+    top: style.top ? Number(style.top) + LISTBOX_PADDING : 0,
   };
 
   return (
@@ -32,28 +42,39 @@ function renderRow(props) {
       <Typography style={{ fontWeight: "bold", textAlign: "right" }}>{dataSet[1].provincia.nome}</Typography>
     </div>
   );
-}
+};
 
 const OuterElementContext = React.createContext({});
 
-const OuterElementType = React.forwardRef((props, ref) => {
+const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
+  // console.log(props);
+
   const outerProps = React.useContext(OuterElementContext);
   return <div ref={ref} {...props} {...outerProps} />;
 });
 
-function useResetCache(data) {
-  const ref = React.useRef(null);
-  React.useEffect(() => {
-    if (ref.current != null) {
-      ref.current.resetAfterIndex(0, true);
-    }
-  }, [data]);
-  return ref;
-}
+// function useResetCache(data: number) {
+//   const ref = React.createRef<null>();
+
+//   React.useEffect(() => {
+//     if (ref.current != null) {
+//       ref.current.resetAfterIndex(0, true);
+//     }
+//   }, [data]);
+//   return ref;
+// }
+
+type ListboxComponentProps = {
+  children: renderRowData[];
+  other?: object;
+};
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
-  const { children, ...other } = props;
+const ListboxComponent = React.forwardRef<HTMLDivElement, ListboxComponentProps>(function ListboxComponent(props, ref) {
+  // console.log(props);
+
+  const { children, ...other }: ListboxComponentProps = props;
+  // console.log(other);
 
   // Unused
   // const theme = useTheme();
@@ -63,7 +84,7 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
   const itemCount = children.length;
   const itemSize = 48;
 
-  const getChildSize = (child) => {
+  const getChildSize = (child: renderRowData) => {
     if (child.hasOwnProperty("group")) {
       return 48;
     }
@@ -78,7 +99,8 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
     return children.map(getChildSize).reduce((a, b) => a + b, 0);
   };
 
-  const gridRef = useResetCache(itemCount);
+  // const gridRef = useResetCache(itemCount);
+  const gridRef = React.createRef<VariableSizeList>();
 
   return (
     <div ref={ref}>
@@ -116,10 +138,20 @@ const StyledPopper = styled(Popper)({
   },
 });
 
-const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth, selectedComune, setSelectedComune, setProvinceOfBirth, setCap }) => {
+type VirtualizedAutocompleteTypes = {
+  label: string;
+  comuni: Comune[];
+  placeOfBirth: string;
+  setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+  selectedComune: AutocompleteSelected;
+  setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+  setProvinceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+  setCap: React.Dispatch<React.SetStateAction<string>> | null;
+};
+
+const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth, selectedComune, setSelectedComune, setProvinceOfBirth, setCap }: VirtualizedAutocompleteTypes) => {
   return (
     <Autocomplete
-      loading
       freeSolo
       disableListWrap
       value={selectedComune}
@@ -146,7 +178,7 @@ const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth,
         setProvinceOfBirth(comune.provincia.nome);
         setCap ? setCap(comune.cap) : {};
       }}
-      onBlur={(e) => setPlaceOfBirth(e.target.value.trim())}
+      onBlur={(e: React.FocusEvent<HTMLInputElement>) => setPlaceOfBirth(e.target.value.trim())}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={comuni}

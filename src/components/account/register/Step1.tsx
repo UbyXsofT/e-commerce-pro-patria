@@ -14,8 +14,53 @@ import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 import dayjs from "dayjs";
 import VirtualizedAutocomplete from "./VirtualizedAutocomplete";
-import { useEffect, useRef } from "react";
-import { ThemeProvider, useTheme } from "@emotion/react";
+import { useEffect, useRef, MutableRefObject } from "react";
+
+import { useTheme } from "@mui/material/styles";
+
+import { Focus, Sex, AutocompleteSelected, Date, Comune } from "src/components/CommonTypesInterfaces";
+import PrivacyLabel from "src/components/utils/PrivacyLabel";
+
+type Step1Props = {
+  focus: MutableRefObject<Focus>;
+  parent: boolean;
+  comuni: Comune[];
+  selectedComune: AutocompleteSelected;
+  setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+  comuneResidenza: AutocompleteSelected;
+  setComuneResidenza: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+  stringUpperCase: (string: string) => string;
+  codiceFiscale: string;
+  codiceFiscaleInvalid: boolean;
+  setCodiceFiscale: React.Dispatch<React.SetStateAction<string>>;
+  setCodiceFiscaleInvalid: React.Dispatch<React.SetStateAction<boolean>>;
+  firstName: string;
+  setFirstName: React.Dispatch<React.SetStateAction<string>>;
+  lastName: string;
+  setLastName: React.Dispatch<React.SetStateAction<string>>;
+  gender: Sex;
+  setGender: React.Dispatch<React.SetStateAction<Sex>>;
+  dateOfBirth: Date;
+  setDateOfBirth: React.Dispatch<React.SetStateAction<Date>>;
+  placeOfBirth: string;
+  setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+  provinceOfBirth: string;
+  setProvinceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+  address: string;
+  setAddress: React.Dispatch<React.SetStateAction<string>>;
+  city: string;
+  setCity: React.Dispatch<React.SetStateAction<string>>;
+  cap: string;
+  setCap: React.Dispatch<React.SetStateAction<string>>;
+  province: string;
+  setProvince: React.Dispatch<React.SetStateAction<string>>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  privacy: boolean;
+  setPrivacy: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const Step1 = ({
   focus,
@@ -56,27 +101,26 @@ const Step1 = ({
   setPhoneNumber,
   privacy,
   setPrivacy,
-  privacyLabel,
-}) => {
+}: Step1Props) => {
   const theme = useTheme();
 
   const handleSubmit = () => {};
 
-  const updateCodiceFiscale = (e) => {
-    setCodiceFiscale(e.target.value.trim().toUpperCase());
-    if (CodiceFiscale.check(e.target.value)) {
-      const cf = new CodiceFiscale(e.target.value);
-      const placeOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
-      const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === placeOfBirth.toLocaleLowerCase());
-      !gender ? setGender(cf.gender === "M" ? "male" : "female") : {};
-      setPlaceOfBirth(placeOfBirth);
-      setSelectedComune(comune);
-      setProvinceOfBirth(comune.provincia.nome);
-      !dateOfBirth ? setDateOfBirth(dayjs(cf.birthday)) : {};
+  const updateCodiceFiscale = (codiceFiscale: string) => {
+    setCodiceFiscale(codiceFiscale.trim().toUpperCase());
+    if (CodiceFiscale.check(codiceFiscale)) {
+      const cf = new CodiceFiscale(codiceFiscale);
+      const newPlaceOfBirth = stringUpperCase(cf.birthplace.nome.trim().toLocaleLowerCase());
+      const comune = comuni.find((comune) => comune.nome.toLocaleLowerCase() === newPlaceOfBirth.toLocaleLowerCase());
+      setGender(cf.gender === "M" ? "male" : "female");
+      setPlaceOfBirth(newPlaceOfBirth);
+      comune ? setSelectedComune(comune) : {};
+      comune ? setProvinceOfBirth(comune.provincia.nome) : {};
+      setDateOfBirth(dayjs(cf.birthday));
     }
   };
 
-  const isCodiceFiscaleInvalid = (codiceFiscale) => {
+  const isCodiceFiscaleInvalid = (codiceFiscale: string) => {
     if (CodiceFiscale.check(codiceFiscale)) {
       setCodiceFiscaleInvalid(false);
     } else {
@@ -89,18 +133,19 @@ const Step1 = ({
   }, [codiceFiscale]);
 
   useEffect(() => {
-    if (firstName && lastName !== "" && dateOfBirth !== null && Object.keys(dateOfBirth).length && (dateOfBirth.constructor === Object) !== 0 && selectedComune !== null) {
+    if (firstName && lastName && gender && dateOfBirth && selectedComune) {
+      // TODO: Add Province Conversion and ExtraItalian Support
       const cf = new CodiceFiscale({
         name: firstName,
         surname: lastName,
         gender: gender === "male" ? "M" : "F",
-        day: dateOfBirth.$D,
-        month: dateOfBirth.$M + 1,
-        year: dateOfBirth.$y,
+        day: dateOfBirth.get("date"),
+        month: dateOfBirth.get("month") + 1,
+        year: dateOfBirth.get("year"),
         birthplace: selectedComune.nome,
       });
 
-      setCodiceFiscale(cf.code);
+      setCodiceFiscale(cf.cf);
     }
   }, [firstName, lastName, gender, dateOfBirth, selectedComune]);
 
@@ -131,7 +176,7 @@ const Step1 = ({
                   error={codiceFiscaleInvalid && codiceFiscale !== ""}
                   value={codiceFiscale}
                   inputProps={{ minLength: 16, maxLength: 16 }}
-                  onChange={(e) => updateCodiceFiscale(e)}
+                  onChange={(e) => updateCodiceFiscale(e.target.value)}
                   required
                   fullWidth
                   id="codiceFiscale"
@@ -176,7 +221,7 @@ const Step1 = ({
               <Grid item xs={12} sx={{ height: "72px" }}>
                 <FormControl required>
                   <FormLabel id="sesso">Sesso</FormLabel>
-                  <RadioGroup value={gender} onChange={(e) => setGender(e.target.value)} aria-labelledby="gender" name="gender" row>
+                  <RadioGroup value={gender} onChange={(e) => setGender(e.target.value === "male" ? "male" : "female")} aria-labelledby="gender" name="gender" row>
                     <FormControlLabel value="female" control={<Radio />} label="Femmina" />
                     <FormControlLabel value="male" control={<Radio />} label="Maschio" />
                   </RadioGroup>
@@ -188,8 +233,9 @@ const Step1 = ({
                     disableFuture
                     value={dateOfBirth}
                     maxDate={parent ? dayjs().subtract(18, "year") : null}
-                    onChange={(e) => setDateOfBirth(e)}
-                    required
+                    onChange={(e) => {
+                      setDateOfBirth(e);
+                    }}
                     label="Data di Nascita"
                     sx={{
                       width: "100%",
@@ -206,6 +252,7 @@ const Step1 = ({
                   selectedComune={selectedComune}
                   setSelectedComune={setSelectedComune}
                   setProvinceOfBirth={setProvinceOfBirth}
+                  setCap={null}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -277,13 +324,13 @@ const Step1 = ({
                 />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput sx={{ width: "100%" }} defaultCountry="it" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
+                <MuiTelInput sx={{ width: "100%" }} defaultCountry="IT" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
               <Box>
-                <FormControlLabel required control={<Checkbox color="primary" checked={privacy} onChange={() => setPrivacy(!privacy)} />} label={privacyLabel} />
+                <FormControlLabel required control={<Checkbox color="primary" checked={privacy} onChange={() => setPrivacy(!privacy)} />} label={<PrivacyLabel />} />
               </Box>
             </Grid>
           </Grid>

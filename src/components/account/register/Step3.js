@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+import PrivacyLabel from "src/components/utils/PrivacyLabel";
 
 const Step3 = ({
   focus,
@@ -29,7 +30,6 @@ const Step3 = ({
   phoneNumber,
   privacy,
   username,
-  privacyLabel,
   underage,
   parentCodiceFiscale,
   parentFirstName,
@@ -135,7 +135,7 @@ const Step3 = ({
             </Grid>
 
             <Grid item xs={12}>
-              <FormControlLabel checked={privacy} disabled control={<Checkbox color="primary" />} label={privacyLabel} />
+              <FormControlLabel checked={privacy} disabled control={<Checkbox color="primary" />} label={<PrivacyLabel />} />
             </Grid>
           </Grid>
         </Box>
@@ -213,7 +213,7 @@ const Step3 = ({
 
                 <Grid item xs={12}>
                   <Box>
-                    <FormControlLabel disabled required control={<Checkbox checked={parentPrivacy} color="primary" />} label={privacyLabel} />
+                    <FormControlLabel disabled required control={<Checkbox checked={parentPrivacy} color="primary" />} label={<PrivacyLabel />} />
                   </Box>
                 </Grid>
               </Grid>
