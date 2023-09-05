@@ -28,3 +28,12 @@ export interface Comune {
     lng: number;
   };
 }
+export interface PasswordSafety {
+  correct: boolean;
+  detail: Length | LettereNumeri | MaiuscoloMinuscolo | CaratteriSpeciali;
+}
+
+type Length = "" | "| Password Troppo Lunga" | "| Password Troppo Corta";
+type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
+type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
+type CaratteriSpeciali = "";

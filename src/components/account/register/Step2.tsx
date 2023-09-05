@@ -5,10 +5,24 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "dayjs/locale/it";
-import SecurePassword from "/src/components/account/SecurePassword";
-import { height } from "@mui/system";
+import SecurePassword from "src/components/account/SecurePassword";
+import { Focus, PasswordSafety } from "src/components/CommonTypesInterfaces";
 
-const Step2 = ({ focus, email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, passwordSafety, setPasswordSafety }) => {
+type Step2Props = {
+  focus: React.MutableRefObject<Focus>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  confirmPassword: string;
+  setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
+  passwordSafety: PasswordSafety;
+  setPasswordSafety: React.Dispatch<React.SetStateAction<PasswordSafety>>;
+};
+
+const Step2 = ({ focus, email, setEmail, username, setUsername, password, setPassword, confirmPassword, setConfirmPassword, passwordSafety, setPasswordSafety }: Step2Props) => {
   const handleSubmit = () => {};
 
   return (

@@ -21,7 +21,7 @@ import { useEffect, useState, useRef } from "react";
 import eCommerceConf from "eCommerceConf.json";
 import dayjs, { Dayjs } from "dayjs";
 
-import { Sex, Focus, AutocompleteSelected, Date, Comune } from "src/components/CommonTypesInterfaces";
+import { Sex, Focus, AutocompleteSelected, Date, Comune, PasswordSafety } from "src/components/CommonTypesInterfaces";
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 
 const SignUp = () => {
@@ -88,7 +88,7 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordSafety, setPasswordSafety] = useState({ correct: false, detail: "" });
+  const [passwordSafety, setPasswordSafety] = useState<PasswordSafety>({ correct: false, detail: "" });
 
   const [readyToSend, setReadyToSend] = useState<ReadyToSend>({ status: false, data: null });
   interface ReadyToSend {
