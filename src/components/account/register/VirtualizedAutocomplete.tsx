@@ -5,12 +5,7 @@ import Popper from "@mui/material/Popper";
 import { styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 import Typography from "@mui/material/Typography";
-import {
-  AutocompleteSelected,
-  Comune,
-  Focus,
-} from "src/components/CommonTypesInterfaces";
-import { RefProp } from "react-spring";
+import { AutocompleteSelected, Comune } from "src/components/CommonTypesInterfaces";
 
 const LISTBOX_PADDING = 8; // px
 
@@ -41,9 +36,7 @@ const renderRow = ({ data, index, style }: renderRowType) => {
       }}
     >
       <Typography>{dataSet[1].nome}</Typography>
-      <Typography style={{ fontWeight: "bold", textAlign: "right" }}>
-        {dataSet[1].provincia.nome}
-      </Typography>
+      <Typography style={{ fontWeight: "bold", textAlign: "right" }}>{dataSet[1].provincia.nome}</Typography>
     </div>
   );
 };
@@ -72,10 +65,7 @@ type ListboxComponentProps = {
 };
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLElement>
->(function ListboxComponent(props, ref) {
+const ListboxComponent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLElement>>(function ListboxComponent(props, ref) {
   const { children, ...other }: ListboxComponentProps = props;
 
   // Unused
@@ -98,9 +88,7 @@ const ListboxComponent = React.forwardRef<
     if (itemCount > 8) {
       return 8 * itemSize;
     }
-    return children
-      .map(getChildSize)
-      .reduce((a: number, b: number) => a + b, 0);
+    return children.map(getChildSize).reduce((a: number, b: number) => a + b, 0);
   };
 
   // const gridRef = useResetCache(itemCount);
@@ -153,16 +141,7 @@ type VirtualizedAutocompleteTypes = {
   setCap: React.Dispatch<React.SetStateAction<string>> | null;
 };
 
-const VirtualizedAutocomplete = ({
-  label,
-  comuni,
-  placeOfBirth,
-  setPlaceOfBirth,
-  selectedComune,
-  setSelectedComune,
-  setProvinceOfBirth,
-  setCap,
-}: VirtualizedAutocompleteTypes) => {
+const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth, selectedComune, setSelectedComune, setProvinceOfBirth, setCap }: VirtualizedAutocompleteTypes) => {
   return (
     <Autocomplete
       freeSolo
@@ -191,20 +170,14 @@ const VirtualizedAutocomplete = ({
         setProvinceOfBirth(comune.provincia.nome);
         setCap ? setCap(comune.cap) : {};
       }}
-      onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-        setPlaceOfBirth(e.target.value.trim())
-      }
+      onBlur={(e: React.FocusEvent<HTMLInputElement>) => setPlaceOfBirth(e.target.value.trim())}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={comuni}
       renderInput={(params) => <TextField {...params} label={label} />}
-      renderOption={(props, option, state) =>
-        [props, option, state.index] as React.ReactNode
-      }
+      renderOption={(props, option, state) => [props, option, state.index] as React.ReactNode}
       // TODO: Post React 18 update - validate this conversion, look like a hidden bug
-      getOptionLabel={(comune) =>
-        typeof comune === "string" ? comune : comune.nome
-      }
+      getOptionLabel={(comune) => (typeof comune === "string" ? comune : comune.nome)}
     />
   );
 };

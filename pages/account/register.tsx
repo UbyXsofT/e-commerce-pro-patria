@@ -21,8 +21,9 @@ import { useEffect, useState, useRef } from "react";
 import eCommerceConf from "eCommerceConf.json";
 import dayjs, { Dayjs } from "dayjs";
 
-import { Sex, Focus, AutocompleteSelected, Date, Comune, PasswordSafety } from "src/components/CommonTypesInterfaces";
+import { Sex, Focus, AutocompleteSelected, Date, ComunePaese, PasswordSafety } from "src/components/CommonTypesInterfaces";
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
+import { Paesi } from "src/components/account/register/ProvinciePaesi";
 
 const SignUp = () => {
   const theme = useTheme();
@@ -98,7 +99,7 @@ const SignUp = () => {
 
   const [disableButton, setDisablebutton] = useState(false);
 
-  const [comuni, setComuni] = useState<Comune[]>([]);
+  const [comuni, setComuni] = useState<ComunePaese[]>([]);
 
   const stringUpperCase = (string: string) => {
     const arr = string.split(" ");
@@ -122,13 +123,14 @@ const SignUp = () => {
     try {
       let response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
       let jsonData = await response.json();
+      let ComuniPaesi = jsonData.concat(Paesi);
 
       // let keyFulData = jsonData.map((comune, idx) => {
       //   let updatedComune = { ...comune, key: idx };
       //   return updatedComune;
       // });
 
-      setComuni(jsonData);
+      setComuni(ComuniPaesi);
     } catch (error) {
       alert(error);
     }

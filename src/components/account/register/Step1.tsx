@@ -14,17 +14,18 @@ import { MuiTelInput } from "mui-tel-input";
 import CodiceFiscale from "codice-fiscale-js";
 import dayjs from "dayjs";
 import VirtualizedAutocomplete from "./VirtualizedAutocomplete";
-import { useEffect, useRef, MutableRefObject } from "react";
+import { useEffect, MutableRefObject } from "react";
 
 import { useTheme } from "@mui/material/styles";
 
-import { Focus, Sex, AutocompleteSelected, Date, Comune } from "src/components/CommonTypesInterfaces";
+import { Focus, Sex, AutocompleteSelected, Date, ComunePaese } from "src/components/CommonTypesInterfaces";
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
+import { Province } from "./ProvinciePaesi";
 
 type Step1Props = {
   focus: MutableRefObject<Focus>;
   parent: boolean;
-  comuni: Comune[];
+  comuni: ComunePaese[];
   selectedComune: AutocompleteSelected;
   setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
   comuneResidenza: AutocompleteSelected;
@@ -133,20 +134,25 @@ const Step1 = ({
   }, [codiceFiscale]);
 
   useEffect(() => {
-    if (firstName && lastName && gender && dateOfBirth && selectedComune) {
-      // TODO: Add Province Conversion and ExtraItalian Support
-      const cf = new CodiceFiscale({
-        name: firstName,
-        surname: lastName,
-        gender: gender === "male" ? "M" : "F",
-        day: dateOfBirth.get("date"),
-        month: dateOfBirth.get("month") + 1,
-        year: dateOfBirth.get("year"),
-        birthplace: selectedComune.nome,
-      });
-
-      setCodiceFiscale(cf.cf);
+    if (!firstName || !lastName || !gender || !dateOfBirth || !selectedComune) {
+      return;
     }
+
+    const selectedProvinceName = selectedComune.provincia.nome;
+    const selectedProvince = Province[selectedProvinceName as keyof typeof Province];
+
+    const cf = new CodiceFiscale({
+      name: firstName,
+      surname: lastName,
+      gender: gender === "male" ? "M" : "F",
+      day: dateOfBirth.get("date"),
+      month: dateOfBirth.get("month") + 1,
+      year: dateOfBirth.get("year"),
+      birthplace: selectedComune.nome,
+      birthplaceProvincia: selectedProvince ? selectedProvince : "",
+    });
+
+    setCodiceFiscale(cf.cf);
   }, [firstName, lastName, gender, dateOfBirth, selectedComune]);
 
   const mdUp = useMediaQuery(theme.breakpoints.up("md"), {
@@ -184,7 +190,9 @@ const Step1 = ({
                   name="codiceFiscale"
                   ref={focus}
                 />
-                <FormHelperText>Il Codice Fiscale verrà completato automaticamente con gli altri dati</FormHelperText>
+                <FormHelperText>
+                  Il <strong>Codice Fiscale</strong> verrà completato automaticamente con gli altri dati
+                </FormHelperText>
               </Grid>
               {/* TODO: "Advanced" trimming to allow inner spaces */}
               <Grid item xs={12} sm={6}>
@@ -254,6 +262,9 @@ const Step1 = ({
                   setProvinceOfBirth={setProvinceOfBirth}
                   setCap={null}
                 />
+                <FormHelperText>
+                  Se non sei nato in Italia inserisci il {mdUp ? <br /> : ""} <strong>Paese di Nascita</strong>
+                </FormHelperText>
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
@@ -325,6 +336,16 @@ const Step1 = ({
               </Grid>
               <Grid item xs={12}>
                 <MuiTelInput sx={{ width: "100%" }} defaultCountry="IT" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
+                <FormHelperText>
+                  {mdUp ? (
+                    <React.Fragment>
+                      <br />
+                      <br />
+                    </React.Fragment>
+                  ) : (
+                    ""
+                  )}
+                </FormHelperText>
               </Grid>
             </Grid>
 
