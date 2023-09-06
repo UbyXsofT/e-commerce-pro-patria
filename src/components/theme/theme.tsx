@@ -1,6 +1,6 @@
 import { Roboto } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
-import { ThemeManager } from "/src/theme/ThemeManager";
+import { ThemeManager } from "src/theme/ThemeManager";
 const { currTema } = ThemeManager();
 
 export const roboto = Roboto({
@@ -17,6 +17,7 @@ const transitionStyle = {
 const lightTheme = createTheme({
   palette: {
     ...currTema?.Light?.palette,
+    mode: "light",
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
@@ -40,6 +41,7 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
   palette: {
     ...currTema?.Dark?.palette,
+    mode: "dark",
   },
   typography: {
     fontFamily: roboto.style.fontFamily,

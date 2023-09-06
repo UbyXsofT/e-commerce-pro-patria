@@ -1,23 +1,30 @@
 import { Grid, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { PasswordSafety } from "../CommonTypesInterfaces";
 
-const SecurePassword = ({ password, passwordSafety, setPasswordSafety }) => {
-  const evaluatePassword = (password) => {
+type SecurePasswordProps = {
+  password: string;
+  passwordSafety: PasswordSafety;
+  setPasswordSafety: Dispatch<SetStateAction<PasswordSafety>>;
+};
+
+const SecurePassword = ({ password, passwordSafety, setPasswordSafety }: SecurePasswordProps) => {
+  const evaluatePassword = (password: string) => {
     let length = evaluateLength(password);
     let lettereNumeri = evaluateLettereNumeri(password);
     let maiuscoloMinuscolo = evaluateMaiuscoloMinuscolo(password);
     let caratteriSpeciali = evaluateCaratteriSpeciali(password);
 
     if (length && lettereNumeri && maiuscoloMinuscolo && caratteriSpeciali) {
-      setPasswordSafety({ correct: true });
+      setPasswordSafety({ correct: true, detail: "" });
     } else {
-      setPasswordSafety({ correct: false });
+      setPasswordSafety({ correct: false, detail: "" });
     }
   };
 
-  const evaluateLength = (password) => {
+  const evaluateLength = (password: string) => {
     if (password.length === 0) {
       setLength({ correct: false, detail: "" });
       return false;
@@ -35,7 +42,7 @@ const SecurePassword = ({ password, passwordSafety, setPasswordSafety }) => {
     }
   };
 
-  const evaluateLettereNumeri = (password) => {
+  const evaluateLettereNumeri = (password: string) => {
     const lettere = /[a-zA-Z]/;
     const numeri = /\d/;
 
@@ -51,7 +58,7 @@ const SecurePassword = ({ password, passwordSafety, setPasswordSafety }) => {
     }
   };
 
-  const evaluateMaiuscoloMinuscolo = () => {
+  const evaluateMaiuscoloMinuscolo = (password: string) => {
     const maiuscolo = /[A-Z]/;
     const minuscolo = /[a-z]/;
 
@@ -67,7 +74,7 @@ const SecurePassword = ({ password, passwordSafety, setPasswordSafety }) => {
     }
   };
 
-  const evaluateCaratteriSpeciali = (password) => {
+  const evaluateCaratteriSpeciali = (password: string) => {
     const speciali = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
     if (speciali.test(password)) {
@@ -79,24 +86,24 @@ const SecurePassword = ({ password, passwordSafety, setPasswordSafety }) => {
     }
   };
 
-  const [length, setLength] = useState({
+  const [length, setLength] = useState<PasswordSafety>({
     correct: false,
-    detail: " ",
+    detail: "",
   });
 
-  const [lettereNumeri, setLettereNumeri] = useState({
+  const [lettereNumeri, setLettereNumeri] = useState<PasswordSafety>({
     correct: false,
-    detail: " ",
+    detail: "",
   });
 
-  const [maiuscoloMinuscolo, setMaiuscoloMinuscolo] = useState({
+  const [maiuscoloMinuscolo, setMaiuscoloMinuscolo] = useState<PasswordSafety>({
     correct: false,
-    detail: " ",
+    detail: "",
   });
 
-  const [caratteriSpeciali, setCaratteriSpeciali] = useState({
+  const [caratteriSpeciali, setCaratteriSpeciali] = useState<PasswordSafety>({
     correct: false,
-    detail: " ",
+    detail: "",
   });
 
   useEffect(() => {

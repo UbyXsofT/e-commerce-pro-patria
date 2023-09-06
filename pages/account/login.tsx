@@ -7,28 +7,29 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 //REDUX-STORE
 import { connect } from "react-redux";
-import { setLoading } from "/src/store/actions";
-//*-----*//
-import Layout from "../../src/components/layout/LayoutLogin";
-import eCommerceConf from "../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
+import { setLoading } from "src/store/actions";
 import Image from "next/image";
 
 import { styled } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import CookieManager from "/src/components/cookie/CookieManager";
+import CookieManager from "src/components/cookie/CookieManager";
 // import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import Router from "next/router";
 
-import { PartitaIva } from "../../src/components/layout/footer/PartitaIva";
-import Copyright from "../../src/components/layout/footer/Copyright";
-import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
-import { AlertMe } from "../../src/components/layout/alert/AlertMe";
-import callNodeService from "../api/callNodeService";
-import LoadingWrapper from "../../src/components/utils/LoadingWrapper";
-import logOutUser from "../../src/components/utils/logOutUser";
+import { PartitaIva } from "src/components/layout/footer/PartitaIva";
+import Copyright from "src/components/layout/footer/Copyright";
+
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { AlertMe } from "src/components/layout/alert/AlertMe";
+
+import callNodeService from "pages/api/callNodeService";
+import LoadingWrapper from "src/components/utils/LoadingWrapper";
+import logOutUser from "src/components/utils/logOutUser";
 //redux
-import { setAuthUser } from "../../src/store/actions";
+import { setAuthUser } from "src/store/actions";
 import { useDispatch } from "react-redux";
+import Layout from "src/components/layout/LayoutLogin";
 
 const Login = () => {
   const theme = useTheme();
@@ -50,8 +51,8 @@ const Login = () => {
 
     const calculatePaddingTop = () => {
       const windowHeight = window.innerHeight;
-      const mainHeight = document.getElementById("main").offsetHeight;
-      const calculatedPaddingTop = (windowHeight - mainHeight) / 2;
+      const mainHeight = document.getElementById("main")?.offsetHeight;
+      const calculatedPaddingTop = (windowHeight - (mainHeight ? mainHeight : 0)) / 2;
       setPaddingTop(calculatedPaddingTop);
     };
     calculatePaddingTop();
@@ -61,7 +62,7 @@ const Login = () => {
     };
   }, []);
 
-  const [captchaValue, setCaptchaValue] = React.useState(null);
+  const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
   const { showAlert } = useAlertMe();
 
   const handleLogin = async () => {
@@ -149,6 +150,7 @@ const Login = () => {
 
     fetchData();
   };
+
   const StyledImageLogo = styled(Image)({
     padding: "5px",
     maxWidth: 190,
@@ -205,7 +207,7 @@ const Login = () => {
             position="static"
             sx={{
               display: isMobile ? "block" : "none",
-              backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
+              backgroundColor: (theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as { backgroundColor?: string })?.backgroundColor,
             }}
           >
             <Container sx={{ display: "flex", alignItems: "center" }}>

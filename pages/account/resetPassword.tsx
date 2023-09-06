@@ -5,20 +5,20 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 //REDUX-STORE
 import { connect } from "react-redux";
-import { setLoading } from "/src/store/actions";
+import { setLoading } from "src/store/actions";
 
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
-import Step1 from "/src/components/account/resetPassword/Step1";
-import Step2 from "/src/components/account/resetPassword/Step2";
+import Step1 from "src/components/account/resetPassword/Step1";
+import Step2 from "src/components/account/resetPassword/Step2";
 
 const StyledImageLogo = styled(Image)({
   padding: "10px",
   maxWidth: 300,
 });
 
-const resetPassword = (setLoading) => {
+const resetPassword = (_setLoading: any) => {
   //setLoading(true); rende visibile il loading
   const theme = useTheme();
 
@@ -42,7 +42,8 @@ const resetPassword = (setLoading) => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: theme.components.MuiAppBar.styleOverrides.colorInherit,
+          // Specify the type of backgroundColor
+          backgroundColor: (theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as { backgroundColor?: string })?.backgroundColor,
         }}
       >
         <Container sx={{ display: "flex", alignItems: "center" }}>

@@ -11,6 +11,42 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/it";
 import { FormControl, FormLabel, Radio, RadioGroup } from "@mui/material";
 import { MuiTelInput } from "mui-tel-input";
+import PrivacyLabel from "src/components/utils/PrivacyLabel";
+import { Focus, Sex, Date } from "src/components/CommonTypesInterfaces";
+
+type Step3Props = {
+  focus: React.MutableRefObject<Focus>;
+  codiceFiscale: string;
+  firstName: string;
+  lastName: string;
+  gender: Sex;
+  dateOfBirth: Date;
+  placeOfBirth: string;
+  provinceOfBirth: string;
+  address: string;
+  city: string;
+  cap: string;
+  province: string;
+  email: string;
+  phoneNumber: string;
+  privacy: boolean;
+  username: string;
+  underage: boolean;
+  parentCodiceFiscale: string;
+  parentFirstName: string;
+  parentLastName: string;
+  parentGender: Sex;
+  parentDateOfBirth: Date;
+  parentPlaceOfBirth: string;
+  parentProvinceOfBirth: string;
+  parentAddress: string;
+  parentCity: string;
+  parentCap: string;
+  parentProvince: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
+  parentPrivacy: boolean;
+};
 
 const Step3 = ({
   focus,
@@ -29,7 +65,6 @@ const Step3 = ({
   phoneNumber,
   privacy,
   username,
-  privacyLabel,
   underage,
   parentCodiceFiscale,
   parentFirstName,
@@ -45,7 +80,7 @@ const Step3 = ({
   parentEmail,
   parentPhoneNumber,
   parentPrivacy,
-}) => {
+}: Step3Props) => {
   const handleSubmit = () => {};
 
   const [codeFocus, setCodeFocus] = React.useState(true);
@@ -124,7 +159,7 @@ const Step3 = ({
                 <TextField value={province} disabled fullWidth id="province" label="Provincia di Residenza" name="province" />
               </Grid>
               <Grid item xs={12}>
-                <MuiTelInput value={phoneNumber} disabled sx={{ width: "100%" }} defaultCountry="it" />
+                <MuiTelInput value={phoneNumber} disabled sx={{ width: "100%" }} defaultCountry="IT" />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField value={email} disabled fullWidth id="email" label="Indirizzo Email" name="email" />
@@ -135,7 +170,7 @@ const Step3 = ({
             </Grid>
 
             <Grid item xs={12}>
-              <FormControlLabel checked={privacy} disabled control={<Checkbox color="primary" />} label={privacyLabel} />
+              <FormControlLabel checked={privacy} disabled control={<Checkbox color="primary" />} label={<PrivacyLabel />} />
             </Grid>
           </Grid>
         </Box>
@@ -174,7 +209,6 @@ const Step3 = ({
                       <DatePicker
                         value={parentDateOfBirth}
                         disabled
-                        required
                         label="Data di Nascita"
                         sx={{
                           width: "100%",
@@ -207,13 +241,13 @@ const Step3 = ({
                     <TextField disabled value={parentEmail} required fullWidth id="parentEmail" label="Indirizzo Email" name="parentEmail" autoComplete="parentEmail" />
                   </Grid>
                   <Grid item xs={12}>
-                    <MuiTelInput disabled sx={{ width: "100%" }} defaultCountry="it" value={parentPhoneNumber} />
+                    <MuiTelInput disabled sx={{ width: "100%" }} defaultCountry="IT" value={parentPhoneNumber} />
                   </Grid>
                 </Grid>
 
                 <Grid item xs={12}>
                   <Box>
-                    <FormControlLabel disabled value={parentPrivacy} required control={<Checkbox value="accettaPrivacy" color="primary" />} label={privacyLabel} />
+                    <FormControlLabel disabled required control={<Checkbox checked={parentPrivacy} color="primary" />} label={<PrivacyLabel />} />
                   </Box>
                 </Grid>
               </Grid>
