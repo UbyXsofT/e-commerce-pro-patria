@@ -36,7 +36,28 @@ export interface PasswordSafety {
   detail: Length | LettereNumeri | MaiuscoloMinuscolo | CaratteriSpeciali;
 }
 
-type Length = "" | "| Password Troppo Lunga" | "| Password Troppo Corta";
-type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
-type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
-type CaratteriSpeciali = "";
+export type Length = "" | "| Password Troppo Lunga" | "| Password Troppo Corta";
+export type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
+export type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
+export type CaratteriSpeciali = "";
+
+export type Cookie = "accessToken" | "refreshToken";
+
+export type StoreAction = SetLoading | SetAuthEcommerce | SetAuthUser;
+
+export type SetLoading = {
+  type: "SET_LOADING";
+  payload: boolean;
+};
+
+export type SetAuthEcommerce = {
+  type: "SET_AUTH_ECOMMERCE";
+  payload: boolean;
+};
+
+export type SetAuthUser = {
+  type: "SET_AUTH_USER";
+  payload: UserData;
+};
+
+type UserData = any;
