@@ -21,7 +21,8 @@ import { useEffect, useState, useRef } from "react";
 import eCommerceConf from "eCommerceConf.json";
 import dayjs, { Dayjs } from "dayjs";
 
-import { Sex, Focus, AutocompleteSelected, Date, ComunePaese, PasswordSafety } from "src/components/CommonTypesInterfaces";
+import { Sex, Focus, AutocompleteSelected, Date, ComunePaese, PasswordSafety, UserData } from "src/components/CommonTypesInterfaces";
+
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 import { Paesi } from "src/components/account/register/ProvinciePaesi";
 
@@ -321,43 +322,6 @@ const SignUp = () => {
   };
 
   // TODO: Handle dateOfBirth and Cap
-
-  interface UserData {
-    user: {
-      codiceFiscale: string;
-      firstName: string;
-      lastName: string;
-      gender: Sex;
-      dateOfBirth: Date;
-      placeOfBirth: string;
-      provinceOfBirth: string;
-      address: string;
-      city: string;
-      cap: string;
-      province: string;
-      email: string;
-      phoneNumber: string;
-      privacy: boolean;
-      username: string;
-      password: string;
-    };
-    parent: {
-      parentCodiceFiscale: string;
-      parentFirstName: string;
-      parentLastName: string;
-      parentGender: Sex;
-      parentDateOfBirth: Date;
-      parentPlaceOfBirth: string;
-      parentProvinceOfBirth: string;
-      parentAddress: string;
-      parentCity: string;
-      parentCap: string;
-      parentProvince: string;
-      parentEmail: string;
-      parentPhoneNumber: string;
-      parentPrivacy: boolean;
-    } | null;
-  }
 
   const handleNext = () => {
     if ((underage && activeStep === 2) || (!underage && activeStep === 1)) {

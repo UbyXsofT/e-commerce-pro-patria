@@ -60,4 +60,39 @@ export type SetAuthUser = {
   payload: UserData;
 };
 
-type UserData = any;
+export interface UserData {
+  user: {
+    codiceFiscale: string;
+    firstName: string;
+    lastName: string;
+    gender: Sex;
+    dateOfBirth: Date;
+    placeOfBirth: string;
+    provinceOfBirth: string;
+    address: string;
+    city: string;
+    cap: string;
+    province: string;
+    email: string;
+    phoneNumber: string;
+    privacy: boolean;
+    username: string;
+    password: string;
+  };
+  parent: {
+    parentCodiceFiscale: string;
+    parentFirstName: string;
+    parentLastName: string;
+    parentGender: Sex;
+    parentDateOfBirth: Date;
+    parentPlaceOfBirth: string;
+    parentProvinceOfBirth: string;
+    parentAddress: string;
+    parentCity: string;
+    parentCap: string;
+    parentProvince: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+    parentPrivacy: boolean;
+  } | null;
+}
