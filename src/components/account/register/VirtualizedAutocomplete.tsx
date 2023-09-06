@@ -5,11 +5,11 @@ import Popper from "@mui/material/Popper";
 import { styled } from "@mui/material/styles";
 import { VariableSizeList } from "react-window";
 import Typography from "@mui/material/Typography";
-import { AutocompleteSelected, Comune } from "src/components/CommonTypesInterfaces";
+import { AutocompleteSelected, ComunePaese } from "src/components/CommonTypesInterfaces";
 
 const LISTBOX_PADDING = 8; // px
 
-type renderRowData = [object, Comune, number];
+type renderRowData = [object, ComunePaese, number];
 
 type renderRowType = {
   data: renderRowData[];
@@ -132,7 +132,7 @@ const StyledPopper = styled(Popper)({
 
 type VirtualizedAutocompleteTypes = {
   label: string;
-  comuni: Comune[];
+  comuni: ComunePaese[];
   placeOfBirth: string;
   setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
   selectedComune: AutocompleteSelected;
@@ -168,7 +168,7 @@ const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth,
         setSelectedComune(comune);
         setPlaceOfBirth(comune.nome);
         setProvinceOfBirth(comune.provincia.nome);
-        setCap ? setCap(comune.cap) : {};
+        setCap && comune.cap ? setCap(comune.cap) : {};
       }}
       onBlur={(e: React.FocusEvent<HTMLInputElement>) => setPlaceOfBirth(e.target.value.trim())}
       PopperComponent={StyledPopper}
