@@ -11,7 +11,7 @@ const PrivacyLabel = () => {
     <Typography>
       Iscrivendoti dichiari di aver preso visione dell'
       <span>
-        <Link href={eCommerceConf.LinkPrivacy} style={{ userSelect: "none", color: theme.palette.mode === "light" ? "black" : "white" }}>
+        <Link target="_blank" href={eCommerceConf.LinkPrivacy} style={{ userSelect: "none", color: theme.palette.mode === "light" ? "black" : "white" }}>
           Informativa sulla Privacy {<PrivacyTip sx={{ fontSize: "1rem", color: theme.palette.primary.main }}></PrivacyTip>}
         </Link>
       </span>
