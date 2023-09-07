@@ -25,6 +25,7 @@ import { Sex, Focus, AutocompleteSelected, Date, ComunePaese, PasswordSafety, Us
 
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 import { Paesi } from "src/components/account/register/ProvinciePaesi";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
   const theme = useTheme();
@@ -101,6 +102,8 @@ const SignUp = () => {
   const [disableButton, setDisablebutton] = useState(false);
 
   const [comuni, setComuni] = useState<ComunePaese[]>([]);
+
+  const [captcha, setCaptcha] = useState<string | null>(null);
 
   const stringUpperCase = (string: string) => {
     const arr = string.split(" ");
@@ -324,6 +327,7 @@ const SignUp = () => {
   // TODO: Handle dateOfBirth and Cap
 
   const handleNext = () => {
+    setCaptcha(null);
     if ((underage && activeStep === 2) || (!underage && activeStep === 1)) {
       const data: UserData = {
         user: { codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, provinceOfBirth, address, city, cap, province, email, phoneNumber, privacy, username, password },
@@ -369,8 +373,25 @@ const SignUp = () => {
   };
 
   const handleBack = () => {
+    setCaptcha(null);
     setActiveStep(activeStep - 1);
   };
+
+  const next = (
+    <Button variant="contained" disabled={disableButton} onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
+      Successivo
+    </Button>
+  );
+
+  const finalize = (
+    <div style={{ display: "flex" }}>
+      <ReCAPTCHA sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY} onChange={(token) => setCaptcha(token)} />
+
+      <Button variant="contained" disabled={disableButton && captcha ? true : !disableButton && captcha ? false : disableButton && !captcha ? true : true} onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
+        Finalizza
+      </Button>
+    </div>
+  );
 
   useEffect(() => {
     let correctStep = (underage && activeStep === 2) || (!underage && activeStep === 1);
@@ -406,7 +427,7 @@ const SignUp = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: mdUp ? 3 : 0 }}>
+      <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: mdUp ? 3 : 0, marginBottom: mdUp ? 3 : 0 }}>
         {/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
         {/* TODO: Icons are not centered properly */}
         <Stepper activeStep={activeStep} alternativeLabel>
@@ -480,9 +501,7 @@ const SignUp = () => {
                 </Button>
               )}
 
-              <Button variant="contained" disabled={disableButton} onClick={handleNext} sx={{ mt: "auto", ml: 1 }}>
-                {underage ? (activeStep === underageSteps.length - 1 ? "Finalizza" : "Successivo") : activeStep === steps.length - 1 ? "Finalizza" : "Successivo"}
-              </Button>
+              {underage ? (activeStep === underageSteps.length - 1 ? finalize : next) : activeStep === steps.length - 1 ? finalize : next}
             </Box>
           </React.Fragment>
         )}
