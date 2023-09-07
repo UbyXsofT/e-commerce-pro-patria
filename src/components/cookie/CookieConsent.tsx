@@ -1,12 +1,18 @@
 // components/CookieConsent.js
 
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Snackbar, Typography } from "@mui/material";
+import ManageCookies from "./ManageCookies";
 
 const CookieConsent = () => {
   const [open, setOpen] = React.useState(true);
+  const [manage, setManage] = useState(false);
 
-  const info_Txt = (
+  const [checkedTheme, setCheckedTheme] = React.useState(true);
+
+  const info_Txt = manage ? (
+    <ManageCookies checkedTheme={checkedTheme} setCheckedTheme={setCheckedTheme} />
+  ) : (
     <React.Fragment>
       <Typography component="p" fontSize={"1rem"} gutterBottom>
         Utilizziamo i cookie per aiutarti a navigare in modo efficiente ed eseguire determinate funzioni.
@@ -17,18 +23,17 @@ const CookieConsent = () => {
     </React.Fragment>
   );
 
-  const handleApprova = () => {
+  const updateData = (checkedTheme: boolean) => {};
+
+  const handleApprove = () => {
     // Implement your cookie approval logic here
+    manage ? updateData(checkedTheme) : updateData(true);
     setOpen(false);
   };
 
-  const handleGestisci = () => {
+  const handleManage = () => {
     // Implement your cookie approval logic here
-    setOpen(false);
-  };
-  const handleNega = () => {
-    // Implement your cookie approval logic here
-    setOpen(false);
+    setManage(!manage);
   };
 
   return (
@@ -39,15 +44,12 @@ const CookieConsent = () => {
       message={info_Txt}
       action={
         <Box sx={{ display: "flex" }}>
-          <Button sx={{ backgroundColor: "primary", m: 1 }} variant="outlined" size="small" onClick={handleNega}>
-            Rifiuta tutto
-          </Button>
-          <Button sx={{ backgroundColor: "primary", m: 1 }} variant="outlined" size="small" onClick={handleGestisci}>
-            Gestisci preferenze
+          <Button sx={{ backgroundColor: "primary", m: 1 }} variant="outlined" size="small" onClick={handleManage}>
+            {manage ? "Indietro" : "Gestisci preferenze"}
           </Button>
 
-          <Button sx={{ backgroundColor: "primary", m: 1 }} variant="contained" size="small" onClick={handleApprova}>
-            Accetta tutto
+          <Button sx={{ backgroundColor: "primary", m: 1 }} variant="contained" size="small" onClick={handleApprove}>
+            {manage ? "Accetta Selezionati" : "Accetta Tutto"}
           </Button>
         </Box>
       }
