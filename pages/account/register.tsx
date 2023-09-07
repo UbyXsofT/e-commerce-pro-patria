@@ -385,9 +385,9 @@ const SignUp = () => {
   }, [password, confirmPassword, passwordSafety, activeStep]);
 
   useEffect(() => {
-    const children = focus.current?.children[1].children[0];
-    if (children) {
-      (children as HTMLElement).focus();
+    const input = focus.current?.children[1].children[0];
+    if (input) {
+      (input as HTMLInputElement).focus();
     }
   }, [activeStep]);
 
