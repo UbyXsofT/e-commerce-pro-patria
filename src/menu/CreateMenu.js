@@ -11,6 +11,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Divider } from "@mui/material";
+
 export function CreateMenu(tipoMenu) {
   function generateMenuItem(id, label, onClick, icon, badgeContent, badgeColor, subItems, control) {
     return {

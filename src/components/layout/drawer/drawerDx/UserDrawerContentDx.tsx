@@ -1,29 +1,32 @@
-import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider } from "@mui/material";
+import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider, Theme } from "@mui/material";
 import * as React from "react";
 import { CreateMenu } from "../../../../menu/CreateMenu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
 import { IconButton } from "@mui/material";
-import { TemaControls } from "/src/components/theme/TemaControls";
+import { TemaControls } from "src/components/theme/TemaControls";
 
-const handleDrawerItemClick = (menuItem) => {
+const handleDrawerItemClick = (menuItem: any) => {
   console.log("handleDrawerItemClick : ", menuItem);
 };
 
-export const UserDrawerContentDx = ({ theme }) => {
+type UserDrawerContentDxType = {
+  theme?: Theme;
+};
+
+export const UserDrawerContentDx = ({ theme }: UserDrawerContentDxType) => {
   const menuItems = React.useMemo(() => CreateMenu("menuUtenteDx"), []);
-  console.log(menuItems);
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", padding: "15px" }}>
         <Typography variant="body1" noWrap component="div" sx={{ display: "block", marginBottom: "20px" }}>
           Ciao Ubaldo Formichetti
         </Typography>
-        <Avatar alt="Ualdo Formichetti" src="/images/utente.jpg" sx={{ width: 56, height: 56 }} />
+        <Avatar alt="Ubaldo Formichetti" src="/images/utente.jpg" sx={{ width: 56, height: 56 }} />
       </Box>
       <List>
-        {menuItems.map((item) =>
+        {menuItems.map((item: any) =>
           item.control ? (
             <ListItem key={item.id}>{item.control}</ListItem>
           ) : (

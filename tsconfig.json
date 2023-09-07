@@ -4,8 +4,8 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -21,6 +21,6 @@
       "/*": ["./"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/account/register/Step1.tsx", "pages/account/resetPassword.tsx", "src/components/theme/theme.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/account/register/Step1.tsx", "pages/account/resetPassword.tsx", "src/components/theme/theme.tsx", "src/menu/CreateMenu.js"],
   "exclude": ["node_modules"]
 }

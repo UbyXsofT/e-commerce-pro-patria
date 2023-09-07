@@ -18,6 +18,7 @@
     "@mui/material": "^5.14.5",
     "@mui/system": "^5.13.6",
     "@mui/x-date-pickers": "^6.9.1",
+    "@mui/x-tree-view": "^6.0.0-alpha.1",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "codice-fiscale-js": "^2.3.20",

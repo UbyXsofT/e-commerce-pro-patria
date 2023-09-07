@@ -1,9 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import { Typography } from "@mui/material";
+import { Theme, Typography } from "@mui/material";
 
-export const CarrelloDrawerContentDx = ({ theme }) => {
+type CarrelloDrawerContentDxProps = {
+  theme?: Theme;
+};
+
+export const CarrelloDrawerContentDx = ({ theme }: CarrelloDrawerContentDxProps) => {
   return (
     <>
       {" "}

@@ -1,5 +1,5 @@
 // Layout.js
-import React from "react";
+import React, { ReactChild, ReactElement, ReactNode } from "react";
 import { Box, Toolbar, Button } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerSx } from "./drawer/drawerSx/DrawerSx";
@@ -8,21 +8,22 @@ import { Header } from "./header/Header";
 import { Footer } from "./footer/Footer";
 import { AlertMe } from "./alert/AlertMe";
 import { Typography } from "@mui/material";
-import { UserDrawerContentDx } from "/src/components/layout/drawer/drawerDx/UserDrawerContentDx";
-import { CarrelloDrawerContentDx } from "/src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
-import CookieConsent from "/src/components/cookie/CookieConsent";
+import { UserDrawerContentDx } from "src/components/layout/drawer/drawerDx/UserDrawerContentDx";
+import { CarrelloDrawerContentDx } from "src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
+import CookieConsent from "src/components/cookie/CookieConsent";
 
-const Layout = ({ children }) => {
+type LayoutProps = {
+  children: ReactElement;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
   const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
   const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
   const pLeftDrawerOpen = "88px";
   const pLeftDrawerClose = "24px";
 
-  const toggleDrawerDx = () => {
-    setDrawerDxOpen((prevDrawerDxOpen) => !prevDrawerDxOpen); // Inverte il valore di drawerDxOpen utilizzando la funzione di callback di useState
-  };
-  const handleDrawerSxOpen = (open) => {
+  const handleDrawerSxOpen = (open: boolean) => {
     console.log("handleDrawerSxOpen: ", open);
     if (open) {
       // Chiudi il DrawerDx se DrawerSx viene espanso
@@ -44,9 +45,9 @@ const Layout = ({ children }) => {
   return (
     <animated.main style={mainAnimation}>
       <Box sx={{ display: "flex" }}>
-        <Header drawerDxOpen={drawerDxOpen} toggleDrawerDx={toggleDrawerDx} setTipoContesto={setTipoContesto} setDrawerDxOpen={setDrawerDxOpen} />
+        <Header drawerDxOpen={drawerDxOpen} tipoContesto={tipoContesto} setTipoContesto={setTipoContesto} setDrawerDxOpen={setDrawerDxOpen} />
         <DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
-        <DrawerDx drawerDxOpen={drawerDxOpen} toggleDrawerDx={toggleDrawerDx} tipoContesto={tipoContesto}>
+        <DrawerDx drawerDxOpen={drawerDxOpen} setDrawerDxOpen={setDrawerDxOpen} tipoContesto={tipoContesto}>
           {tipoContesto === "utente" ? <UserDrawerContentDx /> : <CarrelloDrawerContentDx />}
         </DrawerDx>
         <Box
@@ -56,7 +57,7 @@ const Layout = ({ children }) => {
             pr: 3,
             pt: 3,
             pb: 3,
-            marginTop: (theme) => `calc(${theme.mixins.toolbar.minHeight + 5}px)`,
+            marginTop: (theme) => `calc(${theme.mixins.toolbar.minHeight ? (theme.mixins.toolbar.minHeight as number) + 5 : 0}px)`,
             paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
           }}
         >

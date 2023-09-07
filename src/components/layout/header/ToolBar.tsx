@@ -18,11 +18,23 @@ const StyledImageLogo = styled(Image)({
   marginLeft: -30,
 });
 
-export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDrawerDxOpen }) => {
+type ToolBarProps = {
+  drawerDxOpen: boolean;
+  setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  tipoContesto: string;
+  setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoContesto }: ToolBarProps) => {
   const theme = useTheme();
-  const [drawerLocked, setDrawerLocked] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handlePopperOpen = (event) => {
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handlePopperOpen = (event: React.BaseSyntheticEvent) => {
+    if (!event.currentTarget) {
+      return;
+    }
+
     setAnchorEl(event.currentTarget);
   };
 
@@ -32,21 +44,15 @@ export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDraw
 
   const openPopper = Boolean(anchorEl);
 
-  const handleButtonClick = (target) => {
-    setDrawerLocked(!drawerLocked);
+  const handleButtonClick = (target: string) => {
+    if (target !== tipoContesto && drawerDxOpen) {
+      setTipoContesto(target);
+    } else {
+      setTipoContesto(target);
+      setDrawerDxOpen(!drawerDxOpen);
+    }
+
     //toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
-  };
-
-  const handleMouseEnter = () => {
-    if (!drawerLocked) {
-      setDrawerDxOpen(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (!drawerLocked) {
-      setDrawerDxOpen(false);
-    }
   };
 
   return (
@@ -132,14 +138,14 @@ export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDraw
             aria-label="show 1 item"
             color="inherit"
             onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
-            onMouseEnter={() => {
-              setTipoContesto("carrello");
-              handleMouseEnter();
-            }}
-            onMouseLeave={() => {
-              setTipoContesto("carrello");
-              handleMouseLeave();
-            }}
+            // onMouseEnter={() => {
+            //   setTipoContesto("carrello");
+            //   handleMouseEnter();
+            // }}
+            // onMouseLeave={() => {
+            //   setTipoContesto("carrello");
+            //   handleMouseLeave();
+            // }}
           >
             <Badge badgeContent={1} color="error">
               <ShoppingCartIcon />
@@ -152,14 +158,14 @@ export const ToolBar = ({ drawerDxOpen, toggleDrawerDx, setTipoContesto, setDraw
             aria-controls={menuId}
             aria-haspopup="true"
             onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
-            onMouseEnter={() => {
-              setTipoContesto("utente");
-              handleMouseEnter();
-            }}
-            onMouseLeave={() => {
-              setTipoContesto("utente");
-              handleMouseLeave();
-            }}
+            // onMouseEnter={() => {
+            //   setTipoContesto("utente");
+            //   handleMouseEnter();
+            // }}
+            // onMouseLeave={() => {
+            //   setTipoContesto("utente");
+            //   handleMouseLeave();
+            // }}
             color="inherit"
           >
             <AccountCircle />
