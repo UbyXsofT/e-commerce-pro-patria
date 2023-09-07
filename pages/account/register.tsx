@@ -385,13 +385,10 @@ const SignUp = () => {
   }, [password, confirmPassword, passwordSafety, activeStep]);
 
   useEffect(() => {
-    // TODO: Fix focus Type shit
-    // console.log(typeof focus?.current?.children[1].children[0].focus);
-    // if (!focus.current) {
-    //   return;
-    // }
-    // focus?.current?.children[1].children[0].focus();
-    // focus.current.children[1].children[0].focus();
+    const children = focus.current?.children[1].children[0];
+    if (children) {
+      (children as HTMLElement).focus();
+    }
   }, [activeStep]);
 
   return (
