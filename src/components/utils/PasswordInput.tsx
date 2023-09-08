@@ -30,6 +30,7 @@ const PasswordInput = ({ value, setValue, name, label, id, fullWidth, margin, er
       fullWidth={fullWidth ? fullWidth : false}
       type={showPassword ? "text" : "password"}
       error={error ? error : false}
+      onBlur={(e) => setValue(e.target.value.trim())}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Grid, Typography, TextField, Button, Paper, Link, CssBaseline } from "@mui/material";
 
 import Router from "next/router";
+import CodiceFiscale from "codice-fiscale-js";
 
 type Step1Props = {
   smUp: boolean;
@@ -26,10 +27,21 @@ const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale
         </Grid>
 
         <Grid item xs={12}>
-          <TextField value={email} onChange={(event) => setEmail(event.target.value)} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
+          <TextField value={email} onChange={(event) => setEmail(event.target.value.trim())} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
         </Grid>
         <Grid item xs={12}>
-          <TextField value={codiceFiscale} onChange={(event) => setCodiceFiscale(event.target.value)} required fullWidth id="codiceFiscale" label="Codice Fiscale" name="codiceFiscale" autoComplete="codiceFiscale" />
+          <TextField
+            value={codiceFiscale}
+            onChange={(event) => setCodiceFiscale(event.target.value.toUpperCase())}
+            inputProps={{ minLength: 16, maxLength: 16 }}
+            required
+            fullWidth
+            id="codiceFiscale"
+            label="Codice Fiscale"
+            name="codiceFiscale"
+            autoComplete="codiceFiscale"
+            error={!CodiceFiscale.check(codiceFiscale) && codiceFiscale.length !== 0}
+          />
         </Grid>
 
         <Grid item xs={12}>
@@ -55,7 +67,7 @@ const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale
             >
               Annulla
             </Link>
-            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)}>
+            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)} disabled={!email || !codiceFiscale}>
               Invia
             </Button>
           </div>
