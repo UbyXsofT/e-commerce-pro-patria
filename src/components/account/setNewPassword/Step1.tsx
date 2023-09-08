@@ -1,8 +1,10 @@
 import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import Router from "next/router";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import PasswordInput from "src/components/utils/PasswordInput";
+import SecurePassword from "../SecurePassword";
+import { PasswordSafety } from "src/components/CommonTypesInterfaces";
 
 type Step1Props = {
   smUp: boolean;
@@ -14,6 +16,8 @@ type Step1Props = {
 };
 
 const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }: Step1Props) => {
+  const [passwordSafety, setPasswordSafety] = useState<PasswordSafety>({ correct: false, detail: "" });
+
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <CssBaseline />
@@ -27,10 +31,14 @@ const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword,
         </Grid>
 
         <Grid item xs={12}>
-          <PasswordInput value={newPassword} setValue={setNewPassword} fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
+          <PasswordInput value={newPassword} setValue={setNewPassword} error={!passwordSafety.correct && newPassword.length > 0} margin="normal" fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
         </Grid>
         <Grid item xs={12}>
-          <PasswordInput value={confirmNewPassword} setValue={setConfirmNewPassword} fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
+          <PasswordInput value={confirmNewPassword} setValue={setConfirmNewPassword} error={newPassword !== confirmNewPassword && newPassword.length > 0} fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
+        </Grid>
+
+        <Grid item xs={12}>
+          <SecurePassword password={newPassword} passwordSafety={passwordSafety} setPasswordSafety={setPasswordSafety} />
         </Grid>
 
         <Grid item xs={12}>
@@ -56,7 +64,7 @@ const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword,
             >
               Annulla
             </Link>
-            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)}>
+            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)} disabled={!passwordSafety.correct || newPassword !== confirmNewPassword}>
               Conferma
             </Button>
           </div>
