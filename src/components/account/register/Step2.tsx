@@ -7,6 +7,7 @@ import Container from "@mui/material/Container";
 import "dayjs/locale/it";
 import SecurePassword from "src/components/account/SecurePassword";
 import { Focus, PasswordSafety } from "src/components/CommonTypesInterfaces";
+import PasswordInput from "src/components/utils/PasswordInput";
 
 type Step2Props = {
   focus: React.MutableRefObject<Focus>;
@@ -50,21 +51,10 @@ const Step2 = ({ focus, email, setEmail, username, setUsername, password, setPas
             </Grid>
             <Grid container item xs={12} md={6} spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  error={!passwordSafety.correct && password.length > 0}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="password"
-                  name="password"
-                  type="password"
-                  required
-                  fullWidth
-                  id="password"
-                  label="Password"
-                />
+                <PasswordInput value={password} setValue={setPassword} name="password" fullWidth id="password" label="Password" error={!passwordSafety.correct && password.length > 0} />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   error={password !== confirmPassword && password.length > 0}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -75,7 +65,8 @@ const Step2 = ({ focus, email, setEmail, username, setUsername, password, setPas
                   fullWidth
                   id="confirmPassword"
                   label="Conferma Password"
-                />
+                />                 */}
+                <PasswordInput value={confirmPassword} setValue={setConfirmPassword} name="confirmPassword" fullWidth id="confirmPassword" label="Conferma Password" error={password !== confirmPassword && password.length > 0} />
               </Grid>
               <Grid item xs={12}>
                 <SecurePassword password={password} passwordSafety={passwordSafety} setPasswordSafety={setPasswordSafety}></SecurePassword>

@@ -1,14 +1,16 @@
 import { Button, CssBaseline, Grid, Link, Paper, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import Router from "next/router";
+import { Dispatch, SetStateAction } from "react";
+import PasswordInput from "src/components/utils/PasswordInput";
 
 type Step1Props = {
   smUp: boolean;
-  setDone: Function;
+  setDone: Dispatch<SetStateAction<boolean>>;
   newPassword: string;
-  setNewPassword: Function;
+  setNewPassword: Dispatch<SetStateAction<string>>;
   confirmNewPassword: string;
-  setConfirmNewPassword: Function;
+  setConfirmNewPassword: Dispatch<SetStateAction<string>>;
 };
 
 const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword, setConfirmNewPassword }: Step1Props) => {
@@ -25,10 +27,10 @@ const Step1 = ({ smUp, setDone, newPassword, setNewPassword, confirmNewPassword,
         </Grid>
 
         <Grid item xs={12}>
-          <TextField value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
+          <PasswordInput value={newPassword} setValue={setNewPassword} fullWidth id="newPassword" label="Nuova Password" name="newPassword" />
         </Grid>
         <Grid item xs={12}>
-          <TextField value={confirmNewPassword} onChange={(event) => setConfirmNewPassword(event.target.value)} required fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
+          <PasswordInput value={confirmNewPassword} setValue={setConfirmNewPassword} fullWidth id="confirmNewPassword" label="Conferma Nuova Password" name="confirmNewPassword" />
         </Grid>
 
         <Grid item xs={12}>

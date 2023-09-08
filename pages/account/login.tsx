@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
-import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, CssBaseline } from "@mui/material";
+import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, AppBar, Toolbar, Paper, Box, Avatar, Link, CssBaseline, InputAdornment, IconButton } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -30,6 +30,8 @@ import logOutUser from "src/components/utils/logOutUser";
 import { setAuthUser } from "src/store/actions";
 import { useDispatch } from "react-redux";
 import Layout from "src/components/layout/LayoutLogin";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PasswordInput from "src/components/utils/PasswordInput";
 
 const Login = () => {
   const theme = useTheme();
@@ -311,21 +313,9 @@ const Login = () => {
                         },
                       }}
                     />
-                    <TextField
-                      value={password}
-                      onChange={(event) => {
-                        console.log(event.target.value);
-                        return setPassword(event.target.value);
-                      }}
-                      margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                    />
+
+                    <PasswordInput value={password} setValue={setPassword} name="password" id="password" label="Password" fullWidth={true} margin="normal" />
+
                     <FormControlLabel control={<Checkbox value="remember" color="primary" checked={ricordami} onClick={() => setRicordami(!ricordami)} />} label="Ricordati di me" />
 
                     {/* Add the reCAPTCHA component */}
