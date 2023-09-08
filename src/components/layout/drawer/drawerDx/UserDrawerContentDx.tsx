@@ -1,13 +1,10 @@
 import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider, Theme } from "@mui/material";
 import * as React from "react";
-import { CreateMenu } from "../../../../menu/CreateMenu";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import AutoModeIcon from "@mui/icons-material/AutoMode";
-import { IconButton } from "@mui/material";
 import { TemaControls } from "src/components/theme/TemaControls";
+import { MenuItem } from "src/components/CommonTypesInterfaces";
+import CreateMenu from "src/menu/CreateMenu";
 
-const handleDrawerItemClick = (menuItem: any) => {
+const handleDrawerItemClick = (menuItem: MenuItem) => {
   console.log("handleDrawerItemClick : ", menuItem);
 };
 
@@ -26,7 +23,7 @@ export const UserDrawerContentDx = ({ theme }: UserDrawerContentDxType) => {
         <Avatar alt="Ubaldo Formichetti" src="/images/utente.jpg" sx={{ width: 56, height: 56 }} />
       </Box>
       <List>
-        {menuItems.map((item: any) =>
+        {menuItems.map((item: MenuItem) =>
           item.control ? (
             <ListItem key={item.id}>{item.control}</ListItem>
           ) : (

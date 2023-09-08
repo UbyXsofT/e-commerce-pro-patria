@@ -21,6 +21,6 @@
       "/*": ["./"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/account/register/Step1.tsx", "pages/account/resetPassword.tsx", "src/components/theme/theme.tsx", "src/menu/CreateMenu.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/account/register/Step1.tsx", "pages/account/resetPassword.tsx", "src/components/theme/theme.tsx", "src/menu/CreateMenu.tsx"],
   "exclude": ["node_modules"]
 }

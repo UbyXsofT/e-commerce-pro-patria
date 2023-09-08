@@ -96,3 +96,14 @@ export interface UserData {
     parentPrivacy: boolean;
   } | null;
 }
+
+export interface MenuItem {
+  id: string;
+  label: string | null;
+  onClick: Function | null;
+  icon: React.JSX.Element | null;
+  badgeContent: null;
+  badgeColor: null;
+  subItems: MenuItem[];
+  control?: React.JSX.Element | null;
+}

@@ -1,6 +1,4 @@
 import * as React from "react";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import UtilityIcon from "@mui/icons-material/Construction";
 import DocumentIcon from "@mui/icons-material/Description";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -11,9 +9,10 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Divider } from "@mui/material";
+import { MenuItem } from "src/components/CommonTypesInterfaces";
 
-export function CreateMenu(tipoMenu) {
-  function generateMenuItem(id, label, onClick, icon, badgeContent, badgeColor, subItems, control) {
+const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
+  const generateMenuItem = (id: string, label: string | null, onClick: Function | null, icon: React.JSX.Element | null, badgeContent: null, badgeColor: null, subItems: any[], control?: React.JSX.Element | null): MenuItem => {
     return {
       id,
       label,
@@ -21,10 +20,10 @@ export function CreateMenu(tipoMenu) {
       icon,
       badgeContent,
       badgeColor,
-      subItems: subItems ? subItems.map((subItem) => generateMenuItem(...Object.values(subItem))) : [],
+      subItems,
       control,
     };
-  }
+  };
 
   const menuDriverSX = [
     generateMenuItem(
@@ -197,6 +196,8 @@ export function CreateMenu(tipoMenu) {
   };
 
   const selectedMenu = menuOptions[tipoMenu];
-  console.log(`${tipoMenu}: `, selectedMenu);
+  // console.log(`${tipoMenu}: `, selectedMenu);
   return selectedMenu;
-}
+};
+
+export default CreateMenu;

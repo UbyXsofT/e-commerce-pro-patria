@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Divider, Typography } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { styled, useTheme } from "@mui/material/styles";
-import { CreateMenu } from "/src/menu/CreateMenu";
+import CreateMenu from "src/menu/CreateMenu";
 import { MiniDrawer } from "./MiniDrawer";
 import { TreeViewComp } from "./TreeViewComp";
 
