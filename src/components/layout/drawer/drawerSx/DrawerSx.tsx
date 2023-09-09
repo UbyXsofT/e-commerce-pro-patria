@@ -5,31 +5,36 @@ import { styled, useTheme } from "@mui/material/styles";
 import CreateMenu from "src/menu/CreateMenu";
 import { MiniDrawer } from "./MiniDrawer";
 import { TreeViewComp } from "./TreeViewComp";
+import { MenuItem } from "src/components/CommonTypesInterfaces";
 
-export function DrawerSx({ onOpen }) {
+type DrawerSxProps = {
+  onOpen: (open: boolean) => void;
+};
+
+const DrawerSx = ({ onOpen }: DrawerSxProps) => {
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [curDrawerWidth, setCurDrawerWidth] = useState(205);
-  const [expandedDrawerItem, setExpandedDrawerItem] = useState(null);
+  const [expandedDrawerItem, setExpandedDrawerItem] = useState<MenuItem | null>(null);
   const [showBox, setShowBox] = useState(false);
   const menuItems = React.useMemo(() => CreateMenu("menuDriverSX"), []);
   const boxWidth = 300;
-  const boxContainerRef = React.useRef(false);
-  const [curItemSelect, setCurItemSelect] = React.useState(0);
+  const boxContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const [curItemSelect, setCurItemSelect] = React.useState("0");
 
   React.useEffect(() => {
-    const handleClickOutsideBox = (event) => {
-      if (boxContainerRef.current && !boxContainerRef.current.contains(event.target)) {
+    const handleClickOutsideBox = (event: MouseEvent) => {
+      if (boxContainerRef.current && !boxContainerRef.current.contains(event.target as Node)) {
         setExpandedDrawerItem(null);
         setShowBox(false);
         setOpenDrawer(false);
       }
     };
-    const handleEscapeKey = (event) => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setExpandedDrawerItem(null);
         setShowBox(false);
-        setCurItemSelect(0);
+        setCurItemSelect("0");
       }
     };
     document.addEventListener("mousedown", handleClickOutsideBox);
@@ -55,11 +60,11 @@ export function DrawerSx({ onOpen }) {
     setOpenDrawer(false);
   };
 
-  const handleDrawerItemClick = (menuItem) => {
+  const handleDrawerItemClick = (menuItem: MenuItem) => {
     if (expandedDrawerItem ? expandedDrawerItem : null === menuItem) {
       setExpandedDrawerItem(null);
       setShowBox(false);
-      setCurItemSelect(0);
+      setCurItemSelect("0");
     } else {
       if (curItemSelect !== menuItem.id) {
         setExpandedDrawerItem(menuItem);
@@ -69,13 +74,13 @@ export function DrawerSx({ onOpen }) {
       } else {
         setExpandedDrawerItem(null);
         setShowBox(false);
-        setCurItemSelect(0);
+        setCurItemSelect("0");
       }
     }
   };
 
   const StyledTitleBoxSubItem = styled(Typography)(({ theme }) => ({
-    color: theme.palette.text,
+    color: theme.palette.text.primary,
     display: "flex",
     justifyContent: "center",
     backgroundColor: theme.palette.primary.main,
@@ -85,7 +90,7 @@ export function DrawerSx({ onOpen }) {
     width: boxWidth,
     height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
     position: "fixed",
-    top: theme.mixins.toolbar.minHeight + 10,
+    top: theme.mixins.toolbar.minHeight ? (theme.mixins.toolbar.minHeight as number) + 10 : 10,
     backgroundColor: theme.palette.background.paper,
     boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
     overflow: "auto",
@@ -127,4 +132,6 @@ export function DrawerSx({ onOpen }) {
       )}
     </>
   );
-}
+};
+
+export default DrawerSx;

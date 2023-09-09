@@ -2,7 +2,6 @@
 import React, { ReactChild, ReactElement, ReactNode } from "react";
 import { Box, Toolbar, Button } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
-import { DrawerSx } from "./drawer/drawerSx/DrawerSx";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
 import { Header } from "./header/Header";
 import { Footer } from "./footer/Footer";
@@ -11,6 +10,7 @@ import { Typography } from "@mui/material";
 import { UserDrawerContentDx } from "src/components/layout/drawer/drawerDx/UserDrawerContentDx";
 import { CarrelloDrawerContentDx } from "src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
 import CookieConsent from "src/components/cookie/CookieConsent";
+import DrawerSx from "./drawer/drawerSx/DrawerSx";
 
 type LayoutProps = {
   children: ReactElement;

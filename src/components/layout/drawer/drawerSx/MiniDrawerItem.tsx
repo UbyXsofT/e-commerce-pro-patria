@@ -1,9 +1,17 @@
 import React from "react";
 import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { MenuItem } from "src/components/CommonTypesInterfaces";
 
 // Componente DrawerItem
-export function MiniDrawerItem({ item, openDrawer, handleDrawerItemClick, expandedDrawerItem }) {
+type MiniDrawerItemProps = {
+  item: MenuItem;
+  openDrawer: boolean;
+  handleDrawerItemClick: (menuItem: MenuItem) => void;
+  expandedDrawerItem: null | any;
+};
+
+export function MiniDrawerItem({ item, openDrawer, handleDrawerItemClick, expandedDrawerItem }: MiniDrawerItemProps) {
   return (
     <ListItem
       key={item.id}
@@ -12,7 +20,7 @@ export function MiniDrawerItem({ item, openDrawer, handleDrawerItemClick, expand
         backgroundColor: expandedDrawerItem ? (expandedDrawerItem.id === item.id ? (theme) => theme.palette.primary.main : "inherit") : null,
       }}
     >
-      <ListItemButton onClick={() => (item.onClick ? item.onClick() : handleDrawerItemClick(item))}>
+      <ListItemButton onClick={(e) => (item.onClick ? item.onClick(e) : handleDrawerItemClick(item))}>
         <Box
           sx={{
             display: "flex",

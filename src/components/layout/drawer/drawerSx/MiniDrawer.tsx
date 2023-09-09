@@ -2,15 +2,28 @@ import React from "react";
 import { Divider, List, ListItem, ListItemButton, Typography } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { styled, useTheme } from "@mui/material/styles";
+import { Theme, styled, useTheme } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import { MiniDrawerItem } from "./MiniDrawerItem";
 import { useSpring, animated } from "@react-spring/web";
+import { MenuItem } from "src/components/CommonTypesInterfaces";
 // Componente Drawer
-export function MiniDrawer({ menuItems, openDrawer, handleDrawerClose, handleDrawerOpen, handleDrawerItemClick, expandedDrawerItem, titleDrawer, drawerWidth }) {
+
+type MiniDrawerProps = {
+  menuItems: MenuItem[];
+  openDrawer: boolean;
+  handleDrawerClose: () => void;
+  handleDrawerOpen: () => void;
+  handleDrawerItemClick: (menuItem: MenuItem) => void;
+  expandedDrawerItem: null | any;
+  titleDrawer: string;
+  drawerWidth: string;
+};
+
+export function MiniDrawer({ menuItems, openDrawer, handleDrawerClose, handleDrawerOpen, handleDrawerItemClick, expandedDrawerItem, titleDrawer, drawerWidth }: MiniDrawerProps) {
   const theme = useTheme();
 
-  const openedMixin = (theme) => ({
+  const openedMixin = (theme: Theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -19,7 +32,7 @@ export function MiniDrawer({ menuItems, openDrawer, handleDrawerClose, handleDra
     overflowX: "hidden",
   });
 
-  const closedMixin = (theme) => ({
+  const closedMixin = (theme: Theme) => ({
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -31,17 +44,31 @@ export function MiniDrawer({ menuItems, openDrawer, handleDrawerClose, handleDra
     },
   });
 
+  // TODO: Figue out why I had to swap out your functions... Functionality is intact
   const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
     boxSizing: "border-box",
     ...(open && {
-      ...openedMixin(theme),
+      width: drawerWidth,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      overflowX: "hidden",
       "& .MuiDrawer-paper": openedMixin(theme),
     }),
     ...(!open && {
-      ...closedMixin(theme),
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: "hidden",
+      width: `calc(${theme.spacing(7)} + 1px)`,
+      [theme.breakpoints.up("sm")]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+      },
       "& .MuiDrawer-paper": closedMixin(theme),
     }),
   }));

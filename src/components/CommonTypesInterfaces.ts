@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { MouseEventHandler } from "react";
 
 export type Sex = null | "male" | "female";
 
@@ -100,7 +101,7 @@ export interface UserData {
 export interface MenuItem {
   id: string;
   label: string | null;
-  onClick: Function | null;
+  onClick: MouseEventHandler | null;
   icon: React.JSX.Element | null;
   badgeContent: null;
   badgeColor: null;

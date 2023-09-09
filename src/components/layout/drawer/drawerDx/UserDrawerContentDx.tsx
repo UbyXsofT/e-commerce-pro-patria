@@ -28,7 +28,7 @@ export const UserDrawerContentDx = ({ theme }: UserDrawerContentDxType) => {
             <ListItem key={item.id}>{item.control}</ListItem>
           ) : (
             <ListItem key={item.id} disablePadding>
-              <ListItemButton onClick={() => (item.onClick ? item.onClick() : handleDrawerItemClick(item))}>
+              <ListItemButton onClick={(e) => (item.onClick ? item.onClick(e) : handleDrawerItemClick(item))}>
                 <Box
                   sx={{
                     display: "flex",

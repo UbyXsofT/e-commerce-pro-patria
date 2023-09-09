@@ -12,7 +12,7 @@ import { Divider } from "@mui/material";
 import { MenuItem } from "src/components/CommonTypesInterfaces";
 
 const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
-  const generateMenuItem = (id: string, label: string | null, onClick: Function | null, icon: React.JSX.Element | null, badgeContent: null, badgeColor: null, subItems: any[], control?: React.JSX.Element | null): MenuItem => {
+  const generateMenuItem = (id: string, label: string | null, onClick: React.MouseEventHandler | null, icon: React.JSX.Element | null, badgeContent: null, badgeColor: null, subItems: any[], control?: React.JSX.Element | null): MenuItem => {
     return {
       id,
       label,
