@@ -11,24 +11,30 @@ import LoadingOverlay from "../src/components/utils/LoadingOverlay";
 import ThemeColorListener from "../src/components/theme/ThemeColorListener";
 import { AlertMeProvider } from "../src/components/layout/alert/AlertMeContext";
 
-import { wrapper } from "/src/store/store";
+import { wrapper } from "src/store/store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import BlockPage from "./blockPage";
+import { StoreState } from "src/components/CommonTypesInterfaces";
 
 const clientSideEmotionCache = createEmotionCache();
 
-function MyApp(props) {
+const MyApp = (props: {
+  Component: React.ComponentType<any>; // The Component prop is a React component.
+  emotionCache?: any; // The emotionCache prop is optional and can have any type.
+  pageProps: any; // The pageProps prop is required and can have any type.
+}) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   const router = useRouter();
-  const authEcommerce = useSelector((state) => state.authEcommerce);
-  const authUser = useSelector((state) => state.authUser);
+  const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
+  const authUser = useSelector((state: StoreState) => state.authUser);
 
   const isAuthenticated = authEcommerce && authUser;
   const requiresAuth = router.pathname.startsWith("/auth");
 
   const [themeMode, setThemeMode] = React.useState("light");
-  const isLoading = useSelector((state) => state.loading);
+  const isLoading = useSelector((state: StoreState) => state.loading);
   const [autoMode, setAutoMode] = React.useState("true");
 
   useEffect(() => {
@@ -87,7 +93,7 @@ function MyApp(props) {
       </CacheProvider>
     </>
   );
-}
+};
 
 export default wrapper.withRedux(MyApp);
 

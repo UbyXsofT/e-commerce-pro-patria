@@ -11,6 +11,7 @@ import CookieManager from "../src/components/cookie/CookieManager";
 //redux
 import { setAuthEcommerce, setAuthUser } from "../src/store/actions";
 import { useDispatch } from "react-redux";
+import css from "styled-jsx/css";
 
 export const lato = Lato({
   weight: ["300", "400"],
@@ -33,10 +34,10 @@ const Index = () => {
   // console.log("theme: ", theme);
   const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
   const [isAuthEcommerce, setIsAuthEcommerce] = React.useState(false);
-  const [routerToPush, setRouterToPush] = React.useState(false);
+  const [routerToPush, setRouterToPush] = React.useState<null | string>(null);
 
   const startRedirect = () => {
-    if (isAuthEcommerce === true && routerToPush !== false) {
+    if (isAuthEcommerce === true && routerToPush) {
       Router.push(routerToPush);
     } else if (routerToPush === networkError) {
       Router.push(networkError);
@@ -178,7 +179,7 @@ const Index = () => {
 
   const H1 = styled(animated.h1)({
     //blocco colore Testo prima riga
-    fontFamily: poppins,
+    fontFamily: poppins.style.fontFamily,
     color: theme.palette.text.primary,
     fontSize: 32,
     display: "flex",
@@ -221,8 +222,8 @@ const Index = () => {
 
   const P = styled(animated.p)({
     //blocco testo colore seconda riga
-    fontWeight: 400,
-    fontFamily: lato,
+    fontWeight: "400",
+    fontFamily: lato.style.fontFamily,
     color: theme.palette.text.primary,
     fontSize: 12,
     textTransform: "uppercase",
@@ -230,8 +231,6 @@ const Index = () => {
   });
 
   const mainBlockAnimation = useSpring({
-    width: "0%",
-    left: "0",
     from: { width: "0%", left: "0" },
     to: async (next) => {
       await next({ width: "100%", left: "0" });
@@ -244,8 +243,6 @@ const Index = () => {
   });
 
   const secBlockAnimation = useSpring({
-    width: "0%",
-    left: "0",
     from: { width: "0%", left: "0" },
     to: async (next) => {
       await next({ width: "100%", left: "0" });
@@ -285,7 +282,7 @@ const Index = () => {
         opacity: 1,
         bottom: 45,
       });
-      await next({ width: 7, height: 7, bottom: 0, width: 15 });
+      await next({ width: 7, height: 7, bottom: 0 });
       await next({ width: 10, height: 10, bottom: 20 });
       await next({
         width: 7,

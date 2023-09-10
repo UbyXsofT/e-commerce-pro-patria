@@ -61,6 +61,48 @@ export type SetAuthUser = {
   payload: UserData;
 };
 
+export interface StoreState {
+  loading: boolean;
+  authEcommerce: boolean;
+  authUser: AuthUser | null;
+}
+
+// Work In Progress, check in with Antonio for Definition
+export interface AuthUser {
+  ISAUTH: "0" | "1";
+  USERID: string;
+  ADMIN: "0" | "1";
+  EMAIL: string;
+  ATTIVAZ: string;
+  PRIMOACC: "0" | "1";
+  ESITO: "0" | "1";
+  ERRMSG: string;
+  NOMINATIVO: string;
+  EMAILCENTRO: string;
+  TELCENTRO: string;
+  EMAILCONSULENTE: string;
+  CELLCONSULENTE: string;
+  EMAILISTRUTTORE: string;
+  CELLISTRUTTORE: string;
+  EMAILFISIOTERAPISTA: string;
+  CELLFISIOTERAPISTA: string;
+  EMAILESTETISTA: string;
+  CELLESTETISTA: string;
+  EMAILMEDICO: string;
+  CELLMEDICO: string;
+  NEWCOM: "0" | "1";
+  NEWAVV: "0" | "1";
+  IRR: "0" | "1";
+  CARRELLO: "0" | "1";
+  PREN: "0" | "1";
+  PROMO: "0" | "1";
+  CONV: "0" | "1";
+  VIDEO: "0" | "1";
+  DOC: "0" | "1";
+  PARTNER: "0" | "1";
+  PAYPAL: "0" | "1";
+  LISTACENTRI: string;
+}
 export interface UserData {
   user: {
     codiceFiscale: string;
