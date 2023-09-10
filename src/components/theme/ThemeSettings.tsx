@@ -6,70 +6,105 @@ import AutoModeIcon from "@mui/icons-material/AutoMode";
 import { IconButton } from "@mui/material";
 import { ThemeContext } from "./ThemeContext";
 import { styled, useTheme } from "@mui/material/styles";
-import { green } from "@mui/material/colors";
+import { green, grey } from "@mui/material/colors";
 
 export const ThemeSettings = () => {
   const theme = useTheme();
-  const [autoMode, setAutoMode] = React.useState(true);
-  const { toggleThemeMode } = React.useContext(ThemeContext);
+  const { themeMode, setThemeMode, autoMode, setAutoMode } = React.useContext(ThemeContext);
 
   const isDarkMode = theme.palette.mode === "dark";
 
   const [colorIconTemaChiaro, setColorIconTemaChiaro] = React.useState<string>(isDarkMode ? "inherit" : theme.palette.primary.main);
   const [colorIconTemaScuro, setColorIconTemaScuro] = React.useState<string>(isDarkMode ? theme.palette.primary.main : "inherit");
-  const [colorIconTemaAuto, setColorIconTemaAuto] = React.useState<string>(autoMode ? green[600] : theme.palette.grey[800]);
-
-  // React.useEffect(() => {
-  //   console.log(autoMode);
-  // }, [autoMode]);
+  const [colorIconTemaAuto, setColorIconTemaAuto] = React.useState<string>(autoMode ? green[600] : grey[700]);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      console.log("isDarkModeHook");
+    setColorIconTemaAuto(autoMode === "true" ? green[600] : grey[700]);
+  }, [autoMode]);
 
-      const autoModeExists = localStorage.getItem("autoMode") === "true" || "false" ? true : false;
-      autoModeExists ? setAutoMode(localStorage.getItem("autoMode") as unknown as boolean) : {};
-      const storedThemeMode = localStorage.getItem("themeMode");
-      const initialThemeMode = storedThemeMode || (isDarkMode ? "dark" : "light");
-      initialThemeMode === "dark" ? changeColorIcon("Dark") : changeColorIcon("Light");
-      toggleThemeMode(initialThemeMode);
+  // React.useEffect(() => {
+  //   if (typeof window !== "undefined" && window.localStorage) {
+  //     const autoModeExists = localStorage.getItem("autoMode") === "true" || "false" ? true : false;
+  //     autoModeExists ? setAutoMode(localStorage.getItem("autoMode") as unknown as boolean) : {};
+  //     const storedThemeMode = localStorage.getItem("themeMode");
+  //     const initialThemeMode = storedThemeMode || (isDarkMode ? "dark" : "light");
+  //     initialThemeMode === "dark" ? changeColorIcon("Dark") : changeColorIcon("Light");
+  //     toggleThemeMode(initialThemeMode);
+  //   }
+  // }, [isDarkMode]);
+
+  // React.useMemo(() => {
+  //   if (typeof window !== "undefined" && window.localStorage) {
+  //     localStorage.setItem("autoMode", !autoMode as unknown as string);
+  //   }
+  // }, [autoMode]);
+
+  // const handleModeClick = (mode: "Light" | "Dark" | "Auto") => {
+  //   mode === "Auto" ? setAutoMode(!autoMode) : {};
+  //   changeColorIcon(mode);
+  //   toggleThemeMode(mode === "Light" ? "light" : "dark");
+  //   localStorage.setItem("autoMode", "true");
+  // };
+
+  // const changeColorIcon = (icona: "Light" | "Dark" | "Auto") => {
+  //   autoMode ? setColorIconTemaAuto(green[600]) : setColorIconTemaAuto(theme.palette.grey[700]);
+  //   if (icona === "Light") {
+  //     setColorIconTemaChiaro(theme.palette.primary.main);
+  //     setColorIconTemaScuro("inherit");
+  //   } else if (icona === "Dark") {
+  //     setColorIconTemaChiaro("inherit");
+  //     setColorIconTemaScuro(theme.palette.primary.main);
+  //   }
+  // };
+
+  React.useEffect(() => {
+    if (isDarkMode) {
+      setColorIconTemaChiaro("inherit");
+      setColorIconTemaScuro(theme.palette.primary.main);
+    } else {
+      setColorIconTemaChiaro(theme.palette.primary.main);
+      setColorIconTemaScuro("inherit");
     }
   }, [isDarkMode]);
 
-  React.useMemo(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      localStorage.setItem("autoMode", autoMode as unknown as string);
-    }
-  }, [autoMode]);
+  const handleThemeChange = (newSetting: "Light" | "Dark" | "Auto") => {
+    switch (newSetting) {
+      case "Light":
+        setColorIconTemaChiaro(theme.palette.primary.main);
+        setColorIconTemaScuro("inherit");
+        setThemeMode("light");
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("themeMode", "light");
+        }
+        break;
 
-  const handleModeClick = (mode: "Light" | "Dark" | "Auto") => {
-    console.log("Click", mode);
+      case "Dark":
+        setColorIconTemaChiaro("inherit");
+        setColorIconTemaScuro(theme.palette.primary.main);
+        setThemeMode("dark");
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("themeMode", "dark");
+        }
+        break;
 
-    mode === "Auto" ? setAutoMode(!autoMode) : {};
-    changeColorIcon(mode);
-    toggleThemeMode(mode === "Light" ? "light" : "dark");
-    //localStorage.setItem("autoMode", true);
-  };
+      case "Auto":
+        autoMode === "true" ? setAutoMode("false") : setAutoMode("true");
+        setColorIconTemaAuto(autoMode === "false" ? green[600] : grey[700]);
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("autoMode", autoMode === "false" ? "true" : "false");
+        }
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        autoMode === "false" ? setThemeMode(mediaQuery.matches ? "dark" : "light") : {};
 
-  const changeColorIcon = (icona: "Light" | "Dark" | "Auto") => {
-    console.log("CHANGE ICON COLOR:", icona);
+        console.log(mediaQuery);
 
-    autoMode ? setColorIconTemaAuto(green[600]) : setColorIconTemaAuto(theme.palette.grey[800]);
-    if (icona === "Light") {
-      setColorIconTemaChiaro(theme.palette.primary.main);
-      setColorIconTemaScuro("inherit");
-    } else if (icona === "Dark") {
-      setColorIconTemaChiaro("inherit");
-      setColorIconTemaScuro(theme.palette.primary.main);
+        break;
     }
   };
 
   return (
-    <>
-      {/* <Divider /> */}
-      <Typography variant="body1" component="div" sx={{ display: "flex", flexDirection: "row", justifyContent: "center", marginTop: "10px" }}>
-        Modalità tema
-      </Typography>
+    <div>
+      <Typography sx={{ textAlign: "center" }}>Modalità Tema</Typography>
       <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
         <FormControlLabel
           label="Chiaro"
@@ -79,7 +114,7 @@ export const ThemeSettings = () => {
               size="large"
               aria-label="Tema chiaro"
               onClick={() => {
-                handleModeClick("Light");
+                handleThemeChange("Light");
               }}
               sx={{ color: colorIconTemaChiaro }}
             >
@@ -96,7 +131,7 @@ export const ThemeSettings = () => {
               sx={{ color: colorIconTemaScuro }}
               aria-label="Tema scuro"
               onClick={() => {
-                handleModeClick("Dark");
+                handleThemeChange("Dark");
               }}
             >
               <DarkModeIcon />
@@ -112,7 +147,7 @@ export const ThemeSettings = () => {
               sx={{ color: colorIconTemaAuto }}
               aria-label="Tema automatico"
               onClick={() => {
-                handleModeClick("Auto");
+                handleThemeChange("Auto");
               }}
             >
               <AutoModeIcon />
@@ -120,6 +155,6 @@ export const ThemeSettings = () => {
           }
         />
       </Box>
-    </>
+    </div>
   );
 };

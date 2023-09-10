@@ -4,6 +4,6 @@ import * as React from "react";
 export const ThemeContext = React.createContext();
 
 // Esporta il provider del contesto del tema
-export function ThemeProvider({ children, toggleThemeMode }) {
-  return <ThemeContext.Provider value={{ toggleThemeMode }}>{children}</ThemeContext.Provider>;
+export function ThemeProvider({ children, themeMode, setThemeMode, autoMode, setAutoMode }) {
+  return <ThemeContext.Provider value={{ themeMode, setThemeMode, autoMode, setAutoMode }}>{children}</ThemeContext.Provider>;
 }

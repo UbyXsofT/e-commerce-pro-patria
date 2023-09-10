@@ -29,25 +29,24 @@ function MyApp(props) {
 
   const [themeMode, setThemeMode] = React.useState("light");
   const isLoading = useSelector((state) => state.loading);
-  const [autoMode, setAutoMode] = React.useState("false");
+  const [autoMode, setAutoMode] = React.useState("true");
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const savedThemeMode = localStorage.getItem("themeMode");
-      setAutoMode(localStorage.getItem("autoMode"));
-      if (savedThemeMode) {
-        setThemeMode(savedThemeMode);
-      }
+      const savedAutoMode = localStorage.getItem("autoMode");
+      savedAutoMode ? setAutoMode(savedAutoMode) : {};
+      savedThemeMode ? setThemeMode(savedThemeMode) : {};
     }
   }, []);
 
-  const toggleThemeMode = (newThemeMode) => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      localStorage.setItem("themeMode", newThemeMode);
-      setThemeMode(newThemeMode);
-      setAutoMode(localStorage.getItem("autoMode"));
-    }
-  };
+  // const toggleThemeMode = (newThemeMode) => {
+  //   if (typeof window !== "undefined" && window.localStorage) {
+  //     localStorage.setItem("themeMode", newThemeMode);
+  //     setThemeMode(newThemeMode);
+  //     setAutoMode(localStorage.getItem("autoMode"));
+  //   }
+  // };
 
   const appTheme = React.useMemo(() => {
     return {
@@ -77,7 +76,7 @@ function MyApp(props) {
             <Head>
               <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
-            <CustomThemeProvider toggleThemeMode={toggleThemeMode}>
+            <CustomThemeProvider themeMode={themeMode} setThemeMode={setThemeMode} autoMode={autoMode} setAutoMode={setAutoMode}>
               {autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
               <CssBaseline />
               {isLoading && <LoadingOverlay />}
