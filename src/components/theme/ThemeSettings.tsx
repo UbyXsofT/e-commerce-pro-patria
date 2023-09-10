@@ -1,4 +1,4 @@
-import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider } from "@mui/material";
+import { Box, Typography, FormControlLabel } from "@mui/material";
 import * as React from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
@@ -71,51 +71,54 @@ export const ThemeSettings = () => {
         Modalità tema
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
-        <Box sx={{ display: "flex", flexDirection: "column-reverse", alignItems: "center" }}>
-          <Typography variant="body1" component="div">
-            Chiaro
-          </Typography>
-          <IconButton
-            size="large"
-            aria-label="Tema chiaro"
-            onClick={() => {
-              handleModeClick("Light");
-            }}
-            sx={{ color: colorIconTemaChiaro }}
-          >
-            <LightModeIcon />
-          </IconButton>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "column-reverse", alignItems: "center" }}>
-          <Typography variant="body1" component="div">
-            Scuro
-          </Typography>
-          <IconButton
-            size="large"
-            sx={{ color: colorIconTemaScuro }}
-            aria-label="Tema scuro"
-            onClick={() => {
-              handleModeClick("Dark");
-            }}
-          >
-            <DarkModeIcon />
-          </IconButton>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "column-reverse", alignItems: "center" }}>
-          <Typography variant="body1" component="div">
-            Auto
-          </Typography>
-          <IconButton
-            size="large"
-            sx={{ color: colorIconTemaAuto }}
-            aria-label="Tema automatico"
-            onClick={() => {
-              handleModeClick("Auto");
-            }}
-          >
-            <AutoModeIcon />
-          </IconButton>
-        </Box>
+        <FormControlLabel
+          label="Chiaro"
+          labelPlacement="bottom"
+          control={
+            <IconButton
+              size="large"
+              aria-label="Tema chiaro"
+              onClick={() => {
+                handleModeClick("Light");
+              }}
+              sx={{ color: colorIconTemaChiaro }}
+            >
+              <LightModeIcon />
+            </IconButton>
+          }
+        />
+        <FormControlLabel
+          label="Scuro"
+          labelPlacement="bottom"
+          control={
+            <IconButton
+              size="large"
+              sx={{ color: colorIconTemaScuro }}
+              aria-label="Tema scuro"
+              onClick={() => {
+                handleModeClick("Dark");
+              }}
+            >
+              <DarkModeIcon />
+            </IconButton>
+          }
+        />
+        <FormControlLabel
+          label="Auto"
+          labelPlacement="bottom"
+          control={
+            <IconButton
+              size="large"
+              sx={{ color: colorIconTemaAuto }}
+              aria-label="Tema automatico"
+              onClick={() => {
+                handleModeClick("Auto");
+              }}
+            >
+              <AutoModeIcon />
+            </IconButton>
+          }
+        />
       </Box>
     </>
   );
