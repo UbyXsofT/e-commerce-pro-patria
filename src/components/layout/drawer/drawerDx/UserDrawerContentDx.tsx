@@ -1,6 +1,6 @@
 import { Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, List, Avatar, Divider, Theme } from "@mui/material";
 import * as React from "react";
-import { TemaControls } from "src/components/theme/TemaControls";
+import { ThemeSettings } from "src/components/theme/ThemeSettings";
 import { MenuItem } from "src/components/CommonTypesInterfaces";
 import CreateMenu from "src/menu/CreateMenu";
 
@@ -54,7 +54,7 @@ export const UserDrawerContentDx = ({ theme }: UserDrawerContentDxType) => {
       </List>
 
       <>
-        <TemaControls />
+        <ThemeSettings />
       </>
     </>
   );

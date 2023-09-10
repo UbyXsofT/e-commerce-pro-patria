@@ -8,50 +8,57 @@ import { ThemeContext } from "./ThemeContext";
 import { styled, useTheme } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 
-export const TemaControls = () => {
+export const ThemeSettings = () => {
   const theme = useTheme();
-  const [autoMode, setAutoMode] = React.useState("false");
+  const [autoMode, setAutoMode] = React.useState(true);
   const { toggleThemeMode } = React.useContext(ThemeContext);
-
-  const [colorIconTemaChiaro, setColorIconTemaChiaro] = React.useState();
-  const [colorIconTemaScuro, setColorIconTemaScuro] = React.useState();
-  const [colorIconTemaAuto, setColorIconTemaAuto] = React.useState();
 
   const isDarkMode = theme.palette.mode === "dark";
 
+  const [colorIconTemaChiaro, setColorIconTemaChiaro] = React.useState<string>(isDarkMode ? "inherit" : theme.palette.primary.main);
+  const [colorIconTemaScuro, setColorIconTemaScuro] = React.useState<string>(isDarkMode ? theme.palette.primary.main : "inherit");
+  const [colorIconTemaAuto, setColorIconTemaAuto] = React.useState<string>(autoMode ? green[600] : theme.palette.grey[800]);
+
+  // React.useEffect(() => {
+  //   console.log(autoMode);
+  // }, [autoMode]);
+
   React.useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
-      setAutoMode(localStorage.getItem("autoMode"));
+      console.log("isDarkModeHook");
+
+      const autoModeExists = localStorage.getItem("autoMode") === "true" || "false" ? true : false;
+      autoModeExists ? setAutoMode(localStorage.getItem("autoMode") as unknown as boolean) : {};
       const storedThemeMode = localStorage.getItem("themeMode");
       const initialThemeMode = storedThemeMode || (isDarkMode ? "dark" : "light");
-      initialThemeMode === "dark" ? changeColorIcon("Scuro") : changeColorIcon("Chiaro");
-      console.log("initialThemeMode: ", initialThemeMode);
+      initialThemeMode === "dark" ? changeColorIcon("Dark") : changeColorIcon("Light");
       toggleThemeMode(initialThemeMode);
     }
   }, [isDarkMode]);
 
   React.useMemo(() => {
-    console.log("useMemo autoMode: ", autoMode);
     if (typeof window !== "undefined" && window.localStorage) {
-      localStorage.setItem("autoMode", autoMode);
+      localStorage.setItem("autoMode", autoMode as unknown as string);
     }
   }, [autoMode]);
 
-  const handleModeClick = (mode) => {
-    console.log("handleModeClick : ", mode);
-    mode === "Auto" ? (autoMode === "true" ? setAutoMode("false") : setAutoMode("true")) : null;
+  const handleModeClick = (mode: "Light" | "Dark" | "Auto") => {
+    console.log("Click", mode);
+
+    mode === "Auto" ? setAutoMode(!autoMode) : {};
     changeColorIcon(mode);
-    toggleThemeMode(mode === "Chiaro" ? "light" : "dark");
+    toggleThemeMode(mode === "Light" ? "light" : "dark");
     //localStorage.setItem("autoMode", true);
   };
 
-  const changeColorIcon = (icona) => {
-    console.log("autoMode: ", autoMode);
-    autoMode === "true" ? setColorIconTemaAuto(green[600]) : setColorIconTemaAuto(theme.palette.grey[800]);
-    if (icona === "Chiaro") {
+  const changeColorIcon = (icona: "Light" | "Dark" | "Auto") => {
+    console.log("CHANGE ICON COLOR:", icona);
+
+    autoMode ? setColorIconTemaAuto(green[600]) : setColorIconTemaAuto(theme.palette.grey[800]);
+    if (icona === "Light") {
       setColorIconTemaChiaro(theme.palette.primary.main);
       setColorIconTemaScuro("inherit");
-    } else if (icona === "Scuro") {
+    } else if (icona === "Dark") {
       setColorIconTemaChiaro("inherit");
       setColorIconTemaScuro(theme.palette.primary.main);
     }
@@ -72,7 +79,7 @@ export const TemaControls = () => {
             size="large"
             aria-label="Tema chiaro"
             onClick={() => {
-              handleModeClick("Chiaro");
+              handleModeClick("Light");
             }}
             sx={{ color: colorIconTemaChiaro }}
           >
@@ -88,7 +95,7 @@ export const TemaControls = () => {
             sx={{ color: colorIconTemaScuro }}
             aria-label="Tema scuro"
             onClick={() => {
-              handleModeClick("Scuro");
+              handleModeClick("Dark");
             }}
           >
             <DarkModeIcon />
