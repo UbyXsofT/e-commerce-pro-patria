@@ -24,7 +24,6 @@ const Layout = ({ children }: LayoutProps) => {
   const pLeftDrawerClose = "24px";
 
   const handleDrawerSxOpen = (open: boolean) => {
-    console.log("handleDrawerSxOpen: ", open);
     if (open) {
       // Chiudi il DrawerDx se DrawerSx viene espanso
       setDrawerDxOpen(false);

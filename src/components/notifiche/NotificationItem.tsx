@@ -4,7 +4,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DoneIcon from "@mui/icons-material/Done";
 import { styled, useTheme } from "@mui/material/styles";
 
-function NotificheItem({ id, text, read, onDelete, onMarkAsRead, index }) {
+type NotificationItemProps = {
+  id: number;
+  read: boolean;
+  text: React.JSX.Element;
+  onDelete: (id: number) => void;
+  onMarkAsRead: (id: number) => void;
+  index: number;
+};
+
+function NotificheItem({ id, text, read, onDelete, onMarkAsRead, index }: NotificationItemProps) {
   const theme = useTheme();
   const isLightMode = theme.palette.mode === "light";
 

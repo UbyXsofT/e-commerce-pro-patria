@@ -51,12 +51,12 @@ const DrawerSx = ({ onOpen }: DrawerSxProps) => {
   }, [openDrawer]);
 
   const handleDrawerOpen = () => {
-    console.log("Opening Drawer.. Current openDrawer state:", openDrawer);
+    // console.log("Opening Drawer.. Current openDrawer state:", openDrawer);
     setOpenDrawer(true);
   };
 
   const handleDrawerClose = () => {
-    console.log("Closing Drawer.. Current openDrawer state:", openDrawer);
+    // console.log("Closing Drawer.. Current openDrawer state:", openDrawer);
     setOpenDrawer(false);
   };
 

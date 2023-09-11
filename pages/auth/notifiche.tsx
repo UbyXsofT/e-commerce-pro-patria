@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Container, Grid, Typography, TextField, Button, Checkbox, FormControlLabel, FormControl, FormHelperText, Link, Fade, AppBar, Toolbar, Collapse, List } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -11,23 +11,30 @@ import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
-import NotificationItem from "../../src/components/notifiche/NotificheItem";
+import NotificationItem from "../../src/components/notifiche/NotificationItem";
 
 //*-- API---*//
 //import home from "../api/home";
+type NotificheProps = {
+  setLoading: (isLoading: boolean) => {
+    type: string;
+    payload: boolean;
+  };
+};
 
-const Notifiche = ({ setLoading }) => {
+const Notifiche = ({ setLoading }: NotificheProps) => {
   // Rendi visibile il loading impostando setLoading su true
-  React.useEffect(() => {
-    setLoading(true);
-    // Effettua le operazioni di caricamento, se necessario
-    // Qui puoi fare richieste API, ottenere i dati, ecc.
-    // Quando hai completato il caricamento, imposta isLoading su false:
-    setTimeout(() => {
-      console.log("Esempio ritardo nel caricare i dati di secondi");
-      setLoading(false);
-    }, 3000);
-  }, []);
+  // React.useEffect(() => {
+  //   setLoading(true);
+  //   // Effettua le operazioni di caricamento, se necessario
+  //   // Qui puoi fare richieste API, ottenere i dati, ecc.
+  //   // Quando hai completato il caricamento, imposta isLoading su false:
+  //   setTimeout(() => {
+  //     console.log("Esempio ritardo nel caricare i dati di secondi");
+  //     setLoading(false);
+  //   }, 3000);
+  // }, []);
+
   const theme = useTheme();
 
   const [notifications, setNotifications] = React.useState([
@@ -129,36 +136,40 @@ const Notifiche = ({ setLoading }) => {
     },
     // Add more notifications here
   ]);
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     setNotifications(notifications.filter((notification) => notification.id !== id));
   };
 
-  const handleMarkAsRead = (id) => {
+  const handleMarkAsRead = (id: number) => {
     setNotifications(notifications.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)));
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Layout
-        //digitare il titolo della pagina e la descrizione della pagina.
-        title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-        description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+      //digitare il titolo della pagina e la descrizione della pagina.
+      // title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+      // description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
       >
-        <Typography variant="h5" component="h1" gutterBottom>
-          NOTIFICHE PAGE (avvisi e messaggi)
-        </Typography>
+        <div>
+          <Typography variant="h5" component="h1" gutterBottom>
+            Messaggi e Avvisi
+          </Typography>
 
-        <List>
-          {notifications.map((notification, index) => (
-            <NotificationItem
-              key={notification.id}
-              index={index} // Pass index here
-              {...notification}
-              onDelete={handleDelete}
-              onMarkAsRead={handleMarkAsRead}
-            />
-          ))}
-        </List>
+          <List>
+            {notifications.map((notification, index) => (
+              <NotificationItem
+                key={notification.id}
+                id={notification.id}
+                text={notification.text}
+                index={index} // Pass index here
+                read={notification.read}
+                onDelete={handleDelete}
+                onMarkAsRead={handleMarkAsRead}
+              />
+            ))}
+          </List>
+        </div>
       </Layout>
     </ThemeProvider>
   );

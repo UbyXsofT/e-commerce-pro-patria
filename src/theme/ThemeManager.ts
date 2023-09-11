@@ -70,7 +70,7 @@ const listaTemi = [
 
 export function ThemeManager() {
   const projectTema = eCommerceConf.Tema;
-  console.log("projectTema: ", projectTema);
+  // console.log("projectTema: ", projectTema);
 
   const currTema = listaTemi.find((tema) => tema.key === projectTema);
 
