@@ -9,7 +9,7 @@ export function ScrollToTopBtn() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 350) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -51,13 +51,13 @@ export function ScrollToTopBtn() {
     position: "fixed",
     bottom: 16,
     right: 16,
-    zIndex: 999,
+    zIndex: isVisible ? 999 : -1,
     opacity: isVisible ? 1 : 0,
     animation: `${isVisible ? fadeIn : fadeOut} 0.3s ease`,
   });
 
   return (
-    <StyledFab variant="extended" aria-label="Scroll To Top" onClick={scrollToTop}>
+    <StyledFab variant="extended" aria-label="Scroll To Top" onClick={isVisible ? scrollToTop : () => {}}>
       <NavigationIcon sx={{ mr: 1 }} />
       Sali
     </StyledFab>
