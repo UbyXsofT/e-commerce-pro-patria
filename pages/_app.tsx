@@ -81,7 +81,7 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
             <CustomThemeProvider themeMode={themeMode} setThemeMode={setThemeMode} autoMode={autoMode} setAutoMode={setAutoMode}>
               {autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
               <CssBaseline />
-              {isLoading && <LoadingOverlay />}
+              {isLoading ? <LoadingOverlay /> : <></>}
               <Component {...pageProps} />
             </CustomThemeProvider>
           </AlertMeProvider>

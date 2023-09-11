@@ -198,7 +198,7 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <LoadingWrapper visualizzaLoading={visLoader}>
+      <LoadingWrapper showLoader={visLoader}>
         <Layout
           //digitare il titolo della pagina e la descrizione della pagina.
           title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}

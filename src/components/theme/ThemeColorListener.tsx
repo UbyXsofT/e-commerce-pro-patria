@@ -1,10 +1,14 @@
 import * as React from "react";
 
-const ThemeColorListener = ({ setThemeMode }) => {
+type ThemeColorListenerProps = {
+  setThemeMode: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const ThemeColorListener = ({ setThemeMode }: ThemeColorListenerProps) => {
   React.useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const handleChange = (e) => {
+    const handleChange = (e: MediaQueryListEvent) => {
       const newThemeMode = e.matches ? "dark" : "light";
       setThemeMode(newThemeMode);
       localStorage.setItem("themeMode", newThemeMode);
