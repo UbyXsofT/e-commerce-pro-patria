@@ -93,8 +93,8 @@ export interface AuthUser {
   NEWCOM: "0" | "1";
   NEWAVV: "0" | "1";
   IRR: "0" | "1";
-  CARRELLO: "0" | "1";
-  PREN: "0" | "1";
+  CARRELLO: string;
+  PREN: string;
   PROMO: "0" | "1";
   CONV: "0" | "1";
   VIDEO: "0" | "1";

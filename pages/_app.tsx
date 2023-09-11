@@ -19,11 +19,7 @@ import { StoreState } from "src/components/CommonTypesInterfaces";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const MyApp = (props: {
-  Component: React.ComponentType<any>; // The Component prop is a React component.
-  emotionCache?: any; // The emotionCache prop is optional and can have any type.
-  pageProps: any; // The pageProps prop is required and can have any type.
-}) => {
+const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any; pageProps: any }) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   const router = useRouter();

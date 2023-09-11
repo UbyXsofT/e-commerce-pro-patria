@@ -5,7 +5,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
 import { IconButton } from "@mui/material";
 import { ThemeContext } from "./ThemeContext";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { green, grey } from "@mui/material/colors";
 
 export const ThemeSettings = () => {
@@ -95,8 +95,9 @@ export const ThemeSettings = () => {
         }
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
         autoMode === "false" ? setThemeMode(mediaQuery.matches ? "dark" : "light") : {};
-
-        console.log(mediaQuery);
+        if (typeof window !== "undefined" && window.localStorage && autoMode === "false") {
+          localStorage.setItem("themeMode", mediaQuery.matches ? "dark" : "light");
+        }
 
         break;
     }
