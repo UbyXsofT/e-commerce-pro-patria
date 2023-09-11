@@ -1,6 +1,6 @@
 // AlertMe.js
 
-import React from "react";
+import React, { useContext } from "react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -20,7 +20,7 @@ export function AlertMe() {
     <div
       style={{
         position: "fixed",
-        top: `calc(${theme.mixins.toolbar.minHeight + 60}px)`,
+        top: `calc(${theme.mixins.toolbar.minHeight ? (theme.mixins.toolbar.minHeight as number) + 60 : 60}px)`,
         left: 0,
         right: 0,
         bottom: 0,
