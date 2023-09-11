@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import eCommerceConf from "/eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 
 const date = new Date().getFullYear();
 export default function Copyright() {

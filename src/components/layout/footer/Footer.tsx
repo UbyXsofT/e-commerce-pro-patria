@@ -26,7 +26,8 @@ export function Footer() {
 
   // Definiamo l'animazione per le proprietà di posizione con useSpring
   const positionAnimationProps = useSpring({
-    position: isFooterFixed ? "fixed" : "relative",
+    bottom: isFooterFixed ? 20 : 0,
+
     config: { duration: 300 }, // Opzionale: personalizza la durata dell'animazione di posizione
   });
 
@@ -34,13 +35,13 @@ export function Footer() {
     <animated.footer
       style={{
         ...positionAnimationProps,
-        bottom: isFooterFixed ? 20 : 0,
         left: isFooterFixed ? 100 : 0,
         right: isFooterFixed ? 50 : 0,
+        position: isFooterFixed ? "fixed" : "relative",
       }}
     >
       <Container
-        maxWidth="xxl"
+        maxWidth={false}
         sx={{
           backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.grey[200] : theme.palette.grey[900]),
           color: (theme) => (theme.palette.mode === "light" ? theme.palette.grey[600] : theme.palette.grey[400]),
@@ -91,9 +92,8 @@ export function Footer() {
 
         <Divider sx={{ mb: "1rem", mt: "1rem" }} />
 
-        <PrivacyCookie>
-          <ScrollToTopBtn />
-        </PrivacyCookie>
+        <PrivacyCookie />
+
         <Divider sx={{ mb: "1rem", mt: "1rem" }} />
 
         <Box
@@ -111,6 +111,8 @@ export function Footer() {
             <Copyright />
           </Typography>
         </Box>
+
+        <ScrollToTopBtn />
       </Container>
     </animated.footer>
   );

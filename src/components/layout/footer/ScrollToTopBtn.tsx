@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { styled } from "@mui/system";
+import { keyframes, styled } from "@mui/system";
 import Button from "@mui/material/Button";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Fab } from "@mui/material";
+import NavigationIcon from "@mui/icons-material/Navigation";
 
 export function ScrollToTopBtn() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
+      if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -29,20 +30,36 @@ export function ScrollToTopBtn() {
     });
   };
 
-  const StyledButton = styled(Button)({
+  const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+  const fadeOut = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
+  const StyledFab = styled(Fab)({
     position: "fixed",
     bottom: 16,
     right: 16,
     zIndex: 999,
+    opacity: isVisible ? 1 : 0,
+    animation: `${isVisible ? fadeIn : fadeOut} 0.3s ease`,
   });
 
   return (
-    <>
-      {isVisible && (
-        <StyledButton color="primary" aria-label="Scroll to top" onClick={scrollToTop}>
-          <KeyboardArrowUpIcon />
-        </StyledButton>
-      )}
-    </>
+    <StyledFab variant="extended" aria-label="Scroll To Top" onClick={scrollToTop}>
+      <NavigationIcon sx={{ mr: 1 }} />
+      Sali
+    </StyledFab>
   );
 }

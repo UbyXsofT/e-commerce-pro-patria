@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import { HowToReg, PrivacyTip, Cookie } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import eCommerceConf from "/eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import Router from "next/router";
 
 export function PrivacyCookie() {
