@@ -43,7 +43,7 @@ const Home = ({ setLoading }: HomeProps) => {
   );
 
   React.useEffect(() => {
-    showAlert(null, "warning", "Orari segreteria Example", textAlert, true);
+    showAlert("filled", "warning", "Orari segreteria Example", textAlert, true);
   }, []);
 
   // Rendi visibile il loading impostando setLoading su true

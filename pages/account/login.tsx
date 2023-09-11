@@ -78,7 +78,7 @@ const Login = () => {
           </h3>
         </React.Fragment>
       );
-      await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+      await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
       return;
     }
 
@@ -130,7 +130,7 @@ const Login = () => {
               </React.Fragment>
             );
             setVisLoader(false);
-            await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+            await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
           }
         } else {
           // Gestisci l'errore di autenticazione o l'errore di connessione
@@ -142,7 +142,7 @@ const Login = () => {
             </React.Fragment>
           );
           setVisLoader(false);
-          await showAlert(null, "error", "ATTENZIONE!", textAlert, true);
+          await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
         }
       } catch (error) {
         setVisLoader(false);

@@ -7,7 +7,7 @@ const AlertMeContext = createContext<AlerMeContext>({
     variant: "standard",
     severity: "success",
     title: "",
-    desc: "",
+    desc: undefined,
     openAlertMe: false,
   },
   setAlertParams: () => {},
@@ -22,14 +22,14 @@ interface alertParams {
   variant: "standard" | "filled" | "outlined";
   severity: AlertColor;
   title: string;
-  desc: string;
+  desc?: React.JSX.Element;
   openAlertMe: boolean;
 }
 
 interface AlerMeContext {
   alertParams: alertParams;
   setAlertParams: React.Dispatch<React.SetStateAction<alertParams>>;
-  showAlert: (variant: "standard" | "filled" | "outlined", severity: AlertColor, title: string, desc: string, openAlertMe: boolean) => void;
+  showAlert: (variant: "standard" | "filled" | "outlined", severity: AlertColor, title: string, desc: React.JSX.Element, openAlertMe: boolean) => void;
 }
 
 export const AlertMeProvider = ({ children }: AlertMeProviderProps) => {
@@ -37,18 +37,18 @@ export const AlertMeProvider = ({ children }: AlertMeProviderProps) => {
     variant: "filled",
     severity: "error",
     title: "",
-    desc: "",
+    desc: undefined,
     openAlertMe: false,
   });
 
   // Function to trigger the display of the alert with custom parameters
-  const showAlert = (variant: "standard" | "filled" | "outlined", severity: AlertColor, title: string, desc: string, openAlertMe: boolean) => {
+  const showAlert = (variant: "standard" | "filled" | "outlined", severity: AlertColor, title: string, desc: React.JSX.Element, openAlertMe: boolean) => {
     // Set the desired parameters for the alert
     setAlertParams({
       variant: variant !== null ? variant : "filled",
       severity: severity !== null ? severity : "success",
       title: title !== null ? title : "Titolo",
-      desc: desc !== null ? desc : "",
+      desc: desc !== null ? desc : undefined,
       openAlertMe: openAlertMe !== null ? openAlertMe : true,
     });
   };
