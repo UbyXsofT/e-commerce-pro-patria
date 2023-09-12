@@ -1,6 +1,6 @@
-import { TreeView, TreeItem } from "@mui/x-tree-view";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { TreeItem, TreeView } from "@mui/lab";
 import { MenuItem } from "src/components/CommonTypesInterfaces";
 // Componente TreeViewItem
 
