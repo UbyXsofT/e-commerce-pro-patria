@@ -57,9 +57,6 @@ const Index = () => {
           //setVisLoader(true);
           const obyPostData = {
             clienteKey: eCommerceConf.ClienteKey,
-            userName: null,
-            password: null,
-            ricordami: null,
             accessToken: accessToken,
             refreshToken: refreshToken,
           };
