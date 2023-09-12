@@ -30,30 +30,31 @@ export function ScrollToTopBtn() {
     });
   };
 
-  const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
+  //   const fadeIn = keyframes`
+  //   0% {
+  //     opacity: 0;
+  //   }
+  //   100% {
+  //     opacity: 1;
+  //   }
+  // `;
 
-  const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
+  //   const fadeOut = keyframes`
+  //   0% {
+  //     opacity: 1;
+  //   }
+  //   100% {
+  //     opacity: 0;
+  //   }
+  // `;
+
   const StyledFab = styled(Fab)({
     position: "fixed",
     bottom: 16,
     right: 16,
     zIndex: isVisible ? 999 : -1,
     opacity: isVisible ? 1 : 0,
-    animation: `${isVisible ? fadeIn : fadeOut} 0.3s ease`,
+    // animation: `${isVisible ? fadeIn : fadeOut} 0.3s ease`,
   });
 
   return (
