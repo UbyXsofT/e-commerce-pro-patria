@@ -71,7 +71,7 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
         let newAuthUser = authUser;
 
         !newAuthEcommerce ? (newAuthEcommerce = (await AuthEcommerceHelper(dispatch)).result) : {};
-        !newAuthUser ? (newAuthUser = (await AuthUserHelper(dispatch, true)).response) : {};
+        !newAuthUser ? (newAuthUser = (await AuthUserHelper(dispatch, newAuthEcommerce)).response) : {};
 
         if (!newAuthEcommerce || !newAuthUser) {
           router.push(

@@ -13,6 +13,7 @@ import { setAuthEcommerce, setAuthUser } from "../src/store/actions";
 import { useDispatch } from "react-redux";
 import css from "styled-jsx/css";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
+import AuthUserHelper from "src/store/AuthUserHelper";
 
 export const lato = Lato({
   weight: ["300", "400"],
@@ -46,76 +47,11 @@ const Index = () => {
   };
 
   React.useEffect(() => {
-    if (isAuthEcommerce === true) {
-      const accessToken = CookieManager.getCookie("accessToken");
-      const refreshToken = CookieManager.getCookie("refreshToken");
-
-      if (accessToken || refreshToken) {
-        //TODO prima di mandarlo nella home, nel caso di un accesso per un utente che possiede un token salvato
-        //bisogna simulare un login passando i token alla chiamata login
-        console.log("FORZO LA VERIFICA DEL TOKEN CON CHIAMATA AL SERVER PER EFFETTUARE UN LOGIN");
-        const fetchData = async () => {
-          //setVisLoader(true);
-          const obyPostData = {
-            clienteKey: eCommerceConf.ClienteKey,
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-          };
-
-          try {
-            const respCall = await callNodeService("login", obyPostData, null);
-            console.log("respCall: ", respCall);
-            const msg_Resp = respCall.messageCli.message;
-
-            if (respCall.successCli) {
-              if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
-                //****** TOKENS
-                // Salva il accessToken di accesso come cookie o nello stato dell'applicazione
-                CookieManager.setCookie("accessToken", msg_Resp.accessToken);
-                if (msg_Resp.refreshToken) {
-                  // Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
-                  CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
-                } else {
-                  //rimuovo l'eventuale refreshToken
-                  CookieManager.removeCookie("refreshToken");
-                }
-                //****** UTENTE
-                // Aggiorna lo stato dell'OGGETTO utente
-                try {
-                  console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
-                  dispatch(setAuthUser(msg_Resp.respWCF));
-                  //Router.push("/auth/home");
-                  setRouterToPush("/auth/home");
-                } catch (error) {
-                  console.log("Aggiorna Redux AuthUser:", error);
-                }
-              } else {
-                console.log("msg_Resp: ", msg_Resp);
-                setRouterToPush("/account/login");
-                //Router.push("/account/login");
-              }
-            } else {
-              setRouterToPush("/account/login");
-              //Router.push("/account/login");
-            }
-          } catch (error) {
-            //setVisLoader(false);
-            console.error("Errore nella chiamata:", error);
-          }
-        };
-        fetchData();
-      } else {
-        setRouterToPush("/account/login");
-        //Router.push("/account/login");
-      }
-    } else {
-      setRouterToPush(networkError);
-    }
-  }, [isAuthEcommerce]);
-
-  React.useEffect(() => {
     const updateEcommerceAuth = async () => {
-      setIsAuthEcommerce((await AuthEcommerceHelper(dispatch)).result);
+      const authEcommerce = (await AuthEcommerceHelper(dispatch)).result;
+      setIsAuthEcommerce(authEcommerce);
+      const route = (await AuthUserHelper(dispatch, authEcommerce)).route;
+      route ? setRouterToPush(route) : {};
     };
     updateEcommerceAuth();
   }, [dispatch]);
