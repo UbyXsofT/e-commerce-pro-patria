@@ -32,6 +32,7 @@ import { useDispatch } from "react-redux";
 import Layout from "src/components/layout/LayoutLogin";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
+import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 
 const Login = () => {
   const theme = useTheme();
@@ -45,6 +46,8 @@ const Login = () => {
   const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 
   React.useEffect(() => {
+    AuthEcommerceHelper(dispatch);
+
     try {
       logOutUser(dispatch);
     } catch (error) {

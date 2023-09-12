@@ -12,6 +12,7 @@ import CookieManager from "../src/components/cookie/CookieManager";
 import { setAuthEcommerce, setAuthUser } from "../src/store/actions";
 import { useDispatch } from "react-redux";
 import css from "styled-jsx/css";
+import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 
 export const lato = Lato({
   weight: ["300", "400"],
@@ -113,28 +114,10 @@ const Index = () => {
   }, [isAuthEcommerce]);
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const respCall = await callNodeService("access-ecommerce", { clienteKey: eCommerceConf.ClienteKey }, null);
-        console.log("respCall: ", respCall);
-        if (respCall.successCli) {
-          // Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
-          dispatch(setAuthEcommerce(true));
-          setIsAuthEcommerce(true);
-        } else {
-          // Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
-          dispatch(setAuthEcommerce(false));
-          setIsAuthEcommerce(false);
-        }
-      } catch (error) {
-        console.error("Errore nella chiamata:", error);
-        // Aggiorna lo stato dell'autorizzazione dell'ecommerce usando l'azione setAuthEcommerce
-        dispatch(setAuthEcommerce(false));
-        setIsAuthEcommerce(false);
-      }
+    const updateEcommerceAuth = async () => {
+      setIsAuthEcommerce((await AuthEcommerceHelper(dispatch)).result);
     };
-
-    fetchData();
+    updateEcommerceAuth();
   }, [dispatch]);
 
   const Container = styled("div")({
