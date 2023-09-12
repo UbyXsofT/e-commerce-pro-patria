@@ -12,10 +12,12 @@ import ThemeColorListener from "../src/components/theme/ThemeColorListener";
 import { AlertMeProvider } from "../src/components/layout/alert/AlertMeContext";
 
 import { wrapper } from "src/store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import BlockPage from "./blockPage";
 import { StoreState } from "src/components/CommonTypesInterfaces";
+import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
+import AuthUserHelper from "src/store/AuthUserHelper";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,6 +27,8 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
   const router = useRouter();
   const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
   const authUser = useSelector((state: StoreState) => state.authUser);
+
+  const dispatch = useDispatch();
 
   const isAuthenticated = authEcommerce && authUser;
   const requiresAuth = router.pathname.startsWith("/auth");
@@ -61,14 +65,26 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
   }, [themeMode]);
 
   useEffect(() => {
-    if (requiresAuth && !isAuthenticated) {
-      router.push(
-        `/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
+    const checkAuthentication = async () => {
+      if (requiresAuth) {
+        let newAuthEcommerce = authEcommerce;
+        let newAuthUser = authUser;
 
-        Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
-      );
-    }
-  }, [requiresAuth, isAuthenticated]);
+        !newAuthEcommerce ? (newAuthEcommerce = (await AuthEcommerceHelper(dispatch)).result) : {};
+        !newAuthUser ? (newAuthUser = (await AuthUserHelper(dispatch, true)).response) : {};
+
+        if (!newAuthEcommerce || !newAuthUser) {
+          router.push(
+            `/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
+    
+            Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
+          );
+        }
+      }
+    };
+
+    checkAuthentication();
+  }, [requiresAuth]);
 
   return (
     <>
