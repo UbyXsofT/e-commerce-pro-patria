@@ -304,7 +304,18 @@ const Step1 = ({
                 <VirtualizedAutocomplete label={"Residenza"} comuni={comuni} placeOfBirth={city} setPlaceOfBirth={setCity} selectedComune={comuneResidenza} setSelectedComune={setComuneResidenza} setProvinceOfBirth={setProvince} setCap={setCap} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <TextField value={cap} onChange={(e) => setCap(e.target.value.trim().replace(/\D/g, ""))} inputProps={{ maxLength: 5 }} required fullWidth id="cap" label="CAP" name="cap" autoComplete="cap" />
+                <TextField
+                  value={cap}
+                  onChange={(e) => setCap(e.target.value.trim().replace(/\D/g, ""))}
+                  inputProps={{ maxLength: 5 }}
+                  error={cap.length !== 5 && cap.length > 0}
+                  required
+                  fullWidth
+                  id="cap"
+                  label="CAP"
+                  name="cap"
+                  autoComplete="cap"
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Button, Typography, TextField, Divider, ButtonGroup } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -13,6 +13,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyIcon from "@mui/icons-material/Key";
 import SettingsIcon from "@mui/icons-material/Settings";
+import stringUpperCase from "src/components/utils/stringUpperCase";
+import VirtualizedAutocomplete from "src/components/account/register/VirtualizedAutocomplete";
+import { AutocompleteSelected, ComunePaese } from "src/components/CommonTypesInterfaces";
+import getComuni from "src/components/utils/getComuni";
 
 type AccountSettingsProps = {
   _setLoading: (isLoading: boolean) => {
@@ -38,6 +42,22 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
   const phoneNumber = "+39 347 288 5462";
   const email = "mattiaformichetti@gmail.com";
 
+  const [modifyAddress, setModifyAddress] = useState(address);
+  const [modifyCity, setModifyCity] = useState(city);
+  const [modifyProvince, setModifyProvince] = useState(province);
+  const [modifyCap, setModifyCap] = useState(cap);
+
+  const [selectedComune, setSelectedComune] = useState<AutocompleteSelected>(null);
+  const [comuni, setComuni] = useState<ComunePaese[]>([]);
+
+  useEffect(() => {
+    getComuni(setComuni);
+  }, []);
+
+  const sendData = (modifyAddress: string, modifyCity: string, modifyProvince: string, modifyCap: string) => {
+    setModifyData(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Layout
@@ -53,7 +73,59 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
           </Typography>
 
           {modifyData ? (
-            <div></div>
+            <Grid container spacing={2} marginBottom={3}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  value={modifyAddress}
+                  onChange={(e) => {
+                    setModifyAddress(stringUpperCase(e.target.value));
+                  }}
+                  onBlur={(e) => {
+                    setModifyAddress(e.target.value.trim());
+                  }}
+                  inputProps={{ maxLength: 60 }}
+                  label="Indirizzo"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <VirtualizedAutocomplete
+                  label={"Residenza"}
+                  comuni={comuni}
+                  placeOfBirth={modifyCity}
+                  setPlaceOfBirth={setModifyCity}
+                  selectedComune={selectedComune}
+                  setSelectedComune={setSelectedComune}
+                  setProvinceOfBirth={setModifyProvince}
+                  setCap={setModifyCap}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  value={modifyProvince}
+                  onChange={(e) => {
+                    setModifyProvince(e.target.value);
+                  }}
+                  onBlur={(e) => {
+                    setModifyProvince(e.target.value.trim());
+                  }}
+                  inputProps={{ maxLength: 35 }}
+                  label="Provincia"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  value={modifyCap}
+                  onChange={(e) => {
+                    setModifyCap(e.target.value.trim().replace(/\D/g, ""));
+                  }}
+                  inputProps={{ maxLength: 5, minLength: 5 }}
+                  label="CAP"
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
           ) : (
             <Grid container spacing={2} marginBottom={3}>
               <Grid item xs={12} md={3}>
@@ -152,13 +224,30 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
           )}
 
           {modifyData ? (
-            <></>
+            <div style={{ display: "flex", gap: 1, justifyContent: "space-between" }}>
+              <Button
+                onClick={() => {
+                  setModifyData(false);
+                }}
+              >
+                Annulla
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  sendData(modifyAddress, modifyCity, modifyProvince, modifyCap);
+                }}
+                disabled={!modifyAddress || !modifyCity || !modifyProvince || !modifyCap || modifyCap.length !== 5}
+              >
+                Conferma
+              </Button>
+            </div>
           ) : (
             <>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                   <ButtonGroup fullWidth>
-                    <Button onClick={() => setModifyData(!modifyData)} variant="contained">
+                    <Button onClick={() => setModifyData(true)} variant="contained">
                       <EditIcon style={{ marginRight: 5 }} />
                       Modifica Utente
                     </Button>

@@ -26,6 +26,9 @@ import { Sex, Focus, AutocompleteSelected, Date, ComunePaese, PasswordSafety, Us
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 import { Paesi } from "src/components/account/register/ProvinciePaesi";
 import ReCAPTCHA from "react-google-recaptcha";
+import stringUpperCase from "src/components/utils/stringUpperCase";
+import getComuni from "src/components/utils/getComuni";
+import CodiceFiscale from "codice-fiscale-js";
 
 const SignUp = () => {
   const theme = useTheme();
@@ -105,14 +108,6 @@ const SignUp = () => {
 
   const [captcha, setCaptcha] = useState<string | null>(null);
 
-  const stringUpperCase = (string: string) => {
-    const arr = string.split(" ");
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
-    }
-    return arr.join(" ");
-  };
-
   const updateUnderage = (date: Dayjs) => {
     const minDate = dayjs().subtract(18, "year");
 
@@ -123,25 +118,8 @@ const SignUp = () => {
     }
   };
 
-  const getComuni = async () => {
-    try {
-      let response = await fetch("https://axqvoqvbfjpaamphztgd.functions.supabase.co/comuni");
-      let jsonData = await response.json();
-      let ComuniPaesi = jsonData.concat(Paesi);
-
-      // let keyFulData = jsonData.map((comune, idx) => {
-      //   let updatedComune = { ...comune, key: idx };
-      //   return updatedComune;
-      // });
-
-      setComuni(ComuniPaesi);
-    } catch (error) {
-      alert(error);
-    }
-  };
-
   useEffect(() => {
-    getComuni();
+    getComuni(setComuni);
   }, []);
 
   const Step1User = (
@@ -354,7 +332,13 @@ const SignUp = () => {
       const userCheckPassed = Object.values(data.user).every((value) => value !== null && value !== "" && value !== false);
       const parentCheckPassed = data.parent ? Object.values(data.parent).every((value) => value !== null && value !== "" && value !== false) : true;
 
-      if (underage ? userCheckPassed && parentCheckPassed : userCheckPassed) {
+      const codiceFiscaleValid = CodiceFiscale.check(codiceFiscale);
+      const capLength = cap.length === 5 ? true : false;
+
+      const parentCodiceFiscaleValid = CodiceFiscale.check(parentCodiceFiscale);
+      const parentCapLength = parentCap.length === 5 ? true : false;
+
+      if (underage ? userCheckPassed && codiceFiscaleValid && capLength && parentCheckPassed && parentCodiceFiscaleValid && parentCapLength : userCheckPassed && codiceFiscaleValid && capLength) {
         setReadyToSend({ status: true, data });
       } else {
         setReadyToSend({ status: false, data });
