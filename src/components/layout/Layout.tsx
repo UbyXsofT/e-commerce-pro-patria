@@ -11,6 +11,8 @@ import { UserDrawerContentDx } from "src/components/layout/drawer/drawerDx/UserD
 import { CarrelloDrawerContentDx } from "src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
 import CookieConsent from "src/components/cookie/CookieConsent";
 import DrawerSx from "./drawer/drawerSx/DrawerSx";
+import { useSelector } from "react-redux";
+import { StoreState } from "../CommonTypesInterfaces";
 
 type LayoutProps = {
   children: ReactElement;
@@ -24,6 +26,8 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
   const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
   const pLeftDrawerOpen = "88px";
   const pLeftDrawerClose = "24px";
+
+  const user = useSelector((state: StoreState) => state.authUser);
 
   const handleDrawerSxOpen = (open: boolean) => {
     if (open) {
@@ -46,10 +50,17 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
   return (
     <animated.main style={mainAnimation}>
       <Box sx={{ display: "flex" }}>
-        <Header drawerDxOpen={drawerDxOpen} tipoContesto={tipoContesto} setTipoContesto={setTipoContesto} setDrawerDxOpen={setDrawerDxOpen} />
+        <Header
+          drawerDxOpen={drawerDxOpen}
+          tipoContesto={tipoContesto}
+          setTipoContesto={setTipoContesto}
+          setDrawerDxOpen={setDrawerDxOpen}
+          alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
+          cartAlerts={user ? Number(user.CARRELLO) : 0}
+        />
         <DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
         <DrawerDx drawerDxOpen={drawerDxOpen} setDrawerDxOpen={setDrawerDxOpen} tipoContesto={tipoContesto}>
-          {tipoContesto === "utente" ? <UserDrawerContentDx /> : <CarrelloDrawerContentDx />}
+          {tipoContesto === "utente" ? <UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} /> : <CarrelloDrawerContentDx />}
         </DrawerDx>
         <Box
           component="main"

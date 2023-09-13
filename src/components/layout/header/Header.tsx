@@ -14,9 +14,11 @@ type HeaderProps = {
   setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
   tipoContesto: string;
   setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
+  alerts: number;
+  cartAlerts: number;
 };
 
-export const Header = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoContesto }: HeaderProps) => {
+export const Header = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoContesto, alerts, cartAlerts }: HeaderProps) => {
   const theme = useTheme();
 
   return (
@@ -27,7 +29,7 @@ export const Header = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoCon
           backgroundColor: (theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as { backgroundColor?: string })?.backgroundColor,
         }}
       >
-        <ToolBar drawerDxOpen={drawerDxOpen} tipoContesto={tipoContesto} setTipoContesto={setTipoContesto} setDrawerDxOpen={setDrawerDxOpen} />
+        <ToolBar drawerDxOpen={drawerDxOpen} tipoContesto={tipoContesto} setTipoContesto={setTipoContesto} setDrawerDxOpen={setDrawerDxOpen} alerts={alerts} cartAlerts={cartAlerts} />
       </AppBar>
     </>
   );

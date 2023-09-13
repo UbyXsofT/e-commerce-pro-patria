@@ -8,7 +8,6 @@ type CarrelloDrawerContentDxProps = {
 export const CarrelloDrawerContentDx = ({ theme }: CarrelloDrawerContentDxProps) => {
   return (
     <>
-      {" "}
       <Typography variant="h6" noWrap component="div" sx={{ display: "block" }}>
         MENU CARRELLO
       </Typography>

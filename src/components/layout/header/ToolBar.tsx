@@ -23,9 +23,11 @@ type ToolBarProps = {
   setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
   tipoContesto: string;
   setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
+  alerts: number;
+  cartAlerts: number;
 };
 
-export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoContesto }: ToolBarProps) => {
+export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoContesto, alerts, cartAlerts }: ToolBarProps) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -74,7 +76,7 @@ export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoCo
         <Box sx={{ display: "flex" }}>
           <IconButton
             size="large"
-            aria-label="mostra 4 nuovi messaggi"
+            aria-label={alerts !== 0 ? `Mostra ${alerts} nuovi Messaggi` : "Non ci sono Messaggi"}
             color="inherit"
             onMouseEnter={handlePopperOpen}
             onMouseLeave={handlePopperClose}
@@ -82,7 +84,7 @@ export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoCo
               Router.push("/auth/notifiche");
             }}
           >
-            <Badge badgeContent={4} color="error">
+            <Badge badgeContent={alerts} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -135,7 +137,7 @@ export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoCo
 
           <IconButton
             size="large"
-            aria-label="show 1 item"
+            aria-label={cartAlerts !== 0 ? `${cartAlerts} elementi nel Carrello` : "Il Carrello è Vuoto"}
             color="inherit"
             onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
             // onMouseEnter={() => {
@@ -147,7 +149,7 @@ export const ToolBar = ({ drawerDxOpen, setDrawerDxOpen, tipoContesto, setTipoCo
             //   handleMouseLeave();
             // }}
           >
-            <Badge badgeContent={1} color="error">
+            <Badge badgeContent={cartAlerts} color="error">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>

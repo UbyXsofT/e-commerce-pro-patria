@@ -10,15 +10,16 @@ const handleDrawerItemClick = (menuItem: MenuItem) => {
 
 type UserDrawerContentDxType = {
   theme?: Theme;
+  username: string;
 };
 
-export const UserDrawerContentDx = ({ theme }: UserDrawerContentDxType) => {
+export const UserDrawerContentDx = ({ theme, username }: UserDrawerContentDxType) => {
   const menuItems = React.useMemo(() => CreateMenu("menuUtenteDx"), []);
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", padding: "15px" }}>
         <Typography variant="body1" noWrap component="div" sx={{ display: "block", marginBottom: "20px" }}>
-          Ciao Ubaldo Formichetti
+          Ciao {username}
         </Typography>
         <Avatar alt="Ubaldo Formichetti" src="/images/utente.jpg" sx={{ width: 56, height: 56 }} />
       </Box>
