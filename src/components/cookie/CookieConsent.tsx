@@ -1,11 +1,11 @@
 // components/CookieConsent.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Snackbar, Typography } from "@mui/material";
 import ManageCookies from "./ManageCookies";
 
 const CookieConsent = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [manage, setManage] = useState(false);
 
   const [checkedTheme, setCheckedTheme] = React.useState(true);
@@ -23,7 +23,19 @@ const CookieConsent = () => {
     </React.Fragment>
   );
 
-  const updateData = (checkedTheme: boolean) => {};
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      if (!localStorage.getItem("cookieSettings")) {
+        setOpen(true);
+      }
+    }
+  }, []);
+
+  const updateData = (checkedTheme: boolean) => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem("cookieSettings", checkedTheme as unknown as string);
+    }
+  };
 
   const handleApprove = () => {
     // Implement your cookie approval logic here

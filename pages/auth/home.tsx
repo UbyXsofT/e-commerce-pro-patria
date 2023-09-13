@@ -24,27 +24,27 @@ type HomeProps = {
 
 const Home = ({ setLoading }: HomeProps) => {
   const { showAlert } = useAlertMe();
-  const textAlert = (
-    <React.Fragment>
-      Orari segreteria: Dal lunedì al venerdì dalle 8.30-13.00 ; 14.00-20.30 <br />
-      Orari estivi segreteria (Giugno- Luglio) 9.30-12.30 ; 14.30-16.30 <br />
-      <h3>
-        <strong>Agosto chiuso</strong>
-        <br />
-        <br />
-        <Link color="inherit" href={eCommerceConf.LinkHomeCenter}>
-          Per maggiori informazioni clicca qui!
-        </Link>
-      </h3>
-      <div style={{ width: "60px", height: "60px", position: "relative", zIndex: 1 }}>
-        <Image src="/images/LogoQ.png" alt="Logo" fill={true} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ objectFit: "contain" }} priority={true} />
-      </div>
-    </React.Fragment>
-  );
+  // const textAlert = (
+  //   <React.Fragment>
+  //     Orari segreteria: Dal lunedì al venerdì dalle 8.30-13.00 ; 14.00-20.30 <br />
+  //     Orari estivi segreteria (Giugno- Luglio) 9.30-12.30 ; 14.30-16.30 <br />
+  //     <h3>
+  //       <strong>Agosto chiuso</strong>
+  //       <br />
+  //       <br />
+  //       <Link color="inherit" href={eCommerceConf.LinkHomeCenter}>
+  //         Per maggiori informazioni clicca qui!
+  //       </Link>
+  //     </h3>
+  //     <div style={{ width: "60px", height: "60px", position: "relative", zIndex: 1 }}>
+  //       <Image src="/images/LogoQ.png" alt="Logo" fill={true} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ objectFit: "contain" }} priority={true} />
+  //     </div>
+  //   </React.Fragment>
+  // );
 
-  React.useEffect(() => {
-    showAlert("filled", "warning", "Orari segreteria Example", textAlert, true);
-  }, []);
+  // React.useEffect(() => {
+  //   showAlert("filled", "warning", "Orari segreteria Example", textAlert, true);
+  // }, []);
 
   // Rendi visibile il loading impostando setLoading su true
   // React.useEffect(() => {

@@ -5,6 +5,7 @@ import Router from "next/router";
 import CodiceFiscale from "codice-fiscale-js";
 
 type Step1Props = {
+  origin: string | string[] | undefined;
   smUp: boolean;
   setDone: Function;
   email: string;
@@ -13,7 +14,7 @@ type Step1Props = {
   setCodiceFiscale: Function;
 };
 
-const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale }: Step1Props) => {
+const Step1 = ({ origin, smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale }: Step1Props) => {
   return (
     <Container maxWidth={"md"} component={Paper} sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}>
       <CssBaseline />
@@ -53,7 +54,13 @@ const Step1 = ({ smUp, setDone, email, setEmail, codiceFiscale, setCodiceFiscale
             }}
           >
             <Link
-              onClick={() => Router.push("/account/login")}
+              onClick={() => {
+                if (!origin) {
+                  Router.push("/account/login");
+                  return;
+                }
+                Router.push(typeof origin === "string" ? origin : origin[0]);
+              }}
               variant="body2"
               sx={{
                 userSelect: "none",

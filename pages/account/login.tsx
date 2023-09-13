@@ -337,7 +337,7 @@ const Login = () => {
                     <Grid container>
                       <Grid item xs>
                         <Link
-                          onClick={() => Router.push("/account/resetPassword")}
+                          onClick={() => Router.push({ pathname: "/account/resetPassword", query: { origin: "/account/login" } })}
                           variant="body2"
                           sx={{
                             userSelect: "none",

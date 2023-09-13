@@ -12,6 +12,7 @@ import { styled } from "@mui/material/styles";
 
 import Step1 from "src/components/account/resetPassword/Step1";
 import Step2 from "src/components/account/resetPassword/Step2";
+import { useRouter } from "next/router";
 
 const StyledImageLogo = styled(Image)({
   padding: "10px",
@@ -19,6 +20,9 @@ const StyledImageLogo = styled(Image)({
 });
 
 const resetPassword = (_setLoading: any) => {
+  const router = useRouter();
+  const { origin } = router.query;
+
   //setLoading(true); rende visibile il loading
   const theme = useTheme();
 
@@ -52,7 +56,7 @@ const resetPassword = (_setLoading: any) => {
           </Toolbar>
         </Container>
       </AppBar>
-      {done ? <Step2 smUp={smUp} /> : <Step1 smUp={smUp} setDone={setDone} email={email} setEmail={setEmail} codiceFiscale={codiceFiscale} setCodiceFiscale={setCodiceFiscale} />}
+      {done ? <Step2 smUp={smUp} /> : <Step1 origin={origin} smUp={smUp} setDone={setDone} email={email} setEmail={setEmail} codiceFiscale={codiceFiscale} setCodiceFiscale={setCodiceFiscale} />}
     </ThemeProvider>
   );
 };
