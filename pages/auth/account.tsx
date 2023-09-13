@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -20,12 +20,16 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
   const theme = useTheme();
   const router = useRouter();
 
+  const [openCookies, setOpenCookies] = useState(false);
+
   return (
     <ThemeProvider theme={theme}>
       <Layout
-      //digitare il titolo della pagina e la descrizione della pagina.
-      // title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-      // description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+        openSettings={openCookies}
+        setOpenSettings={setOpenCookies}
+        //digitare il titolo della pagina e la descrizione della pagina.
+        // title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+        // description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
       >
         <Grid container>
           <Grid item xs={12}>
@@ -39,7 +43,13 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Button onClick={() => {}}>Configura Cookie</Button>
+            <Button
+              onClick={() => {
+                setOpenCookies(true);
+              }}
+            >
+              Configura Cookie
+            </Button>
           </Grid>
         </Grid>
       </Layout>

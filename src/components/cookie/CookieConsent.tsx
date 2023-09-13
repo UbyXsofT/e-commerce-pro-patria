@@ -1,12 +1,24 @@
 // components/CookieConsent.js
 
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Box, Button, Snackbar, Typography } from "@mui/material";
 import ManageCookies from "./ManageCookies";
 
-const CookieConsent = () => {
+interface CookieConsentProps {
+  openSettings?: boolean;
+  setOpenSettings?: Dispatch<SetStateAction<boolean>>;
+}
+
+const CookieConsent = ({ openSettings, setOpenSettings }: CookieConsentProps) => {
   const [open, setOpen] = React.useState(false);
   const [manage, setManage] = useState(false);
+
+  useEffect(() => {
+    if (openSettings) {
+      setOpen(openSettings);
+      setOpenSettings ? setOpenSettings(false) : {};
+    }
+  }, [openSettings]);
 
   const [checkedTheme, setCheckedTheme] = React.useState(true);
 
@@ -34,6 +46,7 @@ const CookieConsent = () => {
   const updateData = (checkedTheme: boolean) => {
     if (typeof window !== "undefined" && window.localStorage) {
       localStorage.setItem("cookieSettings", checkedTheme as unknown as string);
+      setManage(false);
     }
   };
 

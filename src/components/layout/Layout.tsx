@@ -1,5 +1,5 @@
 // Layout.js
-import React, { ReactChild, ReactElement, ReactNode } from "react";
+import React, { Dispatch, ReactChild, ReactElement, ReactNode, SetStateAction } from "react";
 import { Box, Toolbar, Button } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
@@ -14,9 +14,11 @@ import DrawerSx from "./drawer/drawerSx/DrawerSx";
 
 type LayoutProps = {
   children: ReactElement;
+  openSettings?: boolean;
+  setOpenSettings?: Dispatch<SetStateAction<boolean>>;
 };
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
   const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
   const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
   const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
@@ -65,7 +67,7 @@ const Layout = ({ children }: LayoutProps) => {
           <Footer />
         </Box>
         {/* Componente CookieConsent */}
-        <CookieConsent />
+        <CookieConsent openSettings={openSettings} setOpenSettings={setOpenSettings} />
       </Box>
     </animated.main>
   );
