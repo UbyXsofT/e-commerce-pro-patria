@@ -30,7 +30,6 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
 
   const dispatch = useDispatch();
 
-  const isAuthenticated = authEcommerce && authUser;
   const requiresAuth = router.pathname.startsWith("/auth");
 
   const [themeMode, setThemeMode] = React.useState("light");
@@ -41,8 +40,15 @@ const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any;
     if (typeof window !== "undefined" && window.localStorage) {
       const savedThemeMode = localStorage.getItem("themeMode");
       const savedAutoMode = localStorage.getItem("autoMode");
+
+      if (savedAutoMode === "true") {
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        mediaQuery.matches ? setThemeMode("dark") : setThemeMode("light");
+      } else if (savedThemeMode) {
+        setThemeMode(savedThemeMode);
+      }
+
       savedAutoMode ? setAutoMode(savedAutoMode) : {};
-      savedThemeMode ? setThemeMode(savedThemeMode) : {};
     }
   }, []);
 
