@@ -22,7 +22,6 @@ type Step3Props = {
   gender: Sex;
   dateOfBirth: Date;
   placeOfBirth: string;
-  provinceOfBirth: string;
   address: string;
   city: string;
   cap: string;
@@ -38,14 +37,12 @@ type Step3Props = {
   parentGender: Sex;
   parentDateOfBirth: Date;
   parentPlaceOfBirth: string;
-  parentProvinceOfBirth: string;
   parentAddress: string;
   parentCity: string;
   parentCap: string;
   parentProvince: string;
-  parentEmail: string;
   parentPhoneNumber: string;
-  parentPrivacy: boolean;
+  notes?: string;
 };
 
 const Step3 = ({
@@ -56,7 +53,6 @@ const Step3 = ({
   gender,
   dateOfBirth,
   placeOfBirth,
-  provinceOfBirth,
   address,
   city,
   cap,
@@ -72,14 +68,12 @@ const Step3 = ({
   parentGender,
   parentDateOfBirth,
   parentPlaceOfBirth,
-  parentProvinceOfBirth,
   parentAddress,
   parentCity,
   parentCap,
   parentProvince,
-  parentEmail,
   parentPhoneNumber,
-  parentPrivacy,
+  notes,
 }: Step3Props) => {
   const handleSubmit = () => {};
 
@@ -97,7 +91,7 @@ const Step3 = ({
           Controlla i tuoi dati
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems={"flex-start"}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
                 <TextField
@@ -160,7 +154,7 @@ const Step3 = ({
                   />
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={12} sm={8}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   value={placeOfBirth}
                   InputProps={{
@@ -170,18 +164,6 @@ const Step3 = ({
                   id="placeOfBirth"
                   label="Luogo di Nascita"
                   name="placeOfBirth"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  value={provinceOfBirth}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  fullWidth
-                  id="provinceOfBirth"
-                  label="Provincia"
-                  name="provinceOfBirth"
                 />
               </Grid>
             </Grid>
@@ -237,6 +219,7 @@ const Step3 = ({
               </Grid>
               <Grid item xs={12}>
                 <MuiTelInput
+                  label="Telefono"
                   value={phoneNumber}
                   InputProps={{
                     readOnly: true,
@@ -270,6 +253,23 @@ const Step3 = ({
                   label="Nome Utente"
                 />
               </Grid>
+              {notes ? (
+                <Grid item xs={12}>
+                  <TextField
+                    value={notes}
+                    name="notes"
+                    id="notes"
+                    label="Note"
+                    fullWidth
+                    multiline
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+              ) : (
+                <></>
+              )}
             </Grid>
 
             <Grid item xs={12}>
@@ -283,7 +283,7 @@ const Step3 = ({
               Controlla i Dati del Genitore
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} alignItems={"flex-start"}>
                 <Grid container item spacing={2} sm={12} md={6}>
                   <Grid item xs={12}>
                     <TextField
@@ -351,7 +351,7 @@ const Step3 = ({
                       />
                     </LocalizationProvider>
                   </Grid>
-                  <Grid item xs={12} sm={8}>
+                  <Grid item xs={12} sm={12}>
                     <TextField
                       InputProps={{
                         readOnly: true,
@@ -363,20 +363,6 @@ const Step3 = ({
                       label="Luogo di Nascita"
                       name="parentPlaceOfBirth"
                       autoComplete="parentPlaceOfBirth"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <TextField
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      value={parentProvinceOfBirth}
-                      required
-                      fullWidth
-                      id="parentProvinceOfBirth"
-                      label="Provincia"
-                      name="parentProvinceOfBirth"
-                      autoComplete="ProvinceOfBirth"
                     />
                   </Grid>
                 </Grid>
@@ -438,22 +424,10 @@ const Step3 = ({
                       autoComplete="parentProvince"
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      value={parentEmail}
-                      required
-                      fullWidth
-                      id="parentEmail"
-                      label="Indirizzo Email"
-                      name="parentEmail"
-                      autoComplete="parentEmail"
-                    />
-                  </Grid>
+
                   <Grid item xs={12}>
                     <MuiTelInput
+                      label="Telefono"
                       InputProps={{
                         readOnly: true,
                       }}
@@ -463,12 +437,6 @@ const Step3 = ({
                       value={parentPhoneNumber}
                     />
                   </Grid>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box>
-                    <FormControlLabel required control={<Checkbox checked={parentPrivacy} color="primary" />} label={<PrivacyLabel />} />
-                  </Box>
                 </Grid>
               </Grid>
             </Box>

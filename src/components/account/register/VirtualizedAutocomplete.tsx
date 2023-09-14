@@ -137,7 +137,7 @@ type VirtualizedAutocompleteTypes = {
   setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
   selectedComune: AutocompleteSelected;
   setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
-  setProvinceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+  setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>>;
   setCap: React.Dispatch<React.SetStateAction<string>> | null;
 };
 
@@ -167,7 +167,7 @@ const VirtualizedAutocomplete = ({ label, comuni, placeOfBirth, setPlaceOfBirth,
         }
         setSelectedComune(comune);
         setPlaceOfBirth(comune.nome);
-        setProvinceOfBirth(comune.provincia.nome);
+        setProvinceOfBirth ? setProvinceOfBirth(comune.provincia.nome) : {};
         setCap && comune.cap ? setCap(comune.cap) : {};
       }}
       onBlur={(e: React.FocusEvent<HTMLInputElement>) => setPlaceOfBirth(e.target.value.trim())}

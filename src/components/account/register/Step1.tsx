@@ -45,8 +45,6 @@ type Step1Props = {
   setDateOfBirth: React.Dispatch<React.SetStateAction<Date>>;
   placeOfBirth: string;
   setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
-  provinceOfBirth: string;
-  setProvinceOfBirth: React.Dispatch<React.SetStateAction<string>>;
   address: string;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   city: string;
@@ -55,12 +53,14 @@ type Step1Props = {
   setCap: React.Dispatch<React.SetStateAction<string>>;
   province: string;
   setProvince: React.Dispatch<React.SetStateAction<string>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  email?: string;
+  setEmail?: React.Dispatch<React.SetStateAction<string>>;
   phoneNumber: string;
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
-  privacy: boolean;
-  setPrivacy: React.Dispatch<React.SetStateAction<boolean>>;
+  privacy?: boolean;
+  setPrivacy?: React.Dispatch<React.SetStateAction<boolean>>;
+  notes?: string;
+  setNotes?: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const Step1 = ({
@@ -86,8 +86,6 @@ const Step1 = ({
   setDateOfBirth,
   placeOfBirth,
   setPlaceOfBirth,
-  provinceOfBirth,
-  setProvinceOfBirth,
   address,
   setAddress,
   city,
@@ -102,6 +100,8 @@ const Step1 = ({
   setPhoneNumber,
   privacy,
   setPrivacy,
+  notes,
+  setNotes,
 }: Step1Props) => {
   const theme = useTheme();
 
@@ -116,7 +116,6 @@ const Step1 = ({
       setGender(cf.gender === "M" ? "male" : "female");
       setPlaceOfBirth(newPlaceOfBirth);
       comune ? setSelectedComune(comune) : {};
-      comune ? setProvinceOfBirth(comune.provincia.nome) : {};
       setDateOfBirth(dayjs(cf.birthday));
     }
   };
@@ -173,7 +172,7 @@ const Step1 = ({
           {parent ? "Inserisci i Dati di un Genitore" : "Inserisci Dati Personali"}
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems={"flex-start"}>
             <Grid container item spacing={2} sm={12} md={6}>
               <Grid item xs={12}>
                 <TextField
@@ -251,37 +250,13 @@ const Step1 = ({
                   />
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <VirtualizedAutocomplete
-                  label={"Luogo di Nascita"}
-                  comuni={comuni}
-                  placeOfBirth={placeOfBirth}
-                  setPlaceOfBirth={setPlaceOfBirth}
-                  selectedComune={selectedComune}
-                  setSelectedComune={setSelectedComune}
-                  setProvinceOfBirth={setProvinceOfBirth}
-                  setCap={null}
-                />
+              <Grid item xs={12} sm={12}>
+                <VirtualizedAutocomplete label={"Luogo di Nascita"} comuni={comuni} placeOfBirth={placeOfBirth} setPlaceOfBirth={setPlaceOfBirth} selectedComune={selectedComune} setSelectedComune={setSelectedComune} setCap={null} />
                 <FormHelperText>
                   Se non sei nato in Italia inserisci il {mdUp ? <br /> : ""} <strong>Paese di Nascita</strong>
                 </FormHelperText>
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  value={provinceOfBirth}
-                  onBlur={(e) => setProvinceOfBirth(e.target.value.trim())}
-                  onChange={(e) => setProvinceOfBirth(stringUpperCase(e.target.value))}
-                  inputProps={{ maxLength: 35 }}
-                  required
-                  fullWidth
-                  id="provinceOfBirth"
-                  label="Provincia"
-                  name="provinceOfBirth"
-                  autoComplete="ProvinceOfBirth"
-                />
-              </Grid>
             </Grid>
-
             <Grid container item spacing={2} sm={12} md={6}>
               {/* TODO: Hide FormHelperText on width <= sm  */}
 
@@ -331,40 +306,53 @@ const Step1 = ({
                   autoComplete="province"
                 />
               </Grid>
+              {parent ? (
+                <></>
+              ) : (
+                <Grid item xs={12}>
+                  <TextField
+                    onBlur={(e) => (setEmail ? setEmail(e.target.value.trim()) : {})}
+                    value={email}
+                    onChange={(e) => (setEmail ? setEmail(e.target.value) : {})}
+                    inputProps={{ maxLength: 319 }}
+                    required
+                    fullWidth
+                    id="email"
+                    label="Indirizzo Email"
+                    name="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
-                <TextField
-                  onBlur={(e) => setEmail(e.target.value.trim())}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  inputProps={{ maxLength: 319 }}
-                  required
-                  fullWidth
-                  id="email"
-                  label="Indirizzo Email"
-                  name="email"
-                  autoComplete="email"
-                />
+                <MuiTelInput label="Telefono" sx={{ width: "100%" }} defaultCountry="IT" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
               </Grid>
+              {parent ? (
+                <></>
+              ) : (
+                <Grid item xs={12}>
+                  <TextField
+                    value={notes}
+                    onChange={(e) => (setNotes ? setNotes(e.target.value === "" ? undefined : e.target.value) : {})}
+                    onBlur={(e) => (setNotes ? setNotes(e.target.value.trim() === "" ? undefined : e.target.value.trim()) : {})}
+                    name="notes"
+                    id="notes"
+                    label="Note"
+                    fullWidth
+                    multiline
+                  />
+                </Grid>
+              )}
+            </Grid>
+            {parent ? (
+              <></>
+            ) : (
               <Grid item xs={12}>
-                <MuiTelInput sx={{ width: "100%" }} defaultCountry="IT" value={phoneNumber} onChange={(e) => setPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
-                <FormHelperText>
-                  {mdUp ? (
-                    <React.Fragment>
-                      <br />
-                      <br />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
-                </FormHelperText>
+                <Box>
+                  <FormControlLabel required control={<Checkbox color="primary" checked={privacy} onChange={() => (setPrivacy ? setPrivacy(!privacy) : {})} />} label={<PrivacyLabel />} />
+                </Box>
               </Grid>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box>
-                <FormControlLabel required control={<Checkbox color="primary" checked={privacy} onChange={() => setPrivacy(!privacy)} />} label={<PrivacyLabel />} />
-              </Box>
-            </Grid>
+            )}
           </Grid>
         </Box>
       </Box>

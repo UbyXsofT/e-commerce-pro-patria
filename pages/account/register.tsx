@@ -61,19 +61,19 @@ const SignUp = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date>(null);
   const [placeOfBirth, setPlaceOfBirth] = useState("");
   const [selectedComune, setSelectedComune] = useState<AutocompleteSelected>(null);
-  const [provinceOfBirth, setProvinceOfBirth] = useState("");
 
   const [parentGender, setParentGender] = useState<Sex>(null);
   const [parentDateOfBirth, setParentDateOfBirth] = useState<Date>(null);
   const [parentSelectedComune, setParentSelectedComune] = useState<AutocompleteSelected>(null);
   const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState("");
-  const [parentProvinceOfBirth, setParentProvinceOfBirth] = useState("");
 
   const [address, setAddress] = useState("");
   const [comuneResidenza, setComuneResidenza] = useState<AutocompleteSelected>(null);
   const [city, setCity] = useState("");
   const [cap, setCap] = useState("");
   const [province, setProvince] = useState("");
+
+  const [notes, setNotes] = useState<string | undefined>("");
 
   const [parentAddress, setParentAddress] = useState("");
   const [parentComuneResidenza, setParentComuneResidenza] = useState<AutocompleteSelected>(null);
@@ -84,12 +84,9 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+39");
 
-  const [parentEmail, setParentEmail] = useState("");
   const [parentPhoneNumber, setParentPhoneNumber] = useState("+39");
 
   const [privacy, setPrivacy] = useState(false);
-
-  const [parentPrivacy, setParentPrivacy] = useState(false);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -146,8 +143,6 @@ const SignUp = () => {
       setDateOfBirth={setDateOfBirth}
       placeOfBirth={placeOfBirth}
       setPlaceOfBirth={setPlaceOfBirth}
-      provinceOfBirth={provinceOfBirth}
-      setProvinceOfBirth={setProvinceOfBirth}
       address={address}
       setAddress={setAddress}
       city={city}
@@ -162,6 +157,8 @@ const SignUp = () => {
       setPhoneNumber={setPhoneNumber}
       privacy={privacy}
       setPrivacy={setPrivacy}
+      notes={notes}
+      setNotes={setNotes}
     />
   );
 
@@ -189,8 +186,6 @@ const SignUp = () => {
       setDateOfBirth={setParentDateOfBirth}
       placeOfBirth={parentPlaceOfBirth}
       setPlaceOfBirth={setParentPlaceOfBirth}
-      provinceOfBirth={parentProvinceOfBirth}
-      setProvinceOfBirth={setParentProvinceOfBirth}
       address={parentAddress}
       setAddress={setParentAddress}
       city={parentCity}
@@ -199,12 +194,8 @@ const SignUp = () => {
       setCap={setParentCap}
       province={parentProvince}
       setProvince={setParentProvince}
-      email={parentEmail}
-      setEmail={setParentEmail}
       phoneNumber={parentPhoneNumber}
       setPhoneNumber={setParentPhoneNumber}
-      privacy={parentPrivacy}
-      setPrivacy={setParentPrivacy}
     />
   );
 
@@ -233,7 +224,6 @@ const SignUp = () => {
       gender={gender}
       dateOfBirth={dateOfBirth}
       placeOfBirth={placeOfBirth}
-      provinceOfBirth={provinceOfBirth}
       address={address}
       city={city}
       cap={cap}
@@ -249,14 +239,12 @@ const SignUp = () => {
       parentGender={parentGender}
       parentDateOfBirth={parentDateOfBirth}
       parentPlaceOfBirth={parentPlaceOfBirth}
-      parentProvinceOfBirth={parentProvinceOfBirth}
       parentAddress={parentAddress}
       parentCity={parentCity}
       parentCap={parentCap}
       parentProvince={parentProvince}
-      parentEmail={parentEmail}
       parentPhoneNumber={parentPhoneNumber}
-      parentPrivacy={parentPrivacy}
+      notes={notes}
     />
   );
 
@@ -308,7 +296,7 @@ const SignUp = () => {
     setCaptcha(null);
     if ((underage && activeStep === 2) || (!underage && activeStep === 1)) {
       const data: UserData = {
-        user: { codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, provinceOfBirth, address, city, cap, province, email, phoneNumber, privacy, username, password },
+        user: { codiceFiscale, firstName, lastName, gender, dateOfBirth, placeOfBirth, address, city, cap, province, email, phoneNumber, username, password, notes },
         parent: underage
           ? {
               parentCodiceFiscale,
@@ -317,20 +305,17 @@ const SignUp = () => {
               parentGender,
               parentDateOfBirth,
               parentPlaceOfBirth,
-              parentProvinceOfBirth,
               parentAddress,
               parentCity,
               parentCap,
               parentProvince,
-              parentEmail,
               parentPhoneNumber,
-              parentPrivacy,
             }
           : null,
       };
 
-      const userCheckPassed = Object.values(data.user).every((value) => value !== null && value !== "" && value !== false);
-      const parentCheckPassed = data.parent ? Object.values(data.parent).every((value) => value !== null && value !== "" && value !== false) : true;
+      const userCheckPassed = Object.values(data.user).every((value) => value !== null && value !== "");
+      const parentCheckPassed = data.parent ? Object.values(data.parent).every((value) => value !== null && value !== "") : true;
 
       const codiceFiscaleValid = CodiceFiscale.check(codiceFiscale);
       const capLength = cap.length === 5 ? true : false;
@@ -338,7 +323,9 @@ const SignUp = () => {
       const parentCodiceFiscaleValid = CodiceFiscale.check(parentCodiceFiscale);
       const parentCapLength = parentCap.length === 5 ? true : false;
 
-      if (underage ? userCheckPassed && codiceFiscaleValid && capLength && parentCheckPassed && parentCodiceFiscaleValid && parentCapLength : userCheckPassed && codiceFiscaleValid && capLength) {
+      const privacyValid = privacy ? true : false;
+
+      if (underage ? userCheckPassed && codiceFiscaleValid && capLength && privacyValid && parentCheckPassed && parentCodiceFiscaleValid && parentCapLength : userCheckPassed && codiceFiscaleValid && capLength && privacyValid) {
         setReadyToSend({ status: true, data });
       } else {
         setReadyToSend({ status: false, data });

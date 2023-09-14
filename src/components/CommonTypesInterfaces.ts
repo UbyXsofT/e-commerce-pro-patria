@@ -111,16 +111,15 @@ export interface UserData {
     gender: Sex;
     dateOfBirth: Date;
     placeOfBirth: string;
-    provinceOfBirth: string;
     address: string;
     city: string;
     cap: string;
     province: string;
     email: string;
     phoneNumber: string;
-    privacy: boolean;
     username: string;
     password: string;
+    notes?: string;
   };
   parent: {
     parentCodiceFiscale: string;
@@ -129,14 +128,11 @@ export interface UserData {
     parentGender: Sex;
     parentDateOfBirth: Date;
     parentPlaceOfBirth: string;
-    parentProvinceOfBirth: string;
     parentAddress: string;
     parentCity: string;
     parentCap: string;
     parentProvince: string;
-    parentEmail: string;
     parentPhoneNumber: string;
-    parentPrivacy: boolean;
   } | null;
 }
 
@@ -150,4 +146,3 @@ export interface MenuItem {
   subItems: MenuItem[];
   control?: React.JSX.Element | null;
 }
-
