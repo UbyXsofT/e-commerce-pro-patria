@@ -74,7 +74,7 @@ const Step1 = ({ origin, smUp, setDone, email, setEmail, codiceFiscale, setCodic
             >
               Annulla
             </Link>
-            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)} disabled={!email || !codiceFiscale}>
+            <Button variant="contained" sx={{ mt: "auto" }} onClick={() => setDone(true)} disabled={!email || !codiceFiscale || !CodiceFiscale.check(codiceFiscale)}>
               Invia
             </Button>
           </div>

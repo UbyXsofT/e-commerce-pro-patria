@@ -224,7 +224,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
           )}
 
           {modifyData ? (
-            <div style={{ display: "flex", gap: 1, justifyContent: "space-between" }}>
+            <div style={{ display: "flex", gap: 1, justifyContent: "space-between", marginBottom: "1em" }}>
               <Button
                 onClick={() => {
                   setModifyData(false);
@@ -261,7 +261,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
                     </Button>
                   </ButtonGroup>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} marginBottom={3}>
                   <ButtonGroup fullWidth>
                     <Button
                       onClick={() => {
