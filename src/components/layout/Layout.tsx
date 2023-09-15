@@ -1,19 +1,11 @@
 // Layout.js
-import React, {
-	CSSProperties,
-	Dispatch,
-	ReactChild,
-	ReactElement,
-	ReactNode,
-	SetStateAction,
-} from "react";
-import { Box, Toolbar, Button } from "@mui/material";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import { Box } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
 import { Header } from "./header/Header";
 import { Footer } from "./footer/Footer";
 import { AlertMe } from "./alert/AlertMe";
-import { Typography } from "@mui/material";
 import { UserDrawerContentDx } from "src/components/layout/drawer/drawerDx/UserDrawerContentDx";
 import { CarrelloDrawerContentDx } from "src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
 import CookieConsent from "src/components/cookie/CookieConsent";
@@ -95,7 +87,7 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
 					}}
 				>
 					<AlertMe />
-					{children}
+					<div id="content"> {children}</div>
 					<Footer />
 				</Box>
 				{/* Componente CookieConsent */}

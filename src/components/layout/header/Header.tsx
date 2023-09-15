@@ -31,6 +31,7 @@ export const Header = ({
 	return (
 		<>
 			<AppBar
+				id="header"
 				position="fixed"
 				sx={{
 					backgroundColor: (

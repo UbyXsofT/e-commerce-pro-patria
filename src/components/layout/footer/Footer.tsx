@@ -16,23 +16,55 @@ import { PrivacyCookie } from "./PrivacyCookie";
 export function Footer() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
-	React.useEffect(() => {
-		if (typeof window !== "undefined") {
-			const windowHeight = window.innerHeight;
-			const contentHeight = document.body.clientHeight;
-			setIsFooterFixed(contentHeight <= windowHeight);
+
+	const handleResize = () => {
+		const windowHeight = window.innerHeight;
+		const header = document.getElementById("header");
+		const footerElement = document.getElementById("footer"); // Replace with your footer's ID
+		const contentElement = document.getElementById("content"); // Replace with your content's ID
+
+		if (footerElement && contentElement) {
+			const footerRect = footerElement.getBoundingClientRect();
+			const contentRect = contentElement.getBoundingClientRect();
+
+			const headerHeight = header?.clientHeight ? header?.clientHeight : 0;
+
+			// Check for collision by comparing bottom position of the content and top position of the footer
+			let isColliding =
+				contentRect.height + footerRect.height + headerHeight + 24 >
+				windowHeight;
+
+			setIsFooterFixed(!isColliding);
 		}
+	};
+
+	React.useEffect(() => {
+		// Add an event listener for the "resize" event
+		window.addEventListener("resize", handleResize);
+
+		// Call the initial handleResize to set the initial state
+		handleResize();
+
+		// Remove the event listener when the component unmounts
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	}, []);
+
+	React.useEffect(() => {
+		handleResize();
 	}, [typeof window !== "undefined" ? document.body.clientHeight : {}]);
 
 	// Definiamo l'animazione per le proprietà di posizione con useSpring
 	const positionAnimationProps = useSpring({
-		bottom: isFooterFixed ? 20 : 0,
+		bottom: isFooterFixed ? 0 : 0,
 
-		config: { duration: 300 }, // Opzionale: personalizza la durata dell'animazione di posizione
+		config: { duration: 100 }, // Opzionale: personalizza la durata dell'animazione di posizione
 	});
 
 	return (
 		<animated.footer
+			id="footer"
 			style={{
 				...positionAnimationProps,
 				left: isFooterFixed ? 100 : 0,
