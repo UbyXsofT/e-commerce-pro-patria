@@ -1,5 +1,12 @@
 // Layout.js
-import React, { Dispatch, ReactChild, ReactElement, ReactNode, SetStateAction } from "react";
+import React, {
+  CSSProperties,
+  Dispatch,
+  ReactChild,
+  ReactElement,
+  ReactNode,
+  SetStateAction,
+} from "react";
 import { Box, Toolbar, Button } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
@@ -58,9 +65,18 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
           alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
           cartAlerts={user ? Number(user.CARRELLO) : 0}
         />
-        <DrawerSx onOpen={handleDrawerSxOpen} /> {/* Passa la funzione al componente DrawerSx */}
-        <DrawerDx drawerDxOpen={drawerDxOpen} setDrawerDxOpen={setDrawerDxOpen} tipoContesto={tipoContesto}>
-          {tipoContesto === "utente" ? <UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} /> : <CarrelloDrawerContentDx />}
+        <DrawerSx onOpen={handleDrawerSxOpen} />{" "}
+        {/* Passa la funzione al componente DrawerSx */}
+        <DrawerDx
+          drawerDxOpen={drawerDxOpen}
+          setDrawerDxOpen={setDrawerDxOpen}
+          tipoContesto={tipoContesto}
+        >
+          {tipoContesto === "utente" ? (
+            <UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} />
+          ) : (
+            <CarrelloDrawerContentDx />
+          )}
         </DrawerDx>
         <Box
           component="main"
@@ -69,7 +85,12 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
             pr: 3,
             pt: 3,
             pb: 3,
-            marginTop: (theme) => `calc(${theme.mixins.toolbar.minHeight ? (theme.mixins.toolbar.minHeight as number) + 5 : 0}px)`,
+            marginTop: (theme) =>
+              `calc(${
+                theme.mixins.toolbar.minHeight
+                  ? (theme.mixins.toolbar.minHeight as number) + 5
+                  : 0
+              }px)`,
             paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
           }}
         >
@@ -78,7 +99,10 @@ const Layout = ({ children, openSettings, setOpenSettings }: LayoutProps) => {
           <Footer />
         </Box>
         {/* Componente CookieConsent */}
-        <CookieConsent openSettings={openSettings} setOpenSettings={setOpenSettings} />
+        <CookieConsent
+          openSettings={openSettings}
+          setOpenSettings={setOpenSettings}
+        />
       </Box>
     </animated.main>
   );
