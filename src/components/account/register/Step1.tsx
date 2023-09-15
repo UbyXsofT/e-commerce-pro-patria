@@ -310,18 +310,7 @@ const Step1 = ({
                 <></>
               ) : (
                 <Grid item xs={12}>
-                  <TextField
-                    onBlur={(e) => (setEmail ? setEmail(e.target.value.trim()) : {})}
-                    value={email}
-                    onChange={(e) => (setEmail ? setEmail(e.target.value) : {})}
-                    inputProps={{ maxLength: 319 }}
-                    required
-                    fullWidth
-                    id="email"
-                    label="Indirizzo Email"
-                    name="email"
-                    autoComplete="email"
-                  />
+                  <TextField value={email} onChange={(e) => (setEmail ? setEmail(e.target.value.trim().toLowerCase()) : {})} inputProps={{ maxLength: 319 }} required fullWidth id="email" label="Indirizzo Email" name="email" autoComplete="email" />
                 </Grid>
               )}
               <Grid item xs={12}>

@@ -17,6 +17,7 @@ import stringUpperCase from "src/components/utils/stringUpperCase";
 import VirtualizedAutocomplete from "src/components/account/register/VirtualizedAutocomplete";
 import { AutocompleteSelected, ComunePaese } from "src/components/CommonTypesInterfaces";
 import getComuni from "src/components/utils/getComuni";
+import { MuiTelInput } from "mui-tel-input";
 
 type AccountSettingsProps = {
   _setLoading: (isLoading: boolean) => {
@@ -46,6 +47,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
   const [modifyCity, setModifyCity] = useState(city);
   const [modifyProvince, setModifyProvince] = useState(province);
   const [modifyCap, setModifyCap] = useState(cap);
+  const [modifyEmail, setModifyEmail] = useState(email);
+  const [modifyPhoneNumber, setModifyPhoneNumber] = useState(phoneNumber);
 
   const [selectedComune, setSelectedComune] = useState<AutocompleteSelected>(null);
   const [comuni, setComuni] = useState<ComunePaese[]>([]);
@@ -54,7 +57,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
     getComuni(setComuni);
   }, []);
 
-  const sendData = (modifyAddress: string, modifyCity: string, modifyProvince: string, modifyCap: string) => {
+  const sendData = (modifyAddress: string, modifyCity: string, modifyProvince: string, modifyCap: string, modifyEmail: string, modifyPhoneNumber: string) => {
     setModifyData(false);
   };
 
@@ -124,6 +127,19 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
                   label="CAP"
                   fullWidth
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  value={modifyEmail}
+                  onChange={(e) => {
+                    setModifyEmail(e.target.value.trim().toLowerCase());
+                  }}
+                  label="Email"
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <MuiTelInput label="Telefono" sx={{ width: "100%" }} defaultCountry="IT" value={modifyPhoneNumber} onChange={(e) => setModifyPhoneNumber(e)} inputProps={{ maxLength: 16 }} required />
               </Grid>
             </Grid>
           ) : (
@@ -218,6 +234,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
                     readOnly: true,
                   }}
                   fullWidth
+                  inputProps={{ maxLength: 319 }}
                 />
               </Grid>
             </Grid>
@@ -235,9 +252,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
               <Button
                 variant="contained"
                 onClick={() => {
-                  sendData(modifyAddress, modifyCity, modifyProvince, modifyCap);
+                  sendData(modifyAddress, modifyCity, modifyProvince, modifyCap, modifyEmail, modifyPhoneNumber);
                 }}
-                disabled={!modifyAddress || !modifyCity || !modifyProvince || !modifyCap || modifyCap.length !== 5}
+                disabled={!modifyAddress || !modifyCity || !modifyProvince || !modifyCap || modifyCap.length !== 5 || !modifyEmail || !modifyPhoneNumber}
               >
                 Conferma
               </Button>

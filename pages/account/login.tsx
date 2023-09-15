@@ -37,8 +37,8 @@ import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 const Login = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [username, setUsername] = React.useState("Nome");
-  const [password, setPassword] = React.useState("password");
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [ricordami, setRicordami] = React.useState(false);
   const [paddingTop, setPaddingTop] = React.useState(0);
   const [visLoader, setVisLoader] = React.useState(false);
