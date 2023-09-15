@@ -6,12 +6,14 @@ const isBrowser = typeof document !== "undefined";
 //Questo assicura che gli stili MUI vengano caricati per primi.
 //Consente agli sviluppatori di sovrascrivere facilmente gli stili MUI con altre soluzioni di stile, come i moduli CSS.
 export default function createEmotionCache() {
-  let insertionPoint;
+	let insertionPoint;
 
-  if (isBrowser) {
-    const emotionInsertionPoint = document.querySelector('meta[name="emotion-insertion-point"]') as HTMLElement;
-    insertionPoint = emotionInsertionPoint ?? undefined;
-  }
+	if (isBrowser) {
+		const emotionInsertionPoint = document.querySelector(
+			'meta[name="emotion-insertion-point"]'
+		) as HTMLElement;
+		insertionPoint = emotionInsertionPoint ?? undefined;
+	}
 
-  return createCache({ key: "mui-style", insertionPoint });
+	return createCache({ key: "mui-style", insertionPoint });
 }

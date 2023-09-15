@@ -6,44 +6,45 @@ import { StoreAction } from "src/components/CommonTypesInterfaces";
 
 // Definisci i riduttori per gestire gli stati
 const loadingReducer = (state = false, action: AnyAction) => {
-  switch (action.type) {
-    case "SET_LOADING":
-      return action.payload;
-    default:
-      return state;
-  }
+	switch (action.type) {
+		case "SET_LOADING":
+			return action.payload;
+		default:
+			return state;
+	}
 };
 
 const authEcommerceReducer = (state = false, action: AnyAction) => {
-  switch (action.type) {
-    case "SET_AUTH_ECOMMERCE":
-      return action.payload;
-    default:
-      return state;
-  }
+	switch (action.type) {
+		case "SET_AUTH_ECOMMERCE":
+			return action.payload;
+		default:
+			return state;
+	}
 };
 
 const authUserReducer = (state = null, action: AnyAction) => {
-  switch (action.type) {
-    case "SET_AUTH_USER":
-      return action.payload;
-    default:
-      return state;
-  }
+	switch (action.type) {
+		case "SET_AUTH_USER":
+			return action.payload;
+		default:
+			return state;
+	}
 };
 
 // Crea il tuo store Redux utilizzando configureStore
 const makeStore = () =>
-  configureStore({
-    reducer: {
-      loading: loadingReducer,
-      authEcommerce: authEcommerceReducer,
-      authUser: authUserReducer,
-      // Altri riduttori...
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authMiddleware),
-    devTools: true, // Abilita Redux DevTools
-  });
+	configureStore({
+		reducer: {
+			loading: loadingReducer,
+			authEcommerce: authEcommerceReducer,
+			authUser: authUserReducer,
+			// Altri riduttori...
+		},
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().concat(authMiddleware),
+		devTools: true, // Abilita Redux DevTools
+	});
 
 // Crea il wrapper per Next.js utilizzando createWrapper
 export const wrapper = createWrapper(makeStore);

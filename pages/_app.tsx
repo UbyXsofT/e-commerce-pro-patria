@@ -21,102 +21,123 @@ import AuthUserHelper from "src/store/AuthUserHelper";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const MyApp = (props: { Component: React.ComponentType<any>; emotionCache?: any; pageProps: any }) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+const MyApp = (props: {
+	Component: React.ComponentType<any>;
+	emotionCache?: any;
+	pageProps: any;
+}) => {
+	const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
-  const router = useRouter();
-  const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
-  const authUser = useSelector((state: StoreState) => state.authUser);
+	const router = useRouter();
+	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
+	const authUser = useSelector((state: StoreState) => state.authUser);
 
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const requiresAuth = router.pathname.startsWith("/auth");
+	const requiresAuth = router.pathname.startsWith("/auth");
 
-  const [themeMode, setThemeMode] = React.useState("light");
-  const isLoading = useSelector((state: StoreState) => state.loading);
-  const [autoMode, setAutoMode] = React.useState("true");
+	const [themeMode, setThemeMode] = React.useState("light");
+	const isLoading = useSelector((state: StoreState) => state.loading);
+	const [autoMode, setAutoMode] = React.useState("true");
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const savedThemeMode = localStorage.getItem("themeMode");
-      const savedAutoMode = localStorage.getItem("autoMode");
+	useEffect(() => {
+		if (typeof window !== "undefined" && window.localStorage) {
+			const savedThemeMode = localStorage.getItem("themeMode");
+			const savedAutoMode = localStorage.getItem("autoMode");
 
-      if (savedAutoMode === "true") {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        mediaQuery.matches ? setThemeMode("dark") : setThemeMode("light");
-      } else if (savedThemeMode) {
-        setThemeMode(savedThemeMode);
-      }
+			if (savedAutoMode === "true") {
+				const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+				mediaQuery.matches ? setThemeMode("dark") : setThemeMode("light");
+			} else if (savedThemeMode) {
+				setThemeMode(savedThemeMode);
+			}
 
-      savedAutoMode ? setAutoMode(savedAutoMode) : {};
-    }
-  }, []);
+			savedAutoMode ? setAutoMode(savedAutoMode) : {};
+		}
+	}, []);
 
-  // const toggleThemeMode = (newThemeMode) => {
-  //   if (typeof window !== "undefined" && window.localStorage) {
-  //     localStorage.setItem("themeMode", newThemeMode);
-  //     setThemeMode(newThemeMode);
-  //     setAutoMode(localStorage.getItem("autoMode"));
-  //   }
-  // };
+	// const toggleThemeMode = (newThemeMode) => {
+	//   if (typeof window !== "undefined" && window.localStorage) {
+	//     localStorage.setItem("themeMode", newThemeMode);
+	//     setThemeMode(newThemeMode);
+	//     setAutoMode(localStorage.getItem("autoMode"));
+	//   }
+	// };
 
-  const appTheme = React.useMemo(() => {
-    return {
-      ...(themeMode === "dark" ? darkTheme : lightTheme),
-      palette: {
-        ...(themeMode === "dark" ? darkTheme : lightTheme).palette,
-        mode: themeMode,
-      },
-    };
-  }, [themeMode]);
+	const appTheme = React.useMemo(() => {
+		return {
+			...(themeMode === "dark" ? darkTheme : lightTheme),
+			palette: {
+				...(themeMode === "dark" ? darkTheme : lightTheme).palette,
+				mode: themeMode,
+			},
+		};
+	}, [themeMode]);
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      if (requiresAuth) {
-        let newAuthEcommerce = authEcommerce;
-        let newAuthUser = authUser;
+	useEffect(() => {
+		const checkAuthentication = async () => {
+			if (requiresAuth) {
+				let newAuthEcommerce = authEcommerce;
+				let newAuthUser = authUser;
 
-        !newAuthEcommerce ? (newAuthEcommerce = (await AuthEcommerceHelper(dispatch)).result) : {};
-        !newAuthUser ? (newAuthUser = (await AuthUserHelper(dispatch, newAuthEcommerce)).response) : {};
+				!newAuthEcommerce
+					? (newAuthEcommerce = (await AuthEcommerceHelper(dispatch)).result)
+					: {};
+				!newAuthUser
+					? (newAuthUser = (await AuthUserHelper(dispatch, newAuthEcommerce))
+							.response)
+					: {};
 
-        if (!newAuthEcommerce || !newAuthUser) {
-          router.push(
-            `/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
+				if (!newAuthEcommerce || !newAuthUser) {
+					router.push(
+						`/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
     
             Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
-          );
-        }
-      }
-    };
+					);
+				}
+			}
+		};
 
-    checkAuthentication();
-  }, [requiresAuth]);
+		checkAuthentication();
+	}, [requiresAuth]);
 
-  return (
-    <>
-      <CacheProvider value={emotionCache}>
-        <ThemeProvider theme={appTheme}>
-          <AlertMeProvider>
-            <Head>
-              <meta name="viewport" content="initial-scale=1, width=device-width" />
-            </Head>
-            <CustomThemeProvider themeMode={themeMode} setThemeMode={setThemeMode} autoMode={autoMode} setAutoMode={setAutoMode}>
-              {autoMode === "true" ? <ThemeColorListener setThemeMode={setThemeMode} /> : <></>}
-              <CssBaseline />
-              {isLoading ? <LoadingOverlay /> : <></>}
-              <Component {...pageProps} />
-            </CustomThemeProvider>
-          </AlertMeProvider>
-        </ThemeProvider>
-      </CacheProvider>
-    </>
-  );
+	return (
+		<>
+			<CacheProvider value={emotionCache}>
+				<ThemeProvider theme={appTheme}>
+					<AlertMeProvider>
+						<Head>
+							<meta
+								name="viewport"
+								content="initial-scale=1, width=device-width"
+							/>
+						</Head>
+						<CustomThemeProvider
+							themeMode={themeMode}
+							setThemeMode={setThemeMode}
+							autoMode={autoMode}
+							setAutoMode={setAutoMode}
+						>
+							{autoMode === "true" ? (
+								<ThemeColorListener setThemeMode={setThemeMode} />
+							) : (
+								<></>
+							)}
+							<CssBaseline />
+							{isLoading ? <LoadingOverlay /> : <></>}
+							<Component {...pageProps} />
+						</CustomThemeProvider>
+					</AlertMeProvider>
+				</ThemeProvider>
+			</CacheProvider>
+		</>
+	);
 };
 
 export default wrapper.withRedux(MyApp);
 
 MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  emotionCache: PropTypes.object,
-  pageProps: PropTypes.object.isRequired,
+	Component: PropTypes.elementType.isRequired,
+	emotionCache: PropTypes.object,
+	pageProps: PropTypes.object.isRequired,
 };

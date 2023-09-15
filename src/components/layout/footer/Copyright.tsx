@@ -4,14 +4,17 @@ import eCommerceConf from "eCommerceConf.json";
 
 const date = new Date().getFullYear();
 export default function Copyright() {
-  return (
-    <Typography variant="caption">
-      {"Copyright © "}
-      <Link color="inherit" href={eCommerceConf.LinkHomeCenter}>
-        {eCommerceConf.Copyright}
-      </Link>{" "}
-      {date}
-      {"."}
-    </Typography>
-  );
+	return (
+		<Typography variant="caption">
+			{"Copyright © "}
+			<Link
+				color="inherit"
+				href={eCommerceConf.LinkHomeCenter}
+			>
+				{eCommerceConf.Copyright}
+			</Link>{" "}
+			{date}
+			{"."}
+		</Typography>
+	);
 }

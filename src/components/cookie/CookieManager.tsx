@@ -7,44 +7,47 @@ const encryptionKey = eCommerceConf.CRYPTO_KEY;
 
 // Cripta i dati utilizzando AES
 export const encryptData = (data: string) => {
-  const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), encryptionKey).toString();
-  return encryptedData;
+	const encryptedData = CryptoJS.AES.encrypt(
+		JSON.stringify(data),
+		encryptionKey
+	).toString();
+	return encryptedData;
 };
 
 // Decripta i dati utilizzando AES
 export const decryptData = (encryptedData: string) => {
-  const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
-  const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
-  return JSON.parse(decryptedData);
+	const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
+	const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+	return JSON.parse(decryptedData);
 };
 
 const CookieManager = {
-  setCookie: (name: Cookie, value: string, options = {}) => {
-    Cookies.set(name, value, options);
-  },
+	setCookie: (name: Cookie, value: string, options = {}) => {
+		Cookies.set(name, value, options);
+	},
 
-  // Salva un cookie crittografato
-  setEncryptedCookie: (name: Cookie, value: string, options = {}) => {
-    const encryptedValue = encryptData(value);
-    Cookies.set(name, encryptedValue, options);
-  },
+	// Salva un cookie crittografato
+	setEncryptedCookie: (name: Cookie, value: string, options = {}) => {
+		const encryptedValue = encryptData(value);
+		Cookies.set(name, encryptedValue, options);
+	},
 
-  getCookie: (name: Cookie) => {
-    return Cookies.get(name);
-  },
+	getCookie: (name: Cookie) => {
+		return Cookies.get(name);
+	},
 
-  // Ottieni e decripta il valore di un cookie
-  getDecryptedCookie: (name: Cookie) => {
-    const encryptedValue = Cookies.get(name);
-    if (encryptedValue) {
-      return decryptData(encryptedValue);
-    }
-    return null;
-  },
+	// Ottieni e decripta il valore di un cookie
+	getDecryptedCookie: (name: Cookie) => {
+		const encryptedValue = Cookies.get(name);
+		if (encryptedValue) {
+			return decryptData(encryptedValue);
+		}
+		return null;
+	},
 
-  removeCookie: (name: Cookie) => {
-    Cookies.remove(name);
-  },
+	removeCookie: (name: Cookie) => {
+		Cookies.remove(name);
+	},
 };
 
 export default CookieManager;
