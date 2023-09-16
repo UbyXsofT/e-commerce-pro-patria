@@ -9,6 +9,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Router from "next/router";
+import CustomPopper from "src/components/utils/CustomPopper";
 
 const menuId = "up-account-menu";
 const StyledImageLogo = styled(Image)({
@@ -37,21 +38,31 @@ export const ToolBar = ({
 }: ToolBarProps) => {
 	const theme = useTheme();
 
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [notificationsPopper, setNotificationsPopper] =
+		React.useState<null | HTMLElement>(null);
+	const [cartPopper, setCartPopper] = React.useState<null | HTMLElement>(null);
+	const [userPopper, setUserPopper] = React.useState<null | HTMLElement>(null);
 
-	const handlePopperOpen = (event: React.BaseSyntheticEvent) => {
+	const handlePopperOpen = (
+		event: React.BaseSyntheticEvent,
+		setPopper: React.Dispatch<React.SetStateAction<null | HTMLElement>>
+	) => {
 		if (!event.currentTarget) {
 			return;
 		}
 
-		setAnchorEl(event.currentTarget);
+		setPopper(event.currentTarget);
 	};
 
-	const handlePopperClose = () => {
-		setAnchorEl(null);
+	const handlePopperClose = (
+		setPopper: React.Dispatch<React.SetStateAction<null | HTMLElement>>
+	) => {
+		setPopper(null);
 	};
 
-	const openPopper = Boolean(anchorEl);
+	const openPopper = Boolean(notificationsPopper);
+	const openCart = Boolean(cartPopper);
+	const openUser = Boolean(userPopper);
 
 	const handleButtonClick = (target: string) => {
 		if (target !== tipoContesto && drawerDxOpen) {
@@ -89,8 +100,10 @@ export const ToolBar = ({
 								: "Non ci sono Messaggi"
 						}
 						color="inherit"
-						onMouseEnter={handlePopperOpen}
-						onMouseLeave={handlePopperClose}
+						onMouseEnter={(e) => handlePopperOpen(e, setNotificationsPopper)}
+						onMouseLeave={() => {
+							handlePopperClose(setNotificationsPopper);
+						}}
 						onClick={() => {
 							Router.push("/auth/notifiche");
 						}}
@@ -102,53 +115,11 @@ export const ToolBar = ({
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>
-					<Popper
-						sx={{
-							backgroundColor:
-								theme.palette.mode !== "dark" ? "#1B1B1B" : "#F2F2F2",
-							color: theme.palette.mode !== "dark" ? "#F2F2F2" : "#1B1B1B",
-							borderRadius: 1,
-							padding: 1,
-							zIndex: 1201,
-						}}
-						placement="bottom"
-						disablePortal={false}
-						open={openPopper}
-						anchorEl={anchorEl}
-						modifiers={[
-							{
-								name: "flip",
-								enabled: true,
-								options: {
-									altBoundary: true,
-									rootBoundary: "document",
-									padding: 8,
-								},
-							},
-							{
-								name: "preventOverflow",
-								enabled: true,
-								options: {
-									altAxis: true,
-									altBoundary: true,
-									tether: true,
-									rootBoundary: "document",
-									padding: 8,
-								},
-							},
-							{
-								name: "arrow",
-								enabled: false,
-								options: {
-									// Se hai bisogno di una freccia, puoi specificare un elemento qui.
-									// element: arrowRef,
-								},
-							},
-						]}
-					>
-						{/* Contenuto del Popper */}
-						<Typography sx={{ p: 1 }}>Visualizza messaggi e avvisi</Typography>
-					</Popper>
+					<CustomPopper
+						isOpen={openPopper}
+						anchorEl={notificationsPopper}
+						content="Messaggi e Avvisi"
+					/>
 
 					<IconButton
 						size="large"
@@ -159,6 +130,11 @@ export const ToolBar = ({
 						}
 						color="inherit"
 						onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+						onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
+						onMouseLeave={() => {
+							handlePopperClose(setCartPopper);
+						}}
+
 						// onMouseEnter={() => {
 						//   setTipoContesto("carrello");
 						//   handleMouseEnter();
@@ -175,6 +151,12 @@ export const ToolBar = ({
 							<ShoppingCartIcon />
 						</Badge>
 					</IconButton>
+					<CustomPopper
+						isOpen={openCart}
+						anchorEl={cartPopper}
+						content="Carrello"
+					/>
+
 					<IconButton
 						size="large"
 						edge="end"
@@ -182,6 +164,10 @@ export const ToolBar = ({
 						aria-controls={menuId}
 						aria-haspopup="true"
 						onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
+						onMouseEnter={(e) => handlePopperOpen(e, setUserPopper)}
+						onMouseLeave={() => {
+							handlePopperClose(setUserPopper);
+						}}
 						// onMouseEnter={() => {
 						//   setTipoContesto("utente");
 						//   handleMouseEnter();
@@ -194,6 +180,11 @@ export const ToolBar = ({
 					>
 						<AccountCircle />
 					</IconButton>
+					<CustomPopper
+						isOpen={openUser}
+						anchorEl={userPopper}
+						content="Utente"
+					/>
 				</Box>
 			</Toolbar>
 		</>
