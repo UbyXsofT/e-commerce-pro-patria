@@ -146,3 +146,12 @@ export interface MenuItem {
 	subItems: MenuItem[];
 	control?: React.JSX.Element | null;
 }
+
+export interface Subscription {
+	name: string;
+	cost: string;
+	description: string;
+	minMonths: number;
+	characteristics: string[];
+	highlighted?: boolean;
+}

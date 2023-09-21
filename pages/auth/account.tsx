@@ -305,6 +305,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							display: "flex",
 							justifyContent: "center",
 							alignItems: "center",
+							marginBottom: "1em",
 						}}
 					>
 						<Card

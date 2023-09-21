@@ -46,16 +46,13 @@ import ReCAPTCHA from "react-google-recaptcha";
 import stringUpperCase from "src/components/utils/stringUpperCase";
 import getComuni from "src/components/utils/getComuni";
 import CodiceFiscale from "codice-fiscale-js";
+import StyledImageLogo from "src/components/utils/StyledImageLogo";
 
 const SignUp = () => {
 	const theme = useTheme();
 
 	const focus = useRef<Focus>(null);
 
-	const StyledImageLogo = styled(Image)({
-		padding: "10px",
-		maxWidth: 300,
-	});
 	const [activeStep, setActiveStep] = useState(0);
 
 	const steps = ["Dati Personali", "Utente", "Finalizza"];
