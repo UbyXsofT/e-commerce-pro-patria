@@ -30,6 +30,9 @@ import CookieManager from "../../src/components/cookie/CookieManager";
 //import home from "../api/home";
 import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
 
+import Product from "../../src/components/product/Product";
+import Products from "../../data/products.json";
+
 type HomeProps = {
 	setLoading: (isLoading: boolean) => {
 		type: string;
@@ -83,174 +86,15 @@ const Home = ({ setLoading }: HomeProps) => {
 				description="This is a E-Commerce home page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<div>
-					<Typography
-						variant="h5"
-						component="h1"
-						gutterBottom
-					>
-						HOME PAGE
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id
-						ornare ipsum. Cras nec condimentum odio. Proin maximus augue eu eros
-						vestibulum cursus. Suspendisse congue, arcu at volutpat sodales, leo
-						erat pellentesque turpis, a euismod quam magna ac neque.
-						Pellentesque elit purus, vulputate in placerat et, finibus at augue.
-						Maecenas justo nulla, tempor nec elit faucibus, scelerisque
-						ultricies odio. Curabitur sit amet libero a ipsum pellentesque
-						pharetra eget a lacus. Curabitur tristique leo vitae cursus
-						fermentum. Nullam non suscipit risus. Proin tincidunt lectus non
-						ipsum finibus sollicitudin.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Vivamus tempus maximus felis. Duis in dignissim urna, ac aliquet
-						nisl. Aliquam fringilla viverra turpis, ut porta turpis tristique
-						vel. Fusce at metus egestas, lacinia leo vel, fermentum purus.
-						Quisque bibendum sem vitae arcu scelerisque venenatis. Quisque
-						sagittis massa quis leo hendrerit dictum. Suspendisse elementum
-						sapien vel convallis mattis. Vivamus eros eros, viverra sed
-						malesuada varius, gravida vel justo. In hac habitasse platea
-						dictumst. Nam sit amet facilisis arcu. Etiam rhoncus purus at
-						porttitor congue. Curabitur ultricies in turpis eu venenatis. Nulla
-						ac rhoncus ex, eu dictum neque. Sed commodo sagittis lorem. Nulla
-						facilisi.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Sed aliquam arcu sed congue tincidunt. Donec ornare ligula lectus,
-						gravida eleifend quam auctor nec. In egestas suscipit mi. Nullam eu
-						sem ac arcu scelerisque lacinia. Etiam sagittis quam ut congue
-						accumsan. Aliquam iaculis sapien id nunc volutpat, nec feugiat
-						lectus viverra. Quisque nec felis placerat sem viverra facilisis a
-						non justo. Cras pretium sapien risus, eget feugiat dui eleifend nec.
-						Nullam elementum augue metus, ut mattis lacus varius non. Phasellus
-						odio purus, auctor a ante at, mollis ultrices orci. Pellentesque
-						feugiat ex eget ipsum ultrices, a faucibus sem consequat.
-						Pellentesque habitant morbi tristique senectus et netus et malesuada
-						fames ac turpis egestas. Quisque aliquet elit nec nulla laoreet, nec
-						lacinia lectus fermentum. Integer ut nunc gravida, lobortis leo
-						quis, malesuada sapien.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Fusce luctus diam ac neque pretium, id lobortis purus ultrices.
-						Phasellus pharetra vel metus at aliquam. In laoreet viverra dolor,
-						ut fermentum risus pretium nec. Proin at massa quis felis convallis
-						fermentum accumsan eu arcu. Cras volutpat enim libero. Nullam vel
-						arcu eros. Integer eget nibh in purus pretium blandit at nec eros.
-						Nulla aliquet, augue eu posuere scelerisque, est tortor gravida
-						turpis, at auctor dui lacus quis tortor.{" "}
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Sed tristique arcu tellus. Vivamus ullamcorper viverra ante nec
-						consectetur. Integer et purus ante. Curabitur facilisis, lacus a
-						posuere hendrerit, leo augue pulvinar leo, sed interdum tellus
-						tellus vitae nunc. Sed ultricies mi mi, quis faucibus metus mattis
-						vitae. Suspendisse euismod diam nec vehicula suscipit. Ut magna ex,
-						semper at velit ut, blandit sodales lectus. Integer non egestas
-						nisl. Nullam eu odio et nibh mattis hendrerit. Praesent consequat
-						erat id magna pellentesque, vel tristique elit fermentum. Donec
-						interdum posuere nisl a cursus. Aliquam et lacus a massa sagittis
-						maximus at nec lacus. Suspendisse eleifend iaculis turpis, quis
-						pharetra turpis aliquet posuere.
-					</Typography>
-					<Typography
-						variant="h5"
-						component="h3"
-						gutterBottom
-					>
-						Section
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id
-						ornare ipsum. Cras nec condimentum odio. Proin maximus augue eu eros
-						vestibulum cursus. Suspendisse congue, arcu at volutpat sodales, leo
-						erat pellentesque turpis, a euismod quam magna ac neque.
-						Pellentesque elit purus, vulputate in placerat et, finibus at augue.
-						Maecenas justo nulla, tempor nec elit faucibus, scelerisque
-						ultricies odio. Curabitur sit amet libero a ipsum pellentesque
-						pharetra eget a lacus. Curabitur tristique leo vitae cursus
-						fermentum. Nullam non suscipit risus. Proin tincidunt lectus non
-						ipsum finibus sollicitudin.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Vivamus tempus maximus felis. Duis in dignissim urna, ac aliquet
-						nisl. Aliquam fringilla viverra turpis, ut porta turpis tristique
-						vel. Fusce at metus egestas, lacinia leo vel, fermentum purus.
-						Quisque bibendum sem vitae arcu scelerisque venenatis. Quisque
-						sagittis massa quis leo hendrerit dictum. Suspendisse elementum
-						sapien vel convallis mattis. Vivamus eros eros, viverra sed
-						malesuada varius, gravida vel justo. In hac habitasse platea
-						dictumst. Nam sit amet facilisis arcu. Etiam rhoncus purus at
-						porttitor congue. Curabitur ultricies in turpis eu venenatis. Nulla
-						ac rhoncus ex, eu dictum neque. Sed commodo sagittis lorem. Nulla
-						facilisi.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Sed aliquam arcu sed congue tincidunt. Donec ornare ligula lectus,
-						gravida eleifend quam auctor nec. In egestas suscipit mi. Nullam eu
-						sem ac arcu scelerisque lacinia. Etiam sagittis quam ut congue
-						accumsan. Aliquam iaculis sapien id nunc volutpat, nec feugiat
-						lectus viverra. Quisque nec felis placerat sem viverra facilisis a
-						non justo. Cras pretium sapien risus, eget feugiat dui eleifend nec.
-						Nullam elementum augue metus, ut mattis lacus varius non. Phasellus
-						odio purus, auctor a ante at, mollis ultrices orci. Pellentesque
-						feugiat ex eget ipsum ultrices, a faucibus sem consequat.
-						Pellentesque habitant morbi tristique senectus et netus et malesuada
-						fames ac turpis egestas. Quisque aliquet elit nec nulla laoreet, nec
-						lacinia lectus fermentum. Integer ut nunc gravida, lobortis leo
-						quis, malesuada sapien.
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Fusce luctus diam ac neque pretium, id lobortis purus ultrices.
-						Phasellus pharetra vel metus at aliquam. In laoreet viverra dolor,
-						ut fermentum risus pretium nec. Proin at massa quis felis convallis
-						fermentum accumsan eu arcu. Cras volutpat enim libero. Nullam vel
-						arcu eros. Integer eget nibh in purus pretium blandit at nec eros.
-						Nulla aliquet, augue eu posuere scelerisque, est tortor gravida
-						turpis, at auctor dui lacus quis tortor.{" "}
-					</Typography>
-					<Typography
-						component="p"
-						paragraph={true}
-					>
-						Sed tristique arcu tellus. Vivamus ullamcorper viverra ante nec
-						consectetur. Integer et purus ante. Curabitur facilisis, lacus a
-						posuere hendrerit, leo augue pulvinar leo, sed interdum tellus
-						tellus vitae nunc. Sed ultricies mi mi, quis faucibus metus mattis
-						vitae. Suspendisse euismod diam nec vehicula suscipit. Ut magna ex,
-						semper at velit ut, blandit sodales lectus. Integer non egestas
-						nisl. Nullam eu odio et nibh mattis hendrerit. Praesent consequat
-						erat id magna pellentesque, vel tristique elit fermentum. Donec
-						interdum posuere nisl a cursus. Aliquam et lacus a massa sagittis
-						maximus at nec lacus. Suspendisse eleifend iaculis turpis, quis
-						pharetra turpis aliquet posuere.
-					</Typography>
+					<h1>E-Commerce in Next.js and Snipcart</h1>
+					<div>
+						{Products.map((product, i) => (
+							<Product
+								{...product}
+								key={i}
+							/>
+						))}
+					</div>
 				</div>
 			</Layout>
 		</ThemeProvider>

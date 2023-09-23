@@ -176,7 +176,7 @@ const Index = () => {
 		from: { opacity: 0 },
 		to: { opacity: 1 },
 		config: {
-			duration: 2000,
+			duration: 1000,
 		},
 		delay: 2000,
 	});
@@ -211,7 +211,7 @@ const Index = () => {
 		config: {
 			duration: 300,
 		},
-		delay: 3000,
+		delay: 2000,
 	});
 
 	const secFadeInAnimation = useSpring({
@@ -219,9 +219,9 @@ const Index = () => {
 		from: { opacity: 0 },
 		to: { opacity: 0.5 },
 		config: {
-			duration: 2000,
+			duration: 1000,
 		},
-		delay: 3200,
+		delay: 2800,
 	});
 
 	const allxEndBoxAnimation = useSpring({
@@ -232,7 +232,7 @@ const Index = () => {
 			duration: 1000,
 			easing: easings.easeInBack,
 		},
-		delay: 6000,
+		delay: 4000,
 		onRest: () => {
 			startRedirect();
 		},
@@ -282,7 +282,7 @@ const Index = () => {
 						<Title>
 							<Block style={mainBlockAnimation} />
 							<H1 style={mainFadeInAnimation}>
-								E-commerce
+								Loading
 								<Span style={popInAnimation} />
 							</H1>
 						</Title>
