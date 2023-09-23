@@ -35,6 +35,8 @@ import { MuiTelInput } from "mui-tel-input";
 import PasswordInput from "src/components/utils/PasswordInput";
 import { LockOutlined } from "@mui/icons-material";
 
+import eCommerceConf from "eCommerceConf.json";
+
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
 		type: string;
@@ -537,8 +539,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 				openSettings={openCookies}
 				setOpenSettings={setOpenCookies}
 				//digitare il titolo della pagina e la descrizione della pagina.
-				// title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-				// description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+				title={`Account | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<Container maxWidth="md">{defineUI(interfaceState)}</Container>
 			</Layout>

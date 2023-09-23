@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
 type LayoutProps = {
-	children?: any[];
+	children?: React.ReactNode;
 	title: string;
 	description: string;
 	ogImage?: undefined;
