@@ -50,6 +50,10 @@ import Layout from "src/components/layout/LayoutLogin";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
+import {
+	responseCall,
+	tokenlessAccess,
+} from "src/components/CommonTypesInterfaces";
 
 const Login = () => {
 	const theme = useTheme();
@@ -63,34 +67,37 @@ const Login = () => {
 	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 
 	React.useEffect(() => {
-		AuthEcommerceHelper(dispatch);
+		const handleLogout = () => {
+			try {
+				logOutUser(dispatch);
+			} catch (error) {
+				console.log("logoutSuccess error: ", error);
+			}
+		};
 
-		try {
-			logOutUser(dispatch);
-		} catch (error) {
-			console.log("logoutSuccess error: ", error);
-		}
-
-		const calculatePaddingTop = () => {
+		const centerContent = () => {
 			const windowHeight = window.innerHeight;
 			const mainHeight = document.getElementById("main")?.offsetHeight;
 			const calculatedPaddingTop =
 				(windowHeight - (mainHeight ? mainHeight : 0)) / 2;
 			setPaddingTop(calculatedPaddingTop);
 		};
-		calculatePaddingTop();
-		window.addEventListener("resize", calculatePaddingTop);
+
+		AuthEcommerceHelper(dispatch);
+		handleLogout();
+		centerContent();
+		window.addEventListener("resize", centerContent);
+
 		return () => {
-			window.removeEventListener("resize", calculatePaddingTop);
+			window.removeEventListener("resize", centerContent);
 		};
 	}, []);
 
 	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 	const { showAlert } = useAlertMe();
 
-	const handleLogin = async () => {
-		// Controlla se il captchaValue è valido prima di procedere con il login
-		if (!captchaValue) {
+	const handleLogin = async (captchaValue: string | null) => {
+		const handleCaptchaError = async () => {
 			console.log("Si prega di completare il reCAPTCHA.");
 			const textAlert = (
 				<React.Fragment>
@@ -100,12 +107,59 @@ const Login = () => {
 				</React.Fragment>
 			);
 			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-			return;
-		}
+		};
 
 		const fetchData = async () => {
+			const handleLoginResponse = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					//****** TOKENS
+					// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
+					CookieManager.setCookie("accessToken", msg_Resp.accessToken);
+					if (msg_Resp.refreshToken) {
+						// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
+						CookieManager.setCookie("refreshToken", msg_Resp.refreshToken);
+					} else {
+						//rimuovo l'eventuale refreshToken
+						CookieManager.removeCookie("refreshToken");
+					}
+
+					//****** UTENTE
+					// Aggiorna lo stato dell'OGGETTO utente
+					try {
+						console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+						dispatch(setAuthUser(msg_Resp.respWCF));
+						Router.push("/auth/home");
+					} catch (error) {
+						console.log("Aggiorna Redux AuthUser:", error);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
 			setVisLoader(true);
-			const obyPostData = {
+
+			const obyPostData: tokenlessAccess = {
 				clienteKey: eCommerceConf.ClienteKey,
 				userName: username,
 				password: password,
@@ -115,63 +169,24 @@ const Login = () => {
 			};
 
 			try {
-				const respCall = await callNodeService("login", obyPostData, null);
-				console.log("respCall: ", respCall);
-				const msg_Resp = respCall.messageCli.message;
-				if (respCall.successCli) {
-					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
-						//****** TOKENS
-						// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
-						CookieManager.setCookie("accessToken", msg_Resp.accessToken);
-						if (msg_Resp.refreshToken) {
-							// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
-							CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
-						} else {
-							//rimuovo l'eventuale refreshToken
-							CookieManager.removeCookie("refreshToken");
-						}
-						//****** UTENTE
-						// Aggiorna lo stato dell'OGGETTO utente
-						try {
-							console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
-							dispatch(setAuthUser(msg_Resp.respWCF));
-							setVisLoader(false);
-							Router.push("/auth/home");
-						} catch (error) {
-							console.log("Aggiorna Redux AuthUser:", error);
-						}
-					} else {
-						console.log("msg_Resp: ", msg_Resp);
-						// Gestisci l'errore di autenticazione o l'errore di connessione
-						const textAlert = (
-							<React.Fragment>
-								<h3>
-									<strong>
-										Errore nel recupero dei dati, dati incompleti!
-									</strong>
-								</h3>
-							</React.Fragment>
-						);
-						setVisLoader(false);
-						await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-					}
-				} else {
-					// Gestisci l'errore di autenticazione o l'errore di connessione
-					const textAlert = (
-						<React.Fragment>
-							<h3>
-								<strong>{respCall.messageCli}</strong>
-							</h3>
-						</React.Fragment>
-					);
-					setVisLoader(false);
-					await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-				}
+				const respCall: responseCall = await callNodeService(
+					"login",
+					obyPostData,
+					null
+				);
+				handleLoginResponse(respCall);
 			} catch (error) {
+				handleError(error);
+			} finally {
 				setVisLoader(false);
-				console.error("Errore nella chiamata:", error);
 			}
 		};
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			handleCaptchaError();
+			return;
+		}
 
 		fetchData();
 	};
@@ -411,7 +426,7 @@ const Login = () => {
 											fullWidth
 											variant="contained"
 											sx={{ mt: 3, mb: 2 }}
-											onClick={handleLogin}
+											onClick={() => handleLogin(captchaValue)}
 											disabled={!password || !username}
 										>
 											Accedi
