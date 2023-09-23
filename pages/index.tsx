@@ -6,12 +6,8 @@ import { useTheme, styled } from "@mui/material/styles";
 import Image from "next/image";
 import { Lato, Poppins } from "next/font/google";
 import eCommerceConf from "../eCommerceConf.json";
-import callNodeService from "./api/callNodeService";
-import CookieManager from "../src/components/cookie/CookieManager";
 //redux
-import { setAuthEcommerce, setAuthUser } from "../src/store/actions";
 import { useDispatch } from "react-redux";
-import css from "styled-jsx/css";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 

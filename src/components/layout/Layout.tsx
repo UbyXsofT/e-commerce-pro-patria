@@ -13,6 +13,8 @@ import DrawerSx from "./drawer/drawerSx/DrawerSx";
 import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
+import eCommerceConf from "../../../eCommerceConf.json";
+
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -32,14 +34,17 @@ const Layout = ({
 	openSettings,
 	setOpenSettings,
 }: LayoutProps) => {
+	// website Url
+	const pageUrl = "https://tommysgest.com/";
+	// quando condividi questa pagina su facebook vedrai questa immagine
+	const ogImg = "/public/images/banner-social.png";
+
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
 	const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
 	const pLeftDrawerOpen = "88px";
 	const pLeftDrawerClose = "24px";
-
 	const user = useSelector((state: StoreState) => state.authUser);
-
 	const handleDrawerSxOpen = (open: boolean) => {
 		if (open) {
 			// Chiudi il DrawerDx se DrawerSx viene espanso
@@ -57,11 +62,6 @@ const Layout = ({
 			duration: 200,
 		},
 	});
-
-	// website Url
-	const pageUrl = "https://tommysgest.com/";
-	// quando condividi questa pagina su facebook vedrai questa immagine
-	const ogImg = "/public/images/banner-social.png";
 
 	return (
 		<>
@@ -91,12 +91,12 @@ const Layout = ({
 				/>
 				<meta
 					property="og:url"
-					content={url ? url : pageUrl}
+					content={eCommerceConf.LinkHomeCenter}
 					key="og:url"
 				/>
 				<meta
 					property="og:image"
-					content={ogImage ? ogImage : ogImg}
+					content="/images/banner-social.png"
 					key="og:image"
 				/>
 				<meta
