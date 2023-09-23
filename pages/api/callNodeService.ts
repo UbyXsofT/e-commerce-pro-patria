@@ -2,31 +2,18 @@
 import axios from "axios";
 import eCommerceConf from "../../eCommerceConf.json";
 import qs from "qs";
-
-interface tokenlessAccess {
-	clienteKey: string;
-	userName: string;
-	password: string;
-	ricordami: boolean;
-	accessToken: null;
-	refreshToken: null;
-}
-
-interface tokenfulAccess {
-	clienteKey: string;
-	accessToken: string;
-	refreshToken: string;
-}
-
-interface authEcommerce {
-	clienteKey: string;
-}
+import {
+	authEcommerce,
+	responseCall,
+	tokenfulAccess,
+	tokenlessAccess,
+} from "src/components/CommonTypesInterfaces";
 
 export default async function callNodeService(
 	endPoint: "login" | "access-ecommerce",
 	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce,
 	token: null
-) {
+): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");
 	//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
 	// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo

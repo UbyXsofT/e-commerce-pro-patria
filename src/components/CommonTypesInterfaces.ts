@@ -155,3 +155,27 @@ export interface Subscription {
 	characteristics: string[];
 	highlighted?: boolean;
 }
+
+export interface tokenlessAccess {
+	clienteKey: string;
+	userName: string;
+	password: string;
+	ricordami: boolean;
+	accessToken: null;
+	refreshToken: null;
+}
+
+export interface tokenfulAccess {
+	clienteKey: string;
+	accessToken: string;
+	refreshToken: string;
+}
+
+export interface authEcommerce {
+	clienteKey: string;
+}
+
+export interface responseCall {
+	successCli: boolean;
+	messageCli: any;
+}
