@@ -87,6 +87,9 @@ const Home = ({ setLoading }: HomeProps) => {
 			>
 				<div>
 					<h1>E-Commerce in Next.js and Snipcart</h1>
+					<span className="snipcart-items-count">COUNT</span>
+					<span className="snipcart-total-price">€ 0,00</span>
+
 					<div>
 						{Products.map((product, i) => (
 							<Product

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Container,
 	Grid,
@@ -26,6 +26,12 @@ import { setLoading } from "src/store/actions";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
+import callNodeService from "pages/api/callNodeService";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { responseCall, resetPsw } from "src/components/CommonTypesInterfaces";
+import eCommerceConf from "eCommerceConf.json";
+import Layout from "src/components/layout/Layout";
+
 import Step1 from "src/components/account/resetPassword/Step1";
 import Step2 from "src/components/account/resetPassword/Step2";
 import { useRouter } from "next/router";
@@ -41,7 +47,6 @@ const resetPassword = (_setLoading: any) => {
 
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
-
 	const [done, setDone] = useState(false);
 
 	const [email, setEmail] = useState("");
@@ -51,40 +56,82 @@ const resetPassword = (_setLoading: any) => {
 		noSsr: false,
 	});
 
+	const { showAlert } = useAlertMe();
+	const [visLoader, setVisLoader] = React.useState(false);
+
+	const fetchData = async () => {
+		const handleLoginResponse = (respCall: responseCall) => {
+			const handleSuccess = (msg_Resp: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{msg_Resp}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "success", "ATTENZIONE!", textAlert, true);
+			};
+
+			const msg_Resp = respCall.messageCli.message;
+			if (respCall.successCli) {
+				if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+					handleSuccess(msg_Resp);
+				} else {
+					handleError("Errore nel recupero dei dati, dati incompleti!");
+				}
+			} else {
+				handleError(respCall.messageCli);
+			}
+		};
+
+		const handleError = (error: any) => {
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{error}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		};
+
+		setVisLoader(true);
+
+		const obyPostData: resetPsw = {
+			clienteKey: eCommerceConf.ClienteKey,
+			email: email,
+			codFisc: codiceFiscale,
+		};
+
+		try {
+			const respCall: responseCall = await callNodeService(
+				"recupero-credenziali",
+				obyPostData,
+				null
+			);
+			handleLoginResponse(respCall);
+		} catch (error) {
+			handleError(error);
+		} finally {
+			setVisLoader(false);
+		}
+	};
+
+	useEffect(() => {
+		if (done === true) {
+			//alert("done! " + done);
+			fetchData();
+		}
+	}, [done]);
+
 	return (
 		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			{/* <Layout
-        //digitare il titolo della pagina e la descrizione della pagina.
-        title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-        description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
-      > */}
-			<AppBar
-				position="static"
-				sx={{
-					// Specify the type of backgroundColor
-					backgroundColor: (
-						theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
-							backgroundColor?: string;
-						}
-					)?.backgroundColor,
-				}}
+			{/* <CssBaseline /> */}
+			<Layout
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Recupera credenziali | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<Container sx={{ display: "flex", alignItems: "center" }}>
-					<Toolbar>
-						<StyledImageLogo
-							src="/images/LogoO.png"
-							alt="Logo"
-							width={200}
-							height={70}
-							priority={true}
-						/>
-					</Toolbar>
-				</Container>
-			</AppBar>
-			{done ? (
-				<Step2 smUp={smUp} />
-			) : (
 				<Step1
 					origin={origin}
 					smUp={smUp}
@@ -94,7 +141,7 @@ const resetPassword = (_setLoading: any) => {
 					codiceFiscale={codiceFiscale}
 					setCodiceFiscale={setCodiceFiscale}
 				/>
-			)}
+			</Layout>
 		</ThemeProvider>
 	);
 };

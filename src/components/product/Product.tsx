@@ -61,10 +61,6 @@ export interface IProduct {
 	imageUrl: string;
 }
 
-// interface IProductProps {
-// 	product: IProduct;
-// }
-
 const Product = (props: IProduct) => {
 	return (
 		<div>

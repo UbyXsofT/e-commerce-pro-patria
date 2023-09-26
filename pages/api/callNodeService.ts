@@ -4,14 +4,15 @@ import eCommerceConf from "../../eCommerceConf.json";
 import qs from "qs";
 import {
 	authEcommerce,
+	resetPsw,
 	responseCall,
 	tokenfulAccess,
 	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
 
 export default async function callNodeService(
-	endPoint: "login" | "access-ecommerce",
-	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce,
+	endPoint: "login" | "access-ecommerce" | "recupero-credenziali",
+	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce | resetPsw,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

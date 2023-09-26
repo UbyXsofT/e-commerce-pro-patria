@@ -175,6 +175,12 @@ export interface authEcommerce {
 	clienteKey: string;
 }
 
+export interface resetPsw {
+	clienteKey: string;
+	codFisc: string;
+	email: string;
+}
+
 export interface responseCall {
 	successCli: boolean;
 	messageCli: any;
