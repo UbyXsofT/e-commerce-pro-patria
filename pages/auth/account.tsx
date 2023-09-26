@@ -36,6 +36,7 @@ import PasswordInput from "src/components/utils/PasswordInput";
 import { LockOutlined } from "@mui/icons-material";
 
 import eCommerceConf from "eCommerceConf.json";
+import { useSettings } from "src/components/layout/SettingsContext";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -48,7 +49,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const theme = useTheme();
 	const router = useRouter();
 
-	const [openCookies, setOpenCookies] = useState(false);
+	const { openSettings, setOpenSettings } = useSettings();
 	const [interfaceState, setInterfaceState] = useState<
 		"read" | "authenticate" | "modify"
 	>("read");
@@ -280,7 +281,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								<ButtonGroup fullWidth>
 									<Button
 										onClick={() => {
-											setOpenCookies(true);
+											setOpenSettings(true);
 										}}
 									>
 										<SettingsIcon style={{ marginRight: 5 }} />
@@ -536,8 +537,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
-				openSettings={openCookies}
-				setOpenSettings={setOpenCookies}
+				// openSettings={openCookies}
+				// setOpenSettings={setOpenCookies}
 				//digitare il titolo della pagina e la descrizione della pagina.
 				title={`Account | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."

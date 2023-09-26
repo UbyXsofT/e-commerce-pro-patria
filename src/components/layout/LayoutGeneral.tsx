@@ -25,7 +25,7 @@ type LayoutProps = {
 	url?: undefined;
 };
 
-const Layout = ({
+const LayoutGeneral = ({
 	children,
 	title,
 	description,
@@ -160,4 +160,4 @@ const Layout = ({
 	);
 };
 
-export default Layout;
+export default LayoutGeneral;

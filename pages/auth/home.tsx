@@ -25,7 +25,7 @@ import Layout from "../../src/components/layout/Layout";
 import eCommerceConf from "../../eCommerceConf.json";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
-import CookieManager from "../../src/components/cookie/CookieManager";
+
 //*-- API---*//
 //import home from "../api/home";
 import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
