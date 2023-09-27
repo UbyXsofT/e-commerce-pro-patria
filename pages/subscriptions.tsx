@@ -40,7 +40,7 @@ const Subscriptions = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<AppBar
+			{/* <AppBar
 				position="static"
 				sx={{
 					backgroundColor: (
@@ -91,7 +91,7 @@ const Subscriptions = () => {
 						</Grid>
 					);
 				})}
-			</Grid>
+			</Grid> */}
 		</ThemeProvider>
 	);
 };
