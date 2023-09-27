@@ -14,9 +14,10 @@ import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
 import eCommerceConf from "../../../eCommerceConf.json";
-
+import MuiAppBar from "@mui/material/AppBar";
 import { SettingsProvider } from "./SettingsContext";
-
+import { styled, useTheme } from "@mui/material/styles";
+import { ToolBar } from "src/components/layout/header/ToolBar";
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -43,15 +44,6 @@ const LayoutGeneral = ({
 	const pLeftDrawerOpen = "88px";
 	const pLeftDrawerClose = "24px";
 	const user = useSelector((state: StoreState) => state.authUser);
-	const handleDrawerSxOpen = (open: boolean) => {
-		if (open) {
-			// Chiudi il DrawerDx se DrawerSx viene espanso
-			setDrawerDxOpen(false);
-			setDrawerSxOpen(true);
-		} else {
-			setDrawerSxOpen(false);
-		}
-	};
 
 	const mainAnimation = useSpring({
 		opacity: 1,
@@ -61,6 +53,11 @@ const LayoutGeneral = ({
 		},
 	});
 
+	const AppBar = styled(MuiAppBar)(({ theme }) => ({
+		zIndex: theme.zIndex.drawer + 1,
+		width: "100%",
+	}));
+	const theme = useTheme();
 	return (
 		<>
 			<Head>
@@ -110,27 +107,30 @@ const LayoutGeneral = ({
 			<SettingsProvider>
 				<animated.main style={mainAnimation}>
 					<Box sx={{ display: "flex" }}>
-						<Header
-							drawerDxOpen={drawerDxOpen}
-							tipoContesto={tipoContesto}
-							setTipoContesto={setTipoContesto}
-							setDrawerDxOpen={setDrawerDxOpen}
-							alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
-							cartAlerts={user ? Number(user.CARRELLO) : 0}
-						/>
-						<DrawerSx onOpen={handleDrawerSxOpen} />{" "}
-						{/* Passa la funzione al componente DrawerSx */}
-						<DrawerDx
-							drawerDxOpen={drawerDxOpen}
-							setDrawerDxOpen={setDrawerDxOpen}
-							tipoContesto={tipoContesto}
-						>
-							{tipoContesto === "utente" ? (
-								<UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} />
-							) : (
-								<CarrelloDrawerContentDx />
-							)}
-						</DrawerDx>
+						<>
+							<AppBar
+								id="header"
+								position="fixed"
+								sx={{
+									backgroundColor: (
+										theme?.components?.MuiAppBar?.styleOverrides
+											?.colorInherit as {
+											backgroundColor?: string;
+										}
+									)?.backgroundColor,
+								}}
+							>
+								<ToolBar
+									drawerDxOpen={null}
+									tipoContesto={null}
+									setTipoContesto={null}
+									setDrawerDxOpen={null}
+									alerts={null}
+									cartAlerts={null}
+								/>
+							</AppBar>
+						</>
+
 						<Box
 							component="main"
 							sx={{

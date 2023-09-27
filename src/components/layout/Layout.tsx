@@ -15,8 +15,6 @@ import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
 import eCommerceConf from "../../../eCommerceConf.json";
 
-import { SettingsProvider } from "./SettingsContext";
-
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -107,55 +105,54 @@ const Layout = ({
 					key="og:description"
 				/>
 			</Head>
-			<SettingsProvider>
-				<animated.main style={mainAnimation}>
-					<Box sx={{ display: "flex" }}>
-						<Header
-							drawerDxOpen={drawerDxOpen}
-							tipoContesto={tipoContesto}
-							setTipoContesto={setTipoContesto}
-							setDrawerDxOpen={setDrawerDxOpen}
-							alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
-							cartAlerts={user ? Number(user.CARRELLO) : 0}
-						/>
-						<DrawerSx onOpen={handleDrawerSxOpen} />{" "}
-						{/* Passa la funzione al componente DrawerSx */}
-						<DrawerDx
-							drawerDxOpen={drawerDxOpen}
-							setDrawerDxOpen={setDrawerDxOpen}
-							tipoContesto={tipoContesto}
-						>
-							{tipoContesto === "utente" ? (
-								<UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} />
-							) : (
-								<CarrelloDrawerContentDx />
-							)}
-						</DrawerDx>
-						<Box
-							component="main"
-							sx={{
-								flexGrow: 1,
-								pr: 3,
-								pt: 3,
-								pb: 3,
-								marginTop: (theme) =>
-									`calc(${
-										theme.mixins.toolbar.minHeight
-											? (theme.mixins.toolbar.minHeight as number) + 5
-											: 0
-									}px)`,
-								paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
-							}}
-						>
-							<AlertMe />
-							<div id="content"> {children}</div>
-							<Footer />
-						</Box>
-						{/* Componente CookieConsent */}
-						<CookieConsent />
+
+			<animated.main style={mainAnimation}>
+				<Box sx={{ display: "flex" }}>
+					<Header
+						drawerDxOpen={drawerDxOpen}
+						tipoContesto={tipoContesto}
+						setTipoContesto={setTipoContesto}
+						setDrawerDxOpen={setDrawerDxOpen}
+						alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
+						cartAlerts={user ? Number(user.CARRELLO) : 0}
+					/>
+					<DrawerSx onOpen={handleDrawerSxOpen} />{" "}
+					{/* Passa la funzione al componente DrawerSx */}
+					<DrawerDx
+						drawerDxOpen={drawerDxOpen}
+						setDrawerDxOpen={setDrawerDxOpen}
+						tipoContesto={tipoContesto}
+					>
+						{tipoContesto === "utente" ? (
+							<UserDrawerContentDx username={user ? user?.NOMINATIVO : ""} />
+						) : (
+							<CarrelloDrawerContentDx />
+						)}
+					</DrawerDx>
+					<Box
+						component="main"
+						sx={{
+							flexGrow: 1,
+							pr: 3,
+							pt: 3,
+							pb: 3,
+							marginTop: (theme) =>
+								`calc(${
+									theme.mixins.toolbar.minHeight
+										? (theme.mixins.toolbar.minHeight as number) + 5
+										: 0
+								}px)`,
+							paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
+						}}
+					>
+						<AlertMe />
+						<div id="content"> {children}</div>
+						<Footer />
 					</Box>
-				</animated.main>
-			</SettingsProvider>
+					{/* Componente CookieConsent */}
+					<CookieConsent />
+				</Box>
+			</animated.main>
 		</>
 	);
 };

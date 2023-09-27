@@ -18,6 +18,7 @@ import BlockPage from "./blockPage";
 import { StoreState } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
+import { SettingsProvider } from "src/components/layout/SettingsContext";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -105,29 +106,31 @@ const MyApp = (props: {
 		<>
 			<CacheProvider value={emotionCache}>
 				<ThemeProvider theme={appTheme}>
-					<AlertMeProvider>
-						<Head>
-							<meta
-								name="viewport"
-								content="initial-scale=1, width=device-width"
-							/>
-						</Head>
-						<CustomThemeProvider
-							themeMode={themeMode}
-							setThemeMode={setThemeMode}
-							autoMode={autoMode}
-							setAutoMode={setAutoMode}
-						>
-							{autoMode === "true" ? (
-								<ThemeColorListener setThemeMode={setThemeMode} />
-							) : (
-								<></>
-							)}
-							<CssBaseline />
-							{isLoading ? <LoadingOverlay /> : <></>}
-							<Component {...pageProps} />
-						</CustomThemeProvider>
-					</AlertMeProvider>
+					<SettingsProvider>
+						<AlertMeProvider>
+							<Head>
+								<meta
+									name="viewport"
+									content="initial-scale=1, width=device-width"
+								/>
+							</Head>
+							<CustomThemeProvider
+								themeMode={themeMode}
+								setThemeMode={setThemeMode}
+								autoMode={autoMode}
+								setAutoMode={setAutoMode}
+							>
+								{autoMode === "true" ? (
+									<ThemeColorListener setThemeMode={setThemeMode} />
+								) : (
+									<></>
+								)}
+								<CssBaseline />
+								{isLoading ? <LoadingOverlay /> : <></>}
+								<Component {...pageProps} />
+							</CustomThemeProvider>
+						</AlertMeProvider>
+					</SettingsProvider>
 				</ThemeProvider>
 			</CacheProvider>
 		</>

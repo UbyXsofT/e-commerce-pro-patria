@@ -47,6 +47,7 @@ import stringUpperCase from "src/components/utils/stringUpperCase";
 import getComuni from "src/components/utils/getComuni";
 import CodiceFiscale from "codice-fiscale-js";
 import StyledImageLogo from "src/components/utils/StyledImageLogo";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
 
 const SignUp = () => {
 	const theme = useTheme();
@@ -480,132 +481,120 @@ const SignUp = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<AppBar
-				position="static"
-				sx={{
-					backgroundColor: (
-						theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
-							backgroundColor?: string;
-						}
-					)?.backgroundColor,
-				}}
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Registrati | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce register page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<Container sx={{ display: "flex", alignItems: "center" }}>
-					<Toolbar>
-						<StyledImageLogo
-							src="/images/LogoO.png"
-							alt="Logo"
-							width={200}
-							height={70}
-							priority={true}
-						/>
-					</Toolbar>
-				</Container>
-			</AppBar>
-			<Container
-				maxWidth={"md"}
-				component={Paper}
-				sx={{ padding: 3, marginTop: mdUp ? 3 : 0, marginBottom: mdUp ? 3 : 0 }}
-			>
-				{/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
-				{/* TODO: Icons are not centered properly */}
-				<Stepper
-					activeStep={activeStep}
-					alternativeLabel
+				<Container
+					maxWidth={"md"}
+					component={Paper}
+					sx={{
+						padding: 3,
+						marginTop: mdUp ? 3 : 0,
+						marginBottom: mdUp ? 3 : 0,
+					}}
 				>
-					{underage
-						? underageSteps.map((label) => (
-								<Step key={label}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-						  ))
-						: steps.map((label) => (
-								<Step key={label}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-						  ))}
-				</Stepper>
-				{activeStep === (underage ? underageSteps.length : steps.length) ? (
-					<React.Fragment>
-						<Typography
-							variant="h5"
-							gutterBottom
-							sx={{ marginTop: 3 }}
-							textAlign={"center"}
-						>
-							Registrazione Completata
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							textAlign={"center"}
-						>
-							Il tuo account è stato registrato con successo
-						</Typography>
-						<Button
-							fullWidth
-							variant="contained"
-							onClick={() => Router.push("/account/login")}
-							sx={{
-								mt: 3,
-								mb: 2,
-								width: 500,
-								marginLeft: "auto",
-								marginRight: "auto",
-								display: "flex",
-							}}
-						>
-							Accedi
-						</Button>
-					</React.Fragment>
-				) : (
-					<React.Fragment>
-						{getStepContent(activeStep)}
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "flex-end",
-								alignContent: "space-between",
-								marginTop: "2em",
-							}}
-						>
-							{activeStep == 0 && (
-								<Link
-									onClick={() => Router.push("/account/login")}
-									variant="body2"
-									sx={{
-										userSelect: "none",
-										cursor: "pointer",
-										color: (theme) =>
-											theme.palette.mode === "light" ? "black" : "white",
+					{/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
+					{/* TODO: Icons are not centered properly */}
+					<Stepper
+						activeStep={activeStep}
+						alternativeLabel
+					>
+						{underage
+							? underageSteps.map((label) => (
+									<Step key={label}>
+										<StepLabel>{label}</StepLabel>
+									</Step>
+							  ))
+							: steps.map((label) => (
+									<Step key={label}>
+										<StepLabel>{label}</StepLabel>
+									</Step>
+							  ))}
+					</Stepper>
+					{activeStep === (underage ? underageSteps.length : steps.length) ? (
+						<React.Fragment>
+							<Typography
+								variant="h5"
+								gutterBottom
+								sx={{ marginTop: 3 }}
+								textAlign={"center"}
+							>
+								Registrazione Completata
+							</Typography>
+							<Typography
+								variant="subtitle1"
+								textAlign={"center"}
+							>
+								Il tuo account è stato registrato con successo
+							</Typography>
+							<Button
+								fullWidth
+								variant="contained"
+								onClick={() => Router.push("/account/login")}
+								sx={{
+									mt: 3,
+									mb: 2,
+									width: 500,
+									marginLeft: "auto",
+									marginRight: "auto",
+									display: "flex",
+								}}
+							>
+								Accedi
+							</Button>
+						</React.Fragment>
+					) : (
+						<React.Fragment>
+							{getStepContent(activeStep)}
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "flex-end",
+									alignContent: "space-between",
+									marginTop: "2em",
+								}}
+							>
+								{activeStep == 0 && (
+									<Link
+										onClick={() => Router.push("/account/login")}
+										variant="body2"
+										sx={{
+											userSelect: "none",
+											cursor: "pointer",
+											color: (theme) =>
+												theme.palette.mode === "light" ? "black" : "white",
 
-										marginRight: "auto",
-										marginTop: "auto",
-										marginBottom: "auto",
-									}}
-								>
-									Hai già un account? Accedi
-								</Link>
-							)}
-							{activeStep !== 0 && (
-								<Button
-									onClick={handleBack}
-									sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
-								>
-									Precedente
-								</Button>
-							)}
+											marginRight: "auto",
+											marginTop: "auto",
+											marginBottom: "auto",
+										}}
+									>
+										Hai già un account? Accedi
+									</Link>
+								)}
+								{activeStep !== 0 && (
+									<Button
+										onClick={handleBack}
+										sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
+									>
+										Precedente
+									</Button>
+								)}
 
-							{underage
-								? activeStep === underageSteps.length - 1
+								{underage
+									? activeStep === underageSteps.length - 1
+										? finalize
+										: next
+									: activeStep === steps.length - 1
 									? finalize
-									: next
-								: activeStep === steps.length - 1
-								? finalize
-								: next}
-						</Box>
-					</React.Fragment>
-				)}
-			</Container>
+									: next}
+							</Box>
+						</React.Fragment>
+					)}
+				</Container>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

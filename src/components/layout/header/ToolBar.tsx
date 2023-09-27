@@ -18,14 +18,14 @@ const StyledImageLogo = styled(Image)({
 	maxHeight: 60,
 	marginLeft: -30,
 });
-
+//React.Dispatch<React.SetStateAction<string | undefined>>
 type ToolBarProps = {
-	drawerDxOpen: boolean;
-	setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	tipoContesto: string;
-	setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
-	alerts: number;
-	cartAlerts: number;
+	drawerDxOpen: boolean | null;
+	setDrawerDxOpen?: React.Dispatch<React.SetStateAction<boolean>> | null;
+	tipoContesto: string | null;
+	setTipoContesto?: React.Dispatch<React.SetStateAction<string>> | null;
+	alerts: number | null;
+	cartAlerts: number | null;
 };
 
 export const ToolBar = ({
@@ -64,15 +64,24 @@ export const ToolBar = ({
 	const openCart = Boolean(cartPopper);
 	const openUser = Boolean(userPopper);
 
-	const handleButtonClick = (target: string) => {
-		if (target !== tipoContesto && drawerDxOpen) {
-			setTipoContesto(target);
-		} else {
-			setTipoContesto(target);
-			setDrawerDxOpen(!drawerDxOpen);
-		}
+	// const handleButtonClick = (target: string) => {
+	// 	if (target !== tipoContesto && drawerDxOpen) {
+	// 		setTipoContesto(target);
+	// 	} else {
+	// 		setTipoContesto(target);
+	// 		setDrawerDxOpen(!drawerDxOpen);
+	// 	}
+	// };
 
-		//toggleDrawerDx(!drawerDxOpen); // Inverte il valore di drawerDxOpen
+	const handleButtonClick = (target: string) => {
+		if (setTipoContesto && setDrawerDxOpen) {
+			if (target !== tipoContesto && drawerDxOpen) {
+				setTipoContesto(target);
+			} else {
+				setTipoContesto(target);
+				setDrawerDxOpen(!drawerDxOpen);
+			}
+		}
 	};
 
 	return (
@@ -91,7 +100,9 @@ export const ToolBar = ({
 				/>
 				<Box sx={{ flexGrow: 1 }} />
 
-				<Box sx={{ display: "flex" }}>
+				<Box
+					sx={tipoContesto !== null ? { display: "flex" } : { display: "none" }}
+				>
 					<IconButton
 						size="large"
 						aria-label={

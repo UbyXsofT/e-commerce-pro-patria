@@ -32,6 +32,7 @@ import { useAlertMe } from "../../src/components/layout/alert/AlertMeContext";
 
 import Product from "../../src/components/product/Product";
 import Products from "../../data/products.json";
+import { AlertMe } from "src/components/layout/alert/AlertMe";
 
 type HomeProps = {
 	setLoading: (isLoading: boolean) => {
@@ -85,6 +86,7 @@ const Home = ({ setLoading }: HomeProps) => {
 				title={`Home | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description="This is a E-Commerce home page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
+				<AlertMe />
 				<div>
 					<h1>E-Commerce in Next.js and Snipcart</h1>
 					<span className="snipcart-items-count">COUNT</span>

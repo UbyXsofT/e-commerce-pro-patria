@@ -30,11 +30,10 @@ import callNodeService from "pages/api/callNodeService";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { responseCall, resetPsw } from "src/components/CommonTypesInterfaces";
 import eCommerceConf from "eCommerceConf.json";
-import Layout from "src/components/layout/Layout";
-
 import Step1 from "src/components/account/resetPassword/Step1";
 import Step2 from "src/components/account/resetPassword/Step2";
 import { useRouter } from "next/router";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
 
 const StyledImageLogo = styled(Image)({
 	padding: "10px",
@@ -126,8 +125,8 @@ const resetPassword = (_setLoading: any) => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			{/* <CssBaseline /> */}
-			<Layout
+			<CssBaseline />
+			<LayoutGeneral
 				//digitare il titolo della pagina e la descrizione della pagina.
 				title={`Recupera credenziali | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
@@ -141,7 +140,7 @@ const resetPassword = (_setLoading: any) => {
 					codiceFiscale={codiceFiscale}
 					setCodiceFiscale={setCodiceFiscale}
 				/>
-			</Layout>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

@@ -11,9 +11,9 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 type HeaderProps = {
 	drawerDxOpen: boolean;
-	setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	setDrawerDxOpen?: React.Dispatch<React.SetStateAction<boolean>> | null;
 	tipoContesto: string;
-	setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
+	setTipoContesto?: React.Dispatch<React.SetStateAction<string>> | null;
 	alerts: number;
 	cartAlerts: number;
 };

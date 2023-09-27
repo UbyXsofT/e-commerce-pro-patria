@@ -25,7 +25,7 @@ export function AlertMe() {
 			? currTema?.Dark?.palette?.background?.default
 			: currTema?.Light?.palette?.background?.default;
 	const backgroundColor = backgroundColorWithOpacity || "black";
-	const backgroundColorWithOpacityValue = hexToRGBA(backgroundColor, 0.2);
+	const backgroundColorWithOpacityValue = hexToRGBA("000000", 0.5);
 
 	return (
 		<div

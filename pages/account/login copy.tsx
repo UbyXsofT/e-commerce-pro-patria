@@ -54,7 +54,6 @@ import {
 	responseCall,
 	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
-import LayoutGeneral from "src/components/layout/LayoutGeneral";
 
 const Login = () => {
 	const theme = useTheme();
@@ -64,15 +63,6 @@ const Login = () => {
 	const [ricordami, setRicordami] = React.useState(false);
 	const [paddingTop, setPaddingTop] = React.useState(0);
 	const [visLoader, setVisLoader] = React.useState(false);
-
-	const CustomTextField = styled(TextField)(({ theme }) => ({
-		"& .MuiInputBase-input": {
-			padding: "8px", // Modifica il padding del testo all'interno
-		},
-		backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#ffffff",
-		color: theme.palette.mode === "dark" ? "#ffffff" : "#121212",
-		borderRadius: theme.shape.borderRadius, // Mantieni il borderRadius dal tema
-	}));
 
 	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 
@@ -255,213 +245,245 @@ const Login = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<LoadingWrapper showLoader={visLoader}>
-				<LayoutGeneral
+				<Layout
 					//digitare il titolo della pagina e la descrizione della pagina.
 					title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 					description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 				>
 					<AlertMe />
-					<div
-						id="contenitore"
-						style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
+					<AppBar
+						position="static"
+						sx={{
+							display: isMobile ? "block" : "none",
+							backgroundColor: (
+								theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
+									backgroundColor?: string;
+								}
+							)?.backgroundColor,
+						}}
 					>
-						<Box id="main">
+						<Container sx={{ display: "flex", alignItems: "center" }}>
+							<Toolbar>
+								<StyledImageLogo
+									// src='/images/LogoO.png'
+									// alt='Logo'
+									// width={200}
+									// height={70}
+									// priority={true}
+									// style={{padding: "10px", maxWidth: 300}}
+									src="/images/LogoO.png"
+									alt="Logo"
+									width={190}
+									height={70}
+									priority={true}
+									sx={{ cursor: "pointer" }}
+								/>
+							</Toolbar>
+						</Container>
+					</AppBar>
+
+					<Box
+						id="main"
+						sx={{ paddingTop: smUp ? `${paddingTop}px` : 0 }}
+					>
+						<Grid
+							container
+							component="main"
+							sx={{ padding: smUp ? 2 : 0 }}
+						>
+							{/* TODO There has to be a better way to implement this */}
+							<CssBaseline />
 							<Grid
 								container
-								component="main"
-								sx={{ height: 400 }}
+								justifyContent="center"
+								alignItems="center"
+								item
+								xs={false}
+								sm={4}
+								md={7}
+								component={Paper}
+								elevation={6}
+								square
+								sx={{
+									backgroundImage: "url(/images/wallpaper.jpg)",
+									backgroundRepeat: "no-repeat",
+									backgroundSize: "cover",
+									backgroundPosition: "center",
+									position: "relative",
+									//display: !isMobile ? "block" : "none",
+								}}
 							>
-								<Grid
-									container
-									justifyContent="center"
-									alignItems="center"
-									item
-									xs={false}
-									sm={4}
-									md={6}
-									component={Paper}
-									elevation={2}
-									square
-									sx={{
-										backgroundImage: "url(/images/wallpaper.jpg)",
-										backgroundRepeat: "no-repeat",
-										backgroundSize: "cover",
-										backgroundPosition: "center",
+								<div
+									style={{
+										width: "50%",
+										height: "50%",
 										position: "relative",
-										//display: !isMobile ? "block" : "none",
+										zIndex: 1,
 									}}
 								>
-									<div
-										style={{
-											width: "50%",
-											height: "50%",
-											position: "relative",
-											zIndex: 1,
-										}}
-									>
-										<Image
-											src="/images/LogoQ.png"
-											alt="Logo"
-											fill={true}
-											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-											style={{ objectFit: "contain" }}
-											//objectFit='contain'
-											priority={true}
-										/>
-									</div>
-									<Box sx={overlayStyle} />
-								</Grid>
+									<Image
+										src="/images/LogoQ.png"
+										alt="Logo"
+										fill={true}
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+										style={{ objectFit: "contain" }}
+										//objectFit='contain'
+										priority={true}
+									/>
+								</div>
+								<Box sx={overlayStyle} />
+							</Grid>
 
-								<Grid
-									item
-									xs={12}
-									sm={8}
-									md={6}
-									component={Paper}
-									elevation={2}
-									square
+							<Grid
+								item
+								xs={12}
+								sm={8}
+								md={5}
+								component={Paper}
+								elevation={6}
+								square
+							>
+								<Box
+									sx={{
+										my: 8,
+										mx: 4,
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+									}}
 								>
-									<Box
-										sx={{
-											my: 2,
-											mx: 4,
-											display: "flex",
-											flexDirection: "column",
-											alignItems: "center",
-										}}
+									<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+										<LockOutlinedIcon />
+									</Avatar>
+									<Typography
+										component="h1"
+										variant="h5"
 									>
-										<Avatar
-											sx={{ ml: 1, mr: 1, mb: 1, bgcolor: "secondary.main" }}
-										>
-											<LockOutlinedIcon />
-										</Avatar>
-										<Typography
-											component="h3"
-											variant="h5"
+										Accedi
+									</Typography>
+									<Box
+										component="form"
+										noValidate
+										onSubmit={handleSubmit}
+										sx={{ mt: 1 }}
+									>
+										<TextField
+											margin="normal"
+											required
+											fullWidth
+											id="username"
+											label="Nome Utente"
+											name="username"
+											autoComplete="username"
+											value={username}
+											onChange={(event) => {
+												setUsername(event.target.value);
+											}}
+											InputProps={{
+												style: {
+													backgroundColor:
+														theme.palette.mode === "dark"
+															? "#121212"
+															: "#ffffff",
+													color:
+														theme.palette.mode === "dark"
+															? "#ffffff"
+															: "#121212",
+												},
+											}}
+										/>
+
+										<PasswordInput
+											value={password}
+											setValue={setPassword}
+											name="password"
+											id="password"
+											label="Password"
+											fullWidth={true}
+											margin="normal"
+										/>
+
+										<FormControlLabel
+											control={
+												<Checkbox
+													value="remember"
+													color="primary"
+													checked={ricordami}
+													onClick={() => setRicordami(!ricordami)}
+												/>
+											}
+											label="Ricordati di me"
+										/>
+
+										{/* Add the reCAPTCHA component */}
+										<ReCAPTCHA
+											sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+											onChange={(value) => setCaptchaValue(value)}
+										/>
+
+										<Button
+											//   type="submit"
+											fullWidth
+											variant="contained"
+											sx={{ mt: 3, mb: 2 }}
+											onClick={() => handleLogin(captchaValue)}
+											disabled={!password || !username}
 										>
 											Accedi
-										</Typography>
-										<Box
-											component="form"
-											noValidate
-											onSubmit={handleSubmit}
-											sx={{ mt: 1 }}
-										>
-											<TextField
-												margin="normal"
-												required
-												fullWidth
-												id="username"
-												label="Nome Utente"
-												name="username"
-												autoComplete="username"
-												value={username}
-												onChange={(event) => {
-													setUsername(event.target.value);
-												}}
-												InputProps={{
-													style: {
-														backgroundColor:
-															theme.palette.mode === "dark"
-																? "#121212"
-																: "#ffffff",
-														color:
-															theme.palette.mode === "dark"
-																? "#ffffff"
-																: "#121212",
-													},
-												}}
-											/>
-
-											<PasswordInput
-												value={password}
-												setValue={setPassword}
-												name="password"
-												id="password"
-												label="Password"
-												fullWidth={true}
-												margin="normal"
-											/>
-
-											<FormControlLabel
-												control={
-													<Checkbox
-														value="remember"
-														color="primary"
-														checked={ricordami}
-														onClick={() => setRicordami(!ricordami)}
-													/>
-												}
-												label="Ricordati di me"
-											/>
-
-											{/* Add the reCAPTCHA component */}
-											<ReCAPTCHA
-												sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-												onChange={(value) => setCaptchaValue(value)}
-											/>
-
-											<Button
-												//   type="submit"
-												fullWidth
-												variant="contained"
-												sx={{ mt: 3, mb: 2 }}
-												onClick={() => handleLogin(captchaValue)}
-												disabled={!password || !username}
+										</Button>
+										<Grid container>
+											<Grid
+												item
+												xs
 											>
-												Accedi
-											</Button>
-											<Grid container>
-												<Grid
-													item
-													xs
+												<Link
+													onClick={() =>
+														Router.push({
+															pathname: "/account/resetPassword",
+															query: { origin: "/account/login" },
+														})
+													}
+													variant="body2"
+													sx={{
+														userSelect: "none",
+														cursor: "pointer",
+														color: (theme) =>
+															theme.palette.mode === "light"
+																? "black"
+																: "white",
+													}}
 												>
-													<Link
-														onClick={() =>
-															Router.push({
-																pathname: "/account/resetPassword",
-																query: { origin: "/account/login" },
-															})
-														}
-														variant="body2"
-														sx={{
-															userSelect: "none",
-															cursor: "pointer",
-															color: (theme) =>
-																theme.palette.mode === "light"
-																	? "black"
-																	: "white",
-														}}
-													>
-														Password dimenticata?
-													</Link>
-												</Grid>
-												<Grid item>
-													<Link
-														onClick={() => Router.push("/account/register")}
-														variant="body2"
-														sx={{
-															userSelect: "none",
-															cursor: "pointer",
-															color: (theme) =>
-																theme.palette.mode === "light"
-																	? "black"
-																	: "white",
-														}}
-													>
-														Non hai un account? Iscriviti
-													</Link>
-												</Grid>
+													Password dimenticata?
+												</Link>
 											</Grid>
-											{/* <Copyright sx={{ mt: 5 }} /> */}
-											{!smUp ? copyright : <div></div>}
-										</Box>
+											<Grid item>
+												<Link
+													onClick={() => Router.push("/account/register")}
+													variant="body2"
+													sx={{
+														userSelect: "none",
+														cursor: "pointer",
+														color: (theme) =>
+															theme.palette.mode === "light"
+																? "black"
+																: "white",
+													}}
+												>
+													Non hai un account? Iscriviti
+												</Link>
+											</Grid>
+										</Grid>
+										{/* <Copyright sx={{ mt: 5 }} /> */}
+										{!smUp ? copyright : <div></div>}
 									</Box>
-								</Grid>
+								</Box>
 							</Grid>
-						</Box>
-					</div>
-				</LayoutGeneral>
+
+							{smUp ? copyright : <div></div>}
+							{/* <CookieConsent /> */}
+						</Grid>
+					</Box>
+				</Layout>
 			</LoadingWrapper>
 		</ThemeProvider>
 	);
