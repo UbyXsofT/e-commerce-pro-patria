@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+//import "styles/globals.scss"; // TODO DA VERIFICARE COME CARICARLO
+import React, { use, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,6 +20,9 @@ import { StoreState } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
+
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import eCommerceConf from "eCommerceConf.json";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -104,35 +108,54 @@ const MyApp = (props: {
 
 	return (
 		<>
-			<CacheProvider value={emotionCache}>
-				<ThemeProvider theme={appTheme}>
-					<SettingsProvider>
-						<AlertMeProvider>
-							<Head>
-								<meta
-									name="viewport"
-									content="initial-scale=1, width=device-width"
-								/>
-							</Head>
-							<CustomThemeProvider
-								themeMode={themeMode}
-								setThemeMode={setThemeMode}
-								autoMode={autoMode}
-								setAutoMode={setAutoMode}
-							>
-								{autoMode === "true" ? (
-									<ThemeColorListener setThemeMode={setThemeMode} />
-								) : (
-									<></>
-								)}
-								<CssBaseline />
-								{isLoading ? <LoadingOverlay /> : <></>}
-								<Component {...pageProps} />
-							</CustomThemeProvider>
-						</AlertMeProvider>
-					</SettingsProvider>
-				</ThemeProvider>
-			</CacheProvider>
+			<GoogleReCaptchaProvider
+				reCaptchaKey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+				language="en"
+				useRecaptchaNet={false}
+				useEnterprise={false}
+				scriptProps={{
+					async: false,
+					defer: false,
+					appendTo: "head",
+					nonce: undefined,
+				}}
+				container={{
+					parameters: {
+						badge: "bottomleft",
+						theme: themeMode === "dark" ? "dark" : "light",
+					},
+				}}
+			>
+				<CacheProvider value={emotionCache}>
+					<ThemeProvider theme={appTheme}>
+						<SettingsProvider>
+							<AlertMeProvider>
+								<Head>
+									<meta
+										name="viewport"
+										content="initial-scale=1, width=device-width"
+									/>
+								</Head>
+								<CustomThemeProvider
+									themeMode={themeMode}
+									setThemeMode={setThemeMode}
+									autoMode={autoMode}
+									setAutoMode={setAutoMode}
+								>
+									{autoMode === "true" ? (
+										<ThemeColorListener setThemeMode={setThemeMode} />
+									) : (
+										<></>
+									)}
+									<CssBaseline />
+									{isLoading ? <LoadingOverlay /> : <></>}
+									<Component {...pageProps} />
+								</CustomThemeProvider>
+							</AlertMeProvider>
+						</SettingsProvider>
+					</ThemeProvider>
+				</CacheProvider>
+			</GoogleReCaptchaProvider>
 		</>
 	);
 };

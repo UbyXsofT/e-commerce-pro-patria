@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-
 import {
 	Container,
 	Grid,
@@ -103,22 +101,8 @@ const Login = () => {
 		};
 	}, []);
 
-	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 	const { showAlert } = useAlertMe();
-
-	const handleLogin = async (captchaValue: string | null) => {
-		const handleCaptchaError = async () => {
-			console.log("Si prega di completare il reCAPTCHA.");
-			const textAlert = (
-				<React.Fragment>
-					<h3>
-						<strong>Si prega di completare il reCAPTCHA.</strong>
-					</h3>
-				</React.Fragment>
-			);
-			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-		};
-
+	const handleLogin = async () => {
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
@@ -191,13 +175,6 @@ const Login = () => {
 				setVisLoader(false);
 			}
 		};
-
-		// Controlla se il captchaValue è valido prima di procedere con il login
-		if (!captchaValue) {
-			handleCaptchaError();
-			return;
-		}
-
 		fetchData();
 	};
 
@@ -395,18 +372,12 @@ const Login = () => {
 												label="Ricordati di me"
 											/>
 
-											{/* Add the reCAPTCHA component */}
-											<ReCAPTCHA
-												sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-												onChange={(value) => setCaptchaValue(value)}
-											/>
-
 											<Button
 												//   type="submit"
 												fullWidth
 												variant="contained"
 												sx={{ mt: 3, mb: 2 }}
-												onClick={() => handleLogin(captchaValue)}
+												onClick={() => handleLogin()}
 												disabled={!password || !username}
 											>
 												Accedi
