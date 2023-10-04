@@ -262,8 +262,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 									<Button
 										onClick={() => {
 											router.push({
-												pathname: "/account/resetPassword",
-												query: { origin: "/auth/account" },
+												pathname: "/auth/setNewPassword",
+												query: { origin: "/auth" },
 											});
 										}}
 									>
