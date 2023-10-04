@@ -97,7 +97,7 @@ const SignUp = () => {
 	const [cap, setCap] = useState("");
 	const [province, setProvince] = useState("");
 
-	const [notes, setNotes] = useState<string | undefined>("");
+	const [notes, setNotes] = useState<string | undefined>(undefined);
 
 	const [parentAddress, setParentAddress] = useState("");
 	const [parentComuneResidenza, setParentComuneResidenza] =
@@ -120,6 +120,7 @@ const SignUp = () => {
 		correct: false,
 		detail: "",
 	});
+	const [isSamePassword, setIsSamePassword] = useState(false);
 
 	const [readyToSend, setReadyToSend] = useState<ReadyToSend>({
 		status: false,
@@ -190,6 +191,21 @@ const SignUp = () => {
 			setPrivacy={setPrivacy}
 			notes={notes}
 			setNotes={setNotes}
+			toCheck={[
+				!codiceFiscaleInvalid,
+				firstName,
+				lastName,
+				gender,
+				dateOfBirth,
+				placeOfBirth,
+				address,
+				city,
+				cap,
+				province,
+				email,
+				phoneNumber,
+				privacy,
+			]}
 		/>
 	);
 
@@ -227,6 +243,19 @@ const SignUp = () => {
 			setProvince={setParentProvince}
 			phoneNumber={parentPhoneNumber}
 			setPhoneNumber={setParentPhoneNumber}
+			toCheck={[
+				!parentCodiceFiscaleInvalid,
+				parentFirstName,
+				parentLastName,
+				parentGender,
+				parentDateOfBirth,
+				parentPlaceOfBirth,
+				parentAddress,
+				parentCity,
+				parentCap,
+				parentProvince,
+				parentPhoneNumber,
+			]}
 		/>
 	);
 
@@ -243,6 +272,8 @@ const SignUp = () => {
 			setConfirmPassword={setConfirmPassword}
 			passwordSafety={passwordSafety}
 			setPasswordSafety={setPasswordSafety}
+			setIsSamePassword={setIsSamePassword}
+			toCheck={[email, username, passwordSafety.correct, isSamePassword]}
 		/>
 	);
 
@@ -276,10 +307,11 @@ const SignUp = () => {
 			parentProvince={parentProvince}
 			parentPhoneNumber={parentPhoneNumber}
 			notes={notes}
+			toCheck={[]}
 		/>
 	);
 
-	function getStepContent(step: number) {
+	const getStepContent = (step: number): React.JSX.Element | true => {
 		if (underage) {
 			switch (step) {
 				case 0:
@@ -291,7 +323,7 @@ const SignUp = () => {
 				case 3:
 					return Step3User;
 				default:
-					throw new Error("Unknown step");
+					return true;
 			}
 		} else {
 			switch (step) {
@@ -302,10 +334,10 @@ const SignUp = () => {
 				case 2:
 					return Step3User;
 				default:
-					throw new Error("Unknown step");
+					return true;
 			}
 		}
-	}
+	};
 
 	const mdUp = useMediaQuery(theme.breakpoints.up("md"), {
 		noSsr: false,
@@ -322,6 +354,18 @@ const SignUp = () => {
 	};
 
 	// TODO: Handle dateOfBirth and Cap
+
+	const checkValidation = (toCheck: any[]): boolean => {
+		let isValid = true;
+
+		toCheck.forEach((value) => {
+			if (!value) {
+				isValid = false;
+			}
+		});
+
+		return isValid;
+	};
 
 	const handleNext = () => {
 		setCaptcha(null);
@@ -414,10 +458,21 @@ const SignUp = () => {
 		setActiveStep(activeStep - 1);
 	};
 
+	const isJSXElement = (
+		element: React.JSX.Element | true
+	): element is React.JSX.Element => {
+		return (element as React.JSX.Element).type !== undefined;
+	};
+
+	const content = getStepContent(activeStep);
+
 	const next = (
 		<Button
 			variant="contained"
-			disabled={disableButton}
+			disabled={
+				!checkValidation(isJSXElement(content) ? content.props.toCheck : [])
+			}
+			// disabled={disableButton}
 			onClick={handleNext}
 			sx={{ mt: "auto", ml: 1 }}
 		>
@@ -478,6 +533,40 @@ const SignUp = () => {
 		}
 	}, [activeStep]);
 
+	const SuccessScreen = (
+		<>
+			<Typography
+				variant="h5"
+				gutterBottom
+				sx={{ marginTop: 3 }}
+				textAlign={"center"}
+			>
+				Registrazione Completata
+			</Typography>
+			<Typography
+				variant="subtitle1"
+				textAlign={"center"}
+			>
+				Il tuo account è stato registrato con successo
+			</Typography>
+			<Button
+				fullWidth
+				variant="contained"
+				onClick={() => Router.push("/account/login")}
+				sx={{
+					mt: 3,
+					mb: 2,
+					width: 500,
+					marginLeft: "auto",
+					marginRight: "auto",
+					display: "flex",
+				}}
+			>
+				Accedi
+			</Button>
+		</>
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
@@ -514,37 +603,7 @@ const SignUp = () => {
 							  ))}
 					</Stepper>
 					{activeStep === (underage ? underageSteps.length : steps.length) ? (
-						<React.Fragment>
-							<Typography
-								variant="h5"
-								gutterBottom
-								sx={{ marginTop: 3 }}
-								textAlign={"center"}
-							>
-								Registrazione Completata
-							</Typography>
-							<Typography
-								variant="subtitle1"
-								textAlign={"center"}
-							>
-								Il tuo account è stato registrato con successo
-							</Typography>
-							<Button
-								fullWidth
-								variant="contained"
-								onClick={() => Router.push("/account/login")}
-								sx={{
-									mt: 3,
-									mb: 2,
-									width: 500,
-									marginLeft: "auto",
-									marginRight: "auto",
-									display: "flex",
-								}}
-							>
-								Accedi
-							</Button>
-						</React.Fragment>
+						SuccessScreen
 					) : (
 						<React.Fragment>
 							{getStepContent(activeStep)}

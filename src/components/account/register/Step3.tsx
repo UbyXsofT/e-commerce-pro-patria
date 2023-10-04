@@ -43,6 +43,7 @@ type Step3Props = {
 	parentProvince: string;
 	parentPhoneNumber: string;
 	notes?: string;
+	toCheck: any[];
 };
 
 const Step3 = ({
