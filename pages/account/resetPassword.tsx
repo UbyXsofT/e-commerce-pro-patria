@@ -59,7 +59,7 @@ const resetPassword = (_setLoading: any) => {
 	const [visLoader, setVisLoader] = React.useState(false);
 
 	const fetchData = async () => {
-		const handleLoginResponse = (respCall: responseCall) => {
+		const handleResetPswResponse = (respCall: responseCall) => {
 			const handleSuccess = (msg_Resp: any) => {
 				const textAlert = (
 					<React.Fragment>
@@ -68,13 +68,21 @@ const resetPassword = (_setLoading: any) => {
 						</h3>
 					</React.Fragment>
 				);
-				showAlert("filled", "success", "ATTENZIONE!", textAlert, true);
+				showAlert(
+					"filled",
+					"success",
+					"Recupero Credenziali di Accesso Riuscito!",
+					textAlert,
+					true
+				);
 			};
 
 			const msg_Resp = respCall.messageCli.message;
 			if (respCall.successCli) {
-				if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
-					handleSuccess(msg_Resp);
+				console.log(msg_Resp);
+
+				if (msg_Resp && msg_Resp.respWCF) {
+					handleSuccess(msg_Resp.respWCF.message);
 				} else {
 					handleError("Errore nel recupero dei dati, dati incompleti!");
 				}
@@ -108,7 +116,7 @@ const resetPassword = (_setLoading: any) => {
 				obyPostData,
 				null
 			);
-			handleLoginResponse(respCall);
+			handleResetPswResponse(respCall);
 		} catch (error) {
 			handleError(error);
 		} finally {
