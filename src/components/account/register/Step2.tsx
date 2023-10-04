@@ -21,6 +21,8 @@ type Step2Props = {
 	setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
 	passwordSafety: PasswordSafety;
 	setPasswordSafety: React.Dispatch<React.SetStateAction<PasswordSafety>>;
+	setIsSamePassword: React.Dispatch<React.SetStateAction<boolean>>;
+	toCheck: any[];
 };
 
 const Step2 = ({
@@ -35,8 +37,15 @@ const Step2 = ({
 	setConfirmPassword,
 	passwordSafety,
 	setPasswordSafety,
+	setIsSamePassword,
 }: Step2Props) => {
 	const handleSubmit = () => {};
+
+	React.useEffect(() => {
+		password === confirmPassword
+			? setIsSamePassword(true)
+			: setIsSamePassword(false);
+	}, [password, confirmPassword]);
 
 	return (
 		<Container

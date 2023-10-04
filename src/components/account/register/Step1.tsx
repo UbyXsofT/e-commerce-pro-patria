@@ -76,6 +76,7 @@ type Step1Props = {
 	setPrivacy?: React.Dispatch<React.SetStateAction<boolean>>;
 	notes?: string;
 	setNotes?: React.Dispatch<React.SetStateAction<string | undefined>>;
+	toCheck: any[];
 };
 
 const Step1 = ({
