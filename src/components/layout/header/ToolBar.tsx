@@ -1,7 +1,14 @@
 //ToolBar.js
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import { Badge, Box, Toolbar, Popper, Typography } from "@mui/material";
+import {
+	Badge,
+	Box,
+	Toolbar,
+	Popper,
+	Typography,
+	TextField,
+} from "@mui/material";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
@@ -198,6 +205,17 @@ export const ToolBar = ({
 					/>
 				</Box>
 			</Toolbar>
+			{/* <Box
+				style={{
+					backgroundColor: "red",
+					height: "auto",
+					width: "100%",
+				}}
+			>
+				<h6 style={{ textAlign: "center" }}>
+					Connessione persa. Controlla la tua connessione.
+				</h6>
+			</Box> */}
 		</>
 	);
 };

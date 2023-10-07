@@ -1,6 +1,7 @@
 // AlertMe.js
 
 import React, { useContext } from "react";
+import Router from "next/router";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -14,18 +15,30 @@ import { ThemeManager } from "src/theme/ThemeManager";
 
 export function AlertMe() {
 	const { alertParams, setAlertParams } = React.useContext(AlertMeContext);
-	const { variant, severity, title, desc, openAlertMe } = alertParams;
+	const { variant, severity, title, desc, openAlertMe, route } = alertParams;
 	const theme = useTheme();
 	const { currTema } = ThemeManager();
 	//variant: filled - outlined
 	//severity: error - warning - info - success
-
 	const backgroundColorWithOpacity =
 		theme.palette.mode === "light"
 			? currTema?.Dark?.palette?.background?.default
 			: currTema?.Light?.palette?.background?.default;
 	const backgroundColor = backgroundColorWithOpacity || "black";
 	const backgroundColorWithOpacityValue = hexToRGBA("000000", 0.5);
+
+	// Function to handle alert closure
+	const handleCloseAlert = () => {
+		// Logica di chiusura dell'alert
+		// ...
+		// Verifica se la proprietà 'route' è definita e, se sì, esegui un'azione basata su di essa
+		if (route) {
+			console.log(`Redirecting to ${route}`);
+			Router.push(route);
+		}
+		// Chiudi l'alert
+		setAlertParams((prevParams) => ({ ...prevParams, openAlertMe: false }));
+	};
 
 	return (
 		<div
@@ -68,10 +81,11 @@ export function AlertMe() {
 								size="small"
 								color="inherit"
 								onClick={() => {
-									setAlertParams({
-										...alertParams,
-										openAlertMe: false,
-									});
+									handleCloseAlert();
+									// setAlertParams({
+									// 	...alertParams,
+									// 	openAlertMe: false,
+									// });
 								}}
 							>
 								<CloseIcon fontSize="inherit" />

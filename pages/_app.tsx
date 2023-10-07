@@ -20,7 +20,7 @@ import { StoreState } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
-
+import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import eCommerceConf from "eCommerceConf.json";
 
@@ -108,54 +108,56 @@ const MyApp = (props: {
 
 	return (
 		<>
-			<GoogleReCaptchaProvider
-				reCaptchaKey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-				language="en"
-				useRecaptchaNet={false}
-				useEnterprise={false}
-				scriptProps={{
-					async: false,
-					defer: false,
-					appendTo: "head",
-					nonce: undefined,
-				}}
-				container={{
-					parameters: {
-						badge: "bottomleft",
-						theme: themeMode === "dark" ? "dark" : "light",
-					},
-				}}
-			>
-				<CacheProvider value={emotionCache}>
-					<ThemeProvider theme={appTheme}>
-						<SettingsProvider>
-							<AlertMeProvider>
-								<Head>
-									<meta
-										name="viewport"
-										content="initial-scale=1, width=device-width"
-									/>
-								</Head>
-								<CustomThemeProvider
-									themeMode={themeMode}
-									setThemeMode={setThemeMode}
-									autoMode={autoMode}
-									setAutoMode={setAutoMode}
-								>
-									{autoMode === "true" ? (
-										<ThemeColorListener setThemeMode={setThemeMode} />
-									) : (
-										<></>
-									)}
-									<CssBaseline />
-									{isLoading ? <LoadingOverlay /> : <></>}
-									<Component {...pageProps} />
-								</CustomThemeProvider>
-							</AlertMeProvider>
-						</SettingsProvider>
-					</ThemeProvider>
-				</CacheProvider>
-			</GoogleReCaptchaProvider>
+			<NetworkStatusProvider>
+				<GoogleReCaptchaProvider
+					reCaptchaKey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+					language="en"
+					useRecaptchaNet={false}
+					useEnterprise={false}
+					scriptProps={{
+						async: false,
+						defer: false,
+						appendTo: "head",
+						nonce: undefined,
+					}}
+					container={{
+						parameters: {
+							badge: "bottomleft",
+							theme: themeMode === "dark" ? "dark" : "light",
+						},
+					}}
+				>
+					<CacheProvider value={emotionCache}>
+						<ThemeProvider theme={appTheme}>
+							<SettingsProvider>
+								<AlertMeProvider>
+									<Head>
+										<meta
+											name="viewport"
+											content="initial-scale=1, width=device-width"
+										/>
+									</Head>
+									<CustomThemeProvider
+										themeMode={themeMode}
+										setThemeMode={setThemeMode}
+										autoMode={autoMode}
+										setAutoMode={setAutoMode}
+									>
+										{autoMode === "true" ? (
+											<ThemeColorListener setThemeMode={setThemeMode} />
+										) : (
+											<></>
+										)}
+										<CssBaseline />
+										{isLoading ? <LoadingOverlay /> : <></>}
+										<Component {...pageProps} />
+									</CustomThemeProvider>
+								</AlertMeProvider>
+							</SettingsProvider>
+						</ThemeProvider>
+					</CacheProvider>
+				</GoogleReCaptchaProvider>
+			</NetworkStatusProvider>
 		</>
 	);
 };
