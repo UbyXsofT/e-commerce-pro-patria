@@ -59,7 +59,7 @@ const Home = ({ setLoading }: HomeProps) => {
 					<span className="snipcart-total-price">€ 0,00</span>
 
 					<div>
-						<ProductList products={HomeProducts} />
+						{/* <ProductList products={HomeProducts} /> */}
 					</div>
 				</div>
 			</Layout>
