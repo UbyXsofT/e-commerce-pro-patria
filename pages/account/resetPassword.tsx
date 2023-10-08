@@ -73,7 +73,8 @@ const resetPassword = (_setLoading: any) => {
 					"success",
 					"Recupero Credenziali di Accesso Riuscito!",
 					textAlert,
-					true
+					true,
+					"/account/login"
 				);
 			};
 
