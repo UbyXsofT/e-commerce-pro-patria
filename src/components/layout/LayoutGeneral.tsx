@@ -1,6 +1,6 @@
 // Layout.js
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
 import { Header } from "./header/Header";
@@ -37,6 +37,9 @@ const LayoutGeneral = ({
 	const pageUrl = "https://tommysgest.com/";
 	// quando condividi questa pagina su facebook vedrai questa immagine
 	const ogImg = "/public/images/banner-social.png";
+	const theme = useTheme();
+
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
@@ -57,7 +60,6 @@ const LayoutGeneral = ({
 		zIndex: theme.zIndex.drawer + 1,
 		width: "100%",
 	}));
-	const theme = useTheme();
 	return (
 		<>
 			<Head>
@@ -127,6 +129,8 @@ const LayoutGeneral = ({
 									setDrawerDxOpen={null}
 									alerts={null}
 									cartAlerts={null}
+									isMobile={isMobile}
+									noAuth={true}
 								/>
 							</AppBar>
 						</>

@@ -1,6 +1,18 @@
 // Layout.js
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import { Box } from "@mui/material";
+import React, {
+	Dispatch,
+	ReactElement,
+	SetStateAction,
+	useEffect,
+} from "react";
+import {
+	BottomNavigation,
+	BottomNavigationAction,
+	Box,
+	useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
 import { useSpring, animated } from "@react-spring/web";
 import { DrawerDx } from "./drawer/drawerDx/DrawerDx";
 import { Header } from "./header/Header";
@@ -14,7 +26,8 @@ import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
 import eCommerceConf from "../../../eCommerceConf.json";
-
+import { navigationPoints } from "./header/ToolBar";
+import { useRouter } from "next/router";
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -37,19 +50,11 @@ const Layout = ({
 
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
-	const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
-	const pLeftDrawerOpen = "88px";
-	const pLeftDrawerClose = "24px";
 	const user = useSelector((state: StoreState) => state.authUser);
-	const handleDrawerSxOpen = (open: boolean) => {
-		if (open) {
-			// Chiudi il DrawerDx se DrawerSx viene espanso
-			setDrawerDxOpen(false);
-			setDrawerSxOpen(true);
-		} else {
-			setDrawerSxOpen(false);
-		}
-	};
+
+	const [bottomNavSelected, setBottomNavSelected] = React.useState<
+		undefined | number
+	>(undefined);
 
 	const mainAnimation = useSpring({
 		opacity: 1,
@@ -58,6 +63,25 @@ const Layout = ({
 			duration: 200,
 		},
 	});
+
+	const router = useRouter();
+
+	const theme = useTheme();
+
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+	useEffect(() => {
+		navigationPoints.forEach((button, idx) => {
+			if (router.pathname === button.link) {
+				setBottomNavSelected(idx);
+			}
+		});
+	}, []);
+
+	// TODO: Fix Captcha Positioning
+	// TODO: Fix Footer size/position
+	// TODO: Fix Breakpoint Definition
+	// TODO: Fix Desktop Navigation Coloring
 
 	return (
 		<>
@@ -115,8 +139,8 @@ const Layout = ({
 						setDrawerDxOpen={setDrawerDxOpen}
 						alerts={user ? Number(user?.NEWAVV) + Number(user.NEWCOM) : 0}
 						cartAlerts={user ? Number(user.CARRELLO) : 0}
+						isMobile={isMobile}
 					/>
-					<DrawerSx onOpen={handleDrawerSxOpen} />{" "}
 					{/* Passa la funzione al componente DrawerSx */}
 					<DrawerDx
 						drawerDxOpen={drawerDxOpen}
@@ -133,21 +157,45 @@ const Layout = ({
 						component="main"
 						sx={{
 							flexGrow: 1,
-							pr: 3,
-							pt: 3,
-							pb: 3,
+							p: 3,
 							marginTop: (theme) =>
 								`calc(${
 									theme.mixins.toolbar.minHeight
 										? (theme.mixins.toolbar.minHeight as number) + 5
 										: 0
 								}px)`,
-							paddingLeft: drawerSxOpen ? pLeftDrawerOpen : pLeftDrawerClose,
 						}}
 					>
 						<AlertMe />
 						<div id="content"> {children}</div>
 						<Footer />
+						{isMobile ? (
+							<BottomNavigation
+								style={{
+									width: "100%",
+									position: "fixed",
+									bottom: 0,
+									marginLeft: -24,
+								}}
+								showLabels
+								value={bottomNavSelected}
+							>
+								{navigationPoints.map((button, idx) => (
+									<BottomNavigationAction
+										label={button.name}
+										key={idx}
+										onClick={() => {
+											if (router.pathname !== button.link) {
+												setBottomNavSelected(idx);
+												router.push(button.link);
+											}
+										}}
+									/>
+								))}
+							</BottomNavigation>
+						) : (
+							<></>
+						)}
 					</Box>
 					{/* Componente CookieConsent */}
 					<CookieConsent />
