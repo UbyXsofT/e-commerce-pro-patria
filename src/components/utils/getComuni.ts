@@ -19,7 +19,7 @@ const getComuni = async (
 
 		setComuni(ComuniPaesi);
 	} catch (error) {
-		alert(error);
+		console.log(error);
 	}
 };
 
