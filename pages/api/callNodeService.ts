@@ -10,12 +10,41 @@ import {
 	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
 
+async function isNodeServiceReachable() {
+	try {
+		await axios.head(`${eCommerceConf.UrlServerNode}/api/get-check-server`);
+		return true;
+	} catch (error) {
+		console.error(
+			"Il servizio Node.js non è raggiungibile o non attivo.",
+			error
+		);
+		return false;
+	}
+}
+
 export default async function callNodeService(
 	endPoint: "login" | "access-ecommerce" | "recupero-credenziali",
 	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce | resetPsw,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");
+
+	// Controllo se il browser è online
+	if (!navigator.onLine) {
+		return {
+			successCli: false,
+			messageCli: "Il dispositivo non è connesso a Internet.",
+		};
+	}
+
+	// Controllo se il servizio Node.js è raggiungibile
+	if (!(await isNodeServiceReachable())) {
+		return {
+			successCli: false,
+			messageCli: "Il servizio Node.js non è raggiungibile o non attivo.",
+		};
+	}
 
 	try {
 		let headersData: {} = {
@@ -53,7 +82,7 @@ export default async function callNodeService(
 				console.log(error);
 				return {
 					successCli: false,
-					messageCli: error.response.data.message
+					messageCli: error.response?.data?.message
 						? error.response.data.message
 						: `errore: ${error}`,
 				};

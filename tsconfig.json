@@ -28,7 +28,8 @@
 		"src/components/account/register/Step1.tsx",
 		"pages/account/resetPassword.tsx",
 		"src/components/theme/theme.tsx",
-		"src/menu/CreateMenu.tsx"
+		"src/menu/CreateMenu.tsx",
+		"pages/_app.sx"
 	],
 	"exclude": ["node_modules"]
 }

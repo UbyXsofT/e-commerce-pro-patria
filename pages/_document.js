@@ -6,6 +6,7 @@ import { roboto } from "../src/components/theme/theme";
 import createEmotionCache from "../src/components/utils/createEmotionCache";
 import { ThemeProvider } from "@mui/material/styles";
 import { lightTheme } from "../src/components/theme/theme";
+
 import Script from "next/script";
 export default function MyDocument(props) {
 	const { emotionStyleTags } = props;
@@ -20,19 +21,6 @@ export default function MyDocument(props) {
 				<meta
 					name="theme-color"
 					content={lightTheme.palette.primary.main}
-				/>
-				<link
-					rel="preconnect"
-					href="https://app.snipcart.com"
-				/>
-				<link
-					rel="preconnect"
-					href="https://cdn.snipcart.com"
-				/>
-
-				<link
-					rel="stylesheet"
-					href="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.css"
 				/>
 
 				<link
@@ -146,13 +134,6 @@ export default function MyDocument(props) {
 					<Main />
 					<NextScript />
 				</ThemeProvider>
-				<script src="https://cdn.snipcart.com/themes/v3.2.0/default/snipcart.js"></script>
-				{/* <Script src="https://cdn.Snipcart.com/themes/v3.4.1/default/Snipcart.js" /> */}
-				<div
-					id="snipcart"
-					data-api-key="YjBjMjJkYWQtODllNy00MzA0LWFhY2EtZThiNTQyZDEwYjJiNjM4MzA5MzY0Njc3Nzc4OTkz"
-					hidden
-				></div>
 			</body>
 		</Html>
 	);

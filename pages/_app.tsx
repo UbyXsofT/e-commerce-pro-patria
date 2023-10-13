@@ -24,8 +24,8 @@ import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatu
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import eCommerceConf from "eCommerceConf.json";
 
+// pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
-
 const MyApp = (props: {
 	Component: React.ComponentType<any>;
 	emotionCache?: any;

@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import {
 	Container,
 	Grid,
@@ -29,28 +28,27 @@ import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
 //*-- API---*//
-//import home from "../api/home";
+//import store from "../api/store";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
-type HomeProps = {
+type StoreProps = {
 	setLoading: (isLoading: boolean) => {
 		type: string;
 		payload: boolean;
 	};
 };
 
-const Home = ({ setLoading }: HomeProps) => {
+const Store = ({ setLoading }: StoreProps) => {
 	const { showAlert } = useAlertMe();
-	const router = useRouter();
 	const theme = useTheme();
 
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Home | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-				description="This is a E-Commerce home page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+				title={`Store | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce store page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
 
@@ -61,16 +59,6 @@ const Home = ({ setLoading }: HomeProps) => {
 				>
 					BENVENUTO
 				</Typography>
-				<Button
-					onClick={() => {
-						router.push({
-							pathname: "/auth/store",
-							query: { origin: "/auth" },
-						});
-					}}
-				>
-					Go to Store
-				</Button>
 			</Layout>
 		</ThemeProvider>
 	);
@@ -82,5 +70,5 @@ const mapDispatchToProps = {
 	setLoading,
 };
 
-// Wrappa il componente Home con connect per collegarlo al Redux store
-export default connect(null, mapDispatchToProps)(Home);
+// Wrappa il componente Store con connect per collegarlo al Redux store
+export default connect(null, mapDispatchToProps)(Store);

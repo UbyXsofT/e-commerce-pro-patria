@@ -35,20 +35,32 @@ const Index = () => {
 	const [routerToPush, setRouterToPush] = React.useState<null | string>(null);
 
 	const startRedirect = () => {
+		console.log("startRedirect: ", routerToPush);
 		if (isAuthEcommerce === true && routerToPush) {
 			Router.push(routerToPush);
 		} else if (routerToPush === networkError) {
+			Router.push(networkError);
+		} else {
 			Router.push(networkError);
 		}
 	};
 
 	React.useEffect(() => {
 		const updateEcommerceAuth = async () => {
+			// 1. Chiama la funzione AuthEcommerceHelper(dispatch) asincrona per ottenere le informazioni sull'autenticazione dell'e-commerce.
 			const authEcommerce = (await AuthEcommerceHelper(dispatch)).result;
+
+			// 2. Imposta il valore di stato setIsAuthEcommerce con il risultato dell'autenticazione ottenuto dalla chiamata precedente.
 			setIsAuthEcommerce(authEcommerce);
+
+			// 3. Chiama la funzione AuthUserHelper(dispatch, authEcommerce) asincrona per ottenere le informazioni sull'utente autenticato.
 			const route = (await AuthUserHelper(dispatch, authEcommerce)).route;
+
+			// 4. Se la variabile 'route' è definita (diversa da null o undefined), imposta il valore di stato 'setRouterToPush' con il valore di 'route', altrimenti non fa nulla.
 			route ? setRouterToPush(route) : {};
 		};
+
+		// 5. Chiama la funzione 'updateEcommerceAuth()' quando il componente viene montato o quando il valore della variabile 'dispatch' cambia.
 		updateEcommerceAuth();
 	}, [dispatch]);
 
