@@ -24,7 +24,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import Step2 from "src/components/account/register/Step2";
 import Step3 from "src/components/account/register/Step3";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 
 import eCommerceConf from "eCommerceConf.json";
@@ -48,13 +48,34 @@ import getComuni from "src/components/utils/getComuni";
 import CodiceFiscale from "codice-fiscale-js";
 import StyledImageLogo from "src/components/utils/StyledImageLogo";
 import LayoutGeneral from "src/components/layout/LayoutGeneral";
+import { number } from "prop-types";
 
 const SignUp = () => {
 	const theme = useTheme();
 
 	const focus = useRef<Focus>(null);
+	const router = useRouter();
 
 	const [activeStep, setActiveStep] = useState(0);
+
+	// TODO: Handle External Manipulation?
+
+	useEffect(() => {
+		router.query.activeStep = "0";
+		router.push(router);
+	}, []);
+
+	useEffect(() => {
+		router.query.activeStep
+			? setActiveStep(Number(router.query.activeStep))
+			: {};
+	}, [router.query.activeStep]);
+
+	const handleActiveStepChange = (newStep: number) => {
+		setActiveStep(newStep);
+		router.query.activeStep = newStep.toString();
+		router.push(router);
+	};
 
 	const steps = ["Dati Personali", "Utente", "Finalizza"];
 	const underageSteps = [
@@ -438,7 +459,7 @@ const SignUp = () => {
 				setReadyToSend({ status: false, data });
 			}
 
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		} else if (
 			(underage && activeStep === 3) ||
 			(!underage && activeStep === 2)
@@ -447,15 +468,15 @@ const SignUp = () => {
 				return;
 			}
 			sendData(readyToSend.data);
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		} else {
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		}
 	};
 
 	const handleBack = () => {
 		setCaptcha(null);
-		setActiveStep(activeStep - 1);
+		handleActiveStepChange(activeStep - 1);
 	};
 
 	const isJSXElement = (
