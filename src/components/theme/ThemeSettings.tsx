@@ -29,41 +29,6 @@ export const ThemeSettings = () => {
 		setColorIconTemaAuto(autoMode === "true" ? green[600] : grey[700]);
 	}, [autoMode]);
 
-	// React.useEffect(() => {
-	//   if (typeof window !== "undefined" && window.localStorage) {
-	//     const autoModeExists = localStorage.getItem("autoMode") === "true" || "false" ? true : false;
-	//     autoModeExists ? setAutoMode(localStorage.getItem("autoMode") as unknown as boolean) : {};
-	//     const storedThemeMode = localStorage.getItem("themeMode");
-	//     const initialThemeMode = storedThemeMode || (isDarkMode ? "dark" : "light");
-	//     initialThemeMode === "dark" ? changeColorIcon("Dark") : changeColorIcon("Light");
-	//     toggleThemeMode(initialThemeMode);
-	//   }
-	// }, [isDarkMode]);
-
-	// React.useMemo(() => {
-	//   if (typeof window !== "undefined" && window.localStorage) {
-	//     localStorage.setItem("autoMode", !autoMode as unknown as string);
-	//   }
-	// }, [autoMode]);
-
-	// const handleModeClick = (mode: "Light" | "Dark" | "Auto") => {
-	//   mode === "Auto" ? setAutoMode(!autoMode) : {};
-	//   changeColorIcon(mode);
-	//   toggleThemeMode(mode === "Light" ? "light" : "dark");
-	//   localStorage.setItem("autoMode", "true");
-	// };
-
-	// const changeColorIcon = (icona: "Light" | "Dark" | "Auto") => {
-	//   autoMode ? setColorIconTemaAuto(green[600]) : setColorIconTemaAuto(theme.palette.grey[700]);
-	//   if (icona === "Light") {
-	//     setColorIconTemaChiaro(theme.palette.primary.main);
-	//     setColorIconTemaScuro("inherit");
-	//   } else if (icona === "Dark") {
-	//     setColorIconTemaChiaro("inherit");
-	//     setColorIconTemaScuro(theme.palette.primary.main);
-	//   }
-	// };
-
 	React.useEffect(() => {
 		if (isDarkMode) {
 			setColorIconTemaChiaro("inherit");

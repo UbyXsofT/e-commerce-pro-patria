@@ -8,6 +8,8 @@ import {
 	responseCall,
 	tokenfulAccess,
 	tokenlessAccess,
+	authStripe,
+	obyPostProdotti,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -24,8 +26,19 @@ async function isNodeServiceReachable() {
 }
 
 export default async function callNodeService(
-	endPoint: "login" | "access-ecommerce" | "recupero-credenziali",
-	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce | resetPsw,
+	endPoint:
+		| "login"
+		| "access-ecommerce"
+		| "recupero-credenziali"
+		| "stripe/get-stripe-key"
+		| "prodotti",
+	obyPostData:
+		| tokenlessAccess
+		| tokenfulAccess
+		| authEcommerce
+		| resetPsw
+		| authStripe
+		| obyPostProdotti,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

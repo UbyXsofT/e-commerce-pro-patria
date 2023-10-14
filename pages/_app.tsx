@@ -8,6 +8,8 @@ import { lightTheme, darkTheme } from "../src/components/theme/theme";
 import createEmotionCache from "../src/components/utils/createEmotionCache";
 import { ThemeProvider as CustomThemeProvider } from "../src/components/theme/ThemeContext";
 import { ThemeProvider } from "@mui/material/styles";
+import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+
 import LoadingOverlay from "../src/components/utils/LoadingOverlay";
 import ThemeColorListener from "../src/components/theme/ThemeColorListener";
 import { AlertMeProvider } from "../src/components/layout/alert/AlertMeContext";

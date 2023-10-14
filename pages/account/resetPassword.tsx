@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { setLoading } from "src/store/actions";
 import {
 	Container,
 	Grid,
@@ -19,13 +21,8 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-//REDUX-STORE
-import { connect } from "react-redux";
-import { setLoading } from "src/store/actions";
-
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
-
 import callNodeService from "pages/api/callNodeService";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { responseCall, resetPsw } from "src/components/CommonTypesInterfaces";
@@ -40,14 +37,14 @@ const StyledImageLogo = styled(Image)({
 	maxWidth: 300,
 });
 
-const resetPassword = (_setLoading: any) => {
+const resetPassword = () => {
 	const router = useRouter();
-	const { origin } = router.query;
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 
+	const { origin } = router.query;
 	//setLoading(true); rende visibile il loading
 	const theme = useTheme();
 	const [done, setDone] = useState(false);
-
 	const [email, setEmail] = useState("");
 	const [codiceFiscale, setCodiceFiscale] = useState("");
 
@@ -56,7 +53,6 @@ const resetPassword = (_setLoading: any) => {
 	});
 
 	const { showAlert } = useAlertMe();
-	const [visLoader, setVisLoader] = React.useState(false);
 
 	const fetchData = async () => {
 		const handleResetPswResponse = (respCall: responseCall) => {
@@ -103,7 +99,7 @@ const resetPassword = (_setLoading: any) => {
 			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 		};
 
-		setVisLoader(true);
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
 		const obyPostData: resetPsw = {
 			clienteKey: eCommerceConf.ClienteKey,
@@ -121,7 +117,7 @@ const resetPassword = (_setLoading: any) => {
 		} catch (error) {
 			handleError(error);
 		} finally {
-			setVisLoader(false);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		}
 	};
 
@@ -154,8 +150,4 @@ const resetPassword = (_setLoading: any) => {
 	);
 };
 
-//REDUX-STORE
-const mapDispatchToProps = {
-	setLoading,
-};
-export default connect(null, mapDispatchToProps)(resetPassword);
+export default resetPassword;

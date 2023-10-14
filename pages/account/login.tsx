@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+//REDUX-STORE
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { setLoading } from "src/store/actions";
+//*-----*//
 import {
 	Container,
 	Grid,
@@ -20,10 +24,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-//REDUX-STORE
-import { connect } from "react-redux";
 import eCommerceConf from "eCommerceConf.json";
-import { setLoading } from "src/store/actions";
 import Image from "next/image";
 
 import { styled } from "@mui/material/styles";
@@ -39,11 +40,9 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
 import callNodeService from "pages/api/callNodeService";
-import LoadingWrapper from "src/components/utils/LoadingWrapper";
 import logOutUser from "src/components/utils/logOutUser";
 //redux
 import { setAuthUser } from "src/store/actions";
-import { useDispatch } from "react-redux";
 import Layout from "src/components/layout/LayoutLogin";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
@@ -61,7 +60,7 @@ const Login = () => {
 	const [password, setPassword] = React.useState("");
 	const [ricordami, setRicordami] = React.useState(false);
 	const [paddingTop, setPaddingTop] = React.useState(0);
-	const [visLoader, setVisLoader] = React.useState(false);
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 
 	const CustomTextField = styled(TextField)(({ theme }) => ({
 		"& .MuiInputBase-input": {
@@ -71,8 +70,6 @@ const Login = () => {
 		color: theme.palette.mode === "dark" ? "#ffffff" : "#121212",
 		borderRadius: theme.shape.borderRadius, // Mantieni il borderRadius dal tema
 	}));
-
-	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 
 	React.useEffect(() => {
 		const handleLogout = () => {
@@ -151,7 +148,7 @@ const Login = () => {
 				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 			};
 
-			setVisLoader(true);
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
 			const obyPostData: tokenlessAccess = {
 				clienteKey: eCommerceConf.ClienteKey,
@@ -172,7 +169,7 @@ const Login = () => {
 			} catch (error) {
 				handleError(error);
 			} finally {
-				setVisLoader(false);
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
 		};
 		fetchData();
@@ -231,209 +228,207 @@ const Login = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<LoadingWrapper showLoader={visLoader}>
-				<LayoutGeneral
-					//digitare il titolo della pagina e la descrizione della pagina.
-					title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-					description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+			>
+				<AlertMe />
+				<div
+					id="contenitore"
+					style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
 				>
-					<AlertMe />
-					<div
-						id="contenitore"
-						style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
-					>
-						<Box id="main">
+					<Box id="main">
+						<Grid
+							container
+							component="main"
+							sx={{ height: 400 }}
+						>
 							<Grid
 								container
-								component="main"
-								sx={{ height: 400 }}
+								justifyContent="center"
+								alignItems="center"
+								item
+								xs={false}
+								sm={4}
+								md={6}
+								component={Paper}
+								elevation={2}
+								square
+								sx={{
+									backgroundImage: "url(/images/wallpaper.jpg)",
+									backgroundRepeat: "no-repeat",
+									backgroundSize: "cover",
+									backgroundPosition: "center",
+									position: "relative",
+									//display: !isMobile ? "block" : "none",
+								}}
 							>
-								<Grid
-									container
-									justifyContent="center"
-									alignItems="center"
-									item
-									xs={false}
-									sm={4}
-									md={6}
-									component={Paper}
-									elevation={2}
-									square
-									sx={{
-										backgroundImage: "url(/images/wallpaper.jpg)",
-										backgroundRepeat: "no-repeat",
-										backgroundSize: "cover",
-										backgroundPosition: "center",
+								<div
+									style={{
+										width: "50%",
+										height: "50%",
 										position: "relative",
-										//display: !isMobile ? "block" : "none",
+										zIndex: 1,
 									}}
 								>
-									<div
-										style={{
-											width: "50%",
-											height: "50%",
-											position: "relative",
-											zIndex: 1,
-										}}
-									>
-										<Image
-											src="/images/LogoQ.png"
-											alt="Logo"
-											fill={true}
-											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-											style={{ objectFit: "contain" }}
-											//objectFit='contain'
-											priority={true}
-										/>
-									</div>
-									<Box sx={overlayStyle} />
-								</Grid>
+									<Image
+										src="/images/LogoQ.png"
+										alt="Logo"
+										fill={true}
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+										style={{ objectFit: "contain" }}
+										//objectFit='contain'
+										priority={true}
+									/>
+								</div>
+								<Box sx={overlayStyle} />
+							</Grid>
 
-								<Grid
-									item
-									xs={12}
-									sm={8}
-									md={6}
-									component={Paper}
-									elevation={2}
-									square
+							<Grid
+								item
+								xs={12}
+								sm={8}
+								md={6}
+								component={Paper}
+								elevation={2}
+								square
+							>
+								<Box
+									sx={{
+										my: 2,
+										mx: 4,
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+									}}
 								>
-									<Box
-										sx={{
-											my: 2,
-											mx: 4,
-											display: "flex",
-											flexDirection: "column",
-											alignItems: "center",
-										}}
+									<Avatar
+										sx={{ ml: 1, mr: 1, mb: 1, bgcolor: "secondary.main" }}
 									>
-										<Avatar
-											sx={{ ml: 1, mr: 1, mb: 1, bgcolor: "secondary.main" }}
-										>
-											<LockOutlinedIcon />
-										</Avatar>
-										<Typography
-											component="h3"
-											variant="h5"
+										<LockOutlinedIcon />
+									</Avatar>
+									<Typography
+										component="h3"
+										variant="h5"
+									>
+										Accedi
+									</Typography>
+									<Box
+										component="form"
+										noValidate
+										onSubmit={handleSubmit}
+										sx={{ mt: 1 }}
+									>
+										<TextField
+											margin="normal"
+											required
+											fullWidth
+											id="username"
+											label="Nome Utente"
+											name="username"
+											autoComplete="username"
+											value={username}
+											onChange={(event) => {
+												setUsername(event.target.value);
+											}}
+											InputProps={{
+												style: {
+													backgroundColor:
+														theme.palette.mode === "dark"
+															? "#121212"
+															: "#ffffff",
+													color:
+														theme.palette.mode === "dark"
+															? "#ffffff"
+															: "#121212",
+												},
+											}}
+										/>
+
+										<PasswordInput
+											value={password}
+											setValue={setPassword}
+											name="password"
+											id="password"
+											label="Password"
+											fullWidth={true}
+											margin="normal"
+										/>
+
+										<FormControlLabel
+											control={
+												<Checkbox
+													value="remember"
+													color="primary"
+													checked={ricordami}
+													onClick={() => setRicordami(!ricordami)}
+												/>
+											}
+											label="Ricordati di me"
+										/>
+
+										<Button
+											//   type="submit"
+											fullWidth
+											variant="contained"
+											sx={{ mt: 3, mb: 2 }}
+											onClick={() => handleLogin()}
+											disabled={!password || !username}
 										>
 											Accedi
-										</Typography>
-										<Box
-											component="form"
-											noValidate
-											onSubmit={handleSubmit}
-											sx={{ mt: 1 }}
-										>
-											<TextField
-												margin="normal"
-												required
-												fullWidth
-												id="username"
-												label="Nome Utente"
-												name="username"
-												autoComplete="username"
-												value={username}
-												onChange={(event) => {
-													setUsername(event.target.value);
-												}}
-												InputProps={{
-													style: {
-														backgroundColor:
-															theme.palette.mode === "dark"
-																? "#121212"
-																: "#ffffff",
-														color:
-															theme.palette.mode === "dark"
-																? "#ffffff"
-																: "#121212",
-													},
-												}}
-											/>
-
-											<PasswordInput
-												value={password}
-												setValue={setPassword}
-												name="password"
-												id="password"
-												label="Password"
-												fullWidth={true}
-												margin="normal"
-											/>
-
-											<FormControlLabel
-												control={
-													<Checkbox
-														value="remember"
-														color="primary"
-														checked={ricordami}
-														onClick={() => setRicordami(!ricordami)}
-													/>
-												}
-												label="Ricordati di me"
-											/>
-
-											<Button
-												//   type="submit"
-												fullWidth
-												variant="contained"
-												sx={{ mt: 3, mb: 2 }}
-												onClick={() => handleLogin()}
-												disabled={!password || !username}
+										</Button>
+										<Grid container>
+											<Grid
+												item
+												xs
 											>
-												Accedi
-											</Button>
-											<Grid container>
-												<Grid
-													item
-													xs
+												<Link
+													onClick={() =>
+														Router.push({
+															pathname: "/account/resetPassword",
+															query: { origin: "/account/login" },
+														})
+													}
+													variant="body2"
+													sx={{
+														userSelect: "none",
+														cursor: "pointer",
+														color: (theme) =>
+															theme.palette.mode === "light"
+																? "black"
+																: "white",
+													}}
 												>
-													<Link
-														onClick={() =>
-															Router.push({
-																pathname: "/account/resetPassword",
-																query: { origin: "/account/login" },
-															})
-														}
-														variant="body2"
-														sx={{
-															userSelect: "none",
-															cursor: "pointer",
-															color: (theme) =>
-																theme.palette.mode === "light"
-																	? "black"
-																	: "white",
-														}}
-													>
-														Password dimenticata?
-													</Link>
-												</Grid>
-												<Grid item>
-													<Link
-														onClick={() => Router.push("/account/register")}
-														variant="body2"
-														sx={{
-															userSelect: "none",
-															cursor: "pointer",
-															color: (theme) =>
-																theme.palette.mode === "light"
-																	? "black"
-																	: "white",
-														}}
-													>
-														Non hai un account? Iscriviti
-													</Link>
-												</Grid>
+													Password dimenticata?
+												</Link>
 											</Grid>
-											{/* <Copyright sx={{ mt: 5 }} /> */}
-											{!smUp ? copyright : <div></div>}
-										</Box>
+											<Grid item>
+												<Link
+													onClick={() => Router.push("/account/register")}
+													variant="body2"
+													sx={{
+														userSelect: "none",
+														cursor: "pointer",
+														color: (theme) =>
+															theme.palette.mode === "light"
+																? "black"
+																: "white",
+													}}
+												>
+													Non hai un account? Iscriviti
+												</Link>
+											</Grid>
+										</Grid>
+										{/* <Copyright sx={{ mt: 5 }} /> */}
+										{!smUp ? copyright : <div></div>}
 									</Box>
-								</Grid>
+								</Box>
 							</Grid>
-						</Box>
-					</div>
-				</LayoutGeneral>
-			</LoadingWrapper>
+						</Grid>
+					</Box>
+				</div>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

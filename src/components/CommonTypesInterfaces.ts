@@ -185,3 +185,17 @@ export interface responseCall {
 	successCli: boolean;
 	messageCli: any;
 }
+
+export interface authStripe {
+	clienteKey: string;
+}
+
+export interface obyPostData {
+	clienteKey: string;
+}
+
+export interface obyPostProdotti {
+	clienteKey: string;
+	IDCliente: string;
+	IDCentro: number;
+}
