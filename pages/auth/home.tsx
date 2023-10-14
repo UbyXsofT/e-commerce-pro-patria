@@ -61,16 +61,6 @@ const Home = ({ setLoading }: HomeProps) => {
 				>
 					BENVENUTO
 				</Typography>
-				<Button
-					onClick={() => {
-						router.push({
-							pathname: "/auth/store",
-							query: { origin: "/auth" },
-						});
-					}}
-				>
-					Go to Store
-				</Button>
 			</Layout>
 		</ThemeProvider>
 	);
