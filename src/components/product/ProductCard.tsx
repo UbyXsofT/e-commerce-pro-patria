@@ -137,6 +137,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 					alt={product.nome}
 					width={250}
 					height={250}
+					style={{ borderRadius: 5 }}
 				/>
 				{discountedPrice ? (
 					<span
