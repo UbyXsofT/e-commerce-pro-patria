@@ -196,7 +196,7 @@ const Store = () => {
 										)}
 										onChange={(newValue) => {
 											let isAll = false;
-											
+
 											(newValue.target.value as number[]).forEach((idx) => {
 												if (idx === -1) {
 													isAll = true;
@@ -261,7 +261,15 @@ const Store = () => {
 											>
 												{centroList[selectedCentro].name}
 											</Typography>
-											<div style={{ display: "flex", gap: "3em" }}>
+											<div
+												style={{
+													display: "flex",
+													gap: "3em",
+													flexWrap: "wrap",
+													justifyContent: "center",
+													alignContent: "center",
+												}}
+											>
 												{centroList[selectedCentro].subscriptions.map(
 													(abbonamento) => (
 														<ProductCard
