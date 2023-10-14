@@ -26,8 +26,9 @@ import Step2 from "src/components/account/register/Step2";
 import Step3 from "src/components/account/register/Step3";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
-
 import eCommerceConf from "eCommerceConf.json";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import dayjs, { Dayjs } from "dayjs";
 
 import {
@@ -42,7 +43,7 @@ import {
 
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 import { Paesi } from "src/components/account/register/ProvinciePaesi";
-import ReCAPTCHA from "react-google-recaptcha";
+
 import stringUpperCase from "src/components/utils/stringUpperCase";
 import getComuni from "src/components/utils/getComuni";
 import CodiceFiscale from "codice-fiscale-js";
@@ -507,7 +508,6 @@ const SignUp = () => {
 				sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
 				onChange={(token) => setCaptcha(token)}
 			/>
-
 			<Button
 				variant="contained"
 				disabled={

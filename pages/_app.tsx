@@ -23,7 +23,7 @@ import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
 import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
-// import { GoogleReCaptchaProvider } from "react-google-recaptcha";
+
 import eCommerceConf from "eCommerceConf.json";
 
 // pages/_app.tsx
@@ -111,24 +111,6 @@ const MyApp = (props: {
 	return (
 		<>
 			<NetworkStatusProvider>
-				{/* <GoogleReCaptchaProvider
-					reCaptchaKey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-					language="en"
-					useRecaptchaNet={false}
-					useEnterprise={false}
-					scriptProps={{
-						async: false,
-						defer: false,
-						appendTo: "head",
-						nonce: undefined,
-					}}
-					container={{
-						parameters: {
-							badge: "bottomleft",
-							theme: themeMode === "dark" ? "dark" : "light",
-						},
-					}}
-				> */}
 				<CacheProvider value={emotionCache}>
 					<ThemeProvider theme={appTheme}>
 						<SettingsProvider>
@@ -158,7 +140,6 @@ const MyApp = (props: {
 						</SettingsProvider>
 					</ThemeProvider>
 				</CacheProvider>
-				{/* </GoogleReCaptchaProvider> */}
 			</NetworkStatusProvider>
 		</>
 	);
