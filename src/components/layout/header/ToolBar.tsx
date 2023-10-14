@@ -47,7 +47,7 @@ export const navigationPoints: NavigationPoint[] = [
 		link: "/auth/about",
 	},
 	{ name: "Home", link: "/auth/home" },
-	{ name: "Subscriptions", link: "/subscriptions" },
+	{ name: "Abbonamenti", link: "/auth/store" },
 ];
 
 export const ToolBar = ({

@@ -1,111 +1,198 @@
-import axios from "axios";
-import { ReactElement } from "react";
-import * as React from "react";
-import AspectRatio from "@mui/joy/AspectRatio";
-import Button from "@mui/joy/Button";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import CardOverflow from "@mui/joy/CardOverflow";
-import Chip from "@mui/joy/Chip";
-import Link from "@mui/joy/Link";
-import Typography from "@mui/joy/Typography";
-import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import eCommerceConf from "eCommerceConf.json";
+import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
+import {
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	IconButton,
+	Tooltip,
+	Typography,
+} from "@mui/material";
+import Image from "next/image";
+import { Abbonamento } from "pages/auth/store";
+import { useEffect, useState } from "react";
 
-const formatPrezzo = (prezzo: number) => {
-	// Controlla se ci sono decimali
-	const decimalCount = (prezzo.toString().split(".")[1] || "").length;
-	const decimalSeparator = ",";
+interface ProductCardProps {
+	product: Abbonamento;
+}
 
-	// Se ci sono meno di 2 cifre decimali, aggiungi gli zeri necessari
-	const formattedPrezzo =
-		decimalCount < 2
-			? prezzo
-					.toLocaleString(eCommerceConf.FormattazionePrezzo.toLocaleString, {
-						minimumFractionDigits:
-							eCommerceConf.FormattazionePrezzo.minimumFractionDigits,
-						maximumFractionDigits:
-							eCommerceConf.FormattazionePrezzo.maximumFractionDigits,
-					})
-					.replace(".", decimalSeparator)
-			: prezzo.toLocaleString(
-					eCommerceConf.FormattazionePrezzo.toLocaleString,
-					{
-						minimumFractionDigits:
-							eCommerceConf.FormattazionePrezzo.minimumFractionDigits,
-						maximumFractionDigits:
-							eCommerceConf.FormattazionePrezzo.maximumFractionDigits,
-					}
-			  );
+const ProductCard = ({ product }: ProductCardProps) => {
+	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
 
-	return formattedPrezzo;
-};
-
-export default function ProductCard(props: {
-	id: string;
-	nome: string;
-	descrizione: string;
-	immagine: string;
-	prezzo: number;
-	convenzione: object;
-	promozione: object;
-	sceltaOrari: object;
-}) {
-	const formattedPrezzo = formatPrezzo(props.prezzo);
+	useEffect(() => {
+		if (product.promozione.isPromo) {
+			setDiscountedPrice(20);
+		} else if (product.convenzione.isConv) {
+			setDiscountedPrice(24);
+		}
+	}, []);
 
 	return (
-		<Card sx={{ width: 320, maxWidth: "100%", boxShadow: "lg" }}>
-			<CardOverflow>
-				<AspectRatio sx={{ minWidth: 200 }}>
-					<img
-						src={props.immagine}
-						loading="lazy"
-						alt={props.nome}
-					/>
-				</AspectRatio>
-			</CardOverflow>
+		<Card sx={{ padding: 1 }}>
 			<CardContent>
-				<Typography level="body-xs">{props.nome}</Typography>
-				<Link
-					href="#product-card"
-					fontWeight="md"
-					color="neutral"
-					textColor="text.primary"
-					overlay
-					endDecorator={<ArrowOutwardIcon />}
+				<span
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						height: "64px",
+					}}
 				>
-					{props.descrizione}
-				</Link>
+					<Typography
+						marginBottom={3}
+						variant="h5"
+					>
+						{product.nome}
+					</Typography>
+					<span style={{ display: "flex" }}>
+						{product.convenzione.isConv ? (
+							<Typography
+								marginBottom={3}
+								variant="h5"
+							>
+								<Tooltip
+									title={
+										<span style={{ display: "flex", flexDirection: "column" }}>
+											<Typography
+												textAlign={"center"}
+												variant="subtitle2"
+											>
+												Convenzione
+											</Typography>
+											<Typography variant="subtitle2">
+												{product.convenzione.descConve}
+											</Typography>
+										</span>
+									}
+								>
+									<IconButton>
+										<Handshake />
+									</IconButton>
+								</Tooltip>
+							</Typography>
+						) : (
+							<></>
+						)}
+						{product.promozione.isPromo ? (
+							<Typography
+								marginBottom={3}
+								variant="h5"
+							>
+								<Tooltip
+									title={
+										<span style={{ display: "flex", flexDirection: "column" }}>
+											<Typography
+												textAlign={"center"}
+												variant="subtitle2"
+											>
+												Promozione
+											</Typography>
+											<Typography variant="subtitle2">
+												{product.promozione.descPromo}
+											</Typography>
+										</span>
+									}
+								>
+									<IconButton>
+										<Discount />
+									</IconButton>
+								</Tooltip>
+							</Typography>
+						) : (
+							<></>
+						)}
+						{product.sceltaOrari.isOrari ? (
+							<Typography
+								marginBottom={3}
+								variant="h5"
+							>
+								<Tooltip
+									title={
+										<span style={{ display: "flex", flexDirection: "column" }}>
+											<Typography
+												textAlign={"center"}
+												variant="subtitle2"
+											>
+												Orario Configurabile <br />
+											</Typography>
+											<Typography variant="h6">
+												{`${product.sceltaOrari.daOrari} - ${product.sceltaOrari.aOrari}`}
+											</Typography>
+										</span>
+									}
+								>
+									<IconButton>
+										<EditCalendar />
+									</IconButton>
+								</Tooltip>
+							</Typography>
+						) : (
+							<></>
+						)}
+					</span>
+				</span>
 
-				<Typography
-					level="title-lg"
-					sx={{ mt: 1, fontWeight: "xl" }}
-					endDecorator={
-						<Chip
-							component="span"
-							size="sm"
-							variant="soft"
-							color="success"
+				<Image
+					src={product.immagine ? product.immagine : ""}
+					alt={product.nome}
+					width={250}
+					height={250}
+				/>
+				{discountedPrice ? (
+					<span
+						style={{
+							display: "grid",
+							padding: "1em",
+							gridTemplateColumns: "1fr 1fr 1fr",
+							gap: 3,
+						}}
+					>
+						<Typography
+							variant="h5"
+							textAlign={"center"}
+							color={"grey"}
+							style={{
+								position: "relative",
+							}}
 						>
-							Lowest price
-						</Chip>
-					}
-				>
-					{formattedPrezzo} {eCommerceConf.FormattazionePrezzo.currency}
-				</Typography>
-				<Typography level="body-sm">
-					(Only <b>7</b> left in stock!)
-				</Typography>
+							{product.prezzo}€
+							<span
+								style={{
+									position: "absolute",
+									top: "50%",
+									left: "50%",
+									transform: "translate(-50%, -50%) rotate(-20deg)",
+									background: "red",
+									width: "100%",
+									height: "2px",
+								}}
+							></span>
+						</Typography>
+						<Typography
+							variant="h5"
+							textAlign={"center"}
+							color={"green"}
+						>
+							{discountedPrice}€
+						</Typography>
+					</span>
+				) : (
+					<Typography
+						variant="h5"
+						textAlign={"center"}
+						padding={"1rem"}
+					>
+						{product.prezzo}€
+					</Typography>
+				)}
+
+				<Typography>{product.descrizione}</Typography>
 			</CardContent>
-			<CardOverflow>
-				<Button
-					variant="solid"
-					color="danger"
-					size="lg"
-				>
-					Aggiungi al carrello
-				</Button>
-			</CardOverflow>
+			<CardActions sx={{ justifyContent: "center" }}>
+				<Button variant="contained">Iscriviti</Button>
+			</CardActions>
 		</Card>
 	);
-}
+};
+
+export default ProductCard;

@@ -156,6 +156,8 @@ const SignUp = () => {
 
 	const [comuni, setComuni] = useState<ComunePaese[]>([]);
 
+	const [captcha, setCaptcha] = useState<string | null>(null);
+
 	const updateUnderage = (date: Dayjs) => {
 		const minDate = dayjs().subtract(18, "year");
 
@@ -387,6 +389,7 @@ const SignUp = () => {
 	};
 
 	const handleNext = () => {
+		setCaptcha(null);
 		if ((underage && activeStep === 2) || (!underage && activeStep === 1)) {
 			const data: UserData = {
 				user: {
@@ -472,6 +475,7 @@ const SignUp = () => {
 	};
 
 	const handleBack = () => {
+		setCaptcha(null);
 		handleActiveStepChange(activeStep - 1);
 	};
 
@@ -499,9 +503,22 @@ const SignUp = () => {
 
 	const finalize = (
 		<div style={{ display: "flex" }}>
+			<ReCAPTCHA
+				sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+				onChange={(token) => setCaptcha(token)}
+			/>
+
 			<Button
 				variant="contained"
-				disabled={disableButton}
+				disabled={
+					disableButton && captcha
+						? true
+						: !disableButton && captcha
+						? false
+						: disableButton && !captcha
+						? true
+						: true
+				}
 				onClick={handleNext}
 				sx={{ mt: "auto", ml: 1 }}
 			>
