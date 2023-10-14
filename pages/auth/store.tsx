@@ -195,12 +195,31 @@ const Store = () => {
 											</Box>
 										)}
 										onChange={(newValue) => {
+											let isAll = false;
+											
+											(newValue.target.value as number[]).forEach((idx) => {
+												if (idx === -1) {
+													isAll = true;
+												}
+											});
+
+											if (isAll) {
+												setSelectedCentri(
+													Array.from(
+														Array(centroList ? centroList.length : 0).keys()
+													)
+												);
+												return;
+											}
+
 											if (newValue.target.value.length === 0) {
 												return;
 											}
+
 											setSelectedCentri(newValue.target.value as number[]);
 										}}
 									>
+										<MenuItem value={-1}>Tutti</MenuItem>
 										<ListSubheader>In Sede</ListSubheader>
 										{centroList
 											?.filter((centro) => centro.principale)
