@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Button, Typography } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -15,15 +15,37 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
-import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+
+export interface Abbonamento {
+	id: string;
+	nome: string;
+	prezzo: number;
+	immagine: string | null;
+	descrizione: string;
+	convenzione: {
+		isConv: boolean;
+		descConve: string;
+	};
+	promozione: {
+		isPromo: boolean;
+		descPromo: string;
+	};
+	sceltaOrari: {
+		isOrari: boolean;
+		daOrari: string;
+		aOrari: string;
+	};
+}
+
 const Store = () => {
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const router = useRouter();
 
-	const [productList, setProductList] = React.useState([]);
-	const [caricamento, setCaricamento] = React.useState(true);
+	const [productList, setProductList] = React.useState<
+		undefined | Abbonamento[]
+	>(undefined);
 
 	useEffect(() => {
 		//dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
@@ -32,6 +54,7 @@ const Store = () => {
 				//success data
 				console.log(msg_Resp.messageCli.message.prodotti);
 				// Imposta lo stato locale dei prodotti con i dati ottenuti dalla chiamata API
+
 				setProductList(msg_Resp.messageCli.message.prodotti);
 			};
 			const handleError = (error: any) => {
@@ -65,7 +88,6 @@ const Store = () => {
 				handleError(error);
 			} finally {
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-				setCaricamento(false);
 			}
 		};
 		fetchData();
@@ -78,61 +100,49 @@ const Store = () => {
 				description="This is a E-Commerce store page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				<Typography
-					variant="h5"
-					component="h1"
-					gutterBottom
-				>
-					BENVENUTO NELLO STORE
-				</Typography>
-				<Button
-					onClick={() => {
-						router.push({
-							pathname: "/auth/carrello",
-							query: { origin: "/auth" },
-						});
-					}}
-				>
-					VAI A CARRELLO
-				</Button>
-				<>
+				<div>
+					<Typography
+						variant="h5"
+						component="h1"
+						gutterBottom
+					>
+						Benvenuto Nello Store
+					</Typography>
+					<Button
+						onClick={() => {
+							router.push({
+								pathname: "/auth/carrello",
+								query: { origin: "/auth" },
+							});
+						}}
+					>
+						Vai al Carrello
+					</Button>
+
 					<div>
 						<h1>Lista Prodotti</h1>
-						{caricamento ? (
+						{!productList ? (
 							<p>Caricamento...</p>
 						) : (
-							<div>
-								<JoyCssVarsProvider>
-									{productList.map(
-										(product: {
-											key: string;
-											id: string;
-											nome: string;
-											descrizione: string;
-											prezzo: number;
-											immagine: string;
-											convenzione: object;
-											promozione: object;
-											sceltaOrari: object;
-										}) => (
-											<ProductCard
-												key={product.id}
-												id={product.id}
-												nome={product.nome}
-												descrizione={product.descrizione}
-												prezzo={product.prezzo}
-												immagine={product.immagine}
-												convenzione={product.convenzione}
-												promozione={product.promozione}
-												sceltaOrari={product.sceltaOrari}
-											/>
-										)
-									)}
-								</JoyCssVarsProvider>
+							<div
+								style={{
+									display: "flex",
+									gap: "3em",
+									padding: "1rem",
+									flexWrap: "wrap",
+									justifyContent: "center",
+								}}
+							>
+								{productList.map((abbonamento) => (
+									<ProductCard
+										key={abbonamento.id}
+										product={abbonamento}
+									/>
+								))}
 							</div>
 						)}
 					</div>
-				</>
+				</div>
 			</Layout>
 		</ThemeProvider>
 	);
