@@ -2,6 +2,8 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
 	Button,
+	Card,
+	CardContent,
 	Chip,
 	FormControl,
 	InputLabel,
@@ -9,6 +11,7 @@ import {
 	MenuItem,
 	Select,
 	SelectChangeEvent,
+	Slider,
 	Typography,
 	useMediaQuery,
 } from "@mui/material";
@@ -26,7 +29,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
-import { Box } from "@mui/system";
+import { Box, Stack } from "@mui/system";
 
 interface Centro {
 	id: number;
@@ -69,9 +72,67 @@ const Store = () => {
 		undefined
 	);
 
-	const [productList, setProductList] = React.useState<
-		undefined | Abbonamento[]
-	>(undefined);
+	const [minMax, setMinMax] = useState<{
+		min: number | undefined;
+		max: number | undefined;
+	}>({
+		min: undefined,
+		max: undefined,
+	});
+
+	const [priceRange, setPriceRange] = useState<
+		[undefined, undefined] | [number, number]
+	>([undefined, undefined]);
+
+	const isInRange = (
+		price: number,
+		priceRange: [number, number] | [undefined, undefined]
+	): boolean => {
+		if (priceRange[0] === undefined || priceRange[1] === undefined) {
+			return false;
+		}
+
+		if (price >= priceRange[0] && price <= priceRange[1]) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	const getPrice = (abbonamento: Abbonamento): number => {
+		if (abbonamento.convenzione.isConv) {
+			return 24;
+		}
+
+		if (abbonamento.promozione.isPromo) {
+			return 20;
+		}
+
+		return abbonamento.prezzo;
+	};
+
+	const calculateMinMax = (
+		centroList: Centro[]
+	): { min: number; max: number } => {
+		let min = Infinity;
+		let max = 0;
+
+		centroList.forEach((centro) => {
+			centro.subscriptions.forEach((abbonamento) => {
+				const price = getPrice(abbonamento);
+
+				if (price > max) {
+					max = price;
+				}
+
+				if (price < min) {
+					min = price;
+				}
+			});
+		});
+
+		return { min, max };
+	};
 
 	useEffect(() => {
 		//dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
@@ -100,9 +161,13 @@ const Store = () => {
 					},
 				];
 
-				setProductList(msg_Resp.messageCli.message.prodotti);
 				setCentroList(centri);
 				selectAll(centri.length);
+
+				let minMax = calculateMinMax(centri);
+
+				setMinMax(minMax);
+				setPriceRange([minMax.min, minMax.max]);
 			};
 			const handleError = (error: any) => {
 				//ERROR data
@@ -197,8 +262,42 @@ const Store = () => {
 
 							{selectedCentri !== undefined ? (
 								<div
-									style={{ display: "flex", gap: "2rem", alignItems: "center" }}
+									style={{
+										display: "flex",
+										gap: "2rem",
+										flexWrap: "wrap",
+										justifyContent: isMobile ? "" : "flex-end",
+									}}
 								>
+									<Box width={"200px"}>
+										<Typography>Range di Prezzo</Typography>
+										<Stack
+											spacing={2}
+											direction="row"
+											sx={{ mb: 1 }}
+											alignItems="center"
+										>
+											<Typography>{`${minMax.min}€`}</Typography>
+											<Slider
+												valueLabelDisplay="auto"
+												min={minMax.min}
+												max={minMax.max}
+												value={
+													priceRange[0] !== undefined &&
+													priceRange[1] !== undefined
+														? priceRange
+														: [
+																minMax.min ? minMax.min : 0,
+																minMax.max ? minMax.max : 300,
+														  ]
+												}
+												onChange={(_, newRange) =>
+													setPriceRange(newRange as [number, number])
+												}
+											/>
+											<Typography>{`${minMax.max}€`}</Typography>
+										</Stack>
+									</Box>
 									<Button
 										variant="outlined"
 										onClick={(_) => {
@@ -262,34 +361,69 @@ const Store = () => {
 								}}
 							>
 								{selectedCentri !== undefined ? (
-									selectedCentri.map((selectedCentro) => (
-										<div>
-											<Typography
-												variant="h4"
-												paddingBottom={2}
-											>
-												{centroList[selectedCentro].name}
-											</Typography>
-											<div
-												style={{
-													display: "flex",
-													gap: "3em",
-													flexWrap: "wrap",
-													justifyContent: "center",
-													alignContent: "center",
-												}}
-											>
-												{centroList[selectedCentro].subscriptions.map(
-													(abbonamento) => (
-														<ProductCard
-															key={abbonamento.id}
-															product={abbonamento}
-														/>
-													)
+									selectedCentri.map((selectedCentro) => {
+										const filteredAbbonamenti = centroList[
+											selectedCentro
+										].subscriptions.filter((abbonamento) => {
+											if (isInRange(getPrice(abbonamento), priceRange)) {
+												return abbonamento;
+											}
+										});
+
+										return (
+											<div>
+												<Typography
+													variant="h4"
+													paddingBottom={2}
+												>
+													{centroList[selectedCentro].name}
+												</Typography>
+												{filteredAbbonamenti.length === 0 ? (
+													<Card sx={{ width: 510, height: 510 }}>
+														<CardContent
+															sx={{
+																height: "100%",
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+																flexDirection: "column",
+															}}
+														>
+															<Typography
+																textAlign={"center"}
+																variant="h5"
+															>
+																Nessun Abbonamento tra i
+															</Typography>
+															<Typography
+																textAlign={"center"}
+																variant="h5"
+															>
+																<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
+															</Typography>
+														</CardContent>
+													</Card>
+												) : (
+													<div
+														style={{
+															display: "flex",
+															gap: "3em",
+															flexWrap: "wrap",
+															justifyContent: "center",
+															alignContent: "center",
+														}}
+													>
+														{filteredAbbonamenti.map((abbonamento) => (
+															<ProductCard
+																key={abbonamento.id}
+																product={abbonamento}
+															/>
+														))}
+													</div>
 												)}
 											</div>
-										</div>
-									))
+										);
+									})
 								) : (
 									<p>Nessun Centro</p>
 								)}
