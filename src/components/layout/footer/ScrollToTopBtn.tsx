@@ -50,7 +50,7 @@ export function ScrollToTopBtn() {
 
 	const StyledFab = styled(Fab)({
 		position: "fixed",
-		bottom: 80,
+		bottom: 64,
 		right: 16,
 		zIndex: isVisible ? 999 : -1,
 		opacity: isVisible ? 1 : 0,

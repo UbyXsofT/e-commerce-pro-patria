@@ -8,7 +8,9 @@ import {
 	ListSubheader,
 	MenuItem,
 	Select,
+	SelectChangeEvent,
 	Typography,
+	useMediaQuery,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -60,6 +62,8 @@ const Store = () => {
 	const theme = useTheme();
 	const router = useRouter();
 
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
 	const [centroList, setCentroList] = useState<undefined | Centro[]>(undefined);
 	const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
 		undefined
@@ -98,16 +102,7 @@ const Store = () => {
 
 				setProductList(msg_Resp.messageCli.message.prodotti);
 				setCentroList(centri);
-
-				centri.forEach((centro, idx) => {
-					console.log(centro, idx);
-
-					if (centro.principale) {
-						console.log("TRUE!", idx);
-
-						setSelectedCentri([idx]);
-					}
-				});
+				selectAll(centri.length);
 			};
 			const handleError = (error: any) => {
 				//ERROR data
@@ -145,6 +140,24 @@ const Store = () => {
 		fetchData();
 	}, []);
 
+	const updateSelectedCentro = (newValue: SelectChangeEvent<number[]>) => {
+		if (newValue.target.value.length === 0) {
+			return;
+		}
+
+		setSelectedCentri(newValue.target.value as number[]);
+	};
+
+	const selectAll = (length?: number) => {
+		if (length !== undefined) {
+			setSelectedCentri(Array.from(Array(length).keys()));
+		} else {
+			setSelectedCentri(
+				Array.from(Array(centroList ? centroList.length : 0).keys())
+			);
+		}
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
@@ -173,67 +186,63 @@ const Store = () => {
 
 					<div>
 						<span
-							style={{ display: "flex", gap: "2rem", alignItems: "center" }}
+							style={{
+								display: isMobile ? "block" : "flex",
+								gap: "2rem",
+								alignItems: "center",
+								justifyContent: "space-between",
+							}}
 						>
 							<h1>Lista Prodotti</h1>
+
 							{selectedCentri !== undefined ? (
-								<FormControl>
-									<InputLabel id="centro">Centro</InputLabel>
-									<Select
-										labelId="centro"
-										value={selectedCentri}
-										label="Centro"
-										multiple
-										renderValue={(selected) => (
-											<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-												{selected.map((value) => (
-													<Chip
-														key={value}
-														label={centroList ? centroList[value].name : ""}
-													/>
-												))}
-											</Box>
-										)}
-										onChange={(newValue) => {
-											let isAll = false;
-
-											(newValue.target.value as number[]).forEach((idx) => {
-												if (idx === -1) {
-													isAll = true;
-												}
-											});
-
-											if (isAll) {
-												setSelectedCentri(
-													Array.from(
-														Array(centroList ? centroList.length : 0).keys()
-													)
-												);
-												return;
-											}
-
-											if (newValue.target.value.length === 0) {
-												return;
-											}
-
-											setSelectedCentri(newValue.target.value as number[]);
+								<div
+									style={{ display: "flex", gap: "2rem", alignItems: "center" }}
+								>
+									<Button
+										variant="outlined"
+										onClick={(_) => {
+											selectAll();
 										}}
 									>
-										<MenuItem value={-1}>Tutti</MenuItem>
-										<ListSubheader>In Sede</ListSubheader>
-										{centroList
-											?.filter((centro) => centro.principale)
-											.map((centro) => (
-												<MenuItem value={centro.id}>{centro.name}</MenuItem>
-											))}
-										<ListSubheader>Fuori Sede</ListSubheader>
-										{centroList
-											?.filter((centro) => centro.principale === undefined)
-											.map((centro) => (
-												<MenuItem value={centro.id}>{centro.name}</MenuItem>
-											))}
-									</Select>
-								</FormControl>
+										Visualizza Tutti
+									</Button>
+									<FormControl sx={{ width: "300px" }}>
+										<InputLabel id="centro">Centro</InputLabel>
+										<Select
+											labelId="centro"
+											value={selectedCentri}
+											label="Centro"
+											multiple
+											renderValue={(selected) => (
+												<Box
+													sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+												>
+													{selected.map((value) => (
+														<Chip
+															key={value}
+															label={centroList ? centroList[value].name : ""}
+														/>
+													))}
+												</Box>
+											)}
+											onChange={(newValue) => updateSelectedCentro(newValue)}
+										>
+											<ListSubheader>In Sede</ListSubheader>
+											{centroList
+												?.filter((centro) => centro.principale)
+												.map((centro) => (
+													<MenuItem value={centro.id}>{centro.name}</MenuItem>
+												))}
+											<ListSubheader>Fuori Sede</ListSubheader>
+											{centroList
+												?.filter((centro) => centro.principale === undefined)
+												.map((centro) => (
+													<MenuItem value={centro.id}>{centro.name}</MenuItem>
+												))}
+										</Select>
+									</FormControl>
+								</div>
 							) : (
 								<></>
 							)}
