@@ -4,8 +4,10 @@ import {
 	Button,
 	Card,
 	CardContent,
+	Checkbox,
 	Chip,
 	FormControl,
+	FormControlLabel,
 	InputAdornment,
 	InputLabel,
 	ListSubheader,
@@ -90,6 +92,8 @@ const Store = () => {
 	const [search, setSearch] = useState("");
 
 	const [placeholder, setPlaceholder] = useState("");
+
+	const [orderByPrice, setOrderByPrice] = useState(false);
 
 	const isInRange = (
 		price: number,
@@ -309,6 +313,15 @@ const Store = () => {
 										padding: "1rem 0",
 									}}
 								>
+									<FormControlLabel
+										control={
+											<Checkbox
+												value={orderByPrice}
+												onChange={(e) => setOrderByPrice(!orderByPrice)}
+											/>
+										}
+										label="Ordina Per Prezzo"
+									/>
 									<Box width={"200px"}>
 										<Typography>Range di Prezzo</Typography>
 										<Stack
@@ -402,7 +415,7 @@ const Store = () => {
 							>
 								{selectedCentri !== undefined ? (
 									selectedCentri.map((selectedCentro) => {
-										const filteredAbbonamenti = centroList[
+										let filteredAbbonamenti = centroList[
 											selectedCentro
 										].subscriptions
 											.filter((abbonamento) => {
@@ -418,6 +431,13 @@ const Store = () => {
 													return abbonamento;
 												}
 											});
+
+										if (orderByPrice) {
+											filteredAbbonamenti.sort(
+												(abbonamento1, abbonamento2) =>
+													getPrice(abbonamento1) - getPrice(abbonamento2)
+											);
+										}
 
 										return (
 											<div>

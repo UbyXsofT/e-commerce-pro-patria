@@ -66,7 +66,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 									}
 								>
 									<IconButton>
-										<Handshake />
+										<Handshake color="success" />
 									</IconButton>
 								</Tooltip>
 							</Typography>
@@ -94,7 +94,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 									}
 								>
 									<IconButton>
-										<Discount />
+										<Discount color="success" />
 									</IconButton>
 								</Tooltip>
 							</Typography>
