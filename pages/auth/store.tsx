@@ -6,12 +6,14 @@ import {
 	CardContent,
 	Chip,
 	FormControl,
+	InputAdornment,
 	InputLabel,
 	ListSubheader,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 	Slider,
+	TextField,
 	Typography,
 	useMediaQuery,
 } from "@mui/material";
@@ -30,6 +32,7 @@ import {
 import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
 import { Box, Stack } from "@mui/system";
+import { Search } from "@mui/icons-material";
 
 interface Centro {
 	id: number;
@@ -65,7 +68,7 @@ const Store = () => {
 	const theme = useTheme();
 	const router = useRouter();
 
-	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
 	const [centroList, setCentroList] = useState<undefined | Centro[]>(undefined);
 	const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
@@ -83,6 +86,10 @@ const Store = () => {
 	const [priceRange, setPriceRange] = useState<
 		[undefined, undefined] | [number, number]
 	>([undefined, undefined]);
+
+	const [search, setSearch] = useState("");
+
+	const [placeholder, setPlaceholder] = useState("");
 
 	const isInRange = (
 		price: number,
@@ -134,6 +141,21 @@ const Store = () => {
 		return { min, max };
 	};
 
+	const randomIntFromInterval = (min: number, max: number): number => {
+		// min and max included
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	};
+
+	const findRandomString = (centroList: Centro[]): string => {
+		const centroIdx = randomIntFromInterval(0, centroList.length - 1);
+		const subscriptionIdx = randomIntFromInterval(
+			0,
+			centroList[centroIdx].subscriptions.length - 1
+		);
+
+		return centroList[centroIdx].subscriptions[subscriptionIdx].nome;
+	};
+
 	useEffect(() => {
 		//dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 		const fetchData = async () => {
@@ -168,6 +190,7 @@ const Store = () => {
 
 				setMinMax(minMax);
 				setPriceRange([minMax.min, minMax.max]);
+				setPlaceholder(findRandomString(centri));
 			};
 			const handleError = (error: any) => {
 				//ERROR data
@@ -252,14 +275,29 @@ const Store = () => {
 					<div>
 						<span
 							style={{
-								display: isMobile ? "block" : "flex",
+								display: isMobile ? "block" : "grid",
+								gridTemplateColumns: "1fr 1fr 1fr",
 								gap: "2rem",
 								alignItems: "center",
 								justifyContent: "space-between",
 							}}
 						>
 							<h1>Lista Prodotti</h1>
-
+							<TextField
+								fullWidth
+								label="Cerca"
+								value={search}
+								onChange={(e) => setSearch(e.target.value.trimStart())}
+								onBlur={(e) => setSearch(e.target.value.trim())}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Search />
+										</InputAdornment>
+									),
+								}}
+								placeholder={placeholder}
+							/>
 							{selectedCentri !== undefined ? (
 								<div
 									style={{
@@ -267,6 +305,8 @@ const Store = () => {
 										gap: "2rem",
 										flexWrap: "wrap",
 										justifyContent: isMobile ? "" : "flex-end",
+										alignItems: "center",
+										padding: "1rem 0",
 									}}
 								>
 									<Box width={"200px"}>
@@ -306,7 +346,7 @@ const Store = () => {
 									>
 										Visualizza Tutti
 									</Button>
-									<FormControl sx={{ width: "300px" }}>
+									<FormControl sx={{ width: "170px", maxWidth: "300px" }}>
 										<InputLabel id="centro">Centro</InputLabel>
 										<Select
 											labelId="centro"
@@ -364,11 +404,20 @@ const Store = () => {
 									selectedCentri.map((selectedCentro) => {
 										const filteredAbbonamenti = centroList[
 											selectedCentro
-										].subscriptions.filter((abbonamento) => {
-											if (isInRange(getPrice(abbonamento), priceRange)) {
-												return abbonamento;
-											}
-										});
+										].subscriptions
+											.filter((abbonamento) => {
+												if (isInRange(getPrice(abbonamento), priceRange)) {
+													return abbonamento;
+												}
+											})
+											.filter((abbonamento) => {
+												if (
+													abbonamento.nome.search(new RegExp(search, "i")) !==
+													-1
+												) {
+													return abbonamento;
+												}
+											});
 
 										return (
 											<div>
@@ -379,7 +428,9 @@ const Store = () => {
 													{centroList[selectedCentro].name}
 												</Typography>
 												{filteredAbbonamenti.length === 0 ? (
-													<Card sx={{ width: 510, height: 510 }}>
+													<Card
+														sx={{ width: isMobile ? "auto" : 510, height: 510 }}
+													>
 														<CardContent
 															sx={{
 																height: "100%",
@@ -398,9 +449,21 @@ const Store = () => {
 															<Typography
 																textAlign={"center"}
 																variant="h5"
+																gutterBottom
 															>
 																<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
 															</Typography>
+															{search !== "" ? (
+																<Typography
+																	textAlign={"center"}
+																	variant="h5"
+																>
+																	Contenente
+																	<strong> {search}</strong>
+																</Typography>
+															) : (
+																<></>
+															)}
 														</CardContent>
 													</Card>
 												) : (
