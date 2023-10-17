@@ -9,28 +9,59 @@ export type AutocompleteSelected = ComunePaese | null;
 
 export type Date = Dayjs | null;
 
-export interface ComunePaese {
+// export type ComunePaese = {
+// 	codice: string;
+// 	nome: string;
+// 	nomeStraniero?: string | null;
+// 	codiceCatastale?: string;
+// 	cap?: string;
+// 	prefisso?: string | null;
+// 	provincia: {
+// 		nome: string;
+// 		regione?: string;
+// 	};
+// 	email?: string | null;
+// 	pec?: string | null;
+// 	telefono?: string | null;
+// 	fax?: string | null;
+// 	coordinate?: {
+// 		lat: number;
+// 		lng: number;
+// 	};
+// };
+
+export type ComunePaese = Comune | Paese;
+
+export type Comune = {
 	codice: string;
 	nome: string;
 	nomeStraniero?: string | null;
 	codiceCatastale?: string;
 	cap?: string;
-	prefisso?: string;
+	prefisso?: string | null;
 	provincia: {
 		nome: string;
 		regione?: string;
 	};
-	email?: string;
-	pec?: string;
-	telefono?: string;
-	fax?: string;
+	email?: string | null;
+	pec?: string | null;
+	telefono?: string | null;
+	fax?: string | null;
 	coordinate?: {
 		lat: number;
 		lng: number;
 	};
-}
+};
 
-export type Paese = [string, "EE", string, 0 | 1];
+export type Paese = {
+	codice: string;
+	nome: string;
+	provincia: {
+		nome: string;
+	};
+	// We add it later
+	cap?: string;
+};
 
 export interface PasswordSafety {
 	correct: boolean;
