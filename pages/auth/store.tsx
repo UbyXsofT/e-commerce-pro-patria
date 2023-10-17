@@ -8,6 +8,7 @@ import {
 	Chip,
 	FormControl,
 	FormControlLabel,
+	Grid,
 	InputAdornment,
 	InputLabel,
 	ListSubheader,
@@ -258,35 +259,27 @@ const Store = () => {
 			>
 				<AlertMe />
 				<div>
-					<Typography
-						variant="h5"
-						component="h1"
-						gutterBottom
+					<Grid
+						container
+						justifyContent={"space-between"}
+						spacing={2}
 					>
-						Benvenuto Nello Store
-					</Typography>
-					<Button
-						onClick={() => {
-							router.push({
-								pathname: "/auth/carrello",
-								query: { origin: "/auth" },
-							});
-						}}
-					>
-						Vai al Carrello
-					</Button>
-
-					<div>
-						<span
-							style={{
-								display: isMobile ? "block" : "grid",
-								gridTemplateColumns: "1fr 1fr 1fr",
-								gap: "2rem",
-								alignItems: "center",
-								justifyContent: "space-between",
-							}}
+						<Grid
+							item
+							xs={12}
+							md={12}
+							lg={4}
 						>
-							<h1>Lista Prodotti</h1>
+							<Typography variant="h4">
+								<strong>Lista Prodotti</strong>
+							</Typography>
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							md={6}
+							lg={4}
+						>
 							<TextField
 								fullWidth
 								label="Cerca"
@@ -302,217 +295,256 @@ const Store = () => {
 								}}
 								placeholder={placeholder}
 							/>
+						</Grid>
+
+						<Grid
+							container
+							item
+							xs={12}
+							md={6}
+							lg={4}
+						>
 							{selectedCentri !== undefined ? (
-								<div
-									style={{
-										display: "flex",
-										gap: "2rem",
-										flexWrap: "wrap",
-										justifyContent: isMobile ? "" : "flex-end",
-										alignItems: "center",
-										padding: "1rem 0",
-									}}
+								<Grid
+									item
+									container
+									spacing={2}
 								>
-									<FormControlLabel
-										control={
-											<Checkbox
-												value={orderByPrice}
-												onChange={(e) => setOrderByPrice(!orderByPrice)}
-											/>
-										}
-										label="Ordina Per Prezzo"
-									/>
-									<Box width={"200px"}>
-										<Typography>Range di Prezzo</Typography>
-										<Stack
-											spacing={2}
-											direction="row"
-											sx={{ mb: 1 }}
-											alignItems="center"
-										>
-											<Typography>{`${minMax.min}€`}</Typography>
-											<Slider
-												valueLabelDisplay="auto"
-												min={minMax.min}
-												max={minMax.max}
-												value={
-													priceRange[0] !== undefined &&
-													priceRange[1] !== undefined
-														? priceRange
-														: [
-																minMax.min ? minMax.min : 0,
-																minMax.max ? minMax.max : 300,
-														  ]
-												}
-												onChange={(_, newRange) =>
-													setPriceRange(newRange as [number, number])
-												}
-											/>
-											<Typography>{`${minMax.max}€`}</Typography>
-										</Stack>
-									</Box>
-									<Button
-										variant="outlined"
-										onClick={(_) => {
-											selectAll();
-										}}
+									<Grid
+										container
+										item
+										md={12}
+										lg={6}
 									>
-										Visualizza Tutti
-									</Button>
-									<FormControl sx={{ width: "170px", maxWidth: "300px" }}>
-										<InputLabel id="centro">Centro</InputLabel>
-										<Select
-											labelId="centro"
-											value={selectedCentri}
-											label="Centro"
-											multiple
-											renderValue={(selected) => (
-												<Box
-													sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+										<Grid item>
+											<Button
+												variant="text"
+												onClick={(_) => {
+													selectAll();
+												}}
+											>
+												Tutti
+											</Button>
+										</Grid>
+										<Grid item>
+											<FormControl>
+												<InputLabel id="centro">Centro</InputLabel>
+												<Select
+													labelId="centro"
+													value={selectedCentri}
+													label="Centro"
+													multiple
+													renderValue={(selected) => (
+														<Box
+															sx={{
+																display: "flex",
+																flexWrap: "wrap",
+																gap: 0.5,
+															}}
+														>
+															{selected.map((value) => (
+																<Chip
+																	key={value}
+																	label={
+																		centroList ? centroList[value].name : ""
+																	}
+																/>
+															))}
+														</Box>
+													)}
+													onChange={(newValue) =>
+														updateSelectedCentro(newValue)
+													}
 												>
-													{selected.map((value) => (
-														<Chip
-															key={value}
-															label={centroList ? centroList[value].name : ""}
-														/>
-													))}
-												</Box>
-											)}
-											onChange={(newValue) => updateSelectedCentro(newValue)}
+													<ListSubheader>In Sede</ListSubheader>
+													{centroList
+														?.filter((centro) => centro.principale)
+														.map((centro) => (
+															<MenuItem value={centro.id}>
+																{centro.name}
+															</MenuItem>
+														))}
+													<ListSubheader>Fuori Sede</ListSubheader>
+													{centroList
+														?.filter(
+															(centro) => centro.principale === undefined
+														)
+														.map((centro) => (
+															<MenuItem value={centro.id}>
+																{centro.name}
+															</MenuItem>
+														))}
+												</Select>
+											</FormControl>
+										</Grid>
+									</Grid>
+									<Grid
+										container
+										item
+										md={12}
+										lg={6}
+									>
+										<Grid item>
+											<FormControlLabel
+												control={
+													<Checkbox
+														value={orderByPrice}
+														onChange={(e) => setOrderByPrice(!orderByPrice)}
+													/>
+												}
+												label="Ordina Per Prezzo"
+											/>
+										</Grid>
+										<Grid
+											item
+											width={"200px"}
 										>
-											<ListSubheader>In Sede</ListSubheader>
-											{centroList
-												?.filter((centro) => centro.principale)
-												.map((centro) => (
-													<MenuItem value={centro.id}>{centro.name}</MenuItem>
-												))}
-											<ListSubheader>Fuori Sede</ListSubheader>
-											{centroList
-												?.filter((centro) => centro.principale === undefined)
-												.map((centro) => (
-													<MenuItem value={centro.id}>{centro.name}</MenuItem>
-												))}
-										</Select>
-									</FormControl>
-								</div>
+											<Typography>Range di Prezzo</Typography>
+											<Stack
+												spacing={3}
+												direction="row"
+												alignItems="center"
+											>
+												<Typography>{`${minMax.min}€`}</Typography>
+												<Slider
+													valueLabelDisplay="auto"
+													min={minMax.min}
+													max={minMax.max}
+													value={
+														priceRange[0] !== undefined &&
+														priceRange[1] !== undefined
+															? priceRange
+															: [
+																	minMax.min ? minMax.min : 0,
+																	minMax.max ? minMax.max : 300,
+															  ]
+													}
+													onChange={(_, newRange) =>
+														setPriceRange(newRange as [number, number])
+													}
+												/>
+												<Typography>{`${minMax.max}€`}</Typography>
+											</Stack>
+										</Grid>
+									</Grid>
+								</Grid>
 							) : (
 								<></>
 							)}
-						</span>
-						{!centroList ? (
-							<p>Caricamento...</p>
-						) : (
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									gap: "3em",
-									padding: "1rem",
-									flexWrap: "wrap",
-									justifyContent: "center",
-									alignContent: "center",
-								}}
-							>
-								{selectedCentri !== undefined ? (
-									selectedCentri.map((selectedCentro) => {
-										let filteredAbbonamenti = centroList[
-											selectedCentro
-										].subscriptions
-											.filter((abbonamento) => {
-												if (isInRange(getPrice(abbonamento), priceRange)) {
-													return abbonamento;
-												}
-											})
-											.filter((abbonamento) => {
-												if (
-													abbonamento.nome.search(new RegExp(search, "i")) !==
-													-1
-												) {
-													return abbonamento;
-												}
-											});
+						</Grid>
+					</Grid>
+					{!centroList ? (
+						<p>Caricamento...</p>
+					) : (
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								gap: "3em",
+								padding: "1rem",
+								flexWrap: "wrap",
+								justifyContent: "center",
+								alignContent: "center",
+							}}
+						>
+							{selectedCentri !== undefined ? (
+								selectedCentri.map((selectedCentro) => {
+									let filteredAbbonamenti = centroList[
+										selectedCentro
+									].subscriptions
+										.filter((abbonamento) => {
+											if (isInRange(getPrice(abbonamento), priceRange)) {
+												return abbonamento;
+											}
+										})
+										.filter((abbonamento) => {
+											if (
+												abbonamento.nome.search(new RegExp(search, "i")) !== -1
+											) {
+												return abbonamento;
+											}
+										});
 
-										if (orderByPrice) {
-											filteredAbbonamenti.sort(
-												(abbonamento1, abbonamento2) =>
-													getPrice(abbonamento1) - getPrice(abbonamento2)
-											);
-										}
+									if (orderByPrice) {
+										filteredAbbonamenti.sort(
+											(abbonamento1, abbonamento2) =>
+												getPrice(abbonamento1) - getPrice(abbonamento2)
+										);
+									}
 
-										return (
-											<div>
-												<Typography
-													variant="h4"
-													paddingBottom={2}
+									return (
+										<div>
+											<Typography
+												variant="h4"
+												paddingBottom={2}
+											>
+												{centroList[selectedCentro].name}
+											</Typography>
+											{filteredAbbonamenti.length === 0 ? (
+												<Card
+													sx={{ width: isMobile ? "auto" : 510, height: 510 }}
 												>
-													{centroList[selectedCentro].name}
-												</Typography>
-												{filteredAbbonamenti.length === 0 ? (
-													<Card
-														sx={{ width: isMobile ? "auto" : 510, height: 510 }}
-													>
-														<CardContent
-															sx={{
-																height: "100%",
-																display: "flex",
-																justifyContent: "center",
-																alignItems: "center",
-																flexDirection: "column",
-															}}
-														>
-															<Typography
-																textAlign={"center"}
-																variant="h5"
-															>
-																Nessun Abbonamento tra i
-															</Typography>
-															<Typography
-																textAlign={"center"}
-																variant="h5"
-																gutterBottom
-															>
-																<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
-															</Typography>
-															{search !== "" ? (
-																<Typography
-																	textAlign={"center"}
-																	variant="h5"
-																>
-																	Contenente
-																	<strong> {search}</strong>
-																</Typography>
-															) : (
-																<></>
-															)}
-														</CardContent>
-													</Card>
-												) : (
-													<div
-														style={{
+													<CardContent
+														sx={{
+															height: "100%",
 															display: "flex",
-															gap: "3em",
-															flexWrap: "wrap",
 															justifyContent: "center",
-															alignContent: "center",
+															alignItems: "center",
+															flexDirection: "column",
 														}}
 													>
-														{filteredAbbonamenti.map((abbonamento) => (
-															<ProductCard
-																key={abbonamento.id}
-																product={abbonamento}
-															/>
-														))}
-													</div>
-												)}
-											</div>
-										);
-									})
-								) : (
-									<p>Nessun Centro</p>
-								)}
-							</div>
-						)}
-					</div>
+														<Typography
+															textAlign={"center"}
+															variant="h5"
+														>
+															Nessun Abbonamento tra i
+														</Typography>
+														<Typography
+															textAlign={"center"}
+															variant="h5"
+															gutterBottom
+														>
+															<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
+														</Typography>
+														{search !== "" ? (
+															<Typography
+																textAlign={"center"}
+																variant="h5"
+															>
+																Contenente
+																<strong> {search}</strong>
+															</Typography>
+														) : (
+															<></>
+														)}
+													</CardContent>
+												</Card>
+											) : (
+												<div
+													style={{
+														display: "flex",
+														gap: "3em",
+														flexWrap: "wrap",
+														justifyContent: "center",
+														alignContent: "center",
+													}}
+												>
+													{filteredAbbonamenti.map((abbonamento) => (
+														<ProductCard
+															key={abbonamento.id}
+															product={abbonamento}
+														/>
+													))}
+												</div>
+											)}
+										</div>
+									);
+								})
+							) : (
+								<p>Nessun Centro</p>
+							)}
+						</div>
+					)}
 				</div>
 			</Layout>
 		</ThemeProvider>
