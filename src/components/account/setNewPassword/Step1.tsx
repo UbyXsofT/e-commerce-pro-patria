@@ -15,6 +15,7 @@ import SecurePassword from "../SecurePassword";
 import { PasswordSafety } from "src/components/CommonTypesInterfaces";
 
 type Step1Props = {
+	origin: string | string[] | undefined;
 	smUp: boolean;
 	setDone: Dispatch<SetStateAction<boolean>>;
 	newPassword: string;
@@ -24,6 +25,7 @@ type Step1Props = {
 };
 
 const Step1 = ({
+	origin,
 	smUp,
 	setDone,
 	newPassword,
@@ -116,7 +118,14 @@ const Step1 = ({
 						}}
 					>
 						<Link
-							onClick={() => Router.push("/account/login")}
+							onClick={() => {
+								if (!origin) {
+									Router.push("/account/login");
+									return;
+								}
+
+								Router.push(typeof origin === "string" ? origin : origin[0]);
+							}}
 							variant="body2"
 							sx={{
 								userSelect: "none",

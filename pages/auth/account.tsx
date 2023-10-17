@@ -396,7 +396,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 												router.push({
 													pathname: "/auth/setNewPassword",
-													query: { origin: "/auth" },
+													query: { origin: "/auth/account" },
 												});
 
 												return;
