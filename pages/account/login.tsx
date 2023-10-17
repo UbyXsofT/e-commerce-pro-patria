@@ -52,6 +52,7 @@ import {
 	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
 import LayoutGeneral from "src/components/layout/LayoutGeneral";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
 	const theme = useTheme();
@@ -61,6 +62,7 @@ const Login = () => {
 	const [ricordami, setRicordami] = React.useState(false);
 	const [paddingTop, setPaddingTop] = React.useState(0);
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 
 	const CustomTextField = styled(TextField)(({ theme }) => ({
 		"& .MuiInputBase-input": {
@@ -99,7 +101,17 @@ const Login = () => {
 	}, []);
 
 	const { showAlert } = useAlertMe();
-	const handleLogin = async () => {
+	const handleLogin = async (captchaValue: string | null) => {
+		const handleCaptchaError = async () => {
+			console.log("Si prega di completare il reCAPTCHA.");
+			const textAlert = (
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			);
+			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		};
+
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
@@ -172,6 +184,13 @@ const Login = () => {
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
 		};
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			handleCaptchaError();
+			return;
+		}
+
 		fetchData();
 	};
 
@@ -368,12 +387,18 @@ const Login = () => {
 											label="Ricordati di me"
 										/>
 
+										{/* Add the reCAPTCHA component */}
+										<ReCAPTCHA
+											sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+											onChange={(value) => setCaptchaValue(value)}
+										/>
+
 										<Button
 											//   type="submit"
 											fullWidth
 											variant="contained"
 											sx={{ mt: 3, mb: 2 }}
-											onClick={() => handleLogin()}
+											onClick={() => handleLogin(captchaValue)}
 											disabled={!password || !username}
 										>
 											Accedi
