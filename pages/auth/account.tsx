@@ -37,6 +37,8 @@ import { LockOutlined } from "@mui/icons-material";
 
 import eCommerceConf from "eCommerceConf.json";
 import { useSettings } from "src/components/layout/SettingsContext";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -53,6 +55,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [interfaceState, setInterfaceState] = useState<
 		"read" | "authenticate" | "modify"
 	>("read");
+
+	const [origin, setOrigin] = useState<"changePassword" | null>(null);
 
 	const name = "Mattia";
 	const surname = "Formichetti";
@@ -78,6 +82,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [password, setPassword] = useState("");
 	const [wrongPassword, setWrongPassword] = useState(false);
 
+	const [captcha, setCaptcha] = useState<string | null>(null);
+
 	useEffect(() => {
 		getComuni(setComuni);
 	}, []);
@@ -94,7 +100,25 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	};
 
 	// TODO: Implement Password Checking
-	const passwordCheck = (password: string) => true;
+	const passwordCheck = (password: string) => {
+		if (!captcha) {
+			handleCaptchaError();
+			return;
+		}
+		return true;
+	};
+
+	const { showAlert } = useAlertMe();
+
+	const handleCaptchaError = async () => {
+		console.log("Si prega di completare il reCAPTCHA.");
+		const textAlert = (
+			<h3>
+				<strong>Si prega di completare il reCAPTCHA.</strong>
+			</h3>
+		);
+		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+	};
 
 	const defineUI = (interfaceState: "read" | "authenticate" | "modify") => {
 		switch (interfaceState) {
@@ -261,10 +285,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 									</Button>
 									<Button
 										onClick={() => {
-											router.push({
-												pathname: "/auth/setNewPassword",
-												query: { origin: "/auth" },
-											});
+											setInterfaceState("authenticate");
+											setOrigin("changePassword");
 										}}
 									>
 										<KeyIcon style={{ marginRight: 5 }} />
@@ -343,6 +365,11 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								Inserisci la tua <strong>Password</strong> per{" "}
 								<strong>Autenticarti</strong>
 							</FormHelperText>
+							<ReCAPTCHA
+								style={{ marginTop: "1rem" }}
+								sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+								onChange={(value) => setCaptcha(value)}
+							></ReCAPTCHA>
 							<div
 								style={{
 									marginTop: "10em",
@@ -364,6 +391,17 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 									variant="contained"
 									onClick={() => {
 										if (passwordCheck(password) === true) {
+											if (origin === "changePassword") {
+												setOrigin(null);
+
+												router.push({
+													pathname: "/auth/setNewPassword",
+													query: { origin: "/auth" },
+												});
+
+												return;
+											}
+
 											setInterfaceState("modify");
 											setWrongPassword(false);
 										} else {
