@@ -230,3 +230,35 @@ export interface obyPostProdotti {
 	IDCliente: string;
 	IDCentro: number;
 }
+
+export interface Abbonamento {
+	id: string;
+	nome: string;
+	prezzo: number;
+	immagine: string | null;
+	descrizione: string;
+	convenzione: {
+		isConv: boolean;
+		descConve: string;
+	};
+	promozione: {
+		isPromo: boolean;
+		descPromo: string;
+	};
+	sceltaOrari: {
+		isOrari: boolean;
+		daOrari: string;
+		aOrari: string;
+	};
+}
+
+export type Cart = CartUser[];
+
+export interface CartUser {
+	userId: string;
+	cart: CartAbbonamento[];
+}
+
+export interface CartAbbonamento extends Abbonamento {
+	configuration: { initialDate: Dayjs } | null;
+}

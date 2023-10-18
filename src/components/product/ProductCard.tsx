@@ -9,8 +9,8 @@ import {
 	Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { Abbonamento } from "pages/auth/store";
 import { useEffect, useState } from "react";
+import { Abbonamento } from "../CommonTypesInterfaces";
 
 interface ProductCardProps {
 	product: Abbonamento;

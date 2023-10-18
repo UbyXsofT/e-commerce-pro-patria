@@ -31,6 +31,7 @@ import Layout from "src/components/layout/Layout";
 import {
 	responseCall,
 	obyPostProdotti,
+	Abbonamento,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
@@ -42,27 +43,6 @@ interface Centro {
 	name: string;
 	principale?: true;
 	subscriptions: Abbonamento[];
-}
-
-export interface Abbonamento {
-	id: string;
-	nome: string;
-	prezzo: number;
-	immagine: string | null;
-	descrizione: string;
-	convenzione: {
-		isConv: boolean;
-		descConve: string;
-	};
-	promozione: {
-		isPromo: boolean;
-		descPromo: string;
-	};
-	sceltaOrari: {
-		isOrari: boolean;
-		daOrari: string;
-		aOrari: string;
-	};
 }
 
 const Store = () => {
