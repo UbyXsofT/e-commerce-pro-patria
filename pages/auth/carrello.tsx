@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
 //STRIPE LOAD
@@ -12,6 +12,7 @@ import {
 	ListItemText,
 	Tooltip,
 	Typography,
+	useMediaQuery,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -45,10 +46,23 @@ const Carrello = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const cart = useSelector((state: StoreState) => state.cart);
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const user = cart.at(0);
 
 	const [stripeSecretKey, setStripeSecretKey] = React.useState(null);
+
+	type TotalPrice = {
+		toShow: boolean;
+		totalPrice: number;
+		totalDiscountedPrice: number;
+	};
+
+	const [totalPrice, setTotalPrice] = useState<TotalPrice>({
+		toShow: true,
+		totalPrice: 126,
+		totalDiscountedPrice: 100,
+	});
 
 	React.useEffect(() => {
 		const fetchStripeKey = async () => {
@@ -179,12 +193,117 @@ const Carrello = () => {
 							user.cart.map((abbonamento) => {
 								const prices = getPrices(abbonamento);
 
+								const sconti = (
+									<Stack direction={isMobile ? "row" : "column"}>
+										{abbonamento.convenzione.isConv ? (
+											<Typography
+												marginBottom={3}
+												variant="h5"
+											>
+												<Tooltip
+													title={
+														<span
+															style={{
+																display: "flex",
+																flexDirection: "column",
+															}}
+														>
+															<Typography
+																textAlign={"center"}
+																variant="subtitle2"
+															>
+																Convenzione
+															</Typography>
+															<Typography variant="subtitle2">
+																{abbonamento.convenzione.descConve}
+															</Typography>
+														</span>
+													}
+												>
+													<IconButton>
+														<Handshake color="success" />
+													</IconButton>
+												</Tooltip>
+											</Typography>
+										) : (
+											<></>
+										)}
+										{abbonamento.promozione.isPromo ? (
+											<Typography
+												marginBottom={3}
+												variant="h5"
+											>
+												<Tooltip
+													title={
+														<span
+															style={{
+																display: "flex",
+																flexDirection: "column",
+															}}
+														>
+															<Typography
+																textAlign={"center"}
+																variant="subtitle2"
+															>
+																Promozione
+															</Typography>
+															<Typography variant="subtitle2">
+																{abbonamento.promozione.descPromo}
+															</Typography>
+														</span>
+													}
+												>
+													<IconButton>
+														<Discount color="success" />
+													</IconButton>
+												</Tooltip>
+											</Typography>
+										) : (
+											<></>
+										)}
+										{abbonamento.sceltaOrari.isOrari ? (
+											<Typography
+												marginBottom={3}
+												variant="h5"
+											>
+												<Tooltip
+													title={
+														<span
+															style={{
+																display: "flex",
+																flexDirection: "column",
+															}}
+														>
+															<Typography
+																textAlign={"center"}
+																variant="subtitle2"
+															>
+																Orario Configurabile <br />
+															</Typography>
+															<Typography variant="h6">
+																{`${abbonamento.sceltaOrari.daOrari} - ${abbonamento.sceltaOrari.aOrari}`}
+															</Typography>
+														</span>
+													}
+												>
+													<IconButton>
+														<EditCalendar />
+													</IconButton>
+												</Tooltip>
+											</Typography>
+										) : (
+											<></>
+										)}
+									</Stack>
+								);
+
 								return (
 									<ListItem>
 										<ListItemText>
 											<Stack
+												alignItems={"center"}
 												spacing={2}
-												direction={"row"}
+												direction={isMobile ? "column" : "row"}
 											>
 												<Image
 													src={abbonamento.immagine ? abbonamento.immagine : ""}
@@ -194,7 +313,7 @@ const Carrello = () => {
 													style={{ borderRadius: 5 }}
 												/>
 												<Stack spacing={2}>
-													<Box>
+													<Box width={"200px"}>
 														<Typography variant="h6">
 															{abbonamento.nome}
 														</Typography>
@@ -240,108 +359,9 @@ const Carrello = () => {
 															<strong>{prices.basePrice}€</strong>
 														</Typography>
 													)}
+													{isMobile ? sconti : <></>}
 												</Stack>
-												<Stack>
-													{abbonamento.convenzione.isConv ? (
-														<Typography
-															marginBottom={3}
-															variant="h5"
-														>
-															<Tooltip
-																title={
-																	<span
-																		style={{
-																			display: "flex",
-																			flexDirection: "column",
-																		}}
-																	>
-																		<Typography
-																			textAlign={"center"}
-																			variant="subtitle2"
-																		>
-																			Convenzione
-																		</Typography>
-																		<Typography variant="subtitle2">
-																			{abbonamento.convenzione.descConve}
-																		</Typography>
-																	</span>
-																}
-															>
-																<IconButton>
-																	<Handshake color="success" />
-																</IconButton>
-															</Tooltip>
-														</Typography>
-													) : (
-														<></>
-													)}
-													{abbonamento.promozione.isPromo ? (
-														<Typography
-															marginBottom={3}
-															variant="h5"
-														>
-															<Tooltip
-																title={
-																	<span
-																		style={{
-																			display: "flex",
-																			flexDirection: "column",
-																		}}
-																	>
-																		<Typography
-																			textAlign={"center"}
-																			variant="subtitle2"
-																		>
-																			Promozione
-																		</Typography>
-																		<Typography variant="subtitle2">
-																			{abbonamento.promozione.descPromo}
-																		</Typography>
-																	</span>
-																}
-															>
-																<IconButton>
-																	<Discount color="success" />
-																</IconButton>
-															</Tooltip>
-														</Typography>
-													) : (
-														<></>
-													)}
-													{abbonamento.sceltaOrari.isOrari ? (
-														<Typography
-															marginBottom={3}
-															variant="h5"
-														>
-															<Tooltip
-																title={
-																	<span
-																		style={{
-																			display: "flex",
-																			flexDirection: "column",
-																		}}
-																	>
-																		<Typography
-																			textAlign={"center"}
-																			variant="subtitle2"
-																		>
-																			Orario Configurabile <br />
-																		</Typography>
-																		<Typography variant="h6">
-																			{`${abbonamento.sceltaOrari.daOrari} - ${abbonamento.sceltaOrari.aOrari}`}
-																		</Typography>
-																	</span>
-																}
-															>
-																<IconButton>
-																	<EditCalendar />
-																</IconButton>
-															</Tooltip>
-														</Typography>
-													) : (
-														<></>
-													)}
-												</Stack>
+												{!isMobile ? sconti : <></>}
 											</Stack>
 										</ListItemText>
 										<IconButton
@@ -364,10 +384,52 @@ const Carrello = () => {
 							<></>
 						)}
 					</List>
-					<Box
-						display={"flex"}
-						justifyContent={"flex-end"}
+					<Stack
+						direction={"row"}
+						spacing={2}
+						justifyContent={"space-between"}
 					>
+						<Typography variant="h5">
+							{`Totale: `}
+							{totalPrice.toShow ? (
+								<Stack
+									display={"inline-flex"}
+									direction={"row"}
+									spacing={2}
+								>
+									<Typography
+										variant="h5"
+										textAlign={"center"}
+										color={"green"}
+									>
+										<strong>{totalPrice.totalDiscountedPrice}€</strong>
+									</Typography>
+									<Typography
+										variant="h5"
+										textAlign={"center"}
+										color={"grey"}
+										style={{
+											position: "relative",
+										}}
+									>
+										{totalPrice.totalPrice}€
+										<span
+											style={{
+												position: "absolute",
+												top: "50%",
+												left: "50%",
+												transform: "translate(-50%, -50%) rotate(-20deg)",
+												background: "red",
+												width: "100%",
+												height: "2px",
+											}}
+										></span>
+									</Typography>
+								</Stack>
+							) : (
+								<strong>{totalPrice.totalPrice}€</strong>
+							)}
+						</Typography>
 						{stripeSecretKey && (
 							<Button
 								variant="contained"
@@ -376,7 +438,7 @@ const Carrello = () => {
 								CHECKOUT
 							</Button>
 						)}
-					</Box>
+					</Stack>
 				</Container>
 			</Layout>
 		</ThemeProvider>
