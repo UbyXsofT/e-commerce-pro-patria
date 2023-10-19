@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
 //STRIPE LOAD
@@ -29,6 +29,7 @@ import {
 	responseCall,
 	authStripe,
 	StoreState,
+	CartAbbonamento,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
@@ -39,7 +40,7 @@ import {
 	Handshake,
 } from "@mui/icons-material";
 import { removeFromCart } from "src/components/product/ProductCard";
-import { getPrices } from "./store";
+import { getPrice, getPrices } from "./store";
 
 const Carrello = () => {
 	const { showAlert } = useAlertMe();
@@ -60,9 +61,35 @@ const Carrello = () => {
 
 	const [totalPrice, setTotalPrice] = useState<TotalPrice>({
 		toShow: true,
-		totalPrice: 126,
-		totalDiscountedPrice: 100,
+		totalPrice: 0,
+		totalDiscountedPrice: 0,
 	});
+
+	const calculateTotalPrice = (cart: CartAbbonamento[]): TotalPrice => {
+		let totalPrice = 0;
+		let totalDiscountedPrice = 0;
+
+		cart.forEach((abbonamento) => {
+			totalPrice += getPrices(abbonamento).basePrice;
+			totalDiscountedPrice += getPrice(abbonamento);
+		});
+
+		return {
+			toShow: totalPrice !== totalDiscountedPrice ? true : false,
+			totalPrice: Number(totalPrice.toFixed(2)),
+			totalDiscountedPrice: Number(totalDiscountedPrice.toFixed(2)),
+		};
+	};
+
+	useEffect(() => {
+		let user = cart.at(0);
+
+		if (!user) {
+			return;
+		}
+
+		setTotalPrice(calculateTotalPrice(user.cart));
+	}, [cart]);
 
 	React.useEffect(() => {
 		const fetchStripeKey = async () => {
