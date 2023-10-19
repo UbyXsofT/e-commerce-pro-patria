@@ -32,6 +32,15 @@ const authUserReducer = (state = null, action: AnyAction) => {
 	}
 };
 
+const setCartReducer = (state = [], action: AnyAction) => {
+	switch (action.type) {
+		case "SET_CART":
+			return action.payload;
+		default:
+			return state;
+	}
+};
+
 // Crea il tuo store Redux utilizzando configureStore
 const makeStore = () =>
 	configureStore({
@@ -39,6 +48,7 @@ const makeStore = () =>
 			loading: loadingReducer,
 			authEcommerce: authEcommerceReducer,
 			authUser: authUserReducer,
+			cart: setCartReducer,
 			// Altri riduttori...
 		},
 		middleware: (getDefaultMiddleware) =>

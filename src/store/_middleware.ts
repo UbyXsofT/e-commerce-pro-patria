@@ -14,5 +14,9 @@ export const authMiddleware =
 			return next(action);
 		}
 
+		if (action.type === "SET_CART") {
+			return next(action);
+		}
+
 		return next(action);
 	};

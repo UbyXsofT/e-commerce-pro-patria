@@ -10,7 +10,13 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Abbonamento } from "../CommonTypesInterfaces";
+import {
+	Abbonamento,
+	CartAbbonamento,
+	StoreState,
+} from "../CommonTypesInterfaces";
+import { setCart } from "src/store/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 interface ProductCardProps {
 	product: Abbonamento;
@@ -18,6 +24,10 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
+
+	const cart = useSelector((state: StoreState) => state.cart);
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (product.promozione.isPromo) {
@@ -190,7 +200,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
 				<Typography>{product.descrizione}</Typography>
 			</CardContent>
 			<CardActions sx={{ justifyContent: "center" }}>
-				<Button variant="contained">Iscriviti</Button>
+				<Button
+					onClick={() =>
+						isInCart(product) ? removeFromCart(product) : addToCart(product)
+					}
+					variant="contained"
+				>
+					{isInCart(product) ? "Rimuovi dal Carrello" : "Aggiungi Al Carrello"}
+				</Button>
 			</CardActions>
 		</Card>
 	);

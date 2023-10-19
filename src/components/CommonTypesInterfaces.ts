@@ -75,7 +75,7 @@ export type CaratteriSpeciali = "";
 
 export type Cookie = "accessToken" | "refreshToken";
 
-export type StoreAction = SetLoading | SetAuthEcommerce | SetAuthUser;
+export type StoreAction = SetLoading | SetAuthEcommerce | SetAuthUser | SetCart;
 
 export type SetLoading = {
 	type: "SET_LOADING";
@@ -92,10 +92,16 @@ export type SetAuthUser = {
 	payload: UserData;
 };
 
+export type SetCart = {
+	type: "SET_CART";
+	payload: Cart;
+};
+
 export interface StoreState {
 	loading: boolean;
 	authEcommerce: boolean;
 	authUser: AuthUser | null;
+	cart: Cart;
 }
 
 // Work In Progress, check in with Antonio for Definition
