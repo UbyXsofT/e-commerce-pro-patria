@@ -1,10 +1,18 @@
 import React from "react";
-import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
 //STRIPE LOAD
 import { loadStripe } from "@stripe/stripe-js";
 //----------
-import { Typography } from "@mui/material";
+import {
+	Button,
+	IconButton,
+	List,
+	ListItem,
+	ListItemText,
+	Tooltip,
+	Typography,
+} from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 //*-----*//
@@ -16,13 +24,29 @@ import { styled } from "@mui/material/styles";
 //import esempio from "../api/esempio";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
-import { responseCall, authStripe } from "src/components/CommonTypesInterfaces";
+import {
+	responseCall,
+	authStripe,
+	StoreState,
+} from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
+import { Box, Container, Stack } from "@mui/system";
+import {
+	DeleteRounded,
+	Discount,
+	EditCalendar,
+	Handshake,
+} from "@mui/icons-material";
+import { removeFromCart } from "src/components/product/ProductCard";
+import { getPrices } from "./store";
 
 const Carrello = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const cart = useSelector((state: StoreState) => state.cart);
+
+	const user = cart.at(0);
 
 	const [stripeSecretKey, setStripeSecretKey] = React.useState(null);
 
@@ -146,20 +170,214 @@ const Carrello = () => {
 				description="This is a E-Commerce carrello page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				<Typography
-					variant="h5"
-					component="h1"
-					gutterBottom
-				>
-					CARRELLO
-				</Typography>
+				<Container>
+					<Typography variant="h4">
+						<strong>Il tuo carrello</strong>
+					</Typography>
+					<List>
+						{user ? (
+							user.cart.map((abbonamento) => {
+								const prices = getPrices(abbonamento);
 
-				<div>
-					<h1>Il tuo carrello</h1>
-					{stripeSecretKey && (
-						<button onClick={handleCheckout}>CHECKOUT</button>
-					)}
-				</div>
+								return (
+									<ListItem>
+										<ListItemText>
+											<Stack
+												spacing={2}
+												direction={"row"}
+											>
+												<Image
+													src={abbonamento.immagine ? abbonamento.immagine : ""}
+													alt={abbonamento.nome}
+													width={125}
+													height={125}
+													style={{ borderRadius: 5 }}
+												/>
+												<Stack spacing={2}>
+													<Box>
+														<Typography variant="h6">
+															{abbonamento.nome}
+														</Typography>
+														<Typography>{abbonamento.descrizione}</Typography>
+													</Box>
+													{prices.discountedPrice ? (
+														<Stack
+															direction={"row"}
+															spacing={2}
+														>
+															<Typography
+																variant="h6"
+																textAlign={"center"}
+																color={"green"}
+															>
+																{prices.discountedPrice}€
+															</Typography>
+															<Typography
+																variant="h6"
+																textAlign={"center"}
+																color={"grey"}
+																style={{
+																	position: "relative",
+																}}
+															>
+																{prices.basePrice}€
+																<span
+																	style={{
+																		position: "absolute",
+																		top: "50%",
+																		left: "50%",
+																		transform:
+																			"translate(-50%, -50%) rotate(-20deg)",
+																		background: "red",
+																		width: "100%",
+																		height: "2px",
+																	}}
+																></span>
+															</Typography>
+														</Stack>
+													) : (
+														<Typography variant="h6">
+															<strong>{prices.basePrice}€</strong>
+														</Typography>
+													)}
+												</Stack>
+												<Stack>
+													{abbonamento.convenzione.isConv ? (
+														<Typography
+															marginBottom={3}
+															variant="h5"
+														>
+															<Tooltip
+																title={
+																	<span
+																		style={{
+																			display: "flex",
+																			flexDirection: "column",
+																		}}
+																	>
+																		<Typography
+																			textAlign={"center"}
+																			variant="subtitle2"
+																		>
+																			Convenzione
+																		</Typography>
+																		<Typography variant="subtitle2">
+																			{abbonamento.convenzione.descConve}
+																		</Typography>
+																	</span>
+																}
+															>
+																<IconButton>
+																	<Handshake color="success" />
+																</IconButton>
+															</Tooltip>
+														</Typography>
+													) : (
+														<></>
+													)}
+													{abbonamento.promozione.isPromo ? (
+														<Typography
+															marginBottom={3}
+															variant="h5"
+														>
+															<Tooltip
+																title={
+																	<span
+																		style={{
+																			display: "flex",
+																			flexDirection: "column",
+																		}}
+																	>
+																		<Typography
+																			textAlign={"center"}
+																			variant="subtitle2"
+																		>
+																			Promozione
+																		</Typography>
+																		<Typography variant="subtitle2">
+																			{abbonamento.promozione.descPromo}
+																		</Typography>
+																	</span>
+																}
+															>
+																<IconButton>
+																	<Discount color="success" />
+																</IconButton>
+															</Tooltip>
+														</Typography>
+													) : (
+														<></>
+													)}
+													{abbonamento.sceltaOrari.isOrari ? (
+														<Typography
+															marginBottom={3}
+															variant="h5"
+														>
+															<Tooltip
+																title={
+																	<span
+																		style={{
+																			display: "flex",
+																			flexDirection: "column",
+																		}}
+																	>
+																		<Typography
+																			textAlign={"center"}
+																			variant="subtitle2"
+																		>
+																			Orario Configurabile <br />
+																		</Typography>
+																		<Typography variant="h6">
+																			{`${abbonamento.sceltaOrari.daOrari} - ${abbonamento.sceltaOrari.aOrari}`}
+																		</Typography>
+																	</span>
+																}
+															>
+																<IconButton>
+																	<EditCalendar />
+																</IconButton>
+															</Tooltip>
+														</Typography>
+													) : (
+														<></>
+													)}
+												</Stack>
+											</Stack>
+										</ListItemText>
+										<IconButton
+											edge="end"
+											aria-label="delete"
+											sx={{
+												marginRight: "auto",
+												color: theme.palette.error.main,
+											}}
+											onClick={() =>
+												removeFromCart(abbonamento, cart, dispatch)
+											}
+										>
+											<DeleteRounded />
+										</IconButton>
+									</ListItem>
+								);
+							})
+						) : (
+							<></>
+						)}
+					</List>
+					<Box
+						display={"flex"}
+						justifyContent={"flex-end"}
+					>
+						{stripeSecretKey && (
+							<Button
+								variant="contained"
+								onClick={handleCheckout}
+							>
+								CHECKOUT
+							</Button>
+						)}
+					</Box>
+				</Container>
 			</Layout>
 		</ThemeProvider>
 	);

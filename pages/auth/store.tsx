@@ -45,6 +45,37 @@ interface Centro {
 	subscriptions: Abbonamento[];
 }
 
+export const getPrice = (abbonamento: Abbonamento): number => {
+	if (abbonamento.convenzione.isConv) {
+		return 24;
+	}
+
+	if (abbonamento.promozione.isPromo) {
+		return 20;
+	}
+
+	return abbonamento.prezzo;
+};
+
+export type PriceInfo = { basePrice: number; discountedPrice: number | null };
+
+export const getPrices = (abbonamento: Abbonamento): PriceInfo => {
+	let prices: PriceInfo = {
+		basePrice: abbonamento.prezzo,
+		discountedPrice: null,
+	};
+
+	if (abbonamento.convenzione.isConv) {
+		prices.discountedPrice = 24;
+	}
+
+	if (abbonamento.promozione.isPromo) {
+		prices.discountedPrice = 20;
+	}
+
+	return prices;
+};
+
 const Store = () => {
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const { showAlert } = useAlertMe();
@@ -89,18 +120,6 @@ const Store = () => {
 		} else {
 			return false;
 		}
-	};
-
-	const getPrice = (abbonamento: Abbonamento): number => {
-		if (abbonamento.convenzione.isConv) {
-			return 24;
-		}
-
-		if (abbonamento.promozione.isPromo) {
-			return 20;
-		}
-
-		return abbonamento.prezzo;
 	};
 
 	const calculateMinMax = (

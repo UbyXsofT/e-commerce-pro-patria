@@ -12,15 +12,39 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
 	Abbonamento,
+	Cart,
 	CartAbbonamento,
 	StoreState,
 } from "../CommonTypesInterfaces";
 import { setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
 
 interface ProductCardProps {
 	product: Abbonamento;
 }
+
+export const removeFromCart = (
+	abbonamento: Abbonamento,
+	cart: Cart,
+	dispatch: Dispatch
+): void => {
+	const user = cart.at(0);
+
+	let filteredCart = null;
+
+	if (user) {
+		filteredCart = user.cart.filter((storedAbbonamento) => {
+			if (storedAbbonamento.id !== abbonamento.id) {
+				return storedAbbonamento;
+			}
+		});
+	} else {
+		return;
+	}
+
+	dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
+};
 
 const ProductCard = ({ product }: ProductCardProps) => {
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
@@ -62,24 +86,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 						},
 					])
 			  );
-	};
-
-	const removeFromCart = (abbonamento: Abbonamento): void => {
-		const user = cart.at(0);
-
-		let filteredCart = null;
-
-		if (user) {
-			filteredCart = user.cart.filter((storedAbbonamento) => {
-				if (storedAbbonamento.id !== abbonamento.id) {
-					return storedAbbonamento;
-				}
-			});
-		} else {
-			return;
-		}
-
-		dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
 	};
 
 	const isInCart = (abbonamento: Abbonamento): boolean => {
@@ -267,7 +273,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			<CardActions sx={{ justifyContent: "center" }}>
 				<Button
 					onClick={() =>
-						isInCart(product) ? removeFromCart(product) : addToCart(product)
+						isInCart(product)
+							? removeFromCart(product, cart, dispatch)
+							: addToCart(product)
 					}
 					variant="contained"
 				>
