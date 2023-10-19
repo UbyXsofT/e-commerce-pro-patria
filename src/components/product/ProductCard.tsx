@@ -37,6 +37,71 @@ const ProductCard = ({ product }: ProductCardProps) => {
 		}
 	}, []);
 
+	const addToCart = (abbonamento: Abbonamento): void => {
+		const configurableAbbonamento: CartAbbonamento = {
+			...abbonamento,
+			configuration: null,
+		};
+
+		let user = cart.at(0);
+
+		user
+			? dispatch(
+					setCart([
+						{
+							userId: "todo",
+							cart: [...user.cart, configurableAbbonamento],
+						},
+					])
+			  )
+			: dispatch(
+					setCart([
+						{
+							userId: "todo",
+							cart: [configurableAbbonamento],
+						},
+					])
+			  );
+	};
+
+	const removeFromCart = (abbonamento: Abbonamento): void => {
+		const user = cart.at(0);
+
+		let filteredCart = null;
+
+		if (user) {
+			filteredCart = user.cart.filter((storedAbbonamento) => {
+				if (storedAbbonamento.id !== abbonamento.id) {
+					return storedAbbonamento;
+				}
+			});
+		} else {
+			return;
+		}
+
+		dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
+	};
+
+	const isInCart = (abbonamento: Abbonamento): boolean => {
+		let user = cart.at(0);
+
+		if (!user) {
+			return false;
+		}
+
+		let filteredCart = user.cart.filter((storedAbbonamento) => {
+			if (storedAbbonamento.id === abbonamento.id) {
+				return storedAbbonamento;
+			}
+		});
+
+		if (filteredCart.length > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
 	return (
 		<Card sx={{ padding: 1 }}>
 			<CardContent>
