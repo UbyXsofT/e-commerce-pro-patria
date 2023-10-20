@@ -186,18 +186,18 @@ const Carrello = () => {
 				return;
 			}
 
-			// Avvia il Checkout di Stripe
-			const result = await stripe.redirectToCheckout({
-				lineItems: [{ price: "10,200", quantity: 1 }],
-				mode: "payment",
-				successUrl: "http://localhost:3000/success",
-				cancelUrl: "http://localhost:3000/cancel",
-			});
+			// // Avvia il Checkout di Stripe
+			// const result = await stripe.redirectToCheckout({
+			// 	lineItems: [{ price: "10,200", quantity: 1 }],
+			// 	mode: "payment",
+			// 	successUrl: "http://localhost:3000/success",
+			// 	cancelUrl: "http://localhost:3000/cancel",
+			// });
 
-			if (result.error) {
-				console.error(result.error.message);
-				setLoading(false);
-			}
+			// if (result.error) {
+			// 	console.error(result.error.message);
+			// 	setLoading(false);
+			// }
 		} catch (error) {
 			console.error("Errore durante il caricamento di Stripe:", error);
 			setLoading(false);

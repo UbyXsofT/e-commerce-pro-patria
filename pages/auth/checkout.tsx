@@ -3,7 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "../components/CheckoutForm";
-checkout test - with error
 //Assicurati di chiamare loadStripe al di fuori del rendering di un componente per evitare
 //ricrea l'oggetto Stripe ad ogni rendering.
 //Questa è la chiave API pubblicabile di prova.
