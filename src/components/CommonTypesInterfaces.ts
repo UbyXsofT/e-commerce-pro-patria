@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { Centro } from "pages/auth/store";
 import { MouseEventHandler } from "react";
 
 export type Sex = null | "male" | "female";
@@ -75,7 +76,12 @@ export type CaratteriSpeciali = "";
 
 export type Cookie = "accessToken" | "refreshToken";
 
-export type StoreAction = SetLoading | SetAuthEcommerce | SetAuthUser | SetCart;
+export type StoreAction =
+	| SetLoading
+	| SetAuthEcommerce
+	| SetAuthUser
+	| SetCart
+	| SetCentri;
 
 export type SetLoading = {
 	type: "SET_LOADING";
@@ -97,11 +103,17 @@ export type SetCart = {
 	payload: Cart;
 };
 
+export type SetCentri = {
+	type: "SET_CENTRI";
+	payload: { centri: Centro[]; error: null | unknown };
+};
+
 export interface StoreState {
 	loading: boolean;
 	authEcommerce: boolean;
 	authUser: AuthUser | null;
 	cart: Cart;
+	centri: { centri: Centro[]; error: null | unknown };
 }
 
 // Work In Progress, check in with Antonio for Definition

@@ -1,4 +1,5 @@
-import { Cart } from "src/components/CommonTypesInterfaces";
+import { Centro } from "pages/auth/store";
+import { Abbonamento, Cart } from "src/components/CommonTypesInterfaces";
 
 // actions.js
 export const setLoading = (isLoading: boolean) => ({
@@ -19,4 +20,12 @@ export const setAuthUser = (userData: any) => ({
 export const setCart = (cart: Cart) => ({
 	type: "SET_CART",
 	payload: cart,
+});
+
+export const setCentri = (centri: {
+	centri: Centro[];
+	error: null | unknown;
+}) => ({
+	type: "SET_CENTRI",
+	payload: centri,
 });

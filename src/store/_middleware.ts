@@ -18,5 +18,9 @@ export const authMiddleware =
 			return next(action);
 		}
 
+		if (action.type === "SET_CENTRI") {
+			return next(action);
+		}
+
 		return next(action);
 	};
