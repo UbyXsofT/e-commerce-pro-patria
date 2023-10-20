@@ -213,9 +213,10 @@ const Store = () => {
 							gutterBottom
 							variant="h4"
 						>
-							Qualcosa è andato storto
+							<strong>Qualcosa è andato storto</strong>
 						</Typography>
 						<Button
+							variant="contained"
 							onClick={async () => {
 								dispatch(setCentri(await fetchCentri()));
 							}}
