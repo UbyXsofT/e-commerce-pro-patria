@@ -1,5 +1,5 @@
 import { Centro } from "pages/auth/store";
-import { Abbonamento, Cart } from "src/components/CommonTypesInterfaces";
+import { Cart, StripeKeysData } from "src/components/CommonTypesInterfaces";
 
 // actions.js
 export const setLoading = (isLoading: boolean) => ({
@@ -28,4 +28,9 @@ export const setCentri = (centri: {
 }) => ({
 	type: "SET_CENTRI",
 	payload: centri,
+});
+
+export const setStripeKeys = (stripeKeys: StripeKeysData) => ({
+	type: "SET_STRIPE_KEYS",
+	payload: stripeKeys,
 });

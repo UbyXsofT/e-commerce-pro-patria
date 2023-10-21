@@ -53,6 +53,15 @@ const setCentriReducer = (
 	}
 };
 
+const setStripeKeysReducer = (state = false, action: AnyAction) => {
+	switch (action.type) {
+		case "SET_STRIPE_KEYS":
+			return action.payload;
+		default:
+			return state;
+	}
+};
+
 // Crea il tuo store Redux utilizzando configureStore
 const makeStore = () =>
 	configureStore({
@@ -62,6 +71,7 @@ const makeStore = () =>
 			authUser: authUserReducer,
 			cart: setCartReducer,
 			centri: setCentriReducer,
+			stripeKeys: setStripeKeysReducer,
 			// Altri riduttori...
 		},
 		middleware: (getDefaultMiddleware) =>

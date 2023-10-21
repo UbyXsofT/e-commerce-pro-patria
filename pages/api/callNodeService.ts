@@ -8,8 +8,8 @@ import {
 	responseCall,
 	tokenfulAccess,
 	tokenlessAccess,
-	authStripe,
 	obyPostProdotti,
+	StripeKeysData,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -37,7 +37,7 @@ export default async function callNodeService(
 		| tokenfulAccess
 		| authEcommerce
 		| resetPsw
-		| authStripe
+		| StripeKeysData
 		| obyPostProdotti,
 	token: null
 ): Promise<responseCall> {

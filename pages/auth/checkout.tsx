@@ -2,11 +2,13 @@ import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-import CheckoutForm from "../components/CheckoutForm";
+import CheckoutForm from "src/components/stripe/CheckoutForm";
 //Assicurati di chiamare loadStripe al di fuori del rendering di un componente per evitare
 //ricrea l'oggetto Stripe ad ogni rendering.
 //Questa è la chiave API pubblicabile di prova.
-const stripePromise = loadStripe(
+
+const stripePromise = "";
+const stripePromise = await loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 
@@ -33,7 +35,7 @@ export default function App() {
 	};
 
 	return (
-		<div className="App">
+		<div>
 			{clientSecret && (
 				<Elements
 					options={options}

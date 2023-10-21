@@ -1,3 +1,4 @@
+//_middleware.ts
 import { StoreAction } from "src/components/CommonTypesInterfaces";
 
 export const authMiddleware =
@@ -21,6 +22,8 @@ export const authMiddleware =
 		if (action.type === "SET_CENTRI") {
 			return next(action);
 		}
-
+		if (action.type === "SET_STRIPE_KEYS") {
+			return next(action);
+		}
 		return next(action);
 	};

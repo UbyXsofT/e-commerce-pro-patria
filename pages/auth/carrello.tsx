@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
-//STRIPE LOAD
-import { loadStripe } from "@stripe/stripe-js";
+
 //----------
 import {
 	Button,
@@ -28,7 +27,6 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import {
 	responseCall,
-	authStripe,
 	StoreState,
 	CartAbbonamento,
 } from "src/components/CommonTypesInterfaces";
@@ -51,11 +49,11 @@ const Carrello = () => {
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+	const stripeKeys = useSelector((state: StoreState) => state.stripeKeys);
+
 	const user = cart.at(0);
 
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
-
-	const [stripeSecretKey, setStripeSecretKey] = React.useState(null);
 
 	type TotalPrice = {
 		toShow: boolean;
@@ -86,6 +84,8 @@ const Carrello = () => {
 	};
 
 	useEffect(() => {
+		console.log("@@@@ stripeKeys.isGetKeys: ", stripeKeys.isGetKeys);
+
 		let user = cart.at(0);
 
 		if (!user) {
@@ -95,118 +95,121 @@ const Carrello = () => {
 		setTotalPrice(calculateTotalPrice(user.cart));
 	}, [cart]);
 
-	React.useEffect(() => {
-		const fetchStripeKey = async () => {
-			const handleSuccess = (msg_Resp: any) => {
-				//success
-				console.log(msg_Resp);
+	//	const [stripeSecretKey, setStripeSecretKey] = React.useState(null);
+	// React.useEffect(() => {
+	// 	const fetchStripeKey = async () => {
+	// 		const handleSuccess = (msg_Resp: any) => {
+	// 			//success
+	// 			console.log("@@@@@@@@@@@@@ fetchStripeKey handleSuccess: ", msg_Resp);
 
-				try {
-					if (
-						msg_Resp.messageCli.message.stripeKeys !== null ||
-						msg_Resp.messageCli.message.stripeKeys !== undefined
-					) {
-						setStripeSecretKey(
-							msg_Resp.messageCli.message.stripeKeys.PUBLISHABLE_KEY
-						);
-					} else {
-						const textAlert = (
-							<React.Fragment>
-								<h3>
-									<strong>Stripe Key non valida!</strong>
-								</h3>
-							</React.Fragment>
-						);
-						showAlert(
-							"filled",
-							"error",
-							"ATTENZIONE!",
-							textAlert,
-							true,
-							"/account/login"
-						);
-					}
-				} catch (error) {
-					const textAlert = (
-						<React.Fragment>
-							<h3>
-								<strong>"Errore assegnazione Stripe Key"</strong>
-							</h3>
-						</React.Fragment>
-					);
-					showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-				}
-			};
-			const handleError = (error: any) => {
-				const textAlert = (
-					<React.Fragment>
-						<h3>
-							<strong>{error}</strong>
-						</h3>
-					</React.Fragment>
-				);
-				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-			};
+	// 			try {
+	// 				if (
+	// 					msg_Resp.messageCli.message.stripeKeys !== null ||
+	// 					msg_Resp.messageCli.message.stripeKeys !== undefined
+	// 				) {
+	// 					setStripeSecretKey(
+	// 						msg_Resp.messageCli.message.stripeKeys.PUBLISHABLE_KEY
+	// 					);
+	// 				} else {
+	// 					const textAlert = (
+	// 						<React.Fragment>
+	// 							<h3>
+	// 								<strong>Stripe Key non valida!</strong>
+	// 							</h3>
+	// 						</React.Fragment>
+	// 					);
+	// 					showAlert(
+	// 						"filled",
+	// 						"error",
+	// 						"ATTENZIONE!",
+	// 						textAlert,
+	// 						true,
+	// 						"/account/login"
+	// 					);
+	// 				}
+	// 			} catch (error) {
+	// 				const textAlert = (
+	// 					<React.Fragment>
+	// 						<h3>
+	// 							<strong>"Errore assegnazione Stripe Key"</strong>
+	// 						</h3>
+	// 					</React.Fragment>
+	// 				);
+	// 				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+	// 			}
+	// 		};
+	// 		const handleError = (error: any) => {
+	// 			console.log("@@@@@@@@@@@@@ fetchStripeKey handleError error: ", error);
+	// 			const textAlert = (
+	// 				<React.Fragment>
+	// 					<h3>
+	// 						<strong>{error}</strong>
+	// 					</h3>
+	// 				</React.Fragment>
+	// 			);
+	// 			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+	// 		};
 
-			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+	// 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
-			const obyPostData: authStripe = {
-				clienteKey: eCommerceConf.ClienteKey,
-			};
+	// 		const obyPostData: authStripe = {
+	// 			clienteKey: eCommerceConf.ClienteKey,
+	// 		};
 
-			try {
-				const respCall: responseCall = await callNodeService(
-					"stripe/get-stripe-key",
-					obyPostData,
-					null
-				);
-				handleSuccess(respCall);
-			} catch (error) {
-				handleError(error);
-			} finally {
-				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-			}
-		};
-		fetchStripeKey();
-	}, []);
+	// 		try {
+	// 			const respCall: responseCall = await callNodeService(
+	// 				"stripe/get-stripekeys",
+	// 				obyPostData,
+	// 				null
+	// 			);
+	// 			handleSuccess(respCall);
+	// 		} catch (error) {
+	// 			handleError(error);
+	// 		} finally {
+	// 			console.log("@@@@@@@@@@@@@ fetchStripeKey finally");
+	// 			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	// 		}
+	// 	};
+	// 	fetchStripeKey();
+	// }, []);
 
-	const handleCheckout = async () => {
-		setLoading(true);
+	// const handleCheckout = async () => {
+	// 	setLoading(true);
 
-		if (!stripeSecretKey) {
-			console.error("Chiave di Stripe non disponibile");
-			setLoading(false);
-			return;
-		}
+	// 	if (!stripeSecretKey) {
+	// 		console.error("Chiave di Stripe non disponibile");
+	// 		setLoading(false);
+	// 		return;
+	// 	}
 
-		try {
-			// Assicurati di chiamare `loadStripe` al di fuori del rendering di un componente
-			// per evitare di ricreare l'oggetto `Stripe` ad ogni rendering.
-			const stripe = await loadStripe(stripeSecretKey);
+	// 	try {
+	// 		// Assicurati di chiamare `loadStripe` al di fuori del rendering di un componente
+	// 		// per evitare di ricreare l'oggetto `Stripe` ad ogni rendering.
+	// 		const stripe = await loadStripe(stripeSecretKey);
 
-			if (!stripe) {
-				console.error("L'oggetto Stripe è nullo");
-				setLoading(false);
-				return;
-			}
+	// 		if (!stripe) {
+	// 			console.error("L'oggetto Stripe è nullo");
+	// 			setLoading(false);
+	// 			return;
+	// 		}
 
-			// // Avvia il Checkout di Stripe
-			// const result = await stripe.redirectToCheckout({
-			// 	lineItems: [{ price: "10,200", quantity: 1 }],
-			// 	mode: "payment",
-			// 	successUrl: "http://localhost:3000/success",
-			// 	cancelUrl: "http://localhost:3000/cancel",
-			// });
+	// 		// // Avvia il Checkout di Stripe
+	// 		// const result = await stripe.redirectToCheckout({
+	// 		// 	lineItems: [{ price: "10,200", quantity: 1 }],
+	// 		// 	mode: "payment",
+	// 		// 	successUrl: "http://localhost:3000/success",
+	// 		// 	cancelUrl: "http://localhost:3000/cancel",
+	// 		// });
 
-			// if (result.error) {
-			// 	console.error(result.error.message);
-			// 	setLoading(false);
-			// }
-		} catch (error) {
-			console.error("Errore durante il caricamento di Stripe:", error);
-			setLoading(false);
-		}
-	};
+	// 		// if (result.error) {
+	// 		// 	console.error(result.error.message);
+	// 		// 	setLoading(false);
+	// 		// }
+	// 	} catch (error) {
+	// 		console.error("Errore durante il caricamento di Stripe:", error);
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -494,14 +497,14 @@ const Carrello = () => {
 										<strong>{totalPrice.totalPrice}€</strong>
 									)}
 								</Typography>
-								{stripeSecretKey && (
+								{/* {stripeSecretKey && (
 									<Button
 										variant="contained"
 										onClick={handleCheckout}
 									>
 										CHECKOUT
 									</Button>
-								)}
+								)} */}
 							</Stack>
 						</>
 					)}

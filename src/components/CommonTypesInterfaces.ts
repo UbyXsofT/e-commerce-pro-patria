@@ -81,7 +81,8 @@ export type StoreAction =
 	| SetAuthEcommerce
 	| SetAuthUser
 	| SetCart
-	| SetCentri;
+	| SetCentri
+	| SetStripeKeys;
 
 export type SetLoading = {
 	type: "SET_LOADING";
@@ -108,12 +109,26 @@ export type SetCentri = {
 	payload: { centri: Centro[]; error: null | unknown };
 };
 
+export type SetStripeKeys = {
+	type: "SET_STRIPE_KEYS";
+	payload: StripeKeysData;
+};
+//*--*//
+
 export interface StoreState {
 	loading: boolean;
 	authEcommerce: boolean;
 	authUser: AuthUser | null;
 	cart: Cart;
 	centri: { centri: Centro[]; error: null | unknown };
+	stripeKeys: StripeKeysData;
+}
+
+export interface StripeKeysData {
+	PUBLISHABLE_KEY: string;
+	STRIPE_SECRET_KEY: string;
+	STRIPE_WEBHOOK_SECRET: string;
+	isGetKeys: boolean;
 }
 
 // Work In Progress, check in with Antonio for Definition
@@ -233,10 +248,6 @@ export interface resetPsw {
 export interface responseCall {
 	successCli: boolean;
 	messageCli: any;
-}
-
-export interface authStripe {
-	clienteKey: string;
 }
 
 export interface obyPostData {
