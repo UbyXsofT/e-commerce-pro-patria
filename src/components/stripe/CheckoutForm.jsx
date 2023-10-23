@@ -5,6 +5,20 @@ import {
 	useStripe,
 	useElements,
 } from "@stripe/react-stripe-js";
+import {
+	Button,
+	Paper,
+	Box,
+	IconButton,
+	Link,
+	List,
+	ListItem,
+	ListItemText,
+	Tooltip,
+	Typography,
+	useMediaQuery,
+	Container,
+} from "@mui/material";
 
 export default function CheckoutForm() {
 	const stripe = useStripe();
@@ -30,16 +44,16 @@ export default function CheckoutForm() {
 		stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
 			switch (paymentIntent.status) {
 				case "succeeded":
-					setMessage("Payment succeeded!");
+					setMessage("Pagamento riuscito!");
 					break;
 				case "processing":
-					setMessage("Your payment is processing.");
+					setMessage("Il tuo pagamento è in elaborazione.");
 					break;
 				case "requires_payment_method":
-					setMessage("Your payment was not successful, please try again.");
+					setMessage("Il pagamento non è andato a buon fine, riprova.");
 					break;
 				default:
-					setMessage("Something went wrong.");
+					setMessage("Qualcosa è andato storto.");
 					break;
 			}
 		});
@@ -49,8 +63,8 @@ export default function CheckoutForm() {
 		e.preventDefault();
 
 		if (!stripe || !elements) {
-			// Stripe.js hasn't yet loaded.
-			// Make sure to disable form submission until Stripe.js has loaded.
+			//Stripe.js non è stato ancora caricato.
+			//Assicurati di disabilitare l'invio del modulo fino al caricamento di Stripe.js.
 			return;
 		}
 
@@ -83,35 +97,57 @@ export default function CheckoutForm() {
 	};
 
 	return (
-		<form
-			id="payment-form"
-			onSubmit={handleSubmit}
-		>
-			<LinkAuthenticationElement
-				id="link-authentication-element"
-				onChange={(e) => setEmail(e.target.value)}
-			/>
-			<PaymentElement
-				id="payment-element"
-				options={paymentElementOptions}
-			/>
-			<button
-				disabled={isLoading || !stripe || !elements}
-				id="submit"
+		<Container>
+			<Box
+				display="flex"
+				justifyContent="center"
+				alignItems="center"
+				minHeight="100vh" // Imposta l'altezza al 100% della viewport
 			>
-				<span id="button-text">
-					{isLoading ? (
-						<div
-							className="spinner"
-							id="spinner"
-						></div>
-					) : (
-						"Pay now"
-					)}
-				</span>
-			</button>
-			{/* Show any error or success messages */}
-			{message && <div id="payment-message">{message}</div>}
-		</form>
+				<Paper
+					elevation={3}
+					style={{
+						width: "80vw",
+						minWidth: "initial",
+						maxWidth: 600,
+						padding: 20,
+						display: "block",
+					}}
+				>
+					<form
+						id="payment-form"
+						onSubmit={handleSubmit}
+					>
+						<LinkAuthenticationElement
+							id="link-authentication-element"
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+						<PaymentElement
+							id="payment-element"
+							options={paymentElementOptions}
+						/>
+						<Button
+							disabled={isLoading || !stripe || !elements}
+							id="submit"
+							variant="contained"
+							style={{ marginTop: 30, width: "100%" }}
+						>
+							<span id="button-text">
+								{isLoading ? (
+									<div
+										className="spinner"
+										id="spinner"
+									></div>
+								) : (
+									"Paga ora"
+								)}
+							</span>
+						</Button>
+						{/* Show any error or success messages */}
+						{message && <div id="payment-message">{message}</div>}
+					</form>
+				</Paper>
+			</Box>
+		</Container>
 	);
 }
