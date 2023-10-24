@@ -43,14 +43,6 @@ export default async function callNodeService(
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");
 
-	// Controllo se il browser è online
-	if (!navigator.onLine) {
-		return {
-			successCli: false,
-			messageCli: "Il dispositivo non è connesso a Internet.",
-		};
-	}
-
 	// Controllo se il servizio Node.js è raggiungibile
 	if (!(await isNodeServiceReachable())) {
 		return {

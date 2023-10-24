@@ -70,7 +70,7 @@ const Esempio = () => {
 
 			try {
 				const respCall: responseCall = await callNodeService(
-					"stripe/get-stripekeys",
+					"stripe/get-stripe-key",
 					obyPostData,
 					null
 				);

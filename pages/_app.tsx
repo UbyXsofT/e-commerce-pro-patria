@@ -32,7 +32,6 @@ import eCommerceConf from "eCommerceConf.json";
 import { setCentri } from "src/store/actions";
 import { Centro } from "./auth/store";
 import callNodeService from "./api/callNodeService";
-import SetStripeKeysHelper from "src/store/SetStripeKeysHelper";
 
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
@@ -158,7 +157,6 @@ const MyApp = (props: {
 				if (centri.centri.length === 0) {
 					dispatch(setCentri(await fetchCentri()));
 				}
-				SetStripeKeysHelper(dispatch);
 			}
 		};
 

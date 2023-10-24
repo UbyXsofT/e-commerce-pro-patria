@@ -1,3 +1,5 @@
+import { setStripeKeys, getStripeKeys } from "./keys";
+
 const calculateOrderAmount = (items) => {
 	//Sostituisci questa costante con un calcolo dell'importo dell'ordine
 	//Calcola il totale dell'ordine sul server da prevenire
@@ -10,9 +12,13 @@ export default async function handler(req, res) {
 		console.log(req.body);
 		const { items, stripeKeys } = req.body;
 		console.log(stripeKeys.STRIPE_SECRET_KEY);
-
+		// Imposta le chiavi nel modulo
+		setStripeKeys(stripeKeys);
+		// Puoi anche ottenere le chiavi se necessario
+		const currentKeys = getStripeKeys();
+		console.log("@@@@ --- > currentKeys: ", currentKeys);
 		//Questa è la chiave API segreta di prova.
-		const stripe = require("stripe")(stripeKeys.STRIPE_SECRET_KEY);
+		const stripe = require("stripe")(currentKeys.STRIPE_SECRET_KEY);
 		//Crea un PaymentIntent con l'importo dell'ordine e la valuta
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: calculateOrderAmount(items),

@@ -1,4 +1,4 @@
-//STRIPE LOAD
+//SetStripeKeysHelper.ts
 import { loadStripe } from "@stripe/stripe-js";
 import callNodeService from "pages/api/callNodeService";
 import eCommerceConf from "eCommerceConf.json";
@@ -34,27 +34,15 @@ const SetStripeKeysHelper = async (
 				stripeKeysGetData.STRIPE_WEBHOOK_SECRET =
 					msg_Resp.messageCli.message.stripeKeys.STRIPE_WEBHOOK_SECRET;
 				stripeKeysGetData.isGetKeys = true;
-			} else {
-				//Stripe Key non valida!
-				stripeKeysGetData.PUBLISHABLE_KEY = "NO-KEY";
-				stripeKeysGetData.STRIPE_SECRET_KEY = "NO-KEY";
-				stripeKeysGetData.STRIPE_WEBHOOK_SECRET = "NO-KEY";
-				stripeKeysGetData.isGetKeys = false;
 			}
 		} catch (error) {
 			//Errore assegnazione Stripe Key
-			stripeKeysGetData.PUBLISHABLE_KEY = "NO-KEY";
-			stripeKeysGetData.STRIPE_SECRET_KEY = "NO-KEY";
-			stripeKeysGetData.STRIPE_WEBHOOK_SECRET = "NO-KEY";
-			stripeKeysGetData.isGetKeys = false;
+			console.log("SetStripeKeysHelper.... error: ", error);
 		}
 	};
 
 	const handleError = (error: any) => {
-		stripeKeysGetData.PUBLISHABLE_KEY = "NO-KEY";
-		stripeKeysGetData.STRIPE_SECRET_KEY = "NO-KEY";
-		stripeKeysGetData.STRIPE_WEBHOOK_SECRET = "NO-KEY";
-		stripeKeysGetData.isGetKeys = false;
+		console.log("SetStripeKeysHelper.... error: ", error);
 	};
 
 	const obyPostData = {

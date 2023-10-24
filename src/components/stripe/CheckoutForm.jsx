@@ -5,31 +5,42 @@ import {
 	useStripe,
 	useElements,
 } from "@stripe/react-stripe-js";
-import {
-	Button,
-	Paper,
-	Box,
-	IconButton,
-	Link,
-	List,
-	ListItem,
-	ListItemText,
-	Tooltip,
-	Typography,
-	useMediaQuery,
-	Container,
-} from "@mui/material";
+import { Button, Paper, Box, Container } from "@mui/material";
+
+//REDUX-STORE
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { setLoading } from "src/store/actions";
+//*-----*//
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { AlertMe } from "src/components/layout/alert/AlertMe";
 
 export default function CheckoutForm() {
 	const stripe = useStripe();
 	const elements = useElements();
-
 	const [email, setEmail] = React.useState("");
 	const [message, setMessage] = React.useState(null);
 	const [isLoading, setIsLoading] = React.useState(false);
+	const { showAlert } = useAlertMe();
+
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	React.useEffect(() => {
+		dispatch(setLoading(isLoading)); // Utilizza dispatch per inviare l'azione di setLoading
+	}, [isLoading]);
+
+	React.useEffect(() => {
+		const textAlert = (
+			<React.Fragment>
+				<h3>
+					<strong>{message}</strong>
+				</h3>
+			</React.Fragment>
+		);
+		showAlert("filled", "info", "Informazione!", textAlert, true);
+	}, [message]);
 
 	React.useEffect(() => {
 		if (!stripe) {
+			setMessage("dove sono mi vedo");
 			return;
 		}
 
@@ -68,7 +79,7 @@ export default function CheckoutForm() {
 			return;
 		}
 
-		setIsLoading(true);
+		setLoading(true);
 
 		const { error } = await stripe.confirmPayment({
 			elements,
@@ -86,10 +97,10 @@ export default function CheckoutForm() {
 		if (error.type === "card_error" || error.type === "validation_error") {
 			setMessage(error.message);
 		} else {
-			setMessage("An unexpected error occurred.");
+			setMessage("Si è verificato un errore imprevisto.");
 		}
 
-		setIsLoading(false);
+		setLoading(false);
 	};
 
 	const paymentElementOptions = {
@@ -120,7 +131,9 @@ export default function CheckoutForm() {
 					>
 						<LinkAuthenticationElement
 							id="link-authentication-element"
-							onChange={(e) => setEmail(e.target.value)}
+							onChange={(e) => {
+								setEmail(e.value.email);
+							}}
 						/>
 						<PaymentElement
 							id="payment-element"
@@ -144,7 +157,7 @@ export default function CheckoutForm() {
 							</span>
 						</Button>
 						{/* Show any error or success messages */}
-						{message && <div id="payment-message">{message}</div>}
+						{message && <div id="payment-message">{message} </div>}
 					</form>
 				</Paper>
 			</Box>

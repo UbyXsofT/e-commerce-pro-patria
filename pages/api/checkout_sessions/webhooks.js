@@ -1,10 +1,11 @@
+//webhooks.js
 import Stripe from "stripe";
 import { buffer } from "micro";
 import Cors from "micro-cors";
+import { setStripeKeys, getStripeKeys } from "./keys";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+//const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+//const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // Stripe requires the raw body to construct the event.
 export const config = {
@@ -18,6 +19,14 @@ const cors = Cors({
 });
 
 const webhookHandler = async (req, res) => {
+	const currentKeys = getStripeKeys();
+	console.log("@@@@ webhookHandler --- > currentKeys: ", currentKeys);
+	//Questa è la chiave API segreta di prova.
+	const stripe = require("stripe")(currentKeys.STRIPE_SECRET_KEY);
+	const webhookSecret = require("stripe")(currentKeys.STRIPE_WEBHOOK_SECRET);
+	//const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+	//const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
 	if (req.method === "POST") {
 		const buf = await buffer(req);
 		const signature = req.headers["stripe-signature"];

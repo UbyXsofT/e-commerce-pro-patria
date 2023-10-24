@@ -29,7 +29,8 @@
 		"pages/account/resetPassword.tsx",
 		"src/components/theme/theme.tsx",
 		"src/menu/CreateMenu.tsx",
-		"pages/_app.sx"
+		"pages/_app.sx",
+		"pages/api/checkout_sessions/SetStripeKeysHelper.js"
 	],
 	"exclude": ["node_modules"]
 }

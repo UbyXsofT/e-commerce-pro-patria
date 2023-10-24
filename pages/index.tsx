@@ -7,9 +7,10 @@ import Image from "next/image";
 import { Lato, Poppins } from "next/font/google";
 import eCommerceConf from "../eCommerceConf.json";
 //redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
+import { StoreState } from "src/components/CommonTypesInterfaces";
 
 export const lato = Lato({
 	weight: ["300", "400"],
@@ -33,8 +34,10 @@ const Index = () => {
 	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 	const [isAuthEcommerce, setIsAuthEcommerce] = React.useState(false);
 	const [routerToPush, setRouterToPush] = React.useState<null | string>(null);
+	//const stripeKeys = useSelector((state: StoreState) => state.stripeKeys);
 
-	const startRedirect = () => {
+	const startRedirect = async () => {
+		//STRIPE LOAD KEYS ESITO POSITIVO
 		if (isAuthEcommerce === true && routerToPush) {
 			Router.push(routerToPush);
 		} else if (routerToPush === networkError) {
