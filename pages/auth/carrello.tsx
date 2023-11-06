@@ -93,10 +93,20 @@ const Carrello = () => {
 	const handleCheckOut = () => {
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
-		const cartItems = cart.map((item) => ({
-			...item, // Copia tutte le proprietà esistenti dell'oggetto
-			quantity: 1, // Aggiungi la nuova proprietà 'quantity' con valore 1
+		const cartWithQuantity = cart.map((item) => ({
+			...item,
+			cart: item.cart.map((cartItem) => ({
+				...cartItem,
+				quantity: 1,
+			})),
 		}));
+
+		console.log(cartWithQuantity);
+
+		// const cartItems = (cart ?? []).map((item) => ({
+		// 	...item, // Copia tutte le proprietà esistenti dell'oggetto
+		// 	quantity: 1, // Aggiungi la nuova proprietà 'quantity' con valore 1
+		// }));
 
 		const CreateCheckOutSession = async () => {
 			const handleSuccess = (msg_Resp: any) => {
@@ -126,19 +136,21 @@ const Carrello = () => {
 			};
 
 			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
-			// Ottieni il dominio e la porta dalla finestra del browser
+			// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
+			const protocol = window.location.protocol ?? "https:";
 			const domain = window.location.hostname;
 			const port = window.location.port;
 
+			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
 
 			const obyPostData = {
 				clienteKey: eCommerceConf.ClienteKey,
-				line_items: cartItems,
+				cartWithQuantity,
 				mode: "payment",
-				success_url: `${domain}${port}/auth/successPayment`,
-				cancel_url: `${domain}${port}/auth/cancelPayment`,
+				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
+				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
 			};
 
 			try {
