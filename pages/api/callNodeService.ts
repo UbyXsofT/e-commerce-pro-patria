@@ -31,6 +31,7 @@ export default async function callNodeService(
 		| "access-ecommerce"
 		| "recupero-credenziali"
 		| "stripe/get-stripe-key"
+		| "stripe/checkout-session"
 		| "prodotti",
 	obyPostData:
 		| tokenlessAccess

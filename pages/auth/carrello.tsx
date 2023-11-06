@@ -76,8 +76,8 @@ const Carrello = () => {
 
 		return {
 			toShow: totalPrice !== totalDiscountedPrice ? true : false,
-			totalPrice: Number(totalPrice.toFixed(2)),
-			totalDiscountedPrice: Number(totalDiscountedPrice.toFixed(2)),
+			totalPrice: totalPrice, //Number(totalPrice.toFixed(2)),
+			totalDiscountedPrice: totalDiscountedPrice, //Number(totalDiscountedPrice.toFixed(2)),
 		};
 	};
 
@@ -89,6 +89,73 @@ const Carrello = () => {
 
 		setTotalPrice(calculateTotalPrice(user.cart));
 	}, [cart]);
+
+	const handleCheckOut = () => {
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+		const cartItems = cart.map((item) => ({
+			...item, // Copia tutte le proprietà esistenti dell'oggetto
+			quantity: 1, // Aggiungi la nuova proprietà 'quantity' con valore 1
+		}));
+
+		const CreateCheckOutSession = async () => {
+			const handleSuccess = (msg_Resp: any) => {
+				console.log(
+					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
+					msg_Resp
+				);
+				try {
+					if (msg_Resp.messageCli.url) {
+						window.location.href = msg_Resp.messageCli.url;
+					}
+				} catch (error) {
+					console.log("error CreateCheckOutSession: ", error);
+				}
+				//success data
+			};
+			const handleError = (error: any) => {
+				//ERROR data
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+			// Ottieni il dominio e la porta dalla finestra del browser
+			const domain = window.location.hostname;
+			const port = window.location.port;
+
+			console.log(`Dominio: ${domain}`);
+			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
+
+			const obyPostData = {
+				clienteKey: eCommerceConf.ClienteKey,
+				line_items: cartItems,
+				mode: "payment",
+				success_url: `${domain}${port}/auth/successPayment`,
+				cancel_url: `${domain}${port}/auth/cancelPayment`,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"stripe/checkout-session",
+					obyPostData,
+					null
+				);
+				handleSuccess(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		CreateCheckOutSession();
+	};
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -379,7 +446,7 @@ const Carrello = () => {
 
 								<Button
 									variant="contained"
-									onClick={() => Router.push("/auth/checkout")}
+									onClick={() => handleCheckOut()}
 								>
 									CHECKOUT
 								</Button>
