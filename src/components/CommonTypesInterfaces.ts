@@ -279,6 +279,7 @@ export interface Abbonamento {
 		daOrari: string;
 		aOrari: string;
 	};
+	quantity: number;  // Aggiunta della proprietà quantity
 }
 
 export type Cart = CartUser[];
@@ -290,4 +291,13 @@ export interface CartUser {
 
 export interface CartAbbonamento extends Abbonamento {
 	configuration: { initialDate: Dayjs } | null;
+}
+
+export interface obyPostDataCart {
+	line_items: CartAbbonamento[];
+	userId: string;
+	clienteKey: string;
+	mode: string;
+	success_url: string;
+	cancel_url: string;
 }

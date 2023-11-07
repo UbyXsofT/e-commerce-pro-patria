@@ -93,20 +93,37 @@ const Carrello = () => {
 	const handleCheckOut = () => {
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
-		const cartWithQuantity = cart.map((item) => ({
-			...item,
-			cart: item.cart.map((cartItem) => ({
-				...cartItem,
-				quantity: 1,
-			})),
-		}));
+		// try {
+		// 	// Create Checkout Sessions from body params.
+		// 	const session = await stripe.checkout.sessions.create({
+		// 	  line_items: [
+		// 		{
+		// 		  // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+		// 		  price: '{{PRICE_ID}}',
+		// 		  quantity: 1,
+		// 		},
+		// 	  ],
+		// 	  mode: 'payment',
+		// 	  success_url: `${req.headers.origin}/?success=true`,
+		// 	  cancel_url: `${req.headers.origin}/?canceled=true`,
+		// 	});
+		// 	res.redirect(303, session.url);
+		//   } catch (err) {
+		// 	res.status(err.statusCode || 500).json(err.message);
+		//   }
+		// let userId = {};
+		// 		cart.forEach(element => {
+		// 			console.log("@ -- element: ",element )
+		// 			userId : element.userId
+		// 			line_items: element.cart.map((cartItem) => ({
+		// 				...cartItem,
+		// 				quantity: 1,
+		// 			})),
+		// 		});
 
-		console.log(cartWithQuantity);
+	
 
-		// const cartItems = (cart ?? []).map((item) => ({
-		// 	...item, // Copia tutte le proprietà esistenti dell'oggetto
-		// 	quantity: 1, // Aggiungi la nuova proprietà 'quantity' con valore 1
-		// }));
+
 
 		const CreateCheckOutSession = async () => {
 			const handleSuccess = (msg_Resp: any) => {
@@ -144,19 +161,32 @@ const Carrello = () => {
 			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-
-			const obyPostData = {
+			let userId = cart[0].userId;
+			const obyPostDataCart = {
+				userId: userId,
 				clienteKey: eCommerceConf.ClienteKey,
-				cartWithQuantity,
+				line_items: cart[0].cart.map(item => ({
+				  id: item.id,
+				  nome: item.nome,
+				  prezzo: item.prezzo,
+				  immagine: item.immagine,
+				  descrizione: item.descrizione,
+				  convenzione: item.convenzione,
+				  promozione: item.promozione,
+				  sceltaOrari: item.sceltaOrari,
+				  configuration: item.configuration,
+				  quantity: 1,
+				})),
 				mode: "payment",
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
 				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
-			};
+			  };
+			  
 
 			try {
 				const respCall: responseCall = await callNodeService(
 					"stripe/checkout-session",
-					obyPostData,
+					obyPostDataCart,
 					null
 				);
 				handleSuccess(respCall);
