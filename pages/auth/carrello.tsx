@@ -176,7 +176,9 @@ const Carrello = () => {
 				  sceltaOrari: item.sceltaOrari,
 				  configuration: item.configuration,
 				  quantity: 1,
+				 
 				})),
+				currency: 'eur',
 				mode: "payment",
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
 				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,

@@ -10,6 +10,7 @@ import {
 	tokenlessAccess,
 	obyPostProdotti,
 	StripeKeysData,
+	obyPostDataCart,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -39,7 +40,8 @@ export default async function callNodeService(
 		| authEcommerce
 		| resetPsw
 		| StripeKeysData
-		| obyPostProdotti,
+		| obyPostProdotti
+		| obyPostDataCart,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");
@@ -64,6 +66,7 @@ export default async function callNodeService(
 			};
 		}
 
+		//const postData = JSON.stringify(obyPostData);
 		const postData = qs.stringify(obyPostData);
 		const config = {
 			method: "post",
