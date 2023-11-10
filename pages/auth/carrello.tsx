@@ -42,6 +42,9 @@ import { removeFromCart } from "src/components/product/ProductCard";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
 
+export const renderPrice = (price: number): string =>
+	price.toString().replace(".", ",");
+
 const Carrello = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
@@ -72,15 +75,15 @@ const Carrello = () => {
 		cart.forEach((abbonamento) => {
 			totalPrice += getPrices(abbonamento).basePrice;
 			totalDiscountedPrice += getPrice(abbonamento);
-			console.log("totalPrice: ", totalPrice);
-			console.log("totalDiscountedPrice: ", totalDiscountedPrice);
 		});
 
-		return {
+		const totalPriceObj: TotalPrice = {
 			toShow: totalPrice !== totalDiscountedPrice ? true : false,
-			totalPrice: totalPrice, //Number(totalPrice.toFixed(2)),
-			totalDiscountedPrice: totalDiscountedPrice, //Number(totalDiscountedPrice.toFixed(2)),
+			totalPrice: Number(totalPrice.toFixed(2)),
+			totalDiscountedPrice: Number(totalDiscountedPrice.toFixed(2)),
 		};
+
+		return totalPriceObj;
 	};
 
 	useEffect(() => {
@@ -360,7 +363,7 @@ const Carrello = () => {
 																		textAlign={"center"}
 																		color={"green"}
 																	>
-																		{prices.discountedPrice}€
+																		{renderPrice(prices.discountedPrice)}€
 																	</Typography>
 																	<Typography
 																		variant="h6"
@@ -370,7 +373,7 @@ const Carrello = () => {
 																			position: "relative",
 																		}}
 																	>
-																		{prices.basePrice}€
+																		{renderPrice(prices.basePrice)}€
 																		<span
 																			style={{
 																				position: "absolute",
@@ -387,7 +390,9 @@ const Carrello = () => {
 																</Stack>
 															) : (
 																<Typography variant="h6">
-																	<strong>{prices.basePrice}€</strong>
+																	<strong>
+																		{renderPrice(prices.basePrice)}€
+																	</strong>
 																</Typography>
 															)}
 															{isMobile ? sconti : <></>}
@@ -433,7 +438,9 @@ const Carrello = () => {
 												textAlign={"center"}
 												color={"green"}
 											>
-												<strong>{totalPrice.totalDiscountedPrice}€</strong>
+												<strong>
+													{renderPrice(totalPrice.totalDiscountedPrice)}€
+												</strong>
 											</Typography>
 											<Typography
 												variant="h5"
@@ -443,7 +450,7 @@ const Carrello = () => {
 													position: "relative",
 												}}
 											>
-												{totalPrice.totalPrice}€
+												{renderPrice(totalPrice.totalPrice)}€
 												<span
 													style={{
 														position: "absolute",
@@ -458,7 +465,7 @@ const Carrello = () => {
 											</Typography>
 										</Stack>
 									) : (
-										<strong>{totalPrice.totalPrice}€</strong>
+										<strong>{renderPrice(totalPrice.totalPrice)}€</strong>
 									)}
 								</Typography>
 
