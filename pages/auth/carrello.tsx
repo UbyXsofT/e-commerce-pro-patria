@@ -93,38 +93,6 @@ const Carrello = () => {
 	const handleCheckOut = () => {
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
-		// try {
-		// 	// Create Checkout Sessions from body params.
-		// 	const session = await stripe.checkout.sessions.create({
-		// 	  line_items: [
-		// 		{
-		// 		  // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-		// 		  price: '{{PRICE_ID}}',
-		// 		  quantity: 1,
-		// 		},
-		// 	  ],
-		// 	  mode: 'payment',
-		// 	  success_url: `${req.headers.origin}/?success=true`,
-		// 	  cancel_url: `${req.headers.origin}/?canceled=true`,
-		// 	});
-		// 	res.redirect(303, session.url);
-		//   } catch (err) {
-		// 	res.status(err.statusCode || 500).json(err.message);
-		//   }
-		// let userId = {};
-		// 		cart.forEach(element => {
-		// 			console.log("@ -- element: ",element )
-		// 			userId : element.userId
-		// 			line_items: element.cart.map((cartItem) => ({
-		// 				...cartItem,
-		// 				quantity: 1,
-		// 			})),
-		// 		});
-
-	
-
-
-
 		const CreateCheckOutSession = async () => {
 			const handleSuccess = (msg_Resp: any) => {
 				console.log(
@@ -165,25 +133,47 @@ const Carrello = () => {
 			const obyPostDataCart = {
 				userId: userId,
 				clienteKey: eCommerceConf.ClienteKey,
-				line_items: cart[0].cart.map(item => ({
-				  id: item.id,
-				  nome: item.nome,
-				  prezzo: item.prezzo,
-				  immagine: item.immagine,
-				  descrizione: item.descrizione,
-				  convenzione: item.convenzione,
-				  promozione: item.promozione,
-				  sceltaOrari: item.sceltaOrari,
-				  configuration: item.configuration,
-				  quantity: 1,
-				 
-				})),
-				currency: 'eur',
+				// line_items: cart[0].cart.map(item => ({
+				//   id: item.id,
+				//   nome: item.nome,
+				//   prezzo: item.prezzo,
+				//   immagine: item.immagine,
+				//   descrizione: item.descrizione,
+				//   convenzione: item.convenzione,
+				//   promozione: item.promozione,
+				//   sceltaOrari: item.sceltaOrari,
+				//   configuration: item.configuration,
+				//   quantity: 1,
+
+				// })),
+				// currency: 'eur',
+				// mode: "payment",
+				// success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
+				// cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
+				line_items: cart[0].cart.map((item) => {
+					// Converti in stringa e rimuovi il punto decimale
+					let numeroSenzaDecimale: number = Number(
+						item.prezzo.toString().replace(".", "")
+					);
+
+					return {
+						id: item.id,
+						nome: item.nome,
+						prezzo: numeroSenzaDecimale,
+						immagine: item.immagine,
+						descrizione: item.descrizione,
+						convenzione: item.convenzione,
+						promozione: item.promozione,
+						sceltaOrari: item.sceltaOrari,
+						configuration: item.configuration,
+						quantity: 1,
+					};
+				}),
+				currency: "eur",
 				mode: "payment",
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
 				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
-			  };
-			  
+			};
 
 			try {
 				const respCall: responseCall = await callNodeService(
