@@ -72,6 +72,8 @@ const Carrello = () => {
 		cart.forEach((abbonamento) => {
 			totalPrice += getPrices(abbonamento).basePrice;
 			totalDiscountedPrice += getPrice(abbonamento);
+			console.log("totalPrice: ", totalPrice);
+			console.log("totalDiscountedPrice: ", totalDiscountedPrice);
 		});
 
 		return {
@@ -133,29 +135,11 @@ const Carrello = () => {
 			const obyPostDataCart = {
 				userId: userId,
 				clienteKey: eCommerceConf.ClienteKey,
-				// line_items: cart[0].cart.map(item => ({
-				//   id: item.id,
-				//   nome: item.nome,
-				//   prezzo: item.prezzo,
-				//   immagine: item.immagine,
-				//   descrizione: item.descrizione,
-				//   convenzione: item.convenzione,
-				//   promozione: item.promozione,
-				//   sceltaOrari: item.sceltaOrari,
-				//   configuration: item.configuration,
-				//   quantity: 1,
-
-				// })),
-				// currency: 'eur',
-				// mode: "payment",
-				// success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
-				// cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
 				line_items: cart[0].cart.map((item) => {
 					// Converti in stringa e rimuovi il punto decimale
 					let numeroSenzaDecimale: number = Number(
 						item.prezzo.toString().replace(".", "")
 					);
-
 					return {
 						id: item.id,
 						nome: item.nome,
