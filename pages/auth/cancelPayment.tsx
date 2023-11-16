@@ -38,6 +38,8 @@ import {
 	responseCall,
 } from "src/components/CommonTypesInterfaces";
 
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+
 const cancelPayment = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
@@ -52,13 +54,34 @@ const cancelPayment = () => {
 			>
 				<AlertMe />
 
-				<Typography
-					variant="h5"
-					component="h1"
-					gutterBottom
-				>
-					PAGAMENTO NON EFFETTUATO!
-				</Typography>
+				<Box sx={{
+					display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							// justifyContent: "center",
+							height: "100vh",
+							paddingTop: 4
+				}}>
+					<ErrorOutlineIcon sx={{
+						fontSize: 100,
+						color: theme.palette.error.main,
+						marginBottom: 3
+					}} />
+					<Typography
+						variant="h4"
+						align="center"
+					>
+						Pagamento non completato!
+					</Typography>
+					<Typography
+						variant="body1"
+						align="center"
+					>
+						Il pagamento è stato annullato dall'utente o si è verificato un errore.
+        				Si prega di riprovare o contattare il supporto per ulteriore assistenza.
+					</Typography>
+				</Box>
+				
 			</Layout>
 		</ThemeProvider>
 	);

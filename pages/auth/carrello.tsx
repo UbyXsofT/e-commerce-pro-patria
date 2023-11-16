@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
+import { setAuthUser } from "src/store/actions";
 
 //----------
 import {
@@ -48,6 +49,8 @@ const Carrello = () => {
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const authUser = useSelector((state: StoreState) => state.authUser);
+
 
 	const user = cart.at(0);
 
@@ -78,12 +81,13 @@ const Carrello = () => {
 
 		return {
 			toShow: totalPrice !== totalDiscountedPrice ? true : false,
-			totalPrice: totalPrice, //Number(totalPrice.toFixed(2)),
-			totalDiscountedPrice: totalDiscountedPrice, //Number(totalDiscountedPrice.toFixed(2)),
+			totalPrice: Number(totalPrice.toFixed(2)),
+			totalDiscountedPrice: Number(totalDiscountedPrice.toFixed(2)),
 		};
 	};
 
 	useEffect(() => {
+		
 		let user = cart.at(0);
 		if (!user) {
 			return;
@@ -131,10 +135,14 @@ const Carrello = () => {
 			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-			let userId = cart[0].userId;
+			
 			const obyPostDataCart = {
-				userId: userId,
+				
 				clienteKey: eCommerceConf.ClienteKey,
+				userId: authUser?.USERID,
+				emailUser: authUser?.EMAIL,
+				emailCentro: authUser?.EMAILCENTRO,
+
 				line_items: cart[0].cart.map((item) => {
 					// Converti in stringa e rimuovi il punto decimale
 					let numeroSenzaDecimale: number = Number(
@@ -153,6 +161,7 @@ const Carrello = () => {
 						quantity: 1,
 					};
 				}),
+
 				currency: "eur",
 				mode: "payment",
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
