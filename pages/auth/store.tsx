@@ -68,11 +68,11 @@ export const getPrices = (abbonamento: Abbonamento): PriceInfo => {
 	};
 
 	if (abbonamento.convenzione.isConv) {
-		prices.discountedPrice = 24;
+		prices.discountedPrice = 24.99;
 	}
 
 	if (abbonamento.promozione.isPromo) {
-		prices.discountedPrice = 20;
+		prices.discountedPrice = 20.99;
 	}
 
 	return prices;
