@@ -19,6 +19,7 @@ import {
 import { setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
+import { renderPrice } from "pages/auth/carrello";
 
 interface ProductCardProps {
 	product: Abbonamento;
@@ -55,9 +56,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
 	useEffect(() => {
 		if (product.promozione.isPromo) {
-			setDiscountedPrice(20);
+			setDiscountedPrice(20.99);
 		} else if (product.convenzione.isConv) {
-			setDiscountedPrice(24);
+			setDiscountedPrice(24.99);
 		}
 	}, []);
 
@@ -237,7 +238,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 								position: "relative",
 							}}
 						>
-							{product.prezzo}€
+							{renderPrice(product.prezzo)}€
 							<span
 								style={{
 									position: "absolute",
@@ -255,7 +256,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 							textAlign={"center"}
 							color={"green"}
 						>
-							{discountedPrice}€
+							{renderPrice(discountedPrice)}€
 						</Typography>
 					</span>
 				) : (
@@ -264,7 +265,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 						textAlign={"center"}
 						padding={"1rem"}
 					>
-						{product.prezzo}€
+						{renderPrice(product.prezzo)}€
 					</Typography>
 				)}
 
