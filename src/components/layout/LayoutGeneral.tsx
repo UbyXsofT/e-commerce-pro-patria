@@ -38,8 +38,10 @@ const LayoutGeneral = ({
 	// quando condividi questa pagina su facebook vedrai questa immagine
 	const ogImg = "/public/images/banner-social.png";
 	const theme = useTheme();
-
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+	// Nel componente padre
+	const contentRef = React.useRef<HTMLDivElement | null>(null);
 
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
@@ -152,8 +154,15 @@ const LayoutGeneral = ({
 							}}
 						>
 							<AlertMe />
-							<div id="content"> {children}</div>
-							<Footer />
+							{/* <div id="content"> {children}</div>
+						<Footer /> */}
+							<div
+								id="content"
+								ref={contentRef}
+							>
+								{children}
+								<Footer contentRef={contentRef} />
+							</div>
 						</Box>
 						{/* Componente CookieConsent */}
 						<CookieConsent />

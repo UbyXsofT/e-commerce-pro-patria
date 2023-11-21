@@ -4,6 +4,7 @@ import React, {
 	ReactElement,
 	SetStateAction,
 	useEffect,
+	useRef,
 } from "react";
 import {
 	BottomNavigation,
@@ -28,6 +29,7 @@ import Head from "next/head";
 import eCommerceConf from "../../../eCommerceConf.json";
 import { navigationPoints } from "./header/ToolBar";
 import { useRouter } from "next/router";
+
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -65,10 +67,11 @@ const Layout = ({
 	});
 
 	const router = useRouter();
-
 	const theme = useTheme();
-
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+	// Nel componente padre
+	const contentRef = React.useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		navigationPoints.forEach((button, idx) => {
@@ -167,8 +170,17 @@ const Layout = ({
 						}}
 					>
 						<AlertMe />
-						<div id="content"> {children}</div>
-						<Footer />
+
+						{/* <div id="content"> {children}</div>
+						<Footer /> */}
+						<div
+							id="content"
+							ref={contentRef}
+						>
+							{children}
+							<Footer contentRef={contentRef} />
+						</div>
+
 						{isMobile ? (
 							<BottomNavigation
 								style={{

@@ -13,87 +13,58 @@ import { Box } from "@mui/material";
 import { useSpring, animated } from "react-spring";
 import { PrivacyCookie } from "./PrivacyCookie";
 
-// Nel componente Footer
-interface FooterProps {
-	contentRef: React.RefObject<HTMLDivElement | null>;
-}
-
-export function Footer({ contentRef }: FooterProps) {
+export function Footer() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-	const handleResize = React.useCallback(() => {
+	const handleResize = () => {
 		if (isMobile) {
 			setIsFooterFixed(false);
 		} else {
 			const windowHeight = window.innerHeight;
 			const header = document.getElementById("header");
-			const footerElement = document.getElementById("footer");
-			const contentElement = contentRef.current;
+			const footerElement = document.getElementById("footer"); // Replace with your footer's ID
+			const contentElement = document.getElementById("content"); // Replace with your content's ID
 
 			if (footerElement && contentElement) {
 				const footerRect = footerElement.getBoundingClientRect();
 				const contentRect = contentElement.getBoundingClientRect();
-				const headerHeight = header?.clientHeight || 0;
 
-				console.log("headerHeight :", headerHeight);
-				console.log("contentRect :", contentRect.height);
-				console.log("footerRect :", footerRect.height);
+				const headerHeight = header?.clientHeight ? header?.clientHeight : 0;
 
+				// Check for collision by comparing bottom position of the content and top position of the footer
 				let isColliding =
 					contentRect.height + footerRect.height + headerHeight + 24 >
 					windowHeight;
+
 				setIsFooterFixed(!isColliding);
 			}
 		}
-	}, [isMobile, contentRef]);
+	};
 
 	React.useEffect(() => {
-		const resizeObserver = new ResizeObserver(handleResize);
+		// Add an event listener for the "resize" event
+		window.addEventListener("resize", handleResize);
 
-		const parentElement = contentRef.current;
-		if (parentElement) {
-			resizeObserver.observe(parentElement);
-		}
+		// Call the initial handleResize to set the initial state
+		handleResize();
 
+		// Remove the event listener when the component unmounts
 		return () => {
-			if (parentElement) {
-				resizeObserver.unobserve(parentElement);
-			}
+			window.removeEventListener("resize", handleResize);
 		};
-	}, [handleResize, contentRef]);
+	}, []);
 
 	React.useEffect(() => {
-		console.log("isFooterFixed:", isFooterFixed);
-	}, [isFooterFixed]);
-
-	function throttle<T extends (...args: any[]) => void>(func: T, wait: number) {
-		let timeout: NodeJS.Timeout | null;
-		return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
-			const context = this;
-			if (!timeout) {
-				timeout = setTimeout(function () {
-					timeout = null;
-					func.apply(context, args);
-				}, wait);
-			}
-		};
-	}
-
-	React.useEffect(() => {
-		const handleResizeThrottled = throttle(handleResize, 100);
-		window.addEventListener("resize", handleResizeThrottled);
-		handleResize(); // Chiamare handleResize iniziale per impostare lo stato iniziale
-		return () => {
-			window.removeEventListener("resize", handleResizeThrottled);
-		};
-	}, [handleResize]);
+		handleResize();
+	}, [typeof window !== "undefined" ? document.body.clientHeight : {}]);
 
 	// Definiamo l'animazione per le proprietà di posizione con useSpring
 	const positionAnimationProps = useSpring({
 		bottom: isFooterFixed ? 0 : 0,
-		config: { duration: 100 },
+
+		config: { duration: 100 }, // Opzionale: personalizza la durata dell'animazione di posizione
 	});
 
 	return (

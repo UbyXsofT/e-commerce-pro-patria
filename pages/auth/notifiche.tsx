@@ -179,7 +179,7 @@ const Notifiche = ({ setLoading }: NotificheProps) => {
 				title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
 				description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<div>
+				<div id="content">
 					<Typography
 						variant="h5"
 						component="h1"
