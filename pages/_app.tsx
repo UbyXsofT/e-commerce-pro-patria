@@ -132,6 +132,10 @@ const MyApp = (props: {
 
 	useEffect(() => {
 		const checkAuthentication = async () => {
+			console.log(
+				"@@@@@@@@@ _APP ---- >> checkAuthentication requiresAuth: ",
+				requiresAuth
+			);
 			if (requiresAuth) {
 				let newAuthEcommerce = authEcommerce;
 				let newAuthUser = authUser;
@@ -147,8 +151,8 @@ const MyApp = (props: {
 				if (!newAuthEcommerce || !newAuthUser) {
 					router.push(
 						`/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
-    
-            Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
+	
+						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
 
@@ -159,7 +163,7 @@ const MyApp = (props: {
 		};
 
 		checkAuthentication();
-	}, [requiresAuth]);
+	}, [requiresAuth, authEcommerce, authUser, centri]);
 
 	return (
 		<>

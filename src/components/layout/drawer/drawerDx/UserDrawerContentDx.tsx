@@ -12,8 +12,11 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { ThemeSettings } from "src/components/theme/ThemeSettings";
-import { MenuItem } from "src/components/CommonTypesInterfaces";
+import { MenuItem, StoreState } from "src/components/CommonTypesInterfaces";
 import CreateMenu from "src/menu/CreateMenu";
+import { useSelector } from "react-redux";
+import { setStripeKeys } from "src/store/actions";
+import Router from "next/router";
 
 const handleDrawerItemClick = (menuItem: MenuItem) => {
 	console.log("handleDrawerItemClick : ", menuItem);
@@ -29,6 +32,11 @@ export const UserDrawerContentDx = ({
 	username,
 }: UserDrawerContentDxType) => {
 	const menuItems = React.useMemo(() => CreateMenu("menuUtenteDx"), []);
+
+	const stripeLinkPortale = useSelector(
+		(state: StoreState) => state.stripeKeys?.STRIPE_PORTALE_CLIENTE_LINK ?? "/"
+	);
+
 	return (
 		<>
 			<Box
@@ -54,43 +62,49 @@ export const UserDrawerContentDx = ({
 				/>
 			</Box>
 			<List>
-				{menuItems.map((item: MenuItem) =>
-					item.control ? (
-						<ListItem key={item.id}>{item.control}</ListItem>
-					) : (
-						<ListItem
-							key={item.id}
-							disablePadding
-						>
-							<ListItemButton
-								onClick={(e) =>
-									item.onClick ? item.onClick(e) : handleDrawerItemClick(item)
-								}
+				{menuItems.map((item: MenuItem) => (
+					<React.Fragment key={item.id}>
+						{item.control ? (
+							<ListItem>{item.control}</ListItem>
+						) : (
+							<ListItem
+								key={item.id}
+								disablePadding
 							>
-								<Box
-									sx={{
-										display: "flex",
-										alignItems: "center",
-										width: "100%",
-										justifyContent: "space-between",
-									}}
+								<ListItemButton
+									onClick={(e) =>
+										item.label === "I miei ordini" && stripeLinkPortale
+											? Router.push(stripeLinkPortale)
+											: item.onClick
+											? item.onClick(e)
+											: handleDrawerItemClick(item)
+									}
 								>
 									<Box
 										sx={{
 											display: "flex",
 											alignItems: "center",
+											width: "100%",
+											justifyContent: "space-between",
 										}}
 									>
-										<ListItemIcon>{item.icon}</ListItemIcon>
-										<ListItemText primary={item.label} />
+										<Box
+											sx={{
+												display: "flex",
+												alignItems: "center",
+											}}
+										>
+											<ListItemIcon>{item.icon}</ListItemIcon>
+											<ListItemText primary={item.label} />
+										</Box>
 									</Box>
-								</Box>
-							</ListItemButton>
-						</ListItem>
-					)
-				)}
+								</ListItemButton>
+							</ListItem>
+						)}
+					</React.Fragment>
+				))}
 			</List>
-
+			;
 			<>
 				<ThemeSettings />
 			</>

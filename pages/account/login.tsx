@@ -32,7 +32,6 @@ import { useMediaQuery } from "@mui/material";
 import CookieManager from "src/components/cookie/CookieManager";
 // import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import Router from "next/router";
-
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
@@ -41,7 +40,7 @@ import logOutUser from "src/components/utils/logOutUser";
 //redux
 import { setAuthUser } from "src/store/actions";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { TodayOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import {
@@ -50,6 +49,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import LayoutGeneral from "src/components/layout/LayoutGeneral";
 import ReCAPTCHA from "react-google-recaptcha";
+import SetStripeKeysHelper from "src/store/SetStripeKeysHelper";
 
 const Login = () => {
 	const theme = useTheme();
@@ -74,6 +74,7 @@ const Login = () => {
 		const handleLogout = () => {
 			try {
 				logOutUser(dispatch);
+				console.log("logoutSuccess");
 			} catch (error) {
 				console.log("logoutSuccess error: ", error);
 			}
@@ -87,7 +88,12 @@ const Login = () => {
 			setPaddingTop(calculatedPaddingTop);
 		};
 
+		console.log(
+			"@@@@@@@@@ _LOGIN---- >> AuthEcommerceHelper ??? provo a commentarlo"
+		);
 		AuthEcommerceHelper(dispatch);
+		//SetStripeKeysHelper(dispatch);
+		//TODO #DA VERIFICARE PER BENE
 		handleLogout();
 		centerContent();
 		window.addEventListener("resize", centerContent);

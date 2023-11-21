@@ -10,6 +10,8 @@ import eCommerceConf from "eCommerceConf.json";
 import { useDispatch, useSelector } from "react-redux";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
+import SetStripeKeysHelper from "src/store/SetStripeKeysHelper";
+
 import { StoreState } from "src/components/CommonTypesInterfaces";
 
 export const lato = Lato({
@@ -33,12 +35,12 @@ const Index = () => {
 	// console.log("theme: ", theme);
 	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
 	const [isAuthEcommerce, setIsAuthEcommerce] = React.useState(false);
+	const [isAuthStripe, setIsAuthStripe] = React.useState(false);
 	const [routerToPush, setRouterToPush] = React.useState<null | string>(null);
-	//const stripeKeys = useSelector((state: StoreState) => state.stripeKeys);
 
 	const startRedirect = async () => {
 		//STRIPE LOAD KEYS ESITO POSITIVO
-		if (isAuthEcommerce === true && routerToPush) {
+		if (isAuthEcommerce === true && routerToPush && isAuthStripe) {
 			Router.push(routerToPush);
 		} else if (routerToPush === networkError) {
 			Router.push(networkError);
@@ -49,6 +51,12 @@ const Index = () => {
 
 	React.useEffect(() => {
 		const updateEcommerceAuth = async () => {
+			console.log("@@@@@@@@@ ---- >> Index updateEcommerceAuth");
+			// 0. Chiama la funzione SetStripeKeysHelper(dispatch) asincrona per ottenere le informazioni su stripe.
+			const authConfStripe = (await SetStripeKeysHelper(dispatch)).isGetKeys;
+			setIsAuthStripe(authConfStripe);
+			console.log("authConfStripe: ", authConfStripe);
+
 			// 1. Chiama la funzione AuthEcommerceHelper(dispatch) asincrona per ottenere le informazioni sull'autenticazione dell'e-commerce.
 			const authEcommerce = (await AuthEcommerceHelper(dispatch)).result;
 

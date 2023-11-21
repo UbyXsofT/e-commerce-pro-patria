@@ -2,6 +2,8 @@ import { Dayjs } from "dayjs";
 import { Centro } from "pages/auth/store";
 import { MouseEventHandler } from "react";
 
+export type Url = string;
+
 export type Sex = null | "male" | "female";
 
 export type Focus = HTMLDivElement | null;
@@ -128,6 +130,7 @@ export interface StripeKeysData {
 	PUBLISHABLE_KEY: string;
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
+	STRIPE_PORTALE_CLIENTE_LINK: Url;
 	isGetKeys: boolean;
 }
 
@@ -279,7 +282,7 @@ export interface Abbonamento {
 		daOrari: string;
 		aOrari: string;
 	};
-	quantity: number;  // Aggiunta della proprietà quantity
+	quantity: number; // Aggiunta della proprietà quantity
 }
 
 export type Cart = CartUser[];
