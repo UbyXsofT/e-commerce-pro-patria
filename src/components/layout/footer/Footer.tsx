@@ -22,31 +22,27 @@ export function Footer({ contentRef }: FooterProps) {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const [bottomMobile, setBottomMobile] = React.useState(isMobile ? 40 : 0);
 
 	const handleResize = React.useCallback(() => {
-		if (isMobile) {
-			setIsFooterFixed(false);
-		} else {
-			const windowHeight = window.innerHeight;
-			const header = document.getElementById("header");
-			const footerElement = document.getElementById("footer");
-			const contentElement = contentRef.current;
+		// if (isMobile) {
+		// 	setIsFooterFixed(false);
+		// } else {
+		const windowHeight = window.innerHeight;
+		const header = document.getElementById("header");
+		const footerElement = document.getElementById("footer");
+		const contentElement = contentRef.current;
+		setBottomMobile(isMobile ? 40 : 0);
 
-			if (footerElement && contentElement) {
-				const footerRect = footerElement.getBoundingClientRect();
-				const contentRect = contentElement.getBoundingClientRect();
-				const headerHeight = header?.clientHeight || 0;
+		if (footerElement && contentElement) {
+			const contentRect = contentElement.getBoundingClientRect();
+			const headerHeight = header?.clientHeight || 0;
 
-				console.log("headerHeight :", headerHeight);
-				console.log("contentRect :", contentRect.height);
-				console.log("footerRect :", footerRect.height);
-
-				let isColliding =
-					contentRect.height + footerRect.height + headerHeight + 24 >
-					windowHeight;
-				setIsFooterFixed(!isColliding);
-			}
+			let isColliding =
+				contentRect.height + headerHeight + bottomMobile > windowHeight;
+			setIsFooterFixed(!isColliding);
 		}
+		//}
 	}, [isMobile, contentRef]);
 
 	React.useEffect(() => {
@@ -92,8 +88,9 @@ export function Footer({ contentRef }: FooterProps) {
 
 	// Definiamo l'animazione per le proprietà di posizione con useSpring
 	const positionAnimationProps = useSpring({
-		bottom: isFooterFixed ? 0 : 0,
-		config: { duration: 100 },
+		bottom: bottomMobile,
+		marginTop: bottomMobile,
+		config: { duration: 200 },
 	});
 
 	return (
@@ -104,6 +101,8 @@ export function Footer({ contentRef }: FooterProps) {
 				// left: isFooterFixed ? 100 : 0,
 				// right: isFooterFixed ? 50 : 0,
 				position: isFooterFixed ? "fixed" : "relative",
+				left: isFooterFixed ? "24px" : "0px",
+				right: isFooterFixed ? "24px" : "0px",
 			}}
 		>
 			<Container
