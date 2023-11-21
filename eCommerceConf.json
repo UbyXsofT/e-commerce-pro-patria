@@ -20,6 +20,7 @@
 		"maximumFractionDigits": 2
 	},
 	"UrlServerNode": "https://e-commerce.tommysgest.com:60443",
+	"UrlStripePortaleCliente": "https://billing.stripe.com/p/login/test_dR66sn04og157jq4gg",
 	"MsgErrConvEcommerce": "Sembra che attualmente l'applicazione non abbia una configurazione valida. Ti invitiamo a contattare il tuo centro fitness, per ottenere ulteriori informazioni e supporto in merito a questa situazione. Grazie per la tua collaborazione.",
 	"MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!"
 }

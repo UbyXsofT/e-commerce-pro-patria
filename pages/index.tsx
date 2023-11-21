@@ -5,7 +5,7 @@ import { useSpring, animated, easings } from "@react-spring/web";
 import { useTheme, styled } from "@mui/material/styles";
 import Image from "next/image";
 import { Lato, Poppins } from "next/font/google";
-import eCommerceConf from "../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";

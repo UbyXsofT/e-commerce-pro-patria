@@ -10,6 +10,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Divider } from "@mui/material";
 import { MenuItem } from "src/components/CommonTypesInterfaces";
+import eCommerceConf from "eCommerceConf.json";
 
 const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
 	const generateMenuItem = (
@@ -175,7 +176,9 @@ const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
 			"2",
 			"I miei ordini",
 			() => {
-				Router.push("/auth/ordini");
+				Router.push(
+					"https://billing.stripe.com/p/login/test_dR66sn04og157jq4gg"
+				);
 			},
 			<ManageHistoryIcon />,
 			null,

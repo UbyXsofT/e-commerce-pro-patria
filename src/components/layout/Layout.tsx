@@ -26,7 +26,7 @@ import DrawerSx from "./drawer/drawerSx/DrawerSx";
 import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
-import eCommerceConf from "../../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import { navigationPoints } from "./header/ToolBar";
 import { useRouter } from "next/router";
 

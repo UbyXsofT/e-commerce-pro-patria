@@ -1,6 +1,6 @@
 //api/callNodeService.js
 import axios from "axios";
-import eCommerceConf from "../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import qs from "qs";
 import {
 	authEcommerce,
