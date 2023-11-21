@@ -1,4 +1,3 @@
-//import "styles/globals.scss"; // TODO DA VERIFICARE COME CARICARLO
 import React, { use, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";

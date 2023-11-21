@@ -104,12 +104,42 @@ const Carrello = () => {
 					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
 					msg_Resp
 				);
+				const msg_error_session = `Ops! Siamo spiacenti, ma al momento riscontriamo un problema
+				nella creazione della sessione di pagamento tramite Stripe.
+
+				Ti invitiamo a riprovare tra qualche istante. Se il problema
+				persiste, per favore, contatta il nostro servizio di
+				assistenza. 
+				
+				Ci scusiamo per l'inconveniente e faremo del
+				nostro meglio per risolvere la situazione al più presto.`;
 				try {
-					if (msg_Resp.messageCli.url) {
+					if (msg_Resp.successCli.url) {
 						window.location.href = msg_Resp.messageCli.url;
+					} else {
+						//ERROR data
+						console.log("error msg_Resp.successCli.url");
+						//ERROR data
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>{msg_error_session}</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 					}
 				} catch (error) {
+					//ERROR data
 					console.log("error CreateCheckOutSession: ", error);
+					const textAlert = (
+						<React.Fragment>
+							<h3>
+								<strong> {msg_error_session}</strong>
+							</h3>
+						</React.Fragment>
+					);
+					showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 				}
 				//success data
 			};

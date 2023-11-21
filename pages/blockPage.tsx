@@ -23,7 +23,7 @@ import { useTheme } from "@mui/material/styles";
 import { connect } from "react-redux";
 import { setLoading } from "../src/store/actions";
 //*-----*//
-import Layout from "../src/components/layout/LayoutLogin";
+
 import eCommerceConf from "../eCommerceConf.json";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
@@ -48,7 +48,6 @@ const BlockPage = () => {
 	const dispatch = useDispatch();
 
 	React.useEffect(() => {
-		//TODO qui forzo la rimozione dei cookie per non avere problemi, costringo l'utente ad un nuovo login
 		try {
 			logOutUser(dispatch);
 		} catch (error) {

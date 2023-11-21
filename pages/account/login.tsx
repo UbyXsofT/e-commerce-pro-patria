@@ -33,9 +33,6 @@ import CookieManager from "src/components/cookie/CookieManager";
 // import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import Router from "next/router";
 
-import { PartitaIva } from "src/components/layout/footer/PartitaIva";
-import Copyright from "src/components/layout/footer/Copyright";
-
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
@@ -43,7 +40,7 @@ import callNodeService from "pages/api/callNodeService";
 import logOutUser from "src/components/utils/logOutUser";
 //redux
 import { setAuthUser } from "src/store/actions";
-import Layout from "src/components/layout/LayoutLogin";
+
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
@@ -212,39 +209,6 @@ const Login = () => {
 
 	const handleSubmit = () => {};
 
-	const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
-		noSsr: false,
-	});
-
-	const copyright = (
-		<Box style={{ width: "100%", marginTop: 30 }}>
-			<Box
-				sx={{
-					backgroundColor: (theme) => theme.palette.primary.main,
-					borderRadius: 1,
-					p: 2,
-					m: 2,
-				}}
-			>
-				<Typography
-					variant="body2"
-					align="center"
-					sx={{ color: "white" }}
-				>
-					<PartitaIva />
-				</Typography>
-
-				<Typography
-					variant="body2"
-					align="center"
-					sx={{ color: "white" }}
-				>
-					<Copyright />
-				</Typography>
-			</Box>
-		</Box>
-	);
-
 	return (
 		<ThemeProvider theme={theme}>
 			<LayoutGeneral
@@ -255,7 +219,8 @@ const Login = () => {
 				<AlertMe />
 				<div
 					id="contenitore"
-					style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
+					style={{ height: "540px" }}
+					// style={{ minHeight: "calc(100vh - 340px)" }}
 				>
 					<Box id="main">
 						<Grid
@@ -388,10 +353,16 @@ const Login = () => {
 										/>
 
 										{/* Add the reCAPTCHA component */}
-										<ReCAPTCHA
-											sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-											onChange={(value) => setCaptchaValue(value)}
-										/>
+										<Box
+											sx={{
+												maxWidth: 240,
+											}}
+										>
+											<ReCAPTCHA
+												sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+												onChange={(value) => setCaptchaValue(value)}
+											/>
+										</Box>
 
 										<Button
 											//   type="submit"
@@ -403,6 +374,7 @@ const Login = () => {
 										>
 											Accedi
 										</Button>
+
 										<Grid container>
 											<Grid
 												item
@@ -445,8 +417,6 @@ const Login = () => {
 												</Link>
 											</Grid>
 										</Grid>
-										{/* <Copyright sx={{ mt: 5 }} /> */}
-										{!smUp ? copyright : <div></div>}
 									</Box>
 								</Box>
 							</Grid>

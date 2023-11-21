@@ -22,9 +22,9 @@ import CustomPopper from "src/components/utils/CustomPopper";
 const menuId = "up-account-menu";
 const StyledImageLogo = styled(Image)({
 	padding: "5px",
-	maxWidth: 190,
-	maxHeight: 60,
-	marginLeft: -30,
+	// maxWidth: 190,
+	// maxHeight: 60,
+	// marginLeft: -30,
 });
 //React.Dispatch<React.SetStateAction<string | undefined>>
 type ToolBarProps = {
@@ -117,13 +117,14 @@ export const ToolBar = ({
 						display: "grid",
 						gridTemplateColumns: "1fr 1fr 1fr",
 						width: "100%",
+						minHeight: "60px",
 					}}
 				>
 					<StyledImageLogo
 						src="/images/LogoO.png"
 						alt="Logo"
 						width={190}
-						height={70}
+						height={60}
 						priority={true}
 						sx={{ cursor: "pointer" }}
 						onClick={() => {
@@ -133,12 +134,17 @@ export const ToolBar = ({
 
 					{!noAuth ? (
 						isMobile ? (
-							<div></div>
+							<div
+								style={{
+									minHeight: "60px",
+								}}
+							></div>
 						) : (
 							<Box
 								sx={{
 									display: "flex",
 									justifyContent: "center",
+									minHeight: "60px",
 								}}
 								gap={1}
 							>
@@ -167,7 +173,11 @@ export const ToolBar = ({
 							</Box>
 						)
 					) : (
-						<div></div>
+						<div
+							style={{
+								minHeight: "60px",
+							}}
+						></div>
 					)}
 
 					<Box
