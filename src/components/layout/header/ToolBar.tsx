@@ -42,13 +42,13 @@ export interface NavigationPoint {
 	link: string;
 }
 export const navigationPoints: NavigationPoint[] = [
-	{
-		name: "About",
-		link: "/auth/about",
-	},
+	// {
+	// 	name: "About",
+	// 	link: "/auth/about",
+	// },
 	{ name: "Home", link: "/auth/home" },
 	{ name: "Abbonamenti", link: "/auth/store" },
-	{ name: "Carrello", link: "/auth/carrello" },
+	// { name: "Carrello", link: "/auth/carrello" },
 ];
 
 export const ToolBar = ({
@@ -224,7 +224,8 @@ export const ToolBar = ({
 									: "Il Carrello è Vuoto"
 							}
 							color="inherit"
-							onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+							onClick={() => Router.push("/auth/store")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
