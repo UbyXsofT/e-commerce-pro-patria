@@ -118,6 +118,7 @@ const Login = () => {
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					CookieManager.setCookie("username", username);
 					//****** TOKENS
 					// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
 					CookieManager.setCookie("accessToken", msg_Resp.accessToken);

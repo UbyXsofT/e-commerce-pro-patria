@@ -76,7 +76,7 @@ export type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
 export type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
 export type CaratteriSpeciali = "";
 
-export type Cookie = "accessToken" | "refreshToken";
+export type Cookie = "accessToken" | "refreshToken" | "username";
 
 export type StoreAction =
 	| SetLoading
@@ -286,6 +286,12 @@ export interface tokenlessAccess {
 	ricordami: boolean;
 	accessToken: null;
 	refreshToken: null;
+}
+
+export interface authUserCheck {
+	clienteKey: string;
+	userName: string;
+	password: string;
 }
 
 export interface tokenfulAccess {

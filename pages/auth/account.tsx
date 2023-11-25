@@ -29,6 +29,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import stringUpperCase from "src/components/utils/stringUpperCase";
 import VirtualizedAutocomplete from "src/components/account/register/VirtualizedAutocomplete";
 import {
+	authUserCheck,
+	authUserId,
+	authUserIdCheck,
 	AutocompleteSelected,
 	ComunePaese,
 	responseCall,
@@ -46,6 +49,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { useSelector } from "react-redux";
 import callNodeService from "pages/api/callNodeService";
+import CookieManager from "src/components/cookie/CookieManager";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -64,7 +68,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [origin, setOrigin] = useState<"changePassword" | null>(null);
 
 	const user = useSelector((state: StoreState) => state.authUser);
-	console.log("*******user: ", user);
+	//console.log("*******user: ", user);
 	const name = user?.NOME;
 	const surname = user?.COGNOME;
 	const fiscalCode = user?.CODFISC;
@@ -116,16 +120,29 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 					<strong>Si prega di completare il reCAPTCHA.</strong>
 				</h3>
 			);
-			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 		};
 
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
-				const handleSuccess = (msg_Resp: any) => {};
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ISAUTH: ", msg_Resp.ISAUTH);
+					if (msg_Resp.ISAUTH === "1" && msg_Resp.ESITO === "1") {
+						alert("Autenticato");
+					} else {
+						const textAlert = (
+							<h3>
+								<strong>Utente non autenticato!</strong>
+							</h3>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+					}
+				};
 
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
-					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
 						handleSuccess(msg_Resp);
 					} else {
 						handleError("Errore nel recupero dei dati, dati incompleti!");
@@ -147,20 +164,17 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 			};
 
 			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
-
+			let userName = CookieManager.getCookie("username");
 			//*********** CALL NODE SERVICE
-			const obyPostData: tokenlessAccess = {
+			const obyPostData: authUserCheck = {
 				clienteKey: eCommerceConf.ClienteKey,
-				userName: username,
+				userName: userName ?? "null",
 				password: password,
-				ricordami: ricordami,
-				accessToken: null,
-				refreshToken: null,
 			};
 
 			try {
 				const respCall: responseCall = await callNodeService(
-					"login",
+					"authUserCheck",
 					obyPostData,
 					null
 				);
