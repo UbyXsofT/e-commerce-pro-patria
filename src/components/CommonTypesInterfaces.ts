@@ -169,7 +169,63 @@ export interface AuthUser {
 	PARTNER: "0" | "1";
 	PAYPAL: "0" | "1";
 	LISTACENTRI: string;
+	NOME: string;
+	COGNOME: string;
+	INDIRIZZO: string;
+	CITTA: string;
+	TELEFONO: string;
+	CELLULARE: string;
+	CAP: string;
+	PROVINCIA: string;
+	CODFISC: string;
+	SCADENZEFISSE: {
+		SCADENZA: {
+			TIPO: string;
+			DESC: string;
+			FLREGULAR: string;
+			DATA: string;
+			TIPOID: string;
+			RINNOVA: string;
+		}[];
+	};
+	ABBONAMENTI: {
+		ABBONAMENTO: {
+			DESC: string;
+			DATAINIZIO: string;
+			DATAFINE: string;
+			ISCRIZIONE: string;
+			IDAGGIUNTA: string;
+			IDPACCHETTO: string;
+			GESTSOSP: string;
+			DATAINIZIOSOSP: string;
+			DATAFINESOSP: string;
+			ATTIVITA: {
+				DESC: string;
+				DATAINIZIO: string;
+				DATAFINE: string;
+				SEDUTE: string;
+			};
+		};
+	};
+	INTEGRAZIONI: string;
+	PAGAMENTI: {
+		PAGAMENTO: {
+			DATA: string;
+			DESC: string;
+			IMPORTO: string;
+		}[];
+	};
+	MONEYCARD: string;
+	LIVELLINAT: {
+		LIVELLO: {
+			IDLIV: string;
+			DATA: string;
+			DESC: string;
+			NOTES: string;
+		}[];
+	};
 }
+
 export interface UserData {
 	user: {
 		codiceFiscale: string;

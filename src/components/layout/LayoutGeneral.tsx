@@ -46,6 +46,9 @@ const LayoutGeneral = ({
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
 	const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
+
+	const [cartAlerts, setCartAlerts] = React.useState(1);
+
 	const pLeftDrawerOpen = "88px";
 	const pLeftDrawerClose = "24px";
 	const user = useSelector((state: StoreState) => state.authUser);

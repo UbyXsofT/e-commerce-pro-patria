@@ -74,6 +74,8 @@ const Layout = ({
 	const contentRef = React.useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
+		console.log("********************* user: ", user);
+
 		navigationPoints.forEach((button, idx) => {
 			if (router.pathname === button.link) {
 				setBottomNavSelected(idx);
@@ -81,8 +83,6 @@ const Layout = ({
 		});
 	}, []);
 
-	// TODO: Fix Captcha Positioning
-	// TODO: Fix Footer size/position
 	// TODO: Fix Breakpoint Definition
 	// TODO: Fix Desktop Navigation Coloring
 

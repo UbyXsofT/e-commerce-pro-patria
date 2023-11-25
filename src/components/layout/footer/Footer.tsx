@@ -12,6 +12,7 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useSpring, animated } from "react-spring";
 import { PrivacyCookie } from "./PrivacyCookie";
+import eCommerce from "eCommerceConf.json";
 
 // Nel componente Footer
 interface FooterProps {
@@ -150,10 +151,7 @@ export function Footer({ contentRef }: FooterProps) {
 							>
 								Chi siamo
 							</Typography>
-							<Typography variant="body2">
-								We are XYZ company, dedicated to providing the best service to
-								our customers.
-							</Typography>
+							<Typography variant="body2">{eCommerce.ChiSiamo}</Typography>
 						</Box>
 					</Grid>
 					<Grid
@@ -180,10 +178,29 @@ export function Footer({ contentRef }: FooterProps) {
 								Contattaci
 							</Typography>
 							<Typography variant="body2">
-								123 Main Street, Anytown, USA
+								{eCommerce.Contatti.indirizzo}
 							</Typography>
-							<Typography variant="body2">Email: info@example.com</Typography>
-							<Typography variant="body2">Phone: +1 234 567 8901</Typography>
+							<Typography variant="body2">
+								- {eCommerce.Contatti.telefono}
+							</Typography>
+							<Typography variant="body2">
+								- e-mail: {eCommerce.Contatti.email}
+							</Typography>
+							<Typography variant="body2">
+								- Inviare la corrispondenza in :{" "}
+								{eCommerce.Contatti.indirizzoCorrispondenza}
+							</Typography>
+							<Typography variant="body2">
+								- Orari segreteria:{" "}
+								{eCommerce.Contatti.orariSegreteria.lunedì_venerdì}
+							</Typography>
+							<Typography variant="body2">
+								- Orari estivi segreteria:{" "}
+								{eCommerce.Contatti.orariSegreteria.orariEstivi}
+							</Typography>
+							<Typography variant="body2">
+								- Agosto: {eCommerce.Contatti.orariSegreteria.agosto}
+							</Typography>
 						</Box>
 					</Grid>
 					<Grid
@@ -211,20 +228,20 @@ export function Footer({ contentRef }: FooterProps) {
 							</Typography>
 
 							<Link
-								href="https://www.facebook.com/"
+								href={eCommerce.Seguici.Facebook}
 								color="inherit"
 							>
 								<Facebook />
 							</Link>
 							<Link
-								href="https://www.instagram.com/"
+								href={eCommerce.Seguici.Instagram}
 								color="inherit"
 								sx={{ pl: 1, pr: 1 }}
 							>
 								<Instagram />
 							</Link>
 							<Link
-								href="https://www.twitter.com/"
+								href={eCommerce.Seguici.Twitter}
 								color="inherit"
 							>
 								<Twitter />

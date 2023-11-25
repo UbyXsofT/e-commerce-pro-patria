@@ -16,6 +16,8 @@ import { useTheme } from "@mui/material/styles";
 //REDUX-STORE
 import { connect } from "react-redux";
 import { setLoading } from "../../src/store/actions";
+//REDUX-STORE
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
 import { useRouter } from "next/router";
@@ -29,6 +31,9 @@ import VirtualizedAutocomplete from "src/components/account/register/Virtualized
 import {
 	AutocompleteSelected,
 	ComunePaese,
+	responseCall,
+	StoreState,
+	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
 import getComuni from "src/components/utils/getComuni";
 import { MuiTelInput } from "mui-tel-input";
@@ -39,6 +44,8 @@ import eCommerceConf from "eCommerceConf.json";
 import { useSettings } from "src/components/layout/SettingsContext";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { useSelector } from "react-redux";
+import callNodeService from "pages/api/callNodeService";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -50,23 +57,23 @@ type AccountSettingsProps = {
 const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const theme = useTheme();
 	const router = useRouter();
-
 	const { openSettings, setOpenSettings } = useSettings();
 	const [interfaceState, setInterfaceState] = useState<
 		"read" | "authenticate" | "modify"
 	>("read");
-
 	const [origin, setOrigin] = useState<"changePassword" | null>(null);
 
-	const name = "Mattia";
-	const surname = "Formichetti";
-	const fiscalCode = "FRMMTT04B08H282M";
-	const address = "Via Principe di Piemonte 28";
-	const city = "Colli Sul Velino";
-	const province = "Rieti";
-	const cap = "02010";
-	const phoneNumber = "+39 347 288 5462";
-	const email = "mattiaformichetti@gmail.com";
+	const user = useSelector((state: StoreState) => state.authUser);
+	console.log("*******user: ", user);
+	const name = user?.NOME;
+	const surname = user?.COGNOME;
+	const fiscalCode = user?.CODFISC;
+	const address = user?.INDIRIZZO;
+	const city = user?.CITTA;
+	const province = user?.PROVINCIA;
+	const cap = user?.CAP;
+	const phoneNumber = user?.TELEFONO;
+	const email = user?.EMAIL;
 
 	const [modifyAddress, setModifyAddress] = useState(address);
 	const [modifyCity, setModifyCity] = useState(city);
@@ -82,30 +89,97 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [password, setPassword] = useState("");
 	const [wrongPassword, setWrongPassword] = useState(false);
 
-	const [captcha, setCaptcha] = useState<string | null>(null);
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 
 	useEffect(() => {
 		getComuni(setComuni);
 	}, []);
 
 	const sendData = (
-		modifyAddress: string,
-		modifyCity: string,
-		modifyProvince: string,
-		modifyCap: string,
-		modifyEmail: string,
-		modifyPhoneNumber: string
+		modifyAddress: string | undefined,
+		modifyCity: string | undefined,
+		modifyProvince: string | undefined,
+		modifyCap: string | undefined,
+		modifyEmail: string | undefined,
+		modifyPhoneNumber: string | undefined
 	) => {
 		setInterfaceState("read");
 	};
 
 	// TODO: Implement Password Checking
 	const passwordCheck = (password: string) => {
-		if (!captcha) {
+		const handleCaptchaError = async () => {
+			console.log("Si prega di completare il reCAPTCHA.");
+			const textAlert = (
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			);
+			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		};
+
+		const fetchData = async () => {
+			const handleLoginResponse = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+			//*********** CALL NODE SERVICE
+			const obyPostData: tokenlessAccess = {
+				clienteKey: eCommerceConf.ClienteKey,
+				userName: username,
+				password: password,
+				ricordami: ricordami,
+				accessToken: null,
+				refreshToken: null,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"login",
+					obyPostData,
+					null
+				);
+				handleLoginResponse(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
 			handleCaptchaError();
 			return;
 		}
-		return true;
+
+		fetchData();
 	};
 
 	const { showAlert } = useAlertMe();
@@ -368,7 +442,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							<ReCAPTCHA
 								style={{ marginTop: "1rem" }}
 								sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-								onChange={(value) => setCaptcha(value)}
+								onChange={(value) => setCaptchaValue(value)}
 							></ReCAPTCHA>
 							<div
 								style={{
