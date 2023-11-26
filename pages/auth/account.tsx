@@ -30,9 +30,9 @@ import stringUpperCase from "src/components/utils/stringUpperCase";
 import VirtualizedAutocomplete from "src/components/account/register/VirtualizedAutocomplete";
 import {
 	authUserCheck,
-	authUserId,
-	authUserIdCheck,
+	AuthUser,
 	AutocompleteSelected,
+	changeUserData,
 	ComunePaese,
 	responseCall,
 	StoreState,
@@ -50,6 +50,8 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { useSelector } from "react-redux";
 import callNodeService from "pages/api/callNodeService";
 import CookieManager from "src/components/cookie/CookieManager";
+//redux
+import { setAuthUser } from "src/store/actions";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -68,23 +70,50 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [origin, setOrigin] = useState<"changePassword" | null>(null);
 
 	const user = useSelector((state: StoreState) => state.authUser);
-	//console.log("*******user: ", user);
-	const name = user?.NOME;
-	const surname = user?.COGNOME;
-	const fiscalCode = user?.CODFISC;
-	const address = user?.INDIRIZZO;
-	const city = user?.CITTA;
-	const province = user?.PROVINCIA;
-	const cap = user?.CAP;
-	const phoneNumber = user?.TELEFONO;
-	const email = user?.EMAIL;
+	// Gestisci il caso in cui 'user' può essere null
+	const {
+		NOME,
+		COGNOME,
+		CODFISC,
+		INDIRIZZO,
+		CITTA,
+		PROVINCIA,
+		CAP,
+		CELLULARE,
+		EMAIL,
+	} = user || {};
 
-	const [modifyAddress, setModifyAddress] = useState(address);
-	const [modifyCity, setModifyCity] = useState(city);
-	const [modifyProvince, setModifyProvince] = useState(province);
-	const [modifyCap, setModifyCap] = useState(cap);
-	const [modifyEmail, setModifyEmail] = useState(email);
-	const [modifyPhoneNumber, setModifyPhoneNumber] = useState(phoneNumber);
+	// Dichiarazione delle variabili locali
+	const [name, setName] = React.useState(NOME);
+	const [surname, setSurname] = React.useState(COGNOME);
+	const [fiscalCode, setFiscalCode] = React.useState(CODFISC);
+	const [localAddress, setLocalAddress] = React.useState(INDIRIZZO);
+	const [localCity, setLocalCity] = React.useState(CITTA);
+	const [localProvince, setLocalProvince] = React.useState(PROVINCIA);
+	const [localCap, setLocalCap] = React.useState(CAP);
+	const [localPhoneNumber, setLocalPhoneNumber] = React.useState(CELLULARE);
+	const [localEmail, setLocalEmail] = React.useState(EMAIL);
+
+	useEffect(() => {
+		console.log("*******user: ", user);
+		// Aggiorna le variabili locali quando lo stato di Redux cambia
+		setName(NOME);
+		setSurname(COGNOME);
+		setFiscalCode(CODFISC);
+		setLocalAddress(INDIRIZZO);
+		setLocalCity(CITTA);
+		setLocalProvince(PROVINCIA);
+		setLocalCap(CAP);
+		setLocalPhoneNumber(CELLULARE);
+		setLocalEmail(EMAIL);
+	}, [user]); // Dipendenza dell'effetto sullo stato di Redux
+
+	const [modifyAddress, setModifyAddress] = useState(localAddress);
+	const [modifyCity, setModifyCity] = useState(localCity);
+	const [modifyProvince, setModifyProvince] = useState(localProvince);
+	const [modifyCap, setModifyCap] = useState(localCap);
+	const [modifyEmail, setModifyEmail] = useState(localEmail);
+	const [modifyPhoneNumber, setModifyPhoneNumber] = useState(localPhoneNumber);
 
 	const [selectedComune, setSelectedComune] =
 		useState<AutocompleteSelected>(null);
@@ -108,10 +137,117 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 		modifyEmail: string | undefined,
 		modifyPhoneNumber: string | undefined
 	) => {
-		setInterfaceState("read");
+		const fixPhoneNumber = user?.TELEFONO;
+		const userID = user?.USERID;
+
+		const fetchData = async () => {
+			const handleCallNodeService_Resp = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					if (msg_Resp.ESITO === "1") {
+						//****** UTENTE
+						// Aggiorna lo stato dell'OGGETTO utente
+						try {
+							console.log("Aggiorna Redux AuthUser:");
+							const updatedProperties = {
+								INDIRIZZO: modifyAddress,
+								CITTA: modifyCity,
+								PROVINCIA: modifyProvince,
+								CAP: modifyCap,
+								EMAIL: modifyEmail,
+								CELLULARE: modifyPhoneNumber,
+							};
+
+							// Aggiorna solo le proprietà necessarie espandendo anche l'oggetto utente esistente
+							dispatch(setAuthUser({ ...user, ...updatedProperties }));
+						} catch (error) {
+							console.log("Aggiorna Redux AuthUser:", error);
+						}
+
+						setInterfaceState("read");
+						const textAlert = (
+							<h3>
+								<strong>
+									Modifica dati anagrafici, avvenuta correttamente!
+								</strong>
+							</h3>
+						);
+						showAlert("filled", "success", "INFO!", textAlert, true);
+					} else {
+						const textAlert = (
+							<h3>
+								<strong>{msg_Resp.ERRMSG}</strong>
+							</h3>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+			const obyPostData: changeUserData = {
+				clienteKey: eCommerceConf.ClienteKey,
+				op: 2,
+				Codice_Cliente: userID ?? "null",
+				Indirizzo: modifyAddress ?? "null",
+				Citta: modifyCity ?? "null",
+				Provincia: modifyProvince ?? "null",
+				Cap: modifyCap ?? "null",
+				EMail: modifyEmail ?? "null",
+				Cellulare: modifyPhoneNumber ?? "null",
+				Telefono: fixPhoneNumber ?? "null",
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"save-user-data",
+					obyPostData,
+					null
+				);
+
+				handleCallNodeService_Resp(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			handleCaptchaError();
+			return;
+		}
+
+		fetchData();
+
+		//setInterfaceState("read");
 	};
 
-	// TODO: Implement Password Checking
 	const passwordCheck = (password: string) => {
 		const handleCaptchaError = async () => {
 			console.log("Si prega di completare il reCAPTCHA.");
@@ -128,7 +264,18 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 				const handleSuccess = (msg_Resp: any) => {
 					console.log("handleSuccess ISAUTH: ", msg_Resp.ISAUTH);
 					if (msg_Resp.ISAUTH === "1" && msg_Resp.ESITO === "1") {
-						alert("Autenticato");
+						console.log("****** origin: ", origin);
+						if (origin === "changePassword") {
+							setOrigin(null);
+							setWrongPassword(false);
+							router.push({
+								pathname: "/auth/setNewPassword",
+								query: { origin: "/auth/account" },
+							});
+							return;
+						} else {
+							setInterfaceState("modify");
+						}
 					} else {
 						const textAlert = (
 							<h3>
@@ -273,7 +420,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={4.5}
 							>
 								<TextField
-									value={address}
+									value={localAddress}
 									label="Indirizzo"
 									InputProps={{
 										readOnly: true,
@@ -287,7 +434,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={1.5}
 							>
 								<TextField
-									value={cap}
+									value={localCap}
 									label="CAP"
 									InputProps={{
 										readOnly: true,
@@ -301,7 +448,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={3}
 							>
 								<TextField
-									value={city}
+									value={localCity}
 									label="Città"
 									InputProps={{
 										readOnly: true,
@@ -315,7 +462,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={3}
 							>
 								<TextField
-									value={province}
+									value={localProvince}
 									label="Provincia"
 									InputProps={{
 										readOnly: true,
@@ -330,7 +477,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<TextField
-									value={phoneNumber}
+									value={localPhoneNumber}
 									label="Telefono"
 									InputProps={{
 										readOnly: true,
@@ -344,7 +491,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<TextField
-									value={email}
+									value={localEmail}
 									label="Email"
 									InputProps={{
 										readOnly: true,
@@ -365,7 +512,10 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							>
 								<ButtonGroup fullWidth>
 									<Button
-										onClick={() => setInterfaceState("authenticate")}
+										onClick={() => {
+											setInterfaceState("authenticate");
+											setOrigin(null);
+										}}
 										variant="contained"
 									>
 										<EditIcon style={{ marginRight: 5 }} />
@@ -478,25 +628,27 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								<Button
 									variant="contained"
 									onClick={() => {
-										if (passwordCheck(password) === true) {
-											if (origin === "changePassword") {
-												setOrigin(null);
-
-												router.push({
-													pathname: "/auth/setNewPassword",
-													query: { origin: "/auth/account" },
-												});
-
-												return;
-											}
-
-											setInterfaceState("modify");
-											setWrongPassword(false);
-										} else {
-											setWrongPassword(true);
-										}
+										passwordCheck(password);
 									}}
-									disabled={!password}
+									// 	if (passwordCheck(password) === true) {
+									// 		if (origin === "changePassword") {
+									// 			setOrigin(null);
+
+									// 			router.push({
+									// 				pathname: "/auth/setNewPassword",
+									// 				query: { origin: "/auth/account" },
+									// 			});
+
+									// 			return;
+									// 		}
+
+									// 		setInterfaceState("modify");
+									// 		setWrongPassword(false);
+									// 	} else {
+									// 		setWrongPassword(true);
+									// 	}
+									// }}
+									// disabled={!password}
 								>
 									Autentica
 								</Button>
@@ -542,14 +694,14 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<VirtualizedAutocomplete
-									label={"Residenza"}
+									label={"Città"}
 									comuni={comuni}
-									placeOfBirth={modifyCity}
+									placeOfBirth={modifyCity ?? "null"}
 									setPlaceOfBirth={setModifyCity}
 									selectedComune={selectedComune}
 									setSelectedComune={setSelectedComune}
-									setProvinceOfBirth={setModifyProvince}
-									setCap={setModifyCap}
+									setProvinceOfBirth={setModifyProvince ?? "null"}
+									setCap={setModifyCap ?? "null"}
 								/>
 							</Grid>
 							<Grid

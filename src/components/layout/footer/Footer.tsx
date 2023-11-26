@@ -191,6 +191,10 @@ export function Footer({ contentRef }: FooterProps) {
 								{eCommerce.Contatti.indirizzoCorrispondenza}
 							</Typography>
 							<Typography variant="body2">
+								{" "}
+								<br></br>
+							</Typography>
+							<Typography variant="body2">
 								- Orari segreteria:{" "}
 								{eCommerce.Contatti.orariSegreteria.lunedì_venerdì}
 							</Typography>

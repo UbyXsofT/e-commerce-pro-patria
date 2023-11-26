@@ -146,15 +146,26 @@ const StyledPopper = styled(Popper)({
 	},
 });
 
+// type VirtualizedAutocompleteTypes = {
+// 	label: string;
+// 	comuni: ComunePaese[];
+// 	placeOfBirth: string;
+// 	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+// 	selectedComune: AutocompleteSelected;
+// 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+// 	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>>;
+// 	setCap: React.Dispatch<React.SetStateAction<string>> | null;
+// };
+
 type VirtualizedAutocompleteTypes = {
 	label: string;
 	comuni: ComunePaese[];
-	placeOfBirth: string;
-	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+	placeOfBirth: string | undefined;
+	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string | undefined>>;
 	selectedComune: AutocompleteSelected;
 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
-	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>>;
-	setCap: React.Dispatch<React.SetStateAction<string>> | null;
+	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string | undefined>>;
+	setCap: React.Dispatch<React.SetStateAction<string | undefined>> | null;
 };
 
 const VirtualizedAutocomplete = ({

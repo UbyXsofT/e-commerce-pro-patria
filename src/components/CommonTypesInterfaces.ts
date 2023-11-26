@@ -294,6 +294,19 @@ export interface authUserCheck {
 	password: string;
 }
 
+export interface changeUserData {
+	clienteKey: string;
+	op: number;
+	Codice_Cliente: string;
+	Indirizzo: string;
+	Citta: string;
+	Provincia: string;
+	Cap: string;
+	EMail: string;
+	Cellulare: string;
+	Telefono: string;
+}
+
 export interface tokenfulAccess {
 	clienteKey: string;
 	accessToken: string;

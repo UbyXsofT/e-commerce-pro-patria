@@ -39,12 +39,25 @@ function stringToColor(string: string) {
 	return color;
 }
 
-function stringAvatar(name: string) {
+function stringAvatar(name: string | undefined) {
+	if (!name) {
+		return {
+			sx: {
+				bgcolor: "",
+			},
+			children: "",
+		};
+	}
+
+	const nameParts = name.split(" ");
+	const firstNameInitial = nameParts[0]?.[0] || "";
+	const lastNameInitial = nameParts[1]?.[0] || "";
+
 	return {
 		sx: {
-			bgcolor: name ? stringToColor(name) : "",
+			bgcolor: stringToColor(name),
 		},
-		children: name ? `${name.split(" ")[0][0]}${name.split(" ")[1][0]}` : "",
+		children: `${firstNameInitial}${lastNameInitial}`,
 	};
 }
 
