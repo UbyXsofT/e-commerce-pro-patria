@@ -323,6 +323,16 @@ export interface resetPsw {
 	email: string;
 }
 
+export interface setNewPsw {
+	clienteKey: string;
+	UserID: string;
+	Pwd_New: string;
+	mittente: string;
+	destinatario: string;
+	oggetto: string;
+	corpo: string;
+}
+
 export interface responseCall {
 	successCli: boolean;
 	messageCli: any;

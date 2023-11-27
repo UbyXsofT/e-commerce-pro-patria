@@ -35,7 +35,8 @@ export default async function callNodeService(
 		| "stripe/checkout-session"
 		| "prodotti"
 		| "authUserCheck"
-		| "save-user-data",
+		| "save-user-data"
+		| "cambio-password",
 	obyPostData:
 		| tokenlessAccess
 		| tokenfulAccess
