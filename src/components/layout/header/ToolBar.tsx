@@ -225,7 +225,7 @@ export const ToolBar = ({
 							}
 							color="inherit"
 							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
-							onClick={() => Router.push("/auth/store")}
+							onClick={() => Router.push("/auth/carrello")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
