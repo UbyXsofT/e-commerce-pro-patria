@@ -259,6 +259,38 @@ export interface UserData {
 	} | null;
 }
 
+export interface NewUserData {
+	ID: String;
+	clienteKey: string;
+	Cognome: string;
+	Nome: string;
+	Data_Nascita: string;
+	Luogo_Nascita: string;
+	Sesso: string;
+	Indirizzo: string;
+	EMail: string;
+	Cellulare: string;
+	NoteD?: string;
+	CodFisc: string;
+	Citta: string;
+	Provincia: string;
+	Cap: string;
+	IDUtente: string;
+	PwdUtente: string;
+	Tipo_Prov: string;
+	Parent_CodFisc: string;
+	Parent_Nome: string;
+	Parent_Cognome: string;
+	Parent_Sesso: string;
+	Parent_Data_Nascita: string;
+	Parent_Luogo_Nascita: string;
+	Parent_Indirizzo: string;
+	Parent_Citta: string;
+	Parent_Cap: string;
+	Parent_Provincia: string;
+	Parent_Cellulare: string;
+}
+
 export interface MenuItem {
 	id: string;
 	label: string | null;

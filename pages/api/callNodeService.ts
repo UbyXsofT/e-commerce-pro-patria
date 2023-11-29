@@ -11,6 +11,7 @@ import {
 	obyPostProdotti,
 	StripeKeysData,
 	obyPostDataCart,
+	NewUserData,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -29,6 +30,7 @@ async function isNodeServiceReachable() {
 export default async function callNodeService(
 	endPoint:
 		| "login"
+		| "save-new-user"
 		| "access-ecommerce"
 		| "recupero-credenziali"
 		| "stripe/get-stripe-key"
@@ -44,7 +46,8 @@ export default async function callNodeService(
 		| resetPsw
 		| StripeKeysData
 		| obyPostProdotti
-		| obyPostDataCart,
+		| obyPostDataCart
+		| NewUserData,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

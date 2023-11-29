@@ -42,9 +42,11 @@ const Step1 = ({
 	const handleCaptchaError = async () => {
 		console.log("Si prega di completare il reCAPTCHA.");
 		const textAlert = (
-			<h3>
-				<strong>Si prega di completare il reCAPTCHA.</strong>
-			</h3>
+			<React.Fragment>
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			</React.Fragment>
 		);
 		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 	};

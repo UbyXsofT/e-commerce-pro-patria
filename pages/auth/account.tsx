@@ -166,18 +166,22 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 						setInterfaceState("read");
 						const textAlert = (
-							<h3>
-								<strong>
-									Modifica dati anagrafici, avvenuta correttamente!
-								</strong>
-							</h3>
+							<React.Fragment>
+								<h3>
+									<strong>
+										Modifica dati anagrafici, avvenuta correttamente!
+									</strong>
+								</h3>
+							</React.Fragment>
 						);
 						showAlert("filled", "success", "INFO!", textAlert, true);
 					} else {
 						const textAlert = (
-							<h3>
-								<strong>{msg_Resp.ERRMSG}</strong>
-							</h3>
+							<React.Fragment>
+								<h3>
+									<strong>{msg_Resp.ERRMSG}</strong>
+								</h3>
+							</React.Fragment>
 						);
 						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 					}
@@ -252,9 +256,11 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 		const handleCaptchaError = async () => {
 			console.log("Si prega di completare il reCAPTCHA.");
 			const textAlert = (
-				<h3>
-					<strong>Si prega di completare il reCAPTCHA.</strong>
-				</h3>
+				<React.Fragment>
+					<h3>
+						<strong>Si prega di completare il reCAPTCHA.</strong>
+					</h3>
+				</React.Fragment>
 			);
 			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 		};
@@ -278,9 +284,11 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 						}
 					} else {
 						const textAlert = (
-							<h3>
-								<strong>Utente non autenticato!</strong>
-							</h3>
+							<React.Fragment>
+								<h3>
+									<strong>Utente non autenticato!</strong>
+								</h3>
+							</React.Fragment>
 						);
 						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 					}
@@ -348,9 +356,11 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const handleCaptchaError = async () => {
 		console.log("Si prega di completare il reCAPTCHA.");
 		const textAlert = (
-			<h3>
-				<strong>Si prega di completare il reCAPTCHA.</strong>
-			</h3>
+			<React.Fragment>
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			</React.Fragment>
 		);
 		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 	};

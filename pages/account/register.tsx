@@ -11,10 +11,12 @@ import "dayjs/locale/it";
 import {
 	AppBar,
 	CssBaseline,
+	Grid,
 	Paper,
 	Step,
 	StepLabel,
 	Stepper,
+	TextField,
 	Toolbar,
 	useMediaQuery,
 } from "@mui/material";
@@ -39,6 +41,8 @@ import {
 	ComunePaese,
 	PasswordSafety,
 	UserData,
+	responseCall,
+	NewUserData,
 } from "src/components/CommonTypesInterfaces";
 
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
@@ -50,6 +54,11 @@ import CodiceFiscale from "codice-fiscale-js";
 import StyledImageLogo from "src/components/utils/StyledImageLogo";
 import LayoutGeneral from "src/components/layout/LayoutGeneral";
 import { number } from "prop-types";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { setLoading } from "src/store/actions";
+import { useDispatch } from "react-redux";
+import callNodeService from "pages/api/callNodeService";
+import { fontSize } from "@mui/system";
 
 const SignUp = () => {
 	const theme = useTheme();
@@ -85,56 +94,43 @@ const SignUp = () => {
 		"Utente",
 		"Finalizza",
 	];
-
 	const [underage, setUnderage] = useState(true);
-
 	const [codiceFiscale, setCodiceFiscale] = useState("");
 	const [codiceFiscaleInvalid, setCodiceFiscaleInvalid] = useState(false);
-
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [parentCodiceFiscale, setParentCodiceFiscale] = useState("");
 	const [parentCodiceFiscaleInvalid, setParentCodiceFiscaleInvalid] =
 		useState(false);
-
 	const [parentFirstName, setParentFirstName] = useState("");
 	const [parentLastName, setParentLastName] = useState("");
-
 	const [gender, setGender] = useState<Sex>(null);
 	const [dateOfBirth, setDateOfBirth] = useState<Date>(null);
 	const [placeOfBirth, setPlaceOfBirth] = useState("");
 	const [selectedComune, setSelectedComune] =
 		useState<AutocompleteSelected>(null);
-
 	const [parentGender, setParentGender] = useState<Sex>(null);
 	const [parentDateOfBirth, setParentDateOfBirth] = useState<Date>(null);
 	const [parentSelectedComune, setParentSelectedComune] =
 		useState<AutocompleteSelected>(null);
 	const [parentPlaceOfBirth, setParentPlaceOfBirth] = useState("");
-
 	const [address, setAddress] = useState("");
 	const [comuneResidenza, setComuneResidenza] =
 		useState<AutocompleteSelected>(null);
 	const [city, setCity] = useState("");
 	const [cap, setCap] = useState("");
 	const [province, setProvince] = useState("");
-
 	const [notes, setNotes] = useState<string | undefined>(undefined);
-
 	const [parentAddress, setParentAddress] = useState("");
 	const [parentComuneResidenza, setParentComuneResidenza] =
 		useState<AutocompleteSelected>(null);
 	const [parentCity, setParentCity] = useState("");
 	const [parentCap, setParentCap] = useState("");
 	const [parentProvince, setParentProvince] = useState("");
-
 	const [email, setEmail] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("+39");
-
 	const [parentPhoneNumber, setParentPhoneNumber] = useState("+39");
-
 	const [privacy, setPrivacy] = useState(false);
-
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -143,7 +139,6 @@ const SignUp = () => {
 		detail: "",
 	});
 	const [isSamePassword, setIsSamePassword] = useState(false);
-
 	const [readyToSend, setReadyToSend] = useState<ReadyToSend>({
 		status: false,
 		data: null,
@@ -152,12 +147,11 @@ const SignUp = () => {
 		status: boolean;
 		data: UserData | null;
 	}
-
 	const [disableButton, setDisablebutton] = useState(false);
-
 	const [comuni, setComuni] = useState<ComunePaese[]>([]);
-
 	const [captcha, setCaptcha] = useState<string | null>(null);
+
+	const [showReinviaMail, setShowReinviaMail] = useState(false);
 
 	const updateUnderage = (date: Dayjs) => {
 		const minDate = dayjs().subtract(18, "year");
@@ -365,14 +359,357 @@ const SignUp = () => {
 		noSsr: false,
 	});
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (dateOfBirth) {
 			updateUnderage(dateOfBirth);
 		}
 	}, [dateOfBirth]);
 
+	const { showAlert } = useAlertMe();
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+
+	const handleCaptchaError = async () => {
+		console.log("Si prega di completare il reCAPTCHA.");
+		const textAlert = (
+			<React.Fragment>
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			</React.Fragment>
+		);
+		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+	};
+
+	const rinviaMailConferma = (myEmail) => {
+		console.log("METODO: Nuovo_Utente");
+
+		const fetchData = async () => {
+			const handleCallNodeService_Resp = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					if (msg_Resp.ESITO === 1) {
+						const textAlert = (
+							<React.Fragment>
+								<div
+									style={{
+										maxHeight:
+											"60vh" /* o qualsiasi altezza massima desiderata */,
+										overflowY: "auto",
+									}}
+								>
+									<p
+										style={{
+											fontStyle: "bold",
+											fontSize: "22px",
+										}}
+									>
+										Abbiamo inviato una nuova e-mail all'indirizzo specificato{" "}
+										{myEmail}
+									</p>
+								</div>
+							</React.Fragment>
+						);
+
+						showAlert(
+							"filled",
+							"info",
+							"INFO!",
+							textAlert,
+							true,
+							"/account/login"
+						);
+
+						//setEsito_BackEnd(true);
+					} else {
+						const textAlert = (
+							<React.Fragment>
+								<h3
+									style={{
+										maxHeight:
+											"60vh" /* o qualsiasi altezza massima desiderata */,
+										overflowY: "auto",
+									}}
+								>
+									<strong>{msg_Resp.ERRMSG}</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert(
+							"filled",
+							"error",
+							"ATTENZIONE!",
+							textAlert,
+							true,
+							"/account/login"
+						);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
+						handleSuccess({ ESITO: 1, MESSAGE: msg_Resp });
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "warning", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+			//ID OPTIONI: 0= info / vuoto = registrazione /altrimenti verifica tramite email
+			const obyPostData: NewUserData = {
+				ID: "0",
+				clienteKey: eCommerceConf.ClienteKey,
+				EMail: myEmail,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"save-new-user",
+					obyPostData,
+					null
+				);
+
+				handleCallNodeService_Resp(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captcha) {
+			handleCaptchaError();
+			return;
+		}
+		fetchData();
+	};
+
 	const sendData = (data: UserData) => {
 		console.log("YES!");
+		console.log(data);
+		console.log("METODO: Nuovo_Utente");
+		const formattedDateOfBirth = dayjs(data.user?.dateOfBirth).format(
+			"YYYY-MM-DD"
+		);
+		console.log("formattedDateOfBirth: ", formattedDateOfBirth);
+
+		const cognome = data.user?.lastName ?? "";
+		const nome = data.user?.firstName ?? "";
+		const data_Nascita = formattedDateOfBirth ?? "";
+		const luogo_Nascita = data.user?.placeOfBirth ?? "";
+		const sesso = data.user?.gender ?? "";
+		const indirizzo = data.user?.address ?? "";
+		const eMail = data.user?.email ?? "";
+		const cellulare = data.user?.phoneNumber ?? "";
+		const noteD = data.user?.notes ?? "";
+		const codFisc = data.user?.codiceFiscale ?? "";
+		const citta = data.user?.city ?? "";
+		const provincia = data.user?.province ?? "";
+		const cap = data.user?.cap ?? "";
+		const idUtente = data.user?.username ?? "";
+		const pwdUtente = data.user?.password ?? "";
+		const tipo_Prov = 4; // 1 EasyT, 2 FitonT, 3 MyiClub, 4 E-COMMERCE // @#@ ATTENZIONE PER EASY TICKET
+
+		const parent_CodFisc = data.parent?.parentCodiceFiscale ?? "";
+		const parent_Nome = data.parent?.parentFirstName ?? "";
+		const parent_Cognome = data.parent?.parentLastName ?? "";
+		const parent_Sesso = data.parent?.parentGender ?? "";
+		const parent_Data_Nascita = data.parent?.parentDateOfBirth ?? "";
+		const parent_Luogo_Nascita = data.parent?.parentPlaceOfBirth ?? "";
+		const parent_Indirizzo = data.parent?.parentAddress ?? "";
+		const parent_Citta = data.parent?.parentCity ?? "";
+		const parent_Cap = data.parent?.parentCap ?? "";
+		const parent_Provincia = data.parent?.parentProvince ?? "";
+		const parent_Cellulare = data.parent?.parentPhoneNumber ?? "";
+
+		const fetchData = async () => {
+			const handleCallNodeService_Resp = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					if (msg_Resp.ESITO === 1) {
+						const textAlert = (
+							<React.Fragment>
+								<div
+									style={{
+										maxHeight:
+											"60vh" /* o qualsiasi altezza massima desiderata */,
+										overflowY: "auto",
+									}}
+								>
+									<p
+										style={{
+											fontStyle: "normal",
+											fontSize: "22px",
+										}}
+									>
+										Grazie per avere compilato il modulo di registrazione.{" "}
+										<br />
+										<br />
+										<span style={{ fontWeight: "normal", fontSize: "18px" }}>
+											Manca un ultimo passaggio per attivare il tuo account.
+											Abbiamo inviato una mail all'indirizzo {eMail}. con le
+											indicazioni che ti consentiranno di finalizzare la
+											registrazione. <br />
+											<br /> Se non l'avessi ricevuta verifica la cartella dello
+											SPAM. Puoi richiedere un secondo invio della mail
+											cliccando il bottone{" "}
+											<span style={{ fontWeight: "bold", fontSize: "22px" }}>
+												"Email non ricevuta? Richiedi un nuovo invio"
+											</span>{" "}
+											presente nell'area inferiore della pagina di
+											registrazione.
+											<br />
+											<br /> Ricordiamo che la finalizzazione della
+											registrazione deve avvenire entro e non oltre le 23.59 di
+											oggi, diversamente dovrai procedere con una nuova
+											registrazione.
+										</span>
+									</p>
+								</div>
+							</React.Fragment>
+						);
+
+						showAlert(
+							"filled",
+							"info",
+							"INFO!",
+							textAlert,
+							true,
+							"/account/login"
+						);
+
+						//setEsito_BackEnd(true);
+					} else {
+						const textAlert = (
+							<React.Fragment>
+								<h3
+									style={{
+										maxHeight:
+											"60vh" /* o qualsiasi altezza massima desiderata */,
+										overflowY: "auto",
+									}}
+								>
+									<strong>{msg_Resp.ERRMSG}</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert(
+							"filled",
+							"error",
+							"ATTENZIONE!",
+							textAlert,
+							true,
+							"/account/login"
+						);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
+						handleSuccess({ ESITO: 1, MESSAGE: msg_Resp });
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert(
+					"filled",
+					"warning",
+					"ATTENZIONE!",
+					textAlert,
+					true,
+					"/account/login"
+				);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+			//ID OPTIONI: 0= info / vuoto = registrazione /altrimenti verifica tramite email
+			const obyPostData: NewUserData = {
+				ID: "",
+				clienteKey: eCommerceConf.ClienteKey,
+				Cognome: cognome,
+				Nome: nome,
+				Data_Nascita: data_Nascita.toString(),
+				Luogo_Nascita: luogo_Nascita,
+				Sesso: sesso,
+				Indirizzo: indirizzo,
+				EMail: eMail,
+				Cellulare: cellulare,
+				NoteD: noteD,
+				CodFisc: codFisc,
+				Citta: citta,
+				Provincia: provincia,
+				Cap: cap,
+				IDUtente: idUtente,
+				PwdUtente: pwdUtente,
+				Tipo_Prov: tipo_Prov.toString(),
+				Parent_CodFisc: parent_CodFisc,
+				Parent_Nome: parent_Nome,
+				Parent_Cognome: parent_Cognome,
+				Parent_Sesso: parent_Sesso,
+				Parent_Data_Nascita: parent_Data_Nascita.toString(),
+				Parent_Luogo_Nascita: parent_Luogo_Nascita,
+				Parent_Indirizzo: parent_Indirizzo,
+				Parent_Citta: parent_Citta,
+				Parent_Cap: parent_Cap,
+				Parent_Provincia: parent_Provincia,
+				Parent_Cellulare: parent_Cellulare,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"save-new-user",
+					obyPostData,
+					null
+				);
+
+				handleCallNodeService_Resp(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captcha) {
+			handleCaptchaError();
+			return;
+		}
+
+		fetchData();
 	};
 
 	// TODO: Handle dateOfBirth and Cap
@@ -508,6 +845,7 @@ const SignUp = () => {
 				sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
 				onChange={(token) => setCaptcha(token)}
 			/>
+
 			<Button
 				variant="contained"
 				disabled={
@@ -554,38 +892,97 @@ const SignUp = () => {
 		}
 	}, [activeStep]);
 
-	const SuccessScreen = (
-		<>
-			<Typography
-				variant="h5"
-				gutterBottom
-				sx={{ marginTop: 3 }}
-				textAlign={"center"}
+	const reinviaMailScreen = (
+		<Grid
+			container
+			spacing={2}
+		>
+			<div style={{ marginLeft: "auto", marginRight: "auto" }}>
+				<Typography
+					variant="h5"
+					gutterBottom
+					sx={{ marginTop: 3 }}
+					textAlign={"center"}
+				>
+					RICHIESTA NUOVO INVIO MAIL DI ATTIVAZIONE ACCOUNT
+				</Typography>
+				<Typography
+					variant="subtitle1"
+					gutterBottom
+					sx={{ marginBottom: 3 }}
+					textAlign={"center"}
+				>
+					Inserisci l′indirizzo mail con cui ti sei registrato:
+				</Typography>
+			</div>
+			<Grid
+				item
+				xs={12}
 			>
-				Registrazione Completata
-			</Typography>
-			<Typography
-				variant="subtitle1"
-				textAlign={"center"}
+				<TextField
+					value={email}
+					onChange={(event) => setEmail(event.target.value.trim())}
+					required
+					fullWidth
+					id="email"
+					label="Indirizzo Email"
+					name="email"
+					autoComplete="email"
+				/>
+			</Grid>
+
+			<Grid
+				item
+				xs={12}
 			>
-				Il tuo account è stato registrato con successo
-			</Typography>
-			<Button
-				fullWidth
-				variant="contained"
-				onClick={() => Router.push("/account/login")}
-				sx={{
-					mt: 3,
-					mb: 2,
-					width: 500,
-					marginLeft: "auto",
-					marginRight: "auto",
-					display: "flex",
-				}}
-			>
-				Accedi
-			</Button>
-		</>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "space-between",
+						marginTop: 3,
+					}}
+				>
+					<Link
+						onClick={() => {
+							setShowReinviaMail(false);
+						}}
+						variant="body2"
+						sx={{
+							userSelect: "none",
+							cursor: "pointer",
+							color: (theme) =>
+								theme.palette.mode === "light" ? "black" : "white",
+
+							marginRight: "auto",
+							marginTop: "auto",
+							marginBottom: "auto",
+						}}
+					>
+						Annulla
+					</Link>
+					<ReCAPTCHA
+						style={{ marginRight: "1rem" }}
+						sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+						onChange={(value) => setCaptcha(value)}
+					/>
+					<Button
+						variant="contained"
+						sx={{ mt: "auto" }}
+						onClick={() => {
+							if (!captcha) {
+								handleCaptchaError();
+								return;
+							}
+							//setDone(true);
+							rinviaMailConferma(email);
+						}}
+						disabled={!email}
+					>
+						Invia
+					</Button>
+				</div>
+			</Grid>
+		</Grid>
 	);
 
 	return (
@@ -607,72 +1004,91 @@ const SignUp = () => {
 				>
 					{/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
 					{/* TODO: Icons are not centered properly */}
-					<Stepper
-						activeStep={activeStep}
-						alternativeLabel
-					>
-						{underage
-							? underageSteps.map((label) => (
-									<Step key={label}>
-										<StepLabel>{label}</StepLabel>
-									</Step>
-							  ))
-							: steps.map((label) => (
-									<Step key={label}>
-										<StepLabel>{label}</StepLabel>
-									</Step>
-							  ))}
-					</Stepper>
-					{activeStep === (underage ? underageSteps.length : steps.length) ? (
-						SuccessScreen
+
+					{showReinviaMail === true ? (
+						reinviaMailScreen
 					) : (
-						<React.Fragment>
-							{getStepContent(activeStep)}
-							<Box
-								sx={{
-									display: "flex",
-									justifyContent: "flex-end",
-									alignContent: "space-between",
-									marginTop: "2em",
-								}}
+						<>
+							<Stepper
+								activeStep={activeStep}
+								alternativeLabel
 							>
-								{activeStep == 0 && (
-									<Link
-										onClick={() => Router.push("/account/login")}
-										variant="body2"
-										sx={{
-											userSelect: "none",
-											cursor: "pointer",
-											color: (theme) =>
-												theme.palette.mode === "light" ? "black" : "white",
-
-											marginRight: "auto",
-											marginTop: "auto",
-											marginBottom: "auto",
-										}}
-									>
-										Hai già un account? Accedi
-									</Link>
-								)}
-								{activeStep !== 0 && (
-									<Button
-										onClick={handleBack}
-										sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
-									>
-										Precedente
-									</Button>
-								)}
-
 								{underage
-									? activeStep === underageSteps.length - 1
+									? underageSteps.map((label) => (
+											<Step key={label}>
+												<StepLabel>{label}</StepLabel>
+											</Step>
+									  ))
+									: steps.map((label) => (
+											<Step key={label}>
+												<StepLabel>{label}</StepLabel>
+											</Step>
+									  ))}
+							</Stepper>
+
+							<React.Fragment>
+								{getStepContent(activeStep)}
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "flex-end",
+										alignContent: "space-between",
+										marginTop: "2em",
+									}}
+								>
+									{activeStep == 0 && (
+										<Link
+											onClick={() => Router.push("/account/login")}
+											variant="body2"
+											sx={{
+												userSelect: "none",
+												cursor: "pointer",
+												color: (theme) =>
+													theme.palette.mode === "light" ? "black" : "white",
+
+												marginRight: "auto",
+												marginTop: "auto",
+												marginBottom: "auto",
+											}}
+										>
+											Hai già un account? Accedi
+										</Link>
+									)}
+									{activeStep !== 0 && (
+										<Button
+											onClick={handleBack}
+											sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
+										>
+											Precedente
+										</Button>
+									)}
+
+									{underage
+										? activeStep === underageSteps.length - 1
+											? finalize
+											: next
+										: activeStep === steps.length - 1
 										? finalize
-										: next
-									: activeStep === steps.length - 1
-									? finalize
-									: next}
-							</Box>
-						</React.Fragment>
+										: next}
+								</Box>
+							</React.Fragment>
+						</>
 					)}
+				</Container>
+				<Container maxWidth={"md"}>
+					<Button
+						fullWidth
+						variant="contained"
+						onClick={() => setShowReinviaMail(true)}
+						sx={{
+							mt: 3,
+							mb: 2,
+							marginRight: "auto",
+							display: "flex",
+						}}
+					>
+						Email non ricevuta? Richiedi un nuovo invio
+					</Button>
 				</Container>
 			</LayoutGeneral>
 		</ThemeProvider>
