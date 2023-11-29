@@ -9,6 +9,7 @@ import {
 	Typography,
 	TextField,
 	Button,
+	Avatar,
 } from "@mui/material";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
@@ -18,6 +19,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Router, { useRouter } from "next/router";
 import CustomPopper from "src/components/utils/CustomPopper";
+import { useSelector } from "react-redux";
+import { StoreState } from "src/components/CommonTypesInterfaces";
+import AvatarName from "src/components/account/AvatarName";
 
 const menuId = "up-account-menu";
 const StyledImageLogo = styled(Image)({
@@ -264,18 +268,13 @@ export const ToolBar = ({
 							onMouseLeave={() => {
 								handlePopperClose(setUserPopper);
 							}}
-							// onMouseEnter={() => {
-							//   setTipoContesto("utente");
-							//   handleMouseEnter();
-							// }}
-							// onMouseLeave={() => {
-							//   setTipoContesto("utente");
-							//   handleMouseLeave();
-							// }}
 							color="inherit"
 						>
-							<AccountCircle />
+							{/* <AccountCircle /> */}
+
+							<AvatarName />
 						</IconButton>
+
 						<CustomPopper
 							isOpen={openUser}
 							anchorEl={userPopper}
