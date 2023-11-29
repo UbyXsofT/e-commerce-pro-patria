@@ -380,7 +380,7 @@ const SignUp = () => {
 		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 	};
 
-	const rinviaMailConferma = (myEmail) => {
+	const rinviaMailConferma = (myEmail: string) => {
 		console.log("METODO: Nuovo_Utente");
 
 		const fetchData = async () => {
@@ -476,6 +476,32 @@ const SignUp = () => {
 				ID: "0",
 				clienteKey: eCommerceConf.ClienteKey,
 				EMail: myEmail,
+				Cognome: "",
+				Nome: "",
+				Data_Nascita: "",
+				Luogo_Nascita: "",
+				Sesso: "",
+				Indirizzo: "",
+				Cellulare: "",
+				NoteD: "",
+				CodFisc: "",
+				Citta: "",
+				Provincia: "",
+				Cap: "",
+				IDUtente: "",
+				PwdUtente: "",
+				Tipo_Prov: "",
+				Parent_CodFisc: "",
+				Parent_Nome: "",
+				Parent_Cognome: "",
+				Parent_Sesso: "",
+				Parent_Data_Nascita: "",
+				Parent_Luogo_Nascita: "",
+				Parent_Indirizzo: "",
+				Parent_Citta: "",
+				Parent_Cap: "",
+				Parent_Provincia: "",
+				Parent_Cellulare: "",
 			};
 
 			try {
