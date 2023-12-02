@@ -960,12 +960,24 @@ const SignUp = () => {
 			<Grid
 				item
 				xs={12}
+				sx={{ display: "flex", flexDirection: "column" }}
 			>
+				<Box
+					sx={{
+						maxWidth: 240,
+					}}
+				>
+					<ReCAPTCHA
+						style={{ marginRight: "1rem" }}
+						sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+						onChange={(value) => setCaptcha(value)}
+					/>
+				</Box>
 				<div
 					style={{
 						display: "flex",
 						justifyContent: "space-between",
-						marginTop: 3,
+						margin: 3,
 					}}
 				>
 					<Link
@@ -986,11 +998,7 @@ const SignUp = () => {
 					>
 						Annulla
 					</Link>
-					<ReCAPTCHA
-						style={{ marginRight: "1rem" }}
-						sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-						onChange={(value) => setCaptcha(value)}
-					/>
+
 					<Button
 						variant="contained"
 						sx={{ mt: "auto" }}
@@ -1101,14 +1109,18 @@ const SignUp = () => {
 						</>
 					)}
 				</Container>
-				<Container maxWidth={"md"}>
+				<Container
+					maxWidth={"md"}
+					sx={{ mt: 3, mb: 3 }}
+				>
 					<Button
 						fullWidth
 						variant="contained"
 						onClick={() => setShowReinviaMail(true)}
 						sx={{
 							mt: 3,
-							mb: 2,
+							mb: 3,
+
 							marginRight: "auto",
 							display: "flex",
 						}}

@@ -79,13 +79,23 @@ const BlockPage = () => {
 			>
 				<div
 					id="contenitore"
-					style={{ minHeight: "calc(100vh - 400px)", paddingBottom: "20px" }}
+					style={{
+						// minHeight: "calc(100vh - 50vh)",
+						paddingBottom: "60px",
+						height:
+							"60vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+					}}
 				>
 					<Box id="main">
 						<Grid
 							container
 							component="main"
-							sx={{ height: 400 }}
+							style={{
+								// overflowY: "scroll",
+								height:
+									"40vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+								// marginBottom: "200px",
+							}}
 						>
 							<Grid
 								container
@@ -154,7 +164,7 @@ const BlockPage = () => {
 									<Typography
 										component="h3"
 										variant="h6"
-										sx={{ textAlign: "center" }}
+										sx={{ textAlign: "center", fontSize: "3vh" }}
 									>
 										{/* CONVALIDA ECOMMERCE */}
 										{titolo}
@@ -165,7 +175,10 @@ const BlockPage = () => {
 										<Typography
 											variant="h6"
 											align="center"
-											sx={{ color: "red" }}
+											sx={{
+												color: "red",
+												fontSize: "2vh", // Regola il valore in base alle tue esigenze
+											}}
 										>
 											{descrizione}
 										</Typography>
@@ -187,6 +200,7 @@ const BlockPage = () => {
 												cursor: "pointer",
 												color: (theme) =>
 													theme.palette.mode === "light" ? "black" : "white",
+												fontSize: "2vh", // Regola il valore in base alle tue esigenze
 											}}
 										>
 											{desc_azione}

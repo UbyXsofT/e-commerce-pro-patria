@@ -226,16 +226,26 @@ const Login = () => {
 				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
+
 				<div
 					id="contenitore"
-					style={{ height: "540px" }}
-					// style={{ minHeight: "calc(100vh - 340px)" }}
+					style={{
+						// minHeight: "calc(100vh - 50vh)",
+						paddingBottom: "60px",
+						height:
+							"70vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+					}}
 				>
 					<Box id="main">
 						<Grid
 							container
 							component="main"
-							sx={{ height: 400 }}
+							style={{
+								// overflowY: "scroll",
+								height:
+									"40vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+								// marginBottom: "200px",
+							}}
 						>
 							<Grid
 								container
@@ -271,6 +281,7 @@ const Login = () => {
 										fill={true}
 										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 										style={{ objectFit: "contain" }}
+										//objectFit='contain'
 										priority={true}
 									/>
 								</div>
@@ -300,9 +311,11 @@ const Login = () => {
 									>
 										<LockOutlinedIcon />
 									</Avatar>
+
 									<Typography
-										component="h3"
-										variant="h5"
+										// component="h3"
+										// variant="h5"
+										sx={{ textAlign: "center", fontSize: "3vh" }}
 									>
 										Accedi
 									</Typography>
@@ -310,7 +323,7 @@ const Login = () => {
 										component="form"
 										noValidate
 										onSubmit={handleSubmit}
-										sx={{ mt: 1 }}
+										sx={{ mt: 1, fontSize: "1vh" }}
 									>
 										<TextField
 											margin="normal"
@@ -348,28 +361,30 @@ const Login = () => {
 											margin="normal"
 										/>
 
-										<FormControlLabel
-											control={
-												<Checkbox
-													value="remember"
-													color="primary"
-													checked={ricordami}
-													onClick={() => setRicordami(!ricordami)}
-												/>
-											}
-											label="Ricordati di me"
-										/>
-
-										{/* Add the reCAPTCHA component */}
-										<Box
-											sx={{
-												maxWidth: 240,
-											}}
-										>
-											<ReCAPTCHA
-												sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-												onChange={(value) => setCaptchaValue(value)}
+										<Box sx={{ display: "flex", flexDirection: "column" }}>
+											<FormControlLabel
+												control={
+													<Checkbox
+														value="remember"
+														color="primary"
+														checked={ricordami}
+														onClick={() => setRicordami(!ricordami)}
+													/>
+												}
+												label="Ricordati di me"
 											/>
+
+											{/* Add the reCAPTCHA component */}
+											<Box
+												sx={{
+													maxWidth: 240,
+												}}
+											>
+												<ReCAPTCHA
+													sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+													onChange={(value) => setCaptchaValue(value)}
+												/>
+											</Box>
 										</Box>
 
 										<Button

@@ -39,7 +39,7 @@ import {
 	EditCalendar,
 	Handshake,
 } from "@mui/icons-material";
-import { removeFromCart } from "src/components/product/ProductCard";
+import { removeFromCart } from "src/components/product/ProductCard2";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
 
@@ -53,7 +53,6 @@ const Carrello = () => {
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const authUser = useSelector((state: StoreState) => state.authUser);
-
 
 	const user = cart.at(0);
 
@@ -90,7 +89,6 @@ const Carrello = () => {
 	};
 
 	useEffect(() => {
-		
 		let user = cart.at(0);
 		if (!user) {
 			return;
@@ -168,9 +166,8 @@ const Carrello = () => {
 			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-			
+
 			const obyPostDataCart = {
-				
 				clienteKey: eCommerceConf.ClienteKey,
 				userId: authUser?.USERID,
 				emailUser: authUser?.EMAIL,
@@ -224,7 +221,7 @@ const Carrello = () => {
 				description="This is a E-Commerce carrello page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				<Container>
+				<Container sx={{ marginBottom: "100px" }}>
 					{isCartEmpty ? (
 						<Box
 							textAlign={"center"}
@@ -264,7 +261,7 @@ const Carrello = () => {
 
 										const sconti = (
 											<Stack direction={"row"}>
-												{abbonamento.convenzione.isConv ? (
+												{/* {abbonamento.convenzione.isConv ? (
 													<Typography
 														marginBottom={3}
 														variant="h5"
@@ -362,7 +359,7 @@ const Carrello = () => {
 													</Typography>
 												) : (
 													<></>
-												)}
+												)} */}
 											</Stack>
 										);
 
@@ -376,7 +373,9 @@ const Carrello = () => {
 													>
 														<Image
 															src={
-																abbonamento.immagine ? abbonamento.immagine : ""
+																abbonamento.immagine
+																	? abbonamento.immagine
+																	: "/images/LogoQ.png"
 															}
 															alt={abbonamento.nome}
 															width={125}
@@ -388,9 +387,9 @@ const Carrello = () => {
 																<Typography variant="h6">
 																	{abbonamento.nome}
 																</Typography>
-																<Typography>
+																{/* <Typography>
 																	{abbonamento.descrizione}
-																</Typography>
+																</Typography> */}
 															</Box>
 															{prices.discountedPrice ? (
 																<Stack
@@ -439,6 +438,7 @@ const Carrello = () => {
 														{!isMobile ? sconti : <></>}
 													</Stack>
 												</ListItemText>
+
 												<IconButton
 													edge="end"
 													aria-label="delete"
@@ -459,10 +459,16 @@ const Carrello = () => {
 									<></>
 								)}
 							</List>
+
 							<Stack
 								direction={"row"}
 								spacing={2}
 								justifyContent={"space-between"}
+								style={{
+									display: "grid",
+									justifyContent: "end",
+									marginTop: "50px",
+								}}
 							>
 								<Typography variant="h5">
 									{`Totale: `}

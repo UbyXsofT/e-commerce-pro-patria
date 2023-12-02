@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { IconButton } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Router, { useRouter } from "next/router";

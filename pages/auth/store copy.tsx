@@ -51,11 +51,11 @@ export interface Centro {
 
 export const getPrice = (abbonamento: Abbonamento): number => {
 	if (abbonamento.convenzione.isConv) {
-		return 24;
+		return 24.99;
 	}
 
 	if (abbonamento.promozione.isPromo) {
-		return 20;
+		return 20.99;
 	}
 
 	return abbonamento.prezzo;
@@ -311,23 +311,14 @@ const Store = () => {
 																	gap: 0.5,
 																}}
 															>
-																{selected.map(
-																	(value) => (
-																		console.log(
-																			`key_${centroList[value].name}_${value}`
-																		),
-																		(
-																			<Chip
-																				key={`key_${centroList[value].name}_${value}`}
-																				label={
-																					centroList
-																						? centroList[value].name
-																						: ""
-																				}
-																			/>
-																		)
-																	)
-																)}
+																{selected.map((value) => (
+																	<Chip
+																		key={value}
+																		label={
+																			centroList ? centroList[value].name : ""
+																		}
+																	/>
+																))}
 															</Box>
 														)}
 														onChange={(newValue) =>
@@ -455,7 +446,12 @@ const Store = () => {
 											<div>
 												<Typography
 													variant="h4"
-													paddingBottom={2}
+													sx={{
+														// paddingBottom: 2,
+														marginBottom: 2,
+														borderBottom: 1,
+														borderColor: "grey",
+													}}
 												>
 													<WorkspacesIcon style={{ marginRight: "20px" }} />
 													{centroList[selectedCentro].name}
@@ -504,14 +500,14 @@ const Store = () => {
 														style={{
 															display: "flex",
 															gap: "3em",
-															flexWrap: "wrap",
-															justifyContent: "center",
-															alignContent: "center",
+															placeContent: "center",
+															flexDirection: "row",
+															justifyContent: "space-evenly",
 														}}
 													>
-														{filteredAbbonamenti.map((abbonamento, index) => (
+														{filteredAbbonamenti.map((abbonamento) => (
 															<ProductCard2
-																key={index}
+																key={abbonamento.id}
 																product={abbonamento}
 															/>
 														))}

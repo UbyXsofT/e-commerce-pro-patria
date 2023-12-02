@@ -585,6 +585,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							sx={{
 								padding: 3,
 								maxWidth: "350px",
+								maxHeight:
+									"50vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 								display: "flex",
 								flexDirection: "column",
 							}}
@@ -640,25 +642,6 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 									onClick={() => {
 										passwordCheck(password);
 									}}
-									// 	if (passwordCheck(password) === true) {
-									// 		if (origin === "changePassword") {
-									// 			setOrigin(null);
-
-									// 			router.push({
-									// 				pathname: "/auth/setNewPassword",
-									// 				query: { origin: "/auth/account" },
-									// 			});
-
-									// 			return;
-									// 		}
-
-									// 		setInterfaceState("modify");
-									// 		setWrongPassword(false);
-									// 	} else {
-									// 		setWrongPassword(true);
-									// 	}
-									// }}
-									// disabled={!password}
 								>
 									Autentica
 								</Button>
