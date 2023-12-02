@@ -74,7 +74,7 @@ export const ToolBar = ({
 	//TODO provo gli allert
 	const dispatch = useDispatch();
 	const cartLength = useSelector(
-		(state: StoreState) => state.cart[0].cart.length
+		(state: StoreState) => state.cart[0]?.cart.length ?? 0
 	);
 
 	React.useEffect(() => {

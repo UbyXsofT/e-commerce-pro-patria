@@ -34,6 +34,57 @@ import callNodeService from "./api/callNodeService";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 
+// export type FetchCentriResult =
+// 	| { centri: Centro[]; error: null }
+// 	| { centri: []; error: { message: string; prodotti?: unknown } };
+
+// export const fetchCentri = async (): Promise<FetchCentriResult> => {
+// 	const obyPostProdotti: obyPostProdotti = {
+// 		clienteKey: eCommerceConf.ClienteKey,
+// 		IDCliente: "CLABKM5",
+// 		IDCentro: 0,
+// 	};
+
+// 	try {
+// 		const respCall: responseCall = await callNodeService(
+// 			"prodotti",
+// 			obyPostProdotti,
+// 			null
+// 		);
+
+// 		const centri: Centro[] = [
+// 			{
+// 				id: 0,
+// 				name: "CORSI PRESSO LA SEDE PRINCIPALE",
+// 				subscriptions: respCall.messageCli.message.prodotti,
+// 				principale: true,
+// 			},
+// 			{
+// 				id: 1,
+// 				name: "CORSI FUORI SEDE",
+// 				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+// 			},
+// 			{
+// 				id: 2,
+// 				name: "Terzo",
+// 				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
+// 			},
+// 		];
+
+// 		return { centri, error: null };
+// 	} catch (error) {
+// 		console.error(error);
+
+// 		return {
+// 			centri: [],
+// 			error: {
+// 				message: "An error occurred",
+// 				prodotti: undefined, // o qualunque valore di default desiderato
+// 			},
+// 		};
+// 	}
+// };
+
 export const fetchCentri = async (): Promise<{
 	centri: Centro[];
 	error: null | unknown;

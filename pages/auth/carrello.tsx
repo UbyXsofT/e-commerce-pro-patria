@@ -116,7 +116,7 @@ const Carrello = () => {
 				Ci scusiamo per l'inconveniente e faremo del
 				nostro meglio per risolvere la situazione al più presto.`;
 				try {
-					if (msg_Resp.successCli.url) {
+					if (msg_Resp.successCli) {
 						window.location.href = msg_Resp.messageCli.url;
 					} else {
 						//ERROR data
