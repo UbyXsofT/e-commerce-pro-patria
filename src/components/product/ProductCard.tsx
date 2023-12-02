@@ -1,15 +1,24 @@
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
-import {
-	Button,
-	Card,
-	CardActions,
-	CardContent,
-	IconButton,
-	Tooltip,
-	Typography,
-} from "@mui/material";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
 	Abbonamento,
 	Cart,
@@ -20,6 +29,22 @@ import { setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { renderPrice } from "pages/auth/carrello";
+import { Button, Tooltip } from "@mui/material";
+
+interface ExpandMoreProps extends IconButtonProps {
+	expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+	const { expand, ...other } = props;
+	return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+	transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+	marginLeft: "auto",
+	transition: theme.transitions.create("transform", {
+		duration: theme.transitions.duration.shortest,
+	}),
+}));
 
 interface ProductCardProps {
 	product: Abbonamento;
@@ -47,12 +72,40 @@ export const removeFromCart = (
 	dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
 };
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard2 = ({ product }: ProductCardProps) => {
+	const [expanded, setExpanded] = React.useState(false);
+	const handleExpandClick = () => {
+		// setExpanded(!expanded);
+		setExpanded(!expanded);
+		// if (cardRef.current && !expanded) {
+		// 	const cardHeight = cardRef.current.scrollHeight;
+		// 	cardRef.current.style.maxHeight = `${cardHeight}px`;
+		// }
+	};
+
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
-
 	const cart = useSelector((state: StoreState) => state.cart);
-
 	const dispatch = useDispatch();
+
+	const [descProdSmall, setDescProdSmall] = React.useState("");
+	const [descProdFull, setDescProdFull] = React.useState("");
+	const maxLengthSmallDescProd = 250;
+
+	const uniqueCollapseId = `collapse_${product.id}`;
+	const uniqueCardId = `card_${product.id}`;
+
+	// const cardRef = useRef<HTMLDivElement | null>(null);
+
+	// Misura l'altezza del testo non espanso e applica l'altezza alla card
+	// useEffect(() => {
+	// 	if (cardRef.current && !expanded) {
+	// 		console.log("uniqueCardId: ", uniqueCardId);
+	// 		console.log("cardRef: ", cardRef);
+	// 		const cardHeight = cardRef.current.offsetHeight;
+	// 		console.log("offsetHeight: ", cardHeight);
+	// 		cardRef.current.style.maxHeight = `${cardHeight}px`;
+	// 	}
+	// }, [expanded]);
 
 	useEffect(() => {
 		if (product.promozione.isPromo) {
@@ -60,7 +113,32 @@ const ProductCard = ({ product }: ProductCardProps) => {
 		} else if (product.convenzione.isConv) {
 			setDiscountedPrice(24.99);
 		}
-	}, []);
+
+		if (product.descrizione.length > maxLengthSmallDescProd) {
+			// Trova l'ultima occorrenza di uno spazio prima della posizione massima
+			const lastSpaceIndex = product.descrizione.lastIndexOf(
+				" ",
+				maxLengthSmallDescProd
+			);
+
+			// Verifica se uno spazio è stato trovato
+			if (lastSpaceIndex !== -1) {
+				// Suddividi il testo alla fine della parola trovata
+				setDescProdSmall(product.descrizione.substring(0, lastSpaceIndex));
+				setDescProdFull(product.descrizione.substring(lastSpaceIndex + 1));
+			} else {
+				// Se non è stato trovato uno spazio, usa la posizione massima
+				setDescProdSmall(
+					product.descrizione.substring(0, maxLengthSmallDescProd)
+				);
+				setDescProdFull(product.descrizione.substring(maxLengthSmallDescProd));
+			}
+		} else {
+			// Se la lunghezza del testo è inferiore alla lunghezza massima, non è necessario suddividerlo
+			setDescProdSmall(product.descrizione);
+			setDescProdFull("");
+		}
+	}, [product.descrizione]);
 
 	const addToCart = (abbonamento: Abbonamento): void => {
 		const configurableAbbonamento: CartAbbonamento = {
@@ -110,23 +188,45 @@ const ProductCard = ({ product }: ProductCardProps) => {
 	};
 
 	return (
-		<Card sx={{ padding: 1 }}>
-			<CardContent>
-				<span
-					style={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-						height: "64px",
-					}}
-				>
-					<Typography
-						marginBottom={3}
-						variant="h5"
+		<Card
+			// ref={cardRef}
+			sx={{
+				maxWidth: 345,
+				minWidth: 300,
+			}}
+			// key={uniqueCardId}
+		>
+			<CardMedia
+				component="img"
+				image={product.immagine ? product.immagine : "/images/LogoQ.png"}
+				alt={product.nome}
+				height={260}
+				style={{
+					borderRadius: 5,
+					objectFit: product.immagine ? "cover" : "contain",
+				}}
+			/>
+
+			<CardHeader
+				sx={{ minHeight: "160px" }}
+				// avatar={
+				// 	<Avatar
+				// 		sx={{ bgcolor: red[500] }}
+				// 		aria-label="recipe"
+				// 	>
+				// 		R
+				// 	</Avatar>
+				// }
+				action={
+					<span
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							height: "64px",
+						}}
 					>
-						{product.nome}
-					</Typography>
-					<span style={{ display: "flex" }}>
+						{/* <MoreVertIcon /> */}
 						{product.convenzione.isConv ? (
 							<Typography
 								marginBottom={3}
@@ -212,79 +312,136 @@ const ProductCard = ({ product }: ProductCardProps) => {
 							<></>
 						)}
 					</span>
-				</span>
-
-				<Image
-					src={product.immagine ? product.immagine : ""}
-					alt={product.nome}
-					width={250}
-					height={250}
-					style={{ borderRadius: 5 }}
-				/>
-				{discountedPrice ? (
-					<span
-						style={{
-							display: "grid",
-							padding: "1em",
-							gridTemplateColumns: "1fr 1fr 1fr",
-							gap: 3,
-						}}
-					>
-						<Typography
-							variant="h5"
-							textAlign={"center"}
-							color={"grey"}
+				}
+				title={product.nome}
+				// subheader="September 14, 2016"
+			></CardHeader>
+			<CardContent sx={{ minHeight: "150px" }}>
+				<Typography
+					variant="body2"
+					color="text.secondary"
+				>
+					{descProdSmall}
+				</Typography>
+			</CardContent>
+			<div>
+				<CardActions disableSpacing>
+					{discountedPrice ? (
+						<span
 							style={{
-								position: "relative",
+								display: "grid",
+								padding: "1em",
+								gridTemplateColumns: "1fr 1fr",
+								gap: 4,
 							}}
 						>
-							{renderPrice(product.prezzo)}€
-							<span
+							<Typography
+								variant="h5"
+								textAlign={"center"}
+								color={"grey"}
 								style={{
-									position: "absolute",
-									top: "50%",
-									left: "50%",
-									transform: "translate(-50%, -50%) rotate(-20deg)",
-									background: "red",
-									width: "100%",
-									height: "2px",
+									position: "relative",
 								}}
-							></span>
-						</Typography>
+							>
+								{renderPrice(product.prezzo)}€
+								<span
+									style={{
+										position: "absolute",
+										top: "50%",
+										left: "50%",
+										transform: "translate(-50%, -50%) rotate(-20deg)",
+										background: "red",
+										width: "100%",
+										height: "2px",
+									}}
+								></span>
+							</Typography>
+							<Typography
+								variant="h5"
+								textAlign={"center"}
+								color={"green"}
+							>
+								{renderPrice(discountedPrice)}€
+							</Typography>
+						</span>
+					) : (
 						<Typography
 							variant="h5"
 							textAlign={"center"}
-							color={"green"}
+							padding={"1rem"}
 						>
-							{renderPrice(discountedPrice)}€
+							{renderPrice(product.prezzo)}€
 						</Typography>
-					</span>
-				) : (
-					<Typography
-						variant="h5"
-						textAlign={"center"}
-						padding={"1rem"}
-					>
-						{renderPrice(product.prezzo)}€
-					</Typography>
-				)}
+					)}
 
-				<Typography>{product.descrizione}</Typography>
-			</CardContent>
-			<CardActions sx={{ justifyContent: "center" }}>
-				<Button
-					onClick={() =>
-						isInCart(product)
-							? removeFromCart(product, cart, dispatch)
-							: addToCart(product)
-					}
-					variant="contained"
+					{/* {descProdFull.length > 0 ? (
+						<ExpandMore
+							expand={expanded}
+							onClick={handleExpandClick}
+							aria-expanded={expanded}
+							aria-label="mostra di più"
+							style={{ fontSize: "12px" }}
+						>
+							Scheda completa
+							<MoreHorizIcon />
+						</ExpandMore>
+					) : (
+						<></>
+					)} */}
+				</CardActions>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						marginBottom: "30px",
+						bottom: 0,
+						position: "relative",
+					}}
 				>
-					{isInCart(product) ? "Rimuovi dal Carrello" : "Aggiungi Al Carrello"}
-				</Button>
-			</CardActions>
+					<Button
+						onClick={() =>
+							isInCart(product)
+								? removeFromCart(product, cart, dispatch)
+								: addToCart(product)
+						}
+						variant="contained"
+					>
+						<ShoppingCartIcon style={{ marginRight: 20 }} />
+						{isInCart(product)
+							? "Rimuovi dal Carrello"
+							: "Aggiungi Al Carrello"}
+					</Button>
+				</div>
+			</div>
+
+			<Typography
+				variant="body2"
+				color="text.secondary"
+				style={{
+					display: "flex",
+					flexDirection: "row",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				Visualizza scheda completa prodotto
+				<IconButton>
+					<MoreHorizIcon />
+				</IconButton>
+			</Typography>
+
+			{/* <Collapse
+				in={expanded}
+				timeout="auto"
+				unmountOnExit
+				key={uniqueCollapseId}
+			>
+				<CardContent>
+					<Typography paragraph>{descProdFull}</Typography>
+				</CardContent>
+			</Collapse> */}
 		</Card>
 	);
 };
 
-export default ProductCard;
+export default ProductCard2;

@@ -54,13 +54,13 @@ export const fetchCentri = async (): Promise<{
 		const centri: Centro[] = [
 			{
 				id: 0,
-				name: "Principale",
+				name: "CORSI PRESSO LA SEDE PRINCIPALE",
 				subscriptions: respCall.messageCli.message.prodotti,
 				principale: true,
 			},
 			{
 				id: 1,
-				name: "Secondario",
+				name: "CORSI FUORI SEDE",
 				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
 			},
 			{

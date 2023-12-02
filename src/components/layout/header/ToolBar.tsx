@@ -19,7 +19,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Router, { useRouter } from "next/router";
 import CustomPopper from "src/components/utils/CustomPopper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "src/components/CommonTypesInterfaces";
 import AvatarName from "src/components/account/AvatarName";
 
@@ -69,6 +69,17 @@ export const ToolBar = ({
 		React.useState<null | HTMLElement>(null);
 	const [cartPopper, setCartPopper] = React.useState<null | HTMLElement>(null);
 	const [userPopper, setUserPopper] = React.useState<null | HTMLElement>(null);
+
+	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
+	//TODO provo gli allert
+	const dispatch = useDispatch();
+	const cartLength = useSelector(
+		(state: StoreState) => state.cart[0].cart.length
+	);
+
+	React.useEffect(() => {
+		setCartAlertsNum(cartLength);
+	}, [dispatch, cartLength]);
 
 	const router = useRouter();
 
@@ -223,8 +234,8 @@ export const ToolBar = ({
 						<IconButton
 							size="large"
 							aria-label={
-								cartAlerts !== 0
-									? `${cartAlerts} elementi nel Carrello`
+								cartAlertsNum !== 0
+									? `${cartAlertsNum} elementi nel Carrello`
 									: "Il Carrello è Vuoto"
 							}
 							color="inherit"
@@ -245,7 +256,7 @@ export const ToolBar = ({
 							// }}
 						>
 							<Badge
-								badgeContent={cartAlerts}
+								badgeContent={cartAlertsNum}
 								color="error"
 							>
 								<ShoppingCartIcon />

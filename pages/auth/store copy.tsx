@@ -36,7 +36,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 // import ProductCard from "src/components/product/ProductCard";
-import ProductCard2 from "src/components/product/ProductCard2";
+import ProductCard from "src/components/product/ProductCard";
 import { Box, Stack } from "@mui/system";
 import { Search } from "@mui/icons-material";
 import { fetchCentri } from "pages/_app";
@@ -506,7 +506,7 @@ const Store = () => {
 														}}
 													>
 														{filteredAbbonamenti.map((abbonamento) => (
-															<ProductCard2
+															<ProductCard
 																key={abbonamento.id}
 																product={abbonamento}
 															/>
