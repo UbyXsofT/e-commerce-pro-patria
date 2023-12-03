@@ -42,6 +42,7 @@ import {
 import { removeFromCart } from "src/components/product/ProductCard";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
+import chiaveRandom from "src/components/utils/chiaveRandom";
 
 export const renderPrice = (price: number): string =>
 	price.toString().replace(".", ",");
@@ -53,9 +54,7 @@ const Carrello = () => {
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const authUser = useSelector((state: StoreState) => state.authUser);
-
 	const user = cart.at(0);
-
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 
 	type TotalPrice = {
@@ -259,112 +258,8 @@ const Carrello = () => {
 									user.cart.map((abbonamento) => {
 										const prices = getPrices(abbonamento);
 
-										const sconti = (
-											<Stack direction={"row"}>
-												{/* {abbonamento.convenzione.isConv ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Convenzione
-																	</Typography>
-																	<Typography variant="subtitle2">
-																		{abbonamento.convenzione.descConve}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<Handshake color="success" />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)}
-												{abbonamento.promozione.isPromo ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Promozione
-																	</Typography>
-																	<Typography variant="subtitle2">
-																		{abbonamento.promozione.descPromo}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<Discount color="success" />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)}
-												{abbonamento.sceltaOrari.isOrari ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Orario Configurabile <br />
-																	</Typography>
-																	<Typography variant="h6">
-																		{`${abbonamento.sceltaOrari.daOrari} - ${abbonamento.sceltaOrari.aOrari}`}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<EditCalendar />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)} */}
-											</Stack>
-										);
-
 										return (
-											<ListItem>
+											<ListItem key={chiaveRandom()}>
 												<ListItemText>
 													<Stack
 														alignItems={"center"}
@@ -387,9 +282,6 @@ const Carrello = () => {
 																<Typography variant="h6">
 																	{abbonamento.nome}
 																</Typography>
-																{/* <Typography>
-																	{abbonamento.descrizione}
-																</Typography> */}
 															</Box>
 															{prices.discountedPrice ? (
 																<Stack
@@ -433,9 +325,7 @@ const Carrello = () => {
 																	</strong>
 																</Typography>
 															)}
-															{isMobile ? sconti : <></>}
 														</Stack>
-														{!isMobile ? sconti : <></>}
 													</Stack>
 												</ListItemText>
 

@@ -13,6 +13,7 @@ import {
 	InputLabel,
 	ListSubheader,
 	MenuItem,
+	NativeSelect,
 	Select,
 	SelectChangeEvent,
 	Slider,
@@ -41,6 +42,7 @@ import { Box, Stack } from "@mui/system";
 import { Search } from "@mui/icons-material";
 import { fetchCentri } from "pages/_app";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
+import chiaveRandom from "src/components/utils/chiaveRandom";
 
 export interface Centro {
 	id: number;
@@ -85,15 +87,17 @@ const Store = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const router = useRouter();
-
 	const centri = useSelector((state: StoreState) => state.centri);
-
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
 	const [centroList, setCentroList] = useState<undefined | Centro[]>(undefined);
-	const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
-		undefined
-	);
+	// const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
+	// 	undefined
+	// );
+
+	const [selectedCentro, setSelectedCentro] = useState<number>(0);
+	const [isAllSelectCenter, setIsAllSelectCenter] = React.useState(false);
+
+	let filteredAbbonamenti = "";
 
 	const [minMax, setMinMax] = useState<{
 		min: number | undefined;
@@ -172,13 +176,15 @@ const Store = () => {
 		}
 
 		setCentroList(centri.centri);
-		selectAll(centri.centri.length);
+		//selectAll(centri.centri.length);
 
 		let minMax = calculateMinMax(centri.centri);
 
 		setMinMax(minMax);
 		setPriceRange([minMax.min, minMax.max]);
 		setPlaceholder(findRandomString(centri.centri));
+
+		//filteredAbbonamenti = centroList[selectedCentro].subscriptions;
 	}, [centri]);
 
 	const updateSelectedCentro = (newValue: SelectChangeEvent<number[]>) => {
@@ -229,6 +235,16 @@ const Store = () => {
 				) : (
 					<div>
 						<Grid
+							item
+							xs={12}
+							md={12}
+							lg={12}
+						>
+							<Typography variant="h4">
+								<strong>Lista Prodotti</strong>
+							</Typography>
+						</Grid>
+						<Grid
 							container
 							justifyContent={"space-between"}
 							spacing={2}
@@ -236,18 +252,8 @@ const Store = () => {
 							<Grid
 								item
 								xs={12}
-								md={12}
-								lg={4}
-							>
-								<Typography variant="h4">
-									<strong>Lista Prodotti</strong>
-								</Typography>
-							</Grid>
-							<Grid
-								item
-								xs={12}
-								md={6}
-								lg={4}
+								md={3}
+								lg={3}
 							>
 								<TextField
 									fullWidth
@@ -270,20 +276,21 @@ const Store = () => {
 								container
 								item
 								xs={12}
-								md={6}
-								lg={4}
+								md={8}
+								lg={8}
 							>
-								{selectedCentri !== undefined ? (
+								{selectedCentro !== undefined ? (
 									<Grid
 										item
 										container
 										spacing={2}
 									>
-										<Grid
+										{/* <Grid
 											container
 											item
+											xs={12}
 											md={12}
-											lg={6}
+											lg={8}
 										>
 											<Grid item>
 												<Button
@@ -311,52 +318,95 @@ const Store = () => {
 																	gap: 0.5,
 																}}
 															>
-																{selected.map(
-																	(value) => (
-																		console.log(
-																			`key_${centroList[value].name}_${value}`
-																		),
-																		(
-																			<Chip
-																				key={`key_${centroList[value].name}_${value}`}
-																				label={
-																					centroList
-																						? centroList[value].name
-																						: ""
-																				}
-																			/>
-																		)
-																	)
-																)}
+																{selected.map((value, index) => (
+																	<Chip
+																		key={chiaveRandom()}
+																		label={
+																			centroList ? centroList[value].name : ""
+																		}
+																	/>
+																))}
 															</Box>
 														)}
 														onChange={(newValue) =>
 															updateSelectedCentro(newValue)
 														}
 													>
-														<ListSubheader>In Sede</ListSubheader>
-														{centroList
-															?.filter((centro) => centro.principale)
-															.map((centro) => (
-																<MenuItem value={centro.id}>
-																	{centro.name}
-																</MenuItem>
-															))}
-														<ListSubheader>Fuori Sede</ListSubheader>
-														{centroList
-															?.filter(
-																(centro) => centro.principale === undefined
-															)
-															.map((centro) => (
-																<MenuItem value={centro.id}>
-																	{centro.name}
-																</MenuItem>
-															))}
+														{centroList?.map((centro) => (
+															<MenuItem
+																key={chiaveRandom()}
+																value={centro.id}
+															>
+																{centro.name}
+															</MenuItem>
+														))}
 													</Select>
 												</FormControl>
 											</Grid>
-										</Grid>
+										</Grid> */}
+
 										<Grid
+											container
+											item
+											xs={12}
+											md={12}
+											lg={8}
+										>
+											<Grid
+												container
+												item
+												xs={12}
+												md={12}
+												lg={8}
+											>
+												{/* <Grid item>
+													<FormControlLabel
+														control={
+															<Checkbox
+																checked={isAllSelectCenter}
+																onChange={() => {
+																	setIsAllSelectCenter(!isAllSelectCenter);
+																	selectAll();
+																}}
+															/>
+														}
+														label="Tutti"
+													/>
+												</Grid> */}
+												<Grid item>
+													<FormControl fullWidth>
+														<InputLabel
+															variant="standard"
+															htmlFor="uncontrolled-native"
+														>
+															Seleziona Centro:
+														</InputLabel>
+
+														<NativeSelect
+															inputProps={{
+																name: "centro",
+																id: "uncontrolled-native",
+															}}
+															onChange={(event) => {
+																alert(event.target.value);
+																setSelectedCentro(event.target.value);
+															}}
+														>
+															{centroList?.map((centro) => (
+																<option
+																	key={centro.id}
+																	value={centro.id}
+																>
+																	{centro.name}
+																</option>
+															))}
+														</NativeSelect>
+													</FormControl>
+												</Grid>
+											</Grid>
+										</Grid>
+
+										{/* <Grid
 											container
 											item
 											md={12}
@@ -404,7 +454,7 @@ const Store = () => {
 													<Typography>{`${minMax.max}€`}</Typography>
 												</Stack>
 											</Grid>
-										</Grid>
+										</Grid> */}
 									</Grid>
 								) : (
 									<></>
@@ -425,104 +475,91 @@ const Store = () => {
 									alignContent: "center",
 								}}
 							>
-								{selectedCentri !== undefined ? (
-									selectedCentri.map((selectedCentro) => {
-										let filteredAbbonamenti = centroList[
-											selectedCentro
-										].subscriptions
-											.filter((abbonamento) => {
-												if (isInRange(getPrice(abbonamento), priceRange)) {
-													return abbonamento;
-												}
-											})
-											.filter((abbonamento) => {
-												if (
-													abbonamento.nome.search(new RegExp(search, "i")) !==
-													-1
-												) {
-													return abbonamento;
-												}
-											});
+								{/* .filter((abbonamento) => {
+										 	if (isInRange(getPrice(abbonamento), priceRange)) {
+										 		return abbonamento;
+										 	}
+										 })
+										 .filter((abbonamento) => {
+										 	if (
+										 		abbonamento.nome.search(new RegExp(search, "i")) !==
+										 		-1
+										 	) {
+										 		return abbonamento;
+										 	}
+										 });
 
-										if (orderByPrice) {
-											filteredAbbonamenti.sort(
-												(abbonamento1, abbonamento2) =>
-													getPrice(abbonamento1) - getPrice(abbonamento2)
-											);
-										}
+										 if (orderByPrice) {
+										 	filteredAbbonamenti.sort(
+										 		(abbonamento1, abbonamento2) =>
+										 			getPrice(abbonamento1) - getPrice(abbonamento2)
+										 	);
+										 } */}
 
-										return (
-											<div>
+								<div key={chiaveRandom()}>
+									<Typography
+										variant="h4"
+										paddingBottom={2}
+									>
+										<WorkspacesIcon style={{ marginRight: "20px" }} />
+										{centroList[selectedCentro].name}
+									</Typography>
+									{filteredAbbonamenti.length === 0 ? (
+										<Card sx={{ width: isMobile ? "auto" : 510, height: 510 }}>
+											<CardContent
+												sx={{
+													height: "100%",
+													display: "flex",
+													justifyContent: "center",
+													alignItems: "center",
+													flexDirection: "column",
+												}}
+											>
 												<Typography
-													variant="h4"
-													paddingBottom={2}
+													textAlign={"center"}
+													variant="h5"
 												>
-													<WorkspacesIcon style={{ marginRight: "20px" }} />
-													{centroList[selectedCentro].name}
+													Nessun Abbonamento tra i
 												</Typography>
-												{filteredAbbonamenti.length === 0 ? (
-													<Card
-														sx={{ width: isMobile ? "auto" : 510, height: 510 }}
+												<Typography
+													textAlign={"center"}
+													variant="h5"
+													gutterBottom
+												>
+													<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
+												</Typography>
+												{search !== "" ? (
+													<Typography
+														textAlign={"center"}
+														variant="h5"
 													>
-														<CardContent
-															sx={{
-																height: "100%",
-																display: "flex",
-																justifyContent: "center",
-																alignItems: "center",
-																flexDirection: "column",
-															}}
-														>
-															<Typography
-																textAlign={"center"}
-																variant="h5"
-															>
-																Nessun Abbonamento tra i
-															</Typography>
-															<Typography
-																textAlign={"center"}
-																variant="h5"
-																gutterBottom
-															>
-																<strong>{`${priceRange[0]}€ - ${priceRange[1]}€`}</strong>
-															</Typography>
-															{search !== "" ? (
-																<Typography
-																	textAlign={"center"}
-																	variant="h5"
-																>
-																	Contenente
-																	<strong> {search}</strong>
-																</Typography>
-															) : (
-																<></>
-															)}
-														</CardContent>
-													</Card>
+														Contenente
+														<strong> {search}</strong>
+													</Typography>
 												) : (
-													<div
-														style={{
-															display: "flex",
-															gap: "3em",
-															flexWrap: "wrap",
-															justifyContent: "center",
-															alignContent: "center",
-														}}
-													>
-														{filteredAbbonamenti.map((abbonamento, index) => (
-															<ProductCard
-																key={index}
-																product={abbonamento}
-															/>
-														))}
-													</div>
+													<></>
 												)}
-											</div>
-										);
-									})
-								) : (
-									<p>Nessun Centro</p>
-								)}
+											</CardContent>
+										</Card>
+									) : (
+										<div
+											style={{
+												display: "flex",
+												gap: "3em",
+												flexWrap: "wrap",
+												justifyContent: "center",
+												alignContent: "center",
+											}}
+										>
+											{filteredAbbonamenti.map((abbonamento, index) => (
+												<ProductCard
+													key={chiaveRandom()}
+													product={abbonamento}
+												/>
+											))}
+										</div>
+									)}
+								</div>
 							</div>
 						)}
 					</div>

@@ -105,19 +105,19 @@ export const fetchCentri = async (): Promise<{
 		const centri: Centro[] = [
 			{
 				id: 0,
-				name: "CORSI PRESSO LA SEDE PRINCIPALE",
+				name: "TUTTI",
 				subscriptions: respCall.messageCli.message.prodotti,
 				principale: true,
 			},
 			{
 				id: 1,
-				name: "CORSI FUORI SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+				name: "CORSI IN SEDE",
+				subscriptions: respCall.messageCli.message.prodotti,
 			},
 			{
 				id: 2,
-				name: "Terzo",
-				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
+				name: "CORSI FUORI SEDE",
+				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
 			},
 		];
 

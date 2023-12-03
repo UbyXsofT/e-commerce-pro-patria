@@ -5,20 +5,13 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
 	Abbonamento,
 	Cart,
@@ -73,16 +66,6 @@ export const removeFromCart = (
 };
 
 const ProductCard2 = ({ product }: ProductCardProps) => {
-	const [expanded, setExpanded] = React.useState(false);
-	const handleExpandClick = () => {
-		// setExpanded(!expanded);
-		setExpanded(!expanded);
-		// if (cardRef.current && !expanded) {
-		// 	const cardHeight = cardRef.current.scrollHeight;
-		// 	cardRef.current.style.maxHeight = `${cardHeight}px`;
-		// }
-	};
-
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
 	const cart = useSelector((state: StoreState) => state.cart);
 	const dispatch = useDispatch();
@@ -91,21 +74,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 	const [descProdFull, setDescProdFull] = React.useState("");
 	const maxLengthSmallDescProd = 250;
 
-	const uniqueCollapseId = `collapse_${product.id}`;
-	const uniqueCardId = `card_${product.id}`;
-
-	// const cardRef = useRef<HTMLDivElement | null>(null);
-
-	// Misura l'altezza del testo non espanso e applica l'altezza alla card
-	// useEffect(() => {
-	// 	if (cardRef.current && !expanded) {
-	// 		console.log("uniqueCardId: ", uniqueCardId);
-	// 		console.log("cardRef: ", cardRef);
-	// 		const cardHeight = cardRef.current.offsetHeight;
-	// 		console.log("offsetHeight: ", cardHeight);
-	// 		cardRef.current.style.maxHeight = `${cardHeight}px`;
-	// 	}
-	// }, [expanded]);
+	const authUser = useSelector((state: StoreState) => state.authUser);
 
 	useEffect(() => {
 		if (product.promozione.isPromo) {
@@ -152,7 +121,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 			? dispatch(
 					setCart([
 						{
-							userId: "todo",
+							userId: authUser?.USERID ?? "null",
 							cart: [...user.cart, configurableAbbonamento],
 						},
 					])
@@ -160,7 +129,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 			: dispatch(
 					setCart([
 						{
-							userId: "todo",
+							userId: authUser?.USERID ?? "null",
 							cart: [configurableAbbonamento],
 						},
 					])
@@ -209,14 +178,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 
 			<CardHeader
 				sx={{ minHeight: "160px" }}
-				// avatar={
-				// 	<Avatar
-				// 		sx={{ bgcolor: red[500] }}
-				// 		aria-label="recipe"
-				// 	>
-				// 		R
-				// 	</Avatar>
-				// }
 				action={
 					<span
 						style={{
@@ -226,7 +187,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 							height: "64px",
 						}}
 					>
-						{/* <MoreVertIcon /> */}
 						{product.convenzione.isConv ? (
 							<Typography
 								marginBottom={3}
@@ -314,7 +274,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 					</span>
 				}
 				title={product.nome}
-				// subheader="September 14, 2016"
 			></CardHeader>
 			<CardContent sx={{ minHeight: "150px" }}>
 				<Typography
@@ -373,21 +332,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 							{renderPrice(product.prezzo)}€
 						</Typography>
 					)}
-
-					{/* {descProdFull.length > 0 ? (
-						<ExpandMore
-							expand={expanded}
-							onClick={handleExpandClick}
-							aria-expanded={expanded}
-							aria-label="mostra di più"
-							style={{ fontSize: "12px" }}
-						>
-							Scheda completa
-							<MoreHorizIcon />
-						</ExpandMore>
-					) : (
-						<></>
-					)} */}
 				</CardActions>
 				<div
 					style={{
@@ -429,17 +373,6 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 					<MoreHorizIcon />
 				</IconButton>
 			</Typography>
-
-			{/* <Collapse
-				in={expanded}
-				timeout="auto"
-				unmountOnExit
-				key={uniqueCollapseId}
-			>
-				<CardContent>
-					<Typography paragraph>{descProdFull}</Typography>
-				</CardContent>
-			</Collapse> */}
 		</Card>
 	);
 };
