@@ -6,6 +6,9 @@ import Image from "next/image";
 import { useState } from "react";
 import Step1 from "src/components/account/setNewPassword/Step1";
 import Step2 from "src/components/account/setNewPassword/Step2";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
+import eCommerceConf from "eCommerceConf.json";
+import { useRouter } from "next/router";
 
 const StyledImageLogo = styled(Image)({
 	padding: "10px",
@@ -15,49 +18,27 @@ const StyledImageLogo = styled(Image)({
 const setNewPassword = () => {
 	const theme = useTheme();
 
+	const router = useRouter();
+
 	const [done, setDone] = useState(false);
 
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-	const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
-		noSsr: false,
-	});
+	const smUp = useMediaQuery(theme.breakpoints.up("sm"));
+	const { origin } = router.query;
 
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			{/* <Layout
-    //digitare il titolo della pagina e la descrizione della pagina.
-    title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-    description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
-  > */}
-			<AppBar
-				position="static"
-				sx={{
-					backgroundColor: (
-						theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
-							backgroundColor?: string;
-						}
-					)?.backgroundColor,
-				}}
+
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Modifica password | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce password change, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<Container sx={{ display: "flex", alignItems: "center" }}>
-					<Toolbar>
-						<StyledImageLogo
-							src="/images/LogoO.png"
-							alt="Logo"
-							width={200}
-							height={70}
-							priority={true}
-						/>
-					</Toolbar>
-				</Container>
-			</AppBar>
-			{done ? (
-				<Step2 smUp={smUp} />
-			) : (
 				<Step1
+					origin={origin}
 					smUp={smUp}
 					setDone={setDone}
 					newPassword={newPassword}
@@ -65,7 +46,7 @@ const setNewPassword = () => {
 					confirmNewPassword={confirmNewPassword}
 					setConfirmNewPassword={setConfirmNewPassword}
 				/>
-			)}
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

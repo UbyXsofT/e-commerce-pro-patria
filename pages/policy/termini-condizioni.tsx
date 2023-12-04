@@ -32,6 +32,7 @@ import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import CookieManager from "../../src/components/cookie/CookieManager";
 import { ContactPageOutlined } from "@mui/icons-material";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
 //*-- API---*//
 
 type TerminiCondizioniProps = {
@@ -58,12 +59,12 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Layout
-			//digitare il titolo della pagina e la descrizione della pagina.
-			// title={`Condizioni Generali di Uso e Vendita | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-			// description="This is a E-Commerce Info-Privacy page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Registrati | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce register page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<div>
+				<div style={{ padding: 60 }}>
 					<Typography
 						variant="h5"
 						component="h5"
@@ -82,8 +83,9 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Typography>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
+						sx={{ mt: 7 }}
 					>
 						1. Uso del Sito
 					</Typography>
@@ -111,7 +113,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Box>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
 					>
 						2. Account Utente
@@ -134,7 +136,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Box>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
 						gutterBottom
 					>
@@ -169,7 +171,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Box>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
 						gutterBottom
 					>
@@ -193,7 +195,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Box>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
 					>
 						5. Modifiche alle Condizioni
@@ -210,7 +212,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 					</Box>
 
 					<Typography
-						variant="h5"
+						variant="h6"
 						component="h3"
 					>
 						6. Legge Applicabile e Foro Competente
@@ -226,7 +228,7 @@ const TerminiCondizioni = ({ setLoading }: TerminiCondizioniProps) => {
 						</List>
 					</Box>
 				</div>
-			</Layout>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

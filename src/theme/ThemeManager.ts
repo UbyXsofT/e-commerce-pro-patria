@@ -1,3 +1,4 @@
+//ThemeManager.ts
 import eCommerceConf from "eCommerceConf.json";
 
 const listaTemi = [

@@ -3,6 +3,9 @@ import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import { ToolBar } from "./ToolBar";
+import { useMediaQuery } from "@mui/material";
+import { Box } from "@mui/system";
+import { TextField } from "@mui/material";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
 	zIndex: theme.zIndex.drawer + 1,
@@ -11,11 +14,12 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 type HeaderProps = {
 	drawerDxOpen: boolean;
-	setDrawerDxOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	setDrawerDxOpen?: React.Dispatch<React.SetStateAction<boolean>> | null;
 	tipoContesto: string;
-	setTipoContesto: React.Dispatch<React.SetStateAction<string>>;
+	setTipoContesto?: React.Dispatch<React.SetStateAction<string>> | null;
 	alerts: number;
 	cartAlerts: number;
+	isMobile: boolean;
 };
 
 export const Header = ({
@@ -25,6 +29,7 @@ export const Header = ({
 	setTipoContesto,
 	alerts,
 	cartAlerts,
+	isMobile,
 }: HeaderProps) => {
 	const theme = useTheme();
 
@@ -48,6 +53,8 @@ export const Header = ({
 					setDrawerDxOpen={setDrawerDxOpen}
 					alerts={alerts}
 					cartAlerts={cartAlerts}
+					isMobile={isMobile}
+					noAuth={false}
 				/>
 			</AppBar>
 		</>

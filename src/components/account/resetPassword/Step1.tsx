@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Container,
 	Grid,
@@ -10,8 +10,12 @@ import {
 	CssBaseline,
 } from "@mui/material";
 
+import eCommerceConf from "eCommerceConf.json";
+
 import Router from "next/router";
 import CodiceFiscale from "codice-fiscale-js";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import ReCAPTCHA from "react-google-recaptcha";
 
 type Step1Props = {
 	origin: string | string[] | undefined;
@@ -32,6 +36,19 @@ const Step1 = ({
 	codiceFiscale,
 	setCodiceFiscale,
 }: Step1Props) => {
+	const [captcha, setCaptcha] = useState<string | null>(null);
+	const { showAlert } = useAlertMe();
+
+	const handleCaptchaError = async () => {
+		console.log("Si prega di completare il reCAPTCHA.");
+		const textAlert = (
+			<h3>
+				<strong>Si prega di completare il reCAPTCHA.</strong>
+			</h3>
+		);
+		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+	};
+
 	return (
 		<Container
 			maxWidth={"md"}
@@ -129,10 +146,21 @@ const Step1 = ({
 						>
 							Annulla
 						</Link>
+						<ReCAPTCHA
+							style={{ marginRight: "1rem" }}
+							sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+							onChange={(value) => setCaptcha(value)}
+						/>
 						<Button
 							variant="contained"
 							sx={{ mt: "auto" }}
-							onClick={() => setDone(true)}
+							onClick={() => {
+								if (!captcha) {
+									handleCaptchaError();
+									return;
+								}
+								setDone(true);
+							}}
 							disabled={
 								!email || !codiceFiscale || !CodiceFiscale.check(codiceFiscale)
 							}

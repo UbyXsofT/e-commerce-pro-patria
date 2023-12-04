@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Paesi } from "../account/register/ProvinciePaesi";
+import { Comuni, Paesi } from "../account/register/ProvinciePaesi";
 import { ComunePaese } from "../CommonTypesInterfaces";
 
 const getComuni = async (
@@ -19,7 +19,11 @@ const getComuni = async (
 
 		setComuni(ComuniPaesi);
 	} catch (error) {
-		alert(error);
+		let comuni = Comuni;
+		let ComuniPaesi: ComunePaese[] = comuni.concat(Paesi);
+		setComuni(ComuniPaesi);
+
+		console.log(error);
 	}
 };
 

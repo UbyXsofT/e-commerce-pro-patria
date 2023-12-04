@@ -3,18 +3,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Box, Button, Snackbar, Typography } from "@mui/material";
 import ManageCookies from "./ManageCookies";
+import { useSettings } from "src/components/layout/SettingsContext";
+// interface CookieConsentProps {
+// 	openSettings?: boolean;
+// 	setOpenSettings?: Dispatch<SetStateAction<boolean>>;
+// }
 
-interface CookieConsentProps {
-	openSettings?: boolean;
-	setOpenSettings?: Dispatch<SetStateAction<boolean>>;
-}
-
-const CookieConsent = ({
-	openSettings,
-	setOpenSettings,
-}: CookieConsentProps) => {
+const CookieConsent = () => {
 	const [open, setOpen] = React.useState(false);
 	const [manage, setManage] = useState(false);
+	const { openSettings, setOpenSettings } = useSettings();
 
 	useEffect(() => {
 		if (openSettings) {

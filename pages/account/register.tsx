@@ -24,10 +24,11 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import Step2 from "src/components/account/register/Step2";
 import Step3 from "src/components/account/register/Step3";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
-
 import eCommerceConf from "eCommerceConf.json";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import dayjs, { Dayjs } from "dayjs";
 
 import {
@@ -42,21 +43,40 @@ import {
 
 import PrivacyLabel from "src/components/utils/PrivacyLabel";
 import { Paesi } from "src/components/account/register/ProvinciePaesi";
-import ReCAPTCHA from "react-google-recaptcha";
+
 import stringUpperCase from "src/components/utils/stringUpperCase";
 import getComuni from "src/components/utils/getComuni";
 import CodiceFiscale from "codice-fiscale-js";
+import StyledImageLogo from "src/components/utils/StyledImageLogo";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
+import { number } from "prop-types";
 
 const SignUp = () => {
 	const theme = useTheme();
 
 	const focus = useRef<Focus>(null);
+	const router = useRouter();
 
-	const StyledImageLogo = styled(Image)({
-		padding: "10px",
-		maxWidth: 300,
-	});
 	const [activeStep, setActiveStep] = useState(0);
+
+	// TODO: Handle External Manipulation?
+
+	useEffect(() => {
+		router.query.activeStep = "0";
+		router.push(router);
+	}, []);
+
+	useEffect(() => {
+		router.query.activeStep
+			? setActiveStep(Number(router.query.activeStep))
+			: {};
+	}, [router.query.activeStep]);
+
+	const handleActiveStepChange = (newStep: number) => {
+		setActiveStep(newStep);
+		router.query.activeStep = newStep.toString();
+		router.push(router);
+	};
 
 	const steps = ["Dati Personali", "Utente", "Finalizza"];
 	const underageSteps = [
@@ -99,7 +119,7 @@ const SignUp = () => {
 	const [cap, setCap] = useState("");
 	const [province, setProvince] = useState("");
 
-	const [notes, setNotes] = useState<string | undefined>("");
+	const [notes, setNotes] = useState<string | undefined>(undefined);
 
 	const [parentAddress, setParentAddress] = useState("");
 	const [parentComuneResidenza, setParentComuneResidenza] =
@@ -122,6 +142,7 @@ const SignUp = () => {
 		correct: false,
 		detail: "",
 	});
+	const [isSamePassword, setIsSamePassword] = useState(false);
 
 	const [readyToSend, setReadyToSend] = useState<ReadyToSend>({
 		status: false,
@@ -192,6 +213,21 @@ const SignUp = () => {
 			setPrivacy={setPrivacy}
 			notes={notes}
 			setNotes={setNotes}
+			toCheck={[
+				!codiceFiscaleInvalid,
+				firstName,
+				lastName,
+				gender,
+				dateOfBirth,
+				placeOfBirth,
+				address,
+				city,
+				cap,
+				province,
+				email,
+				phoneNumber,
+				privacy,
+			]}
 		/>
 	);
 
@@ -229,6 +265,19 @@ const SignUp = () => {
 			setProvince={setParentProvince}
 			phoneNumber={parentPhoneNumber}
 			setPhoneNumber={setParentPhoneNumber}
+			toCheck={[
+				!parentCodiceFiscaleInvalid,
+				parentFirstName,
+				parentLastName,
+				parentGender,
+				parentDateOfBirth,
+				parentPlaceOfBirth,
+				parentAddress,
+				parentCity,
+				parentCap,
+				parentProvince,
+				parentPhoneNumber,
+			]}
 		/>
 	);
 
@@ -245,6 +294,8 @@ const SignUp = () => {
 			setConfirmPassword={setConfirmPassword}
 			passwordSafety={passwordSafety}
 			setPasswordSafety={setPasswordSafety}
+			setIsSamePassword={setIsSamePassword}
+			toCheck={[email, username, passwordSafety.correct, isSamePassword]}
 		/>
 	);
 
@@ -278,10 +329,11 @@ const SignUp = () => {
 			parentProvince={parentProvince}
 			parentPhoneNumber={parentPhoneNumber}
 			notes={notes}
+			toCheck={[]}
 		/>
 	);
 
-	function getStepContent(step: number) {
+	const getStepContent = (step: number): React.JSX.Element | true => {
 		if (underage) {
 			switch (step) {
 				case 0:
@@ -293,7 +345,7 @@ const SignUp = () => {
 				case 3:
 					return Step3User;
 				default:
-					throw new Error("Unknown step");
+					return true;
 			}
 		} else {
 			switch (step) {
@@ -304,10 +356,10 @@ const SignUp = () => {
 				case 2:
 					return Step3User;
 				default:
-					throw new Error("Unknown step");
+					return true;
 			}
 		}
-	}
+	};
 
 	const mdUp = useMediaQuery(theme.breakpoints.up("md"), {
 		noSsr: false,
@@ -324,6 +376,18 @@ const SignUp = () => {
 	};
 
 	// TODO: Handle dateOfBirth and Cap
+
+	const checkValidation = (toCheck: any[]): boolean => {
+		let isValid = true;
+
+		toCheck.forEach((value) => {
+			if (!value) {
+				isValid = false;
+			}
+		});
+
+		return isValid;
+	};
 
 	const handleNext = () => {
 		setCaptcha(null);
@@ -396,7 +460,7 @@ const SignUp = () => {
 				setReadyToSend({ status: false, data });
 			}
 
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		} else if (
 			(underage && activeStep === 3) ||
 			(!underage && activeStep === 2)
@@ -405,21 +469,32 @@ const SignUp = () => {
 				return;
 			}
 			sendData(readyToSend.data);
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		} else {
-			setActiveStep(activeStep + 1);
+			handleActiveStepChange(activeStep + 1);
 		}
 	};
 
 	const handleBack = () => {
 		setCaptcha(null);
-		setActiveStep(activeStep - 1);
+		handleActiveStepChange(activeStep - 1);
 	};
+
+	const isJSXElement = (
+		element: React.JSX.Element | true
+	): element is React.JSX.Element => {
+		return (element as React.JSX.Element).type !== undefined;
+	};
+
+	const content = getStepContent(activeStep);
 
 	const next = (
 		<Button
 			variant="contained"
-			disabled={disableButton}
+			disabled={
+				!checkValidation(isJSXElement(content) ? content.props.toCheck : [])
+			}
+			// disabled={disableButton}
 			onClick={handleNext}
 			sx={{ mt: "auto", ml: 1 }}
 		>
@@ -433,7 +508,6 @@ const SignUp = () => {
 				sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
 				onChange={(token) => setCaptcha(token)}
 			/>
-
 			<Button
 				variant="contained"
 				disabled={
@@ -480,135 +554,127 @@ const SignUp = () => {
 		}
 	}, [activeStep]);
 
+	const SuccessScreen = (
+		<>
+			<Typography
+				variant="h5"
+				gutterBottom
+				sx={{ marginTop: 3 }}
+				textAlign={"center"}
+			>
+				Registrazione Completata
+			</Typography>
+			<Typography
+				variant="subtitle1"
+				textAlign={"center"}
+			>
+				Il tuo account è stato registrato con successo
+			</Typography>
+			<Button
+				fullWidth
+				variant="contained"
+				onClick={() => Router.push("/account/login")}
+				sx={{
+					mt: 3,
+					mb: 2,
+					width: 500,
+					marginLeft: "auto",
+					marginRight: "auto",
+					display: "flex",
+				}}
+			>
+				Accedi
+			</Button>
+		</>
+	);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<AppBar
-				position="static"
-				sx={{
-					backgroundColor: (
-						theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
-							backgroundColor?: string;
-						}
-					)?.backgroundColor,
-				}}
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Registrati | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce register page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
-				<Container sx={{ display: "flex", alignItems: "center" }}>
-					<Toolbar>
-						<StyledImageLogo
-							src="/images/LogoO.png"
-							alt="Logo"
-							width={200}
-							height={70}
-							priority={true}
-						/>
-					</Toolbar>
-				</Container>
-			</AppBar>
-			<Container
-				maxWidth={"md"}
-				component={Paper}
-				sx={{ padding: 3, marginTop: mdUp ? 3 : 0, marginBottom: mdUp ? 3 : 0 }}
-			>
-				{/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
-				{/* TODO: Icons are not centered properly */}
-				<Stepper
-					activeStep={activeStep}
-					alternativeLabel
+				<Container
+					maxWidth={"md"}
+					component={Paper}
+					sx={{
+						padding: 3,
+						marginTop: mdUp ? 3 : 0,
+						marginBottom: mdUp ? 3 : 0,
+					}}
 				>
-					{underage
-						? underageSteps.map((label) => (
-								<Step key={label}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-						  ))
-						: steps.map((label) => (
-								<Step key={label}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-						  ))}
-				</Stepper>
-				{activeStep === (underage ? underageSteps.length : steps.length) ? (
-					<React.Fragment>
-						<Typography
-							variant="h5"
-							gutterBottom
-							sx={{ marginTop: 3 }}
-							textAlign={"center"}
-						>
-							Registrazione Completata
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							textAlign={"center"}
-						>
-							Il tuo account è stato registrato con successo
-						</Typography>
-						<Button
-							fullWidth
-							variant="contained"
-							onClick={() => Router.push("/account/login")}
-							sx={{
-								mt: 3,
-								mb: 2,
-								width: 500,
-								marginLeft: "auto",
-								marginRight: "auto",
-								display: "flex",
-							}}
-						>
-							Accedi
-						</Button>
-					</React.Fragment>
-				) : (
-					<React.Fragment>
-						{getStepContent(activeStep)}
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "flex-end",
-								alignContent: "space-between",
-								marginTop: "2em",
-							}}
-						>
-							{activeStep == 0 && (
-								<Link
-									onClick={() => Router.push("/account/login")}
-									variant="body2"
-									sx={{
-										userSelect: "none",
-										cursor: "pointer",
-										color: (theme) =>
-											theme.palette.mode === "light" ? "black" : "white",
+					{/* TODO: Questo meccanismo dovrebbe funzionare insieme alle sub-pagine in maniera tale da poter usare la navigazione/gesture di sistema */}
+					{/* TODO: Icons are not centered properly */}
+					<Stepper
+						activeStep={activeStep}
+						alternativeLabel
+					>
+						{underage
+							? underageSteps.map((label) => (
+									<Step key={label}>
+										<StepLabel>{label}</StepLabel>
+									</Step>
+							  ))
+							: steps.map((label) => (
+									<Step key={label}>
+										<StepLabel>{label}</StepLabel>
+									</Step>
+							  ))}
+					</Stepper>
+					{activeStep === (underage ? underageSteps.length : steps.length) ? (
+						SuccessScreen
+					) : (
+						<React.Fragment>
+							{getStepContent(activeStep)}
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "flex-end",
+									alignContent: "space-between",
+									marginTop: "2em",
+								}}
+							>
+								{activeStep == 0 && (
+									<Link
+										onClick={() => Router.push("/account/login")}
+										variant="body2"
+										sx={{
+											userSelect: "none",
+											cursor: "pointer",
+											color: (theme) =>
+												theme.palette.mode === "light" ? "black" : "white",
 
-										marginRight: "auto",
-										marginTop: "auto",
-										marginBottom: "auto",
-									}}
-								>
-									Hai già un account? Accedi
-								</Link>
-							)}
-							{activeStep !== 0 && (
-								<Button
-									onClick={handleBack}
-									sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
-								>
-									Precedente
-								</Button>
-							)}
+											marginRight: "auto",
+											marginTop: "auto",
+											marginBottom: "auto",
+										}}
+									>
+										Hai già un account? Accedi
+									</Link>
+								)}
+								{activeStep !== 0 && (
+									<Button
+										onClick={handleBack}
+										sx={{ mt: "auto", ml: 1, marginRight: "auto" }}
+									>
+										Precedente
+									</Button>
+								)}
 
-							{underage
-								? activeStep === underageSteps.length - 1
+								{underage
+									? activeStep === underageSteps.length - 1
+										? finalize
+										: next
+									: activeStep === steps.length - 1
 									? finalize
-									: next
-								: activeStep === steps.length - 1
-								? finalize
-								: next}
-						</Box>
-					</React.Fragment>
-				)}
-			</Container>
+									: next}
+							</Box>
+						</React.Fragment>
+					)}
+				</Container>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

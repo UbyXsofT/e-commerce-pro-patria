@@ -1,6 +1,9 @@
+//theme.tsx
 import { Roboto } from "next/font/google";
 import { createTheme } from "@mui/material/styles";
 import { ThemeManager } from "src/theme/ThemeManager";
+
+
 const { currTema } = ThemeManager();
 
 export const roboto = Roboto({
@@ -61,5 +64,6 @@ const darkTheme = createTheme({
 		},
 	},
 });
+
 
 export { lightTheme, darkTheme };

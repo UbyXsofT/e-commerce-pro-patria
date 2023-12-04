@@ -63,6 +63,7 @@ function NotificheItem({
 				{!read && (
 					<IconButton
 						edge="end"
+						color="success"
 						aria-label="mark as read"
 						sx={{ marginRight: "auto" }}
 						onClick={() => onMarkAsRead(id)}

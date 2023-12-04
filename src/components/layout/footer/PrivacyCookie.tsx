@@ -6,11 +6,12 @@ import { HowToReg, PrivacyTip, Cookie } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import eCommerceConf from "eCommerceConf.json";
 import Router from "next/router";
+import { useSettings } from "src/components/layout/SettingsContext";
 
 export function PrivacyCookie() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
-
+	const { setOpenSettings } = useSettings();
 	return (
 		<Grid
 			item
@@ -93,7 +94,7 @@ export function PrivacyCookie() {
 					) : (
 						<Link
 							onClick={() => {
-								Router.push("/policy/cookie-policy");
+								setOpenSettings(true);
 							}}
 							sx={{
 								cursor: "pointer",

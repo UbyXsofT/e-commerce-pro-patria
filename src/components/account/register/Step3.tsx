@@ -43,6 +43,7 @@ type Step3Props = {
 	parentProvince: string;
 	parentPhoneNumber: string;
 	notes?: string;
+	toCheck: any[];
 };
 
 const Step3 = ({
@@ -121,8 +122,10 @@ const Step3 = ({
 								xs={12}
 							>
 								<TextField
+									variant="standard"
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									value={codiceFiscale}
 									fullWidth
@@ -138,9 +141,11 @@ const Step3 = ({
 								sm={6}
 							>
 								<TextField
+									variant="standard"
 									value={firstName}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									name="firstName"
 									fullWidth
@@ -154,9 +159,11 @@ const Step3 = ({
 								sm={6}
 							>
 								<TextField
+									variant="standard"
 									value={lastName}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="lastName"
@@ -168,7 +175,7 @@ const Step3 = ({
 							<Grid
 								item
 								xs={12}
-								sx={{ height: "72px" }}
+								sx={{ height: "64px" }}
 							>
 								<FormControl>
 									<FormLabel id="sesso">Sesso</FormLabel>
@@ -200,20 +207,20 @@ const Step3 = ({
 								item
 								xs={12}
 							>
-								<LocalizationProvider
-									dateAdapter={AdapterDayjs}
-									adapterLocale="it"
-								>
-									<DatePicker
-										readOnly
-										disableOpenPicker
-										value={dateOfBirth}
-										label="Data di Nascita"
-										sx={{
-											width: "100%",
-										}}
-									/>
-								</LocalizationProvider>
+								<TextField
+									variant="standard"
+									InputProps={{
+										readOnly: true,
+										disableUnderline: true,
+									}}
+									fullWidth
+									value={`${dateOfBirth?.get("date")}/${
+										dateOfBirth?.get("month")
+											? dateOfBirth?.get("month") + 1
+											: "XX"
+									}/${dateOfBirth?.get("year")}`}
+									label="Data di Nascita"
+								/>
 							</Grid>
 							<Grid
 								item
@@ -221,9 +228,11 @@ const Step3 = ({
 								sm={12}
 							>
 								<TextField
+									variant="standard"
 									value={placeOfBirth}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="placeOfBirth"
@@ -245,9 +254,11 @@ const Step3 = ({
 								xs={12}
 							>
 								<TextField
+									variant="standard"
 									value={address}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="address"
@@ -258,12 +269,14 @@ const Step3 = ({
 							<Grid
 								item
 								xs={12}
-								sm={8}
+								sm={6}
 							>
 								<TextField
+									variant="standard"
 									value={city}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="city"
@@ -274,12 +287,14 @@ const Step3 = ({
 							<Grid
 								item
 								xs={12}
-								sm={4}
+								sm={6}
 							>
 								<TextField
+									variant="standard"
 									value={cap}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="cap"
@@ -292,9 +307,11 @@ const Step3 = ({
 								xs={12}
 							>
 								<TextField
+									variant="standard"
 									value={province}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="province"
@@ -307,10 +324,12 @@ const Step3 = ({
 								xs={12}
 							>
 								<MuiTelInput
+									variant="standard"
 									label="Telefono"
 									value={phoneNumber}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									disableDropdown
 									sx={{ width: "100%" }}
@@ -323,9 +342,11 @@ const Step3 = ({
 								md={6}
 							>
 								<TextField
+									variant="standard"
 									value={email}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									fullWidth
 									id="email"
@@ -339,9 +360,11 @@ const Step3 = ({
 								md={6}
 							>
 								<TextField
+									variant="standard"
 									value={username}
 									InputProps={{
 										readOnly: true,
+										disableUnderline: true,
 									}}
 									name="username"
 									fullWidth
@@ -355,6 +378,7 @@ const Step3 = ({
 									xs={12}
 								>
 									<TextField
+										variant="standard"
 										value={notes}
 										name="notes"
 										id="notes"
@@ -363,6 +387,7 @@ const Step3 = ({
 										multiline
 										InputProps={{
 											readOnly: true,
+											disableUnderline: true,
 										}}
 									/>
 								</Grid>
@@ -415,9 +440,11 @@ const Step3 = ({
 										xs={12}
 									>
 										<TextField
+											variant="standard"
 											value={parentCodiceFiscale}
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											required
 											fullWidth
@@ -433,9 +460,11 @@ const Step3 = ({
 										sm={6}
 									>
 										<TextField
+											variant="standard"
 											value={parentFirstName}
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											autoComplete="parentFirstName"
 											name="parentFirstName"
@@ -451,9 +480,11 @@ const Step3 = ({
 										sm={6}
 									>
 										<TextField
+											variant="standard"
 											value={parentLastName}
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											required
 											fullWidth
@@ -467,7 +498,7 @@ const Step3 = ({
 									<Grid
 										item
 										xs={12}
-										sx={{ height: "72px" }}
+										sx={{ height: "64px" }}
 									>
 										<FormControl>
 											<FormLabel id="sesso">Sesso</FormLabel>
@@ -499,20 +530,22 @@ const Step3 = ({
 										item
 										xs={12}
 									>
-										<LocalizationProvider
-											dateAdapter={AdapterDayjs}
-											adapterLocale="it"
-										>
-											<DatePicker
-												readOnly
-												disableOpenPicker
-												value={parentDateOfBirth}
-												label="Data di Nascita"
-												sx={{
-													width: "100%",
-												}}
-											/>
-										</LocalizationProvider>
+										<TextField
+											variant="standard"
+											InputProps={{
+												readOnly: true,
+												disableUnderline: true,
+											}}
+											value={`${parentDateOfBirth?.get("date")}/${
+												parentDateOfBirth?.get("month")
+													? parentDateOfBirth?.get("month") + 1
+													: "XX"
+											}/${parentDateOfBirth?.get("year")}`}
+											label="Data di Nascita"
+											sx={{
+												width: "100%",
+											}}
+										/>
 									</Grid>
 									<Grid
 										item
@@ -520,8 +553,10 @@ const Step3 = ({
 										sm={12}
 									>
 										<TextField
+											variant="standard"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											value={parentPlaceOfBirth}
 											required
@@ -546,8 +581,10 @@ const Step3 = ({
 										xs={12}
 									>
 										<TextField
+											variant="standard"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											value={parentAddress}
 											required
@@ -561,11 +598,13 @@ const Step3 = ({
 									<Grid
 										item
 										xs={12}
-										sm={8}
+										sm={6}
 									>
 										<TextField
+											variant="standard"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											value={parentCity}
 											required
@@ -579,11 +618,13 @@ const Step3 = ({
 									<Grid
 										item
 										xs={12}
-										sm={4}
+										sm={6}
 									>
 										<TextField
+											variant="standard"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											value={parentCap}
 											required
@@ -599,8 +640,10 @@ const Step3 = ({
 										xs={12}
 									>
 										<TextField
+											variant="standard"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											value={parentProvince}
 											required
@@ -617,9 +660,11 @@ const Step3 = ({
 										xs={12}
 									>
 										<MuiTelInput
+											variant="standard"
 											label="Telefono"
 											InputProps={{
 												readOnly: true,
+												disableUnderline: true,
 											}}
 											disableDropdown
 											sx={{ width: "100%" }}

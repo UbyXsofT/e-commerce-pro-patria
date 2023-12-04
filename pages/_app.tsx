@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+//import "styles/globals.scss"; // TODO DA VERIFICARE COME CARICARLO
+import React, { use, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -7,6 +8,7 @@ import { lightTheme, darkTheme } from "../src/components/theme/theme";
 import createEmotionCache from "../src/components/utils/createEmotionCache";
 import { ThemeProvider as CustomThemeProvider } from "../src/components/theme/ThemeContext";
 import { ThemeProvider } from "@mui/material/styles";
+
 import LoadingOverlay from "../src/components/utils/LoadingOverlay";
 import ThemeColorListener from "../src/components/theme/ThemeColorListener";
 import { AlertMeProvider } from "../src/components/layout/alert/AlertMeContext";
@@ -15,11 +17,66 @@ import { wrapper } from "src/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import BlockPage from "./blockPage";
-import { StoreState } from "src/components/CommonTypesInterfaces";
+import {
+	StoreState,
+	obyPostProdotti,
+	responseCall,
+} from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
+import { SettingsProvider } from "src/components/layout/SettingsContext";
+import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
 
+import eCommerceConf from "eCommerceConf.json";
+import { setCentri } from "src/store/actions";
+import { Centro } from "./auth/store";
+import callNodeService from "./api/callNodeService";
+
+// pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
+
+export const fetchCentri = async (): Promise<{
+	centri: Centro[];
+	error: null | unknown;
+}> => {
+	const obyPostProdotti: obyPostProdotti = {
+		clienteKey: eCommerceConf.ClienteKey,
+		IDCliente: "CLABKM5",
+		IDCentro: 0,
+	};
+
+	try {
+		const respCall: responseCall = await callNodeService(
+			"prodotti",
+			obyPostProdotti,
+			null
+		);
+
+		const centri: Centro[] = [
+			{
+				id: 0,
+				name: "Principale",
+				subscriptions: respCall.messageCli.message.prodotti,
+				principale: true,
+			},
+			{
+				id: 1,
+				name: "Secondario",
+				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+			},
+			{
+				id: 2,
+				name: "Terzo",
+				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
+			},
+		];
+
+		return { centri, error: null };
+	} catch (error: unknown) {
+		console.log(error);
+		return { centri: [], error: error };
+	}
+};
 
 const MyApp = (props: {
 	Component: React.ComponentType<any>;
@@ -31,7 +88,7 @@ const MyApp = (props: {
 	const router = useRouter();
 	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
 	const authUser = useSelector((state: StoreState) => state.authUser);
-
+	const centri = useSelector((state: StoreState) => state.centri);
 	const dispatch = useDispatch();
 
 	const requiresAuth = router.pathname.startsWith("/auth");
@@ -95,6 +152,10 @@ const MyApp = (props: {
             Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
+
+				if (centri.centri.length === 0) {
+					dispatch(setCentri(await fetchCentri()));
+				}
 			}
 		};
 
@@ -103,33 +164,37 @@ const MyApp = (props: {
 
 	return (
 		<>
-			<CacheProvider value={emotionCache}>
-				<ThemeProvider theme={appTheme}>
-					<AlertMeProvider>
-						<Head>
-							<meta
-								name="viewport"
-								content="initial-scale=1, width=device-width"
-							/>
-						</Head>
-						<CustomThemeProvider
-							themeMode={themeMode}
-							setThemeMode={setThemeMode}
-							autoMode={autoMode}
-							setAutoMode={setAutoMode}
-						>
-							{autoMode === "true" ? (
-								<ThemeColorListener setThemeMode={setThemeMode} />
-							) : (
-								<></>
-							)}
-							<CssBaseline />
-							{isLoading ? <LoadingOverlay /> : <></>}
-							<Component {...pageProps} />
-						</CustomThemeProvider>
-					</AlertMeProvider>
-				</ThemeProvider>
-			</CacheProvider>
+			<NetworkStatusProvider>
+				<CacheProvider value={emotionCache}>
+					<ThemeProvider theme={appTheme}>
+						<SettingsProvider>
+							<AlertMeProvider>
+								<Head>
+									<meta
+										name="viewport"
+										content="initial-scale=1, width=device-width"
+									/>
+								</Head>
+								<CustomThemeProvider
+									themeMode={themeMode}
+									setThemeMode={setThemeMode}
+									autoMode={autoMode}
+									setAutoMode={setAutoMode}
+								>
+									{autoMode === "true" ? (
+										<ThemeColorListener setThemeMode={setThemeMode} />
+									) : (
+										<></>
+									)}
+									<CssBaseline />
+									{isLoading ? <LoadingOverlay /> : <></>}
+									<Component {...pageProps} />
+								</CustomThemeProvider>
+							</AlertMeProvider>
+						</SettingsProvider>
+					</ThemeProvider>
+				</CacheProvider>
+			</NetworkStatusProvider>
 		</>
 	);
 };

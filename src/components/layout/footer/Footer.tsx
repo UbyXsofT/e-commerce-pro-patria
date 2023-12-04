@@ -4,7 +4,7 @@ import Copyright from "./Copyright";
 import { PartitaIva } from "./PartitaIva";
 import Divider from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 import { ScrollToTopBtn } from "./ScrollToTopBtn";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
@@ -16,25 +16,30 @@ import { PrivacyCookie } from "./PrivacyCookie";
 export function Footer() {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const handleResize = () => {
-		const windowHeight = window.innerHeight;
-		const header = document.getElementById("header");
-		const footerElement = document.getElementById("footer"); // Replace with your footer's ID
-		const contentElement = document.getElementById("content"); // Replace with your content's ID
+		if (isMobile) {
+			setIsFooterFixed(false);
+		} else {
+			const windowHeight = window.innerHeight;
+			const header = document.getElementById("header");
+			const footerElement = document.getElementById("footer"); // Replace with your footer's ID
+			const contentElement = document.getElementById("content"); // Replace with your content's ID
 
-		if (footerElement && contentElement) {
-			const footerRect = footerElement.getBoundingClientRect();
-			const contentRect = contentElement.getBoundingClientRect();
+			if (footerElement && contentElement) {
+				const footerRect = footerElement.getBoundingClientRect();
+				const contentRect = contentElement.getBoundingClientRect();
 
-			const headerHeight = header?.clientHeight ? header?.clientHeight : 0;
+				const headerHeight = header?.clientHeight ? header?.clientHeight : 0;
 
-			// Check for collision by comparing bottom position of the content and top position of the footer
-			let isColliding =
-				contentRect.height + footerRect.height + headerHeight + 24 >
-				windowHeight;
+				// Check for collision by comparing bottom position of the content and top position of the footer
+				let isColliding =
+					contentRect.height + footerRect.height + headerHeight + 24 >
+					windowHeight;
 
-			setIsFooterFixed(!isColliding);
+				setIsFooterFixed(!isColliding);
+			}
 		}
 	};
 

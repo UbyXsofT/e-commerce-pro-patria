@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { Centro } from "pages/auth/store";
 import { MouseEventHandler } from "react";
 
 export type Sex = null | "male" | "female";
@@ -9,28 +10,59 @@ export type AutocompleteSelected = ComunePaese | null;
 
 export type Date = Dayjs | null;
 
-export interface ComunePaese {
+// export type ComunePaese = {
+// 	codice: string;
+// 	nome: string;
+// 	nomeStraniero?: string | null;
+// 	codiceCatastale?: string;
+// 	cap?: string;
+// 	prefisso?: string | null;
+// 	provincia: {
+// 		nome: string;
+// 		regione?: string;
+// 	};
+// 	email?: string | null;
+// 	pec?: string | null;
+// 	telefono?: string | null;
+// 	fax?: string | null;
+// 	coordinate?: {
+// 		lat: number;
+// 		lng: number;
+// 	};
+// };
+
+export type ComunePaese = Comune | Paese;
+
+export type Comune = {
 	codice: string;
 	nome: string;
 	nomeStraniero?: string | null;
 	codiceCatastale?: string;
 	cap?: string;
-	prefisso?: string;
+	prefisso?: string | null;
 	provincia: {
 		nome: string;
 		regione?: string;
 	};
-	email?: string;
-	pec?: string;
-	telefono?: string;
-	fax?: string;
+	email?: string | null;
+	pec?: string | null;
+	telefono?: string | null;
+	fax?: string | null;
 	coordinate?: {
 		lat: number;
 		lng: number;
 	};
-}
+};
 
-export type Paese = [string, "EE", string, 0 | 1];
+export type Paese = {
+	codice: string;
+	nome: string;
+	provincia: {
+		nome: string;
+	};
+	// We add it later
+	cap?: string;
+};
 
 export interface PasswordSafety {
 	correct: boolean;
@@ -44,7 +76,13 @@ export type CaratteriSpeciali = "";
 
 export type Cookie = "accessToken" | "refreshToken";
 
-export type StoreAction = SetLoading | SetAuthEcommerce | SetAuthUser;
+export type StoreAction =
+	| SetLoading
+	| SetAuthEcommerce
+	| SetAuthUser
+	| SetCart
+	| SetCentri
+	| SetStripeKeys;
 
 export type SetLoading = {
 	type: "SET_LOADING";
@@ -61,10 +99,36 @@ export type SetAuthUser = {
 	payload: UserData;
 };
 
+export type SetCart = {
+	type: "SET_CART";
+	payload: Cart;
+};
+
+export type SetCentri = {
+	type: "SET_CENTRI";
+	payload: { centri: Centro[]; error: null | unknown };
+};
+
+export type SetStripeKeys = {
+	type: "SET_STRIPE_KEYS";
+	payload: StripeKeysData;
+};
+//*--*//
+
 export interface StoreState {
 	loading: boolean;
 	authEcommerce: boolean;
 	authUser: AuthUser | null;
+	cart: Cart;
+	centri: { centri: Centro[]; error: null | unknown };
+	stripeKeys: StripeKeysData;
+}
+
+export interface StripeKeysData {
+	PUBLISHABLE_KEY: string;
+	STRIPE_SECRET_KEY: string;
+	STRIPE_WEBHOOK_SECRET: string;
+	isGetKeys: boolean;
 }
 
 // Work In Progress, check in with Antonio for Definition
@@ -145,4 +209,95 @@ export interface MenuItem {
 	badgeColor: null;
 	subItems: MenuItem[];
 	control?: React.JSX.Element | null;
+}
+
+export interface Subscription {
+	name: string;
+	cost: string;
+	description: string;
+	minMonths: number;
+	characteristics: string[];
+	highlighted?: boolean;
+}
+
+export interface tokenlessAccess {
+	clienteKey: string;
+	userName: string;
+	password: string;
+	ricordami: boolean;
+	accessToken: null;
+	refreshToken: null;
+}
+
+export interface tokenfulAccess {
+	clienteKey: string;
+	accessToken: string;
+	refreshToken: string;
+}
+
+export interface authEcommerce {
+	clienteKey: string;
+}
+
+export interface resetPsw {
+	clienteKey: string;
+	codFisc: string;
+	email: string;
+}
+
+export interface responseCall {
+	successCli: boolean;
+	messageCli: any;
+}
+
+export interface obyPostData {
+	clienteKey: string;
+}
+
+export interface obyPostProdotti {
+	clienteKey: string;
+	IDCliente: string;
+	IDCentro: number;
+}
+
+export interface Abbonamento {
+	id: string;
+	nome: string;
+	prezzo: number;
+	immagine: string | null;
+	descrizione: string;
+	convenzione: {
+		isConv: boolean;
+		descConve: string;
+	};
+	promozione: {
+		isPromo: boolean;
+		descPromo: string;
+	};
+	sceltaOrari: {
+		isOrari: boolean;
+		daOrari: string;
+		aOrari: string;
+	};
+	quantity: number;  // Aggiunta della proprietà quantity
+}
+
+export type Cart = CartUser[];
+
+export interface CartUser {
+	userId: string;
+	cart: CartAbbonamento[];
+}
+
+export interface CartAbbonamento extends Abbonamento {
+	configuration: { initialDate: Dayjs } | null;
+}
+
+export interface obyPostDataCart {
+	line_items: CartAbbonamento[];
+	userId: string;
+	clienteKey: string;
+	mode: string;
+	success_url: string;
+	cancel_url: string;
 }

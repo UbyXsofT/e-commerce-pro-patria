@@ -175,9 +175,9 @@ const Notifiche = ({ setLoading }: NotificheProps) => {
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
-			//digitare il titolo della pagina e la descrizione della pagina.
-			// title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-			// description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Avvisi | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce Avvisi page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<div>
 					<Typography

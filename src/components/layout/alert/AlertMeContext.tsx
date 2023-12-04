@@ -18,12 +18,15 @@ type AlertMeProviderProps = {
 	children: ReactElement[];
 };
 
+//type CloseHandler = () => void;
 interface alertParams {
 	variant: "standard" | "filled" | "outlined";
 	severity: AlertColor;
 	title: string;
 	desc?: React.JSX.Element;
 	openAlertMe: boolean;
+	route?: string;
+	//onClose?: CloseHandler;
 }
 
 interface AlerMeContext {
@@ -34,7 +37,9 @@ interface AlerMeContext {
 		severity: AlertColor,
 		title: string,
 		desc: React.JSX.Element,
-		openAlertMe: boolean
+		openAlertMe: boolean,
+		route?: string // Aggiungi la route come parametro opzionale
+		//onClose?: () => void
 	) => void;
 }
 
@@ -53,16 +58,21 @@ export const AlertMeProvider = ({ children }: AlertMeProviderProps) => {
 		severity: AlertColor,
 		title: string,
 		desc: React.JSX.Element,
-		openAlertMe: boolean
+		openAlertMe: boolean,
+		route?: string
+		//onClose?: CloseHandler
 	) => {
 		// Set the desired parameters for the alert
-		setAlertParams({
+		setAlertParams((prevParams) => ({
+			...prevParams,
 			variant: variant !== null ? variant : "filled",
 			severity: severity !== null ? severity : "success",
 			title: title !== null ? title : "Titolo",
 			desc: desc !== null ? desc : undefined,
 			openAlertMe: openAlertMe !== null ? openAlertMe : true,
-		});
+			route: route !== null ? route : undefined,
+			//onClose: onClose, // Memorizza la funzione di chiusura nel nuovo stato dell'alert
+		}));
 	};
 
 	return (

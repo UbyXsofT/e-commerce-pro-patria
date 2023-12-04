@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { keyframes, styled } from "@mui/system";
 import Button from "@mui/material/Button";
-import { Fab } from "@mui/material";
+import { Fab, useMediaQuery } from "@mui/material";
 import NavigationIcon from "@mui/icons-material/Navigation";
+import { useTheme } from "@mui/material/styles";
 
 export function ScrollToTopBtn() {
 	const [isVisible, setIsVisible] = useState(false);
+
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
 	useEffect(() => {
 		const toggleVisibility = () => {
@@ -50,7 +54,7 @@ export function ScrollToTopBtn() {
 
 	const StyledFab = styled(Fab)({
 		position: "fixed",
-		bottom: 16,
+		bottom: isMobile ? 64 : 16,
 		right: 16,
 		zIndex: isVisible ? 999 : -1,
 		opacity: isVisible ? 1 : 0,

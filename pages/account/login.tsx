@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-
+//REDUX-STORE
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { setLoading } from "src/store/actions";
+//*-----*//
 import {
 	Container,
 	Grid,
@@ -22,10 +24,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
-//REDUX-STORE
-import { connect } from "react-redux";
 import eCommerceConf from "eCommerceConf.json";
-import { setLoading } from "src/store/actions";
 import Image from "next/image";
 
 import { styled } from "@mui/material/styles";
@@ -41,15 +40,19 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
 import callNodeService from "pages/api/callNodeService";
-import LoadingWrapper from "src/components/utils/LoadingWrapper";
 import logOutUser from "src/components/utils/logOutUser";
 //redux
 import { setAuthUser } from "src/store/actions";
-import { useDispatch } from "react-redux";
 import Layout from "src/components/layout/LayoutLogin";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
+import {
+	responseCall,
+	tokenlessAccess,
+} from "src/components/CommonTypesInterfaces";
+import LayoutGeneral from "src/components/layout/LayoutGeneral";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
 	const theme = useTheme();
@@ -58,54 +61,108 @@ const Login = () => {
 	const [password, setPassword] = React.useState("");
 	const [ricordami, setRicordami] = React.useState(false);
 	const [paddingTop, setPaddingTop] = React.useState(0);
-	const [visLoader, setVisLoader] = React.useState(false);
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 
-	const dispatch = useDispatch(); // Ottieni il dispatcher dal Redux store
+	const CustomTextField = styled(TextField)(({ theme }) => ({
+		"& .MuiInputBase-input": {
+			padding: "8px", // Modifica il padding del testo all'interno
+		},
+		backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#ffffff",
+		color: theme.palette.mode === "dark" ? "#ffffff" : "#121212",
+		borderRadius: theme.shape.borderRadius, // Mantieni il borderRadius dal tema
+	}));
 
 	React.useEffect(() => {
-		AuthEcommerceHelper(dispatch);
+		const handleLogout = () => {
+			try {
+				logOutUser(dispatch);
+			} catch (error) {
+				console.log("logoutSuccess error: ", error);
+			}
+		};
 
-		try {
-			logOutUser(dispatch);
-		} catch (error) {
-			console.log("logoutSuccess error: ", error);
-		}
-
-		const calculatePaddingTop = () => {
+		const centerContent = () => {
 			const windowHeight = window.innerHeight;
 			const mainHeight = document.getElementById("main")?.offsetHeight;
 			const calculatedPaddingTop =
 				(windowHeight - (mainHeight ? mainHeight : 0)) / 2;
 			setPaddingTop(calculatedPaddingTop);
 		};
-		calculatePaddingTop();
-		window.addEventListener("resize", calculatePaddingTop);
+
+		AuthEcommerceHelper(dispatch);
+		handleLogout();
+		centerContent();
+		window.addEventListener("resize", centerContent);
+
 		return () => {
-			window.removeEventListener("resize", calculatePaddingTop);
+			window.removeEventListener("resize", centerContent);
 		};
 	}, []);
 
-	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 	const { showAlert } = useAlertMe();
-
-	const handleLogin = async () => {
-		// Controlla se il captchaValue è valido prima di procedere con il login
-		if (!captchaValue) {
+	const handleLogin = async (captchaValue: string | null) => {
+		const handleCaptchaError = async () => {
 			console.log("Si prega di completare il reCAPTCHA.");
 			const textAlert = (
-				<React.Fragment>
-					<h3>
-						<strong>Si prega di completare il reCAPTCHA.</strong>
-					</h3>
-				</React.Fragment>
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
 			);
 			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-			return;
-		}
+		};
 
 		const fetchData = async () => {
-			setVisLoader(true);
-			const obyPostData = {
+			const handleLoginResponse = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					//****** TOKENS
+					// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
+					CookieManager.setCookie("accessToken", msg_Resp.accessToken);
+					if (msg_Resp.refreshToken) {
+						// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
+						CookieManager.setCookie("refreshToken", msg_Resp.refreshToken);
+					} else {
+						//rimuovo l'eventuale refreshToken
+						CookieManager.removeCookie("refreshToken");
+					}
+
+					//****** UTENTE
+					// Aggiorna lo stato dell'OGGETTO utente
+					try {
+						console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+						dispatch(setAuthUser(msg_Resp.respWCF));
+						Router.push("/auth/home");
+					} catch (error) {
+						console.log("Aggiorna Redux AuthUser:", error);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+			const obyPostData: tokenlessAccess = {
 				clienteKey: eCommerceConf.ClienteKey,
 				userName: username,
 				password: password,
@@ -115,63 +172,24 @@ const Login = () => {
 			};
 
 			try {
-				const respCall = await callNodeService("login", obyPostData, null);
-				console.log("respCall: ", respCall);
-				const msg_Resp = respCall.messageCli.message;
-				if (respCall.successCli) {
-					if (msg_Resp && msg_Resp.respWCF && msg_Resp.accessToken) {
-						//****** TOKENS
-						// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
-						CookieManager.setCookie("accessToken", msg_Resp.accessToken);
-						if (msg_Resp.refreshToken) {
-							// Salva il refreshToken di accesso come cookie o nello stato dell'applicazione
-							CookieManager.setCookie("refreshToken", msg_Resp.refreshToken); //la scadenza del token viene impostata lato server, la validità è gestita sempre lato server
-						} else {
-							//rimuovo l'eventuale refreshToken
-							CookieManager.removeCookie("refreshToken");
-						}
-						//****** UTENTE
-						// Aggiorna lo stato dell'OGGETTO utente
-						try {
-							console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
-							dispatch(setAuthUser(msg_Resp.respWCF));
-							setVisLoader(false);
-							Router.push("/auth/home");
-						} catch (error) {
-							console.log("Aggiorna Redux AuthUser:", error);
-						}
-					} else {
-						console.log("msg_Resp: ", msg_Resp);
-						// Gestisci l'errore di autenticazione o l'errore di connessione
-						const textAlert = (
-							<React.Fragment>
-								<h3>
-									<strong>
-										Errore nel recupero dei dati, dati incompleti!
-									</strong>
-								</h3>
-							</React.Fragment>
-						);
-						setVisLoader(false);
-						await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-					}
-				} else {
-					// Gestisci l'errore di autenticazione o l'errore di connessione
-					const textAlert = (
-						<React.Fragment>
-							<h3>
-								<strong>{respCall.messageCli}</strong>
-							</h3>
-						</React.Fragment>
-					);
-					setVisLoader(false);
-					await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-				}
+				const respCall: responseCall = await callNodeService(
+					"login",
+					obyPostData,
+					null
+				);
+				handleLoginResponse(respCall);
 			} catch (error) {
-				setVisLoader(false);
-				console.error("Errore nella chiamata:", error);
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
 		};
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			handleCaptchaError();
+			return;
+		}
 
 		fetchData();
 	};
@@ -229,55 +247,22 @@ const Login = () => {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<LoadingWrapper showLoader={visLoader}>
-				<Layout
-					//digitare il titolo della pagina e la descrizione della pagina.
-					title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-					description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+			<LayoutGeneral
+				//digitare il titolo della pagina e la descrizione della pagina.
+				title={`Login | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+			>
+				<AlertMe />
+				<div
+					id="contenitore"
+					style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
 				>
-					<AlertMe />
-					<AppBar
-						position="static"
-						sx={{
-							display: isMobile ? "block" : "none",
-							backgroundColor: (
-								theme?.components?.MuiAppBar?.styleOverrides?.colorInherit as {
-									backgroundColor?: string;
-								}
-							)?.backgroundColor,
-						}}
-					>
-						<Container sx={{ display: "flex", alignItems: "center" }}>
-							<Toolbar>
-								<StyledImageLogo
-									// src='/images/LogoO.png'
-									// alt='Logo'
-									// width={200}
-									// height={70}
-									// priority={true}
-									// style={{padding: "10px", maxWidth: 300}}
-									src="/images/LogoO.png"
-									alt="Logo"
-									width={190}
-									height={70}
-									priority={true}
-									sx={{ cursor: "pointer" }}
-								/>
-							</Toolbar>
-						</Container>
-					</AppBar>
-
-					<Box
-						id="main"
-						sx={{ paddingTop: smUp ? `${paddingTop}px` : 0 }}
-					>
+					<Box id="main">
 						<Grid
 							container
 							component="main"
-							sx={{ padding: smUp ? 2 : 0 }}
+							sx={{ height: 400 }}
 						>
-							{/* TODO There has to be a better way to implement this */}
-							<CssBaseline />
 							<Grid
 								container
 								justifyContent="center"
@@ -285,9 +270,9 @@ const Login = () => {
 								item
 								xs={false}
 								sm={4}
-								md={7}
+								md={6}
 								component={Paper}
-								elevation={6}
+								elevation={2}
 								square
 								sx={{
 									backgroundImage: "url(/images/wallpaper.jpg)",
@@ -323,25 +308,27 @@ const Login = () => {
 								item
 								xs={12}
 								sm={8}
-								md={5}
+								md={6}
 								component={Paper}
-								elevation={6}
+								elevation={2}
 								square
 							>
 								<Box
 									sx={{
-										my: 8,
+										my: 2,
 										mx: 4,
 										display: "flex",
 										flexDirection: "column",
 										alignItems: "center",
 									}}
 								>
-									<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+									<Avatar
+										sx={{ ml: 1, mr: 1, mb: 1, bgcolor: "secondary.main" }}
+									>
 										<LockOutlinedIcon />
 									</Avatar>
 									<Typography
-										component="h1"
+										component="h3"
 										variant="h5"
 									>
 										Accedi
@@ -411,7 +398,7 @@ const Login = () => {
 											fullWidth
 											variant="contained"
 											sx={{ mt: 3, mb: 2 }}
-											onClick={handleLogin}
+											onClick={() => handleLogin(captchaValue)}
 											disabled={!password || !username}
 										>
 											Accedi
@@ -463,13 +450,10 @@ const Login = () => {
 									</Box>
 								</Box>
 							</Grid>
-
-							{smUp ? copyright : <div></div>}
-							{/* <CookieConsent /> */}
 						</Grid>
 					</Box>
-				</Layout>
-			</LoadingWrapper>
+				</div>
+			</LayoutGeneral>
 		</ThemeProvider>
 	);
 };

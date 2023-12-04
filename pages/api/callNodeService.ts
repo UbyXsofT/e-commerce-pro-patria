@@ -2,45 +2,58 @@
 import axios from "axios";
 import eCommerceConf from "../../eCommerceConf.json";
 import qs from "qs";
+import {
+	authEcommerce,
+	resetPsw,
+	responseCall,
+	tokenfulAccess,
+	tokenlessAccess,
+	obyPostProdotti,
+	StripeKeysData,
+	obyPostDataCart,
+} from "src/components/CommonTypesInterfaces";
 
-interface tokenlessAccess {
-	clienteKey: string;
-	userName: string;
-	password: string;
-	ricordami: boolean;
-	accessToken: null;
-	refreshToken: null;
-}
-
-interface tokenfulAccess {
-	clienteKey: string;
-	accessToken: string;
-	refreshToken: string;
-}
-
-interface authEcommerce {
-	clienteKey: string;
+async function isNodeServiceReachable() {
+	try {
+		await axios.head(`${eCommerceConf.UrlServerNode}/api/get-check-server`);
+		return true;
+	} catch (error) {
+		console.error(
+			"Il servizio Node.js non è raggiungibile o non attivo.",
+			error
+		);
+		return false;
+	}
 }
 
 export default async function callNodeService(
-	endPoint: "login" | "access-ecommerce",
-	obyPostData: tokenlessAccess | tokenfulAccess | authEcommerce,
+	endPoint:
+		| "login"
+		| "access-ecommerce"
+		| "recupero-credenziali"
+		| "stripe/get-stripe-key"
+		| "stripe/checkout-session"
+		| "prodotti",
+	obyPostData:
+		| tokenlessAccess
+		| tokenfulAccess
+		| authEcommerce
+		| resetPsw
+		| StripeKeysData
+		| obyPostProdotti
+		| obyPostDataCart,
 	token: null
-) {
+): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");
-	//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
-	// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo
-	// messageCli conterra eventuale messaggio di errore, oppure la risposta dal server node.js che avrà anche lui la stessa struttura di oggetti success e message qui message conterrà eventuali errori in risposta oppure conterrà l'oggetto respWCF che conterrà la risposta ottenuta al servizio wcf del centro fitness
-	//-> "successCli":true,
-	//-> "messageCli":{
-	//----> "success":true,
-	//----> "message":{
-	//-------> "respWCF":{
-	//---------->	 "KEY1":"VALORE",
-	//---------->	 "KEY2":"VALORE2",
-	//----------> },
-	//------> }
-	//-> }
+
+	// Controllo se il servizio Node.js è raggiungibile
+	if (!(await isNodeServiceReachable())) {
+		return {
+			successCli: false,
+			messageCli: "Il servizio Node.js non è raggiungibile o non attivo.",
+		};
+	}
+
 	try {
 		let headersData: {} = {
 			"Content-Type": "application/x-www-form-urlencoded",
@@ -53,6 +66,7 @@ export default async function callNodeService(
 			};
 		}
 
+		//const postData = JSON.stringify(obyPostData);
 		const postData = qs.stringify(obyPostData);
 		const config = {
 			method: "post",
@@ -77,7 +91,7 @@ export default async function callNodeService(
 				console.log(error);
 				return {
 					successCli: false,
-					messageCli: error.response.data.message
+					messageCli: error.response?.data?.message
 						? error.response.data.message
 						: `errore: ${error}`,
 				};

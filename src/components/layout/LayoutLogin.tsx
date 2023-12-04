@@ -2,7 +2,7 @@
 // import Footer from "./Footer";
 import Head from "next/head";
 import { useSpring, animated } from "@react-spring/web";
-
+import eCommerceConf from "../../../eCommerceConf.json";
 // TODO: Spec out Children and think about Optionals
 type LayoutType = {
 	children?: any[];
@@ -20,10 +20,6 @@ const Layout = ({ children, title, description, ogImage, url }: LayoutType) => {
 			duration: 1000,
 		},
 	});
-	// website Url
-	const pageUrl = "https://tommysgest.com/";
-	// quando condividi questa pagina su facebook vedrai questa immagine
-	const ogImg = "/public/images/banner-social.png";
 	return (
 		<>
 			<Head>
@@ -52,12 +48,12 @@ const Layout = ({ children, title, description, ogImage, url }: LayoutType) => {
 				/>
 				<meta
 					property="og:url"
-					content={url ? url : pageUrl}
+					content={eCommerceConf.LinkHomeCenter}
 					key="og:url"
 				/>
 				<meta
 					property="og:image"
-					content={ogImage ? ogImage : ogImg}
+					content="/images/banner-social.png"
 					key="og:image"
 				/>
 				<meta

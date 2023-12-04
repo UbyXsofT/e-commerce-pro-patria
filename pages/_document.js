@@ -7,6 +7,7 @@ import createEmotionCache from "../src/components/utils/createEmotionCache";
 import { ThemeProvider } from "@mui/material/styles";
 import { lightTheme } from "../src/components/theme/theme";
 
+import Script from "next/script";
 export default function MyDocument(props) {
 	const { emotionStyleTags } = props;
 
@@ -21,6 +22,7 @@ export default function MyDocument(props) {
 					name="theme-color"
 					content={lightTheme.palette.primary.main}
 				/>
+
 				<link
 					rel="shortcut icon"
 					href="/favicon.ico"
