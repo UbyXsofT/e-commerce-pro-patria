@@ -59,15 +59,18 @@ type Step1Props = {
 	dateOfBirth: Date;
 	setDateOfBirth: React.Dispatch<React.SetStateAction<Date>>;
 	placeOfBirth: string;
-	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string | undefined>>;
 	address: string;
 	setAddress: React.Dispatch<React.SetStateAction<string>>;
 	city: string;
-	setCity: React.Dispatch<React.SetStateAction<string>>;
+	setCity: React.Dispatch<React.SetStateAction<string | undefined>>;
 	cap: string;
-	setCap: React.Dispatch<React.SetStateAction<string>>;
+	setCap: React.Dispatch<React.SetStateAction<string | undefined>>;
 	province: string;
-	setProvince: React.Dispatch<React.SetStateAction<string>>;
+	setProvince: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+	setProvinceOfBirth: React.Dispatch<
+		React.SetStateAction<string | null | undefined>
+	>;
 	email?: string;
 	setEmail?: React.Dispatch<React.SetStateAction<string>>;
 	phoneNumber: string;
@@ -347,6 +350,7 @@ const Step1 = ({
 									setPlaceOfBirth={setPlaceOfBirth}
 									selectedComune={selectedComune}
 									setSelectedComune={setSelectedComune}
+									setProvinceOfBirth={setProvince}
 									setCap={null}
 								/>
 								<FormHelperText>
@@ -391,11 +395,11 @@ const Step1 = ({
 									label={"Residenza"}
 									comuni={comuni}
 									placeOfBirth={city}
-									setPlaceOfBirth={setCity}
+									setPlaceOfBirth={setCity || null}
 									selectedComune={comuneResidenza}
 									setSelectedComune={setComuneResidenza}
 									setProvinceOfBirth={setProvince}
-									setCap={setCap}
+									setCap={setCap || null} // Fornisci null come valore di fallback
 								/>
 							</Grid>
 							<Grid

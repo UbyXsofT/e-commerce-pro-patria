@@ -10,6 +10,7 @@ import {
 	Card,
 	Avatar,
 	FormHelperText,
+	useMediaQuery,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -68,7 +69,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 		"read" | "authenticate" | "modify"
 	>("read");
 	const [origin, setOrigin] = useState<"changePassword" | null>(null);
-
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const user = useSelector((state: StoreState) => state.authUser);
 	// Gestisci il caso in cui 'user' può essere null
 	const {
@@ -621,7 +622,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 							<Box
 								sx={{
-									maxWidth: 240,
+									maxWidth: isMobile ? 240 : "auto",
 								}}
 							>
 								<ReCAPTCHA
@@ -704,8 +705,12 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 									setPlaceOfBirth={setModifyCity}
 									selectedComune={selectedComune}
 									setSelectedComune={setSelectedComune}
-									setProvinceOfBirth={setModifyProvince ?? "null"}
-									setCap={setModifyCap ?? "null"}
+									setProvinceOfBirth={
+										(setModifyProvince as React.Dispatch<
+											React.SetStateAction<string | null | undefined>
+										>) ?? null
+									}
+									setCap={setModifyCap ?? undefined}
 								/>
 							</Grid>
 							<Grid

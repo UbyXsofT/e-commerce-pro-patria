@@ -190,15 +190,32 @@ const SignUp = () => {
 			dateOfBirth={dateOfBirth}
 			setDateOfBirth={setDateOfBirth}
 			placeOfBirth={placeOfBirth}
-			setPlaceOfBirth={setPlaceOfBirth}
+			setPlaceOfBirth={
+				setPlaceOfBirth as React.Dispatch<
+					React.SetStateAction<string | undefined>
+				>
+			}
 			address={address}
 			setAddress={setAddress}
 			city={city}
-			setCity={setCity}
+			setCity={
+				setCity as React.Dispatch<React.SetStateAction<string | undefined>>
+			}
 			cap={cap}
-			setCap={setCap}
+			setCap={
+				setCap as React.Dispatch<React.SetStateAction<string | undefined>>
+			}
 			province={province}
-			setProvince={setProvince}
+			setProvince={
+				setProvince as React.Dispatch<
+					React.SetStateAction<string | null | undefined>
+				>
+			}
+			setProvinceOfBirth={
+				setProvince as React.Dispatch<
+					React.SetStateAction<string | null | undefined>
+				>
+			}
 			email={email}
 			setEmail={setEmail}
 			phoneNumber={phoneNumber}
@@ -248,15 +265,32 @@ const SignUp = () => {
 			dateOfBirth={parentDateOfBirth}
 			setDateOfBirth={setParentDateOfBirth}
 			placeOfBirth={parentPlaceOfBirth}
-			setPlaceOfBirth={setParentPlaceOfBirth}
+			setPlaceOfBirth={
+				setParentPlaceOfBirth as React.Dispatch<
+					React.SetStateAction<string | undefined>
+				>
+			}
 			address={parentAddress}
 			setAddress={setParentAddress}
 			city={parentCity}
-			setCity={setParentCity}
+			setCity={
+				setParentCap as React.Dispatch<React.SetStateAction<string | undefined>>
+			}
 			cap={parentCap}
-			setCap={setParentCap}
+			setCap={
+				setParentCap as React.Dispatch<React.SetStateAction<string | undefined>>
+			}
 			province={parentProvince}
-			setProvince={setParentProvince}
+			setProvince={
+				setParentProvince as React.Dispatch<
+					React.SetStateAction<string | null | undefined>
+				>
+			}
+			setProvinceOfBirth={
+				setParentProvince as React.Dispatch<
+					React.SetStateAction<string | null | undefined>
+				>
+			}
 			phoneNumber={parentPhoneNumber}
 			setPhoneNumber={setParentPhoneNumber}
 			toCheck={[
