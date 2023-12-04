@@ -20,6 +20,7 @@ import {
 	StoreState,
 	obyPostProdotti,
 	responseCall,
+	Abbonamento,
 } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
@@ -30,6 +31,7 @@ import eCommerceConf from "eCommerceConf.json";
 import { setCentri } from "src/store/actions";
 import { Centro } from "./auth/store";
 import callNodeService from "./api/callNodeService";
+import { Any } from "react-spring";
 
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
@@ -112,12 +114,16 @@ export const fetchCentri = async (): Promise<{
 			{
 				id: 1,
 				name: "CORSI IN SEDE",
-				subscriptions: respCall.messageCli.message.prodotti,
+				subscriptions: respCall.messageCli.message.prodotti.filter(
+					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "1"
+				),
 			},
 			{
 				id: 2,
 				name: "CORSI FUORI SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+				subscriptions: respCall.messageCli.message.prodotti.filter(
+					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "2"
+				),
 			},
 		];
 

@@ -112,7 +112,11 @@ const LayoutGeneral = ({
 				/>
 			</Head>
 			<SettingsProvider>
-				<animated.main style={mainAnimation}>
+				<animated.main
+					id="content"
+					ref={contentRef}
+					style={mainAnimation}
+				>
 					<Box sx={{ display: "flex" }}>
 						<>
 							<AppBar
@@ -159,10 +163,7 @@ const LayoutGeneral = ({
 							<AlertMe />
 							{/* <div id="content"> {children}</div>
 						<Footer /> */}
-							<div
-								id="content"
-								ref={contentRef}
-							>
+							<div>
 								{children}
 								<Footer contentRef={contentRef} />
 							</div>

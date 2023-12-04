@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redu
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
 import { useRouter } from "next/router";
-import { Container } from "@mui/system";
+import { Box, Container } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyIcon from "@mui/icons-material/Key";
@@ -579,14 +579,17 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							justifyContent: "center",
 							alignItems: "center",
 							marginBottom: "1em",
+							height:
+								"auto" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 						}}
 					>
 						<Card
 							sx={{
 								padding: 3,
 								maxWidth: "350px",
-								maxHeight:
-									"50vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+								height: "400px",
+								// maxHeight:
+								// 	"50vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 								display: "flex",
 								flexDirection: "column",
 							}}
@@ -615,18 +618,26 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								Inserisci la tua <strong>Password</strong> per{" "}
 								<strong>Autenticarti</strong>
 							</FormHelperText>
-							<ReCAPTCHA
-								style={{ marginTop: "1rem" }}
-								sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-								onChange={(value) => setCaptchaValue(value)}
-							></ReCAPTCHA>
+
+							<Box
+								sx={{
+									maxWidth: 240,
+								}}
+							>
+								<ReCAPTCHA
+									style={{ marginTop: "1rem" }}
+									sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+									onChange={(value) => setCaptchaValue(value)}
+								></ReCAPTCHA>
+							</Box>
+
 							<div
 								style={{
-									marginTop: "10em",
+									marginTop: "2em",
 									display: "flex",
 									gap: 1,
 									justifyContent: "space-between",
-									marginBottom: "1em",
+									marginBottom: "2em",
 								}}
 							>
 								<Button

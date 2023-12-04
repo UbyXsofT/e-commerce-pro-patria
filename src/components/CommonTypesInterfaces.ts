@@ -382,6 +382,7 @@ export interface obyPostProdotti {
 
 export interface Abbonamento {
 	id: string;
+	idCentro: string;
 	nome: string;
 	prezzo: number;
 	immagine: string | null;

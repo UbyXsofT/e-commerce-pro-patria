@@ -26,15 +26,15 @@ export function Footer({ contentRef }: FooterProps) {
 	const [bottomMobile, setBottomMobile] = React.useState(isMobile ? 40 : 0);
 
 	const handleResize = React.useCallback(() => {
-		// if (isMobile) {
-		// 	setIsFooterFixed(false);
-		// } else {
+		console.log("@@@ --- useCallback ******** handleResize");
 		const windowHeight = window.innerHeight;
 		const header = document.getElementById("header");
 		const footerElement = document.getElementById("footer");
 		const contentElement = contentRef.current;
 		setBottomMobile(isMobile ? 40 : 0);
-
+		if (!header || !footerElement) {
+			return;
+		}
 		if (footerElement && contentElement) {
 			const contentRect = contentElement.getBoundingClientRect();
 			const headerHeight = header?.clientHeight || 0;
@@ -47,18 +47,25 @@ export function Footer({ contentRef }: FooterProps) {
 	}, [isMobile, contentRef]);
 
 	React.useEffect(() => {
-		const resizeObserver = new ResizeObserver(handleResize);
+		if (typeof ResizeObserver === "function") {
+			// Usa ResizeObserver
+			const resizeObserver = new ResizeObserver(handleResize);
 
-		const parentElement = contentRef.current;
-		if (parentElement) {
-			resizeObserver.observe(parentElement);
-		}
-
-		return () => {
+			const parentElement = contentRef.current;
 			if (parentElement) {
-				resizeObserver.unobserve(parentElement);
+				resizeObserver.observe(parentElement);
 			}
-		};
+
+			return () => {
+				if (parentElement) {
+					resizeObserver.unobserve(parentElement);
+				}
+			};
+			// ...
+		} else {
+			// Fallback o messaggio di avviso
+			console.warn("ResizeObserver non è supportato in questo ambiente.");
+		}
 	}, [handleResize, contentRef]);
 
 	React.useEffect(() => {
