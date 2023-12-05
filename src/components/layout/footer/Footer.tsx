@@ -12,59 +12,93 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useSpring, animated } from "react-spring";
 import { PrivacyCookie } from "./PrivacyCookie";
+import eCommerce from "eCommerceConf.json";
 
-export function Footer() {
+// Nel componente Footer
+interface FooterProps {
+	contentRef: React.RefObject<HTMLDivElement | null>;
+}
+
+export function Footer({ contentRef }: FooterProps) {
 	const [isFooterFixed, setIsFooterFixed] = React.useState(false);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const [bottomMobile, setBottomMobile] = React.useState(isMobile ? 40 : 0);
 
-	const handleResize = () => {
-		if (isMobile) {
-			setIsFooterFixed(false);
-		} else {
-			const windowHeight = window.innerHeight;
-			const header = document.getElementById("header");
-			const footerElement = document.getElementById("footer"); // Replace with your footer's ID
-			const contentElement = document.getElementById("content"); // Replace with your content's ID
-
-			if (footerElement && contentElement) {
-				const footerRect = footerElement.getBoundingClientRect();
-				const contentRect = contentElement.getBoundingClientRect();
-
-				const headerHeight = header?.clientHeight ? header?.clientHeight : 0;
-
-				// Check for collision by comparing bottom position of the content and top position of the footer
-				let isColliding =
-					contentRect.height + footerRect.height + headerHeight + 24 >
-					windowHeight;
-
-				setIsFooterFixed(!isColliding);
-			}
+	const handleResize = React.useCallback(() => {
+		console.log("@@@ --- useCallback ******** handleResize");
+		const windowHeight = window.innerHeight;
+		const header = document.getElementById("header");
+		const footerElement = document.getElementById("footer");
+		const contentElement = contentRef.current;
+		setBottomMobile(isMobile ? 40 : 0);
+		if (!header || !footerElement) {
+			return;
 		}
-	};
+		if (footerElement && contentElement) {
+			const contentRect = contentElement.getBoundingClientRect();
+			const headerHeight = header?.clientHeight || 0;
+
+			let isColliding =
+				contentRect.height + headerHeight + bottomMobile > windowHeight;
+			setIsFooterFixed(!isColliding);
+		}
+		//}
+	}, [isMobile, contentRef]);
 
 	React.useEffect(() => {
-		// Add an event listener for the "resize" event
-		window.addEventListener("resize", handleResize);
+		if (typeof ResizeObserver === "function") {
+			// Usa ResizeObserver
+			const resizeObserver = new ResizeObserver(handleResize);
 
-		// Call the initial handleResize to set the initial state
-		handleResize();
+			const parentElement = contentRef.current;
+			if (parentElement) {
+				resizeObserver.observe(parentElement);
+			}
 
-		// Remove the event listener when the component unmounts
-		return () => {
-			window.removeEventListener("resize", handleResize);
+			return () => {
+				if (parentElement) {
+					resizeObserver.unobserve(parentElement);
+				}
+			};
+			// ...
+		} else {
+			// Fallback o messaggio di avviso
+			console.warn("ResizeObserver non è supportato in questo ambiente.");
+		}
+	}, [handleResize, contentRef]);
+
+	React.useEffect(() => {
+		console.log("isFooterFixed:", isFooterFixed);
+	}, [isFooterFixed]);
+
+	function throttle<T extends (...args: any[]) => void>(func: T, wait: number) {
+		let timeout: NodeJS.Timeout | null;
+		return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+			const context = this;
+			if (!timeout) {
+				timeout = setTimeout(function () {
+					timeout = null;
+					func.apply(context, args);
+				}, wait);
+			}
 		};
-	}, []);
+	}
 
 	React.useEffect(() => {
-		handleResize();
-	}, [typeof window !== "undefined" ? document.body.clientHeight : {}]);
+		const handleResizeThrottled = throttle(handleResize, 100);
+		window.addEventListener("resize", handleResizeThrottled);
+		handleResize(); // Chiamare handleResize iniziale per impostare lo stato iniziale
+		return () => {
+			window.removeEventListener("resize", handleResizeThrottled);
+		};
+	}, [handleResize]);
 
 	// Definiamo l'animazione per le proprietà di posizione con useSpring
 	const positionAnimationProps = useSpring({
-		bottom: isFooterFixed ? 0 : 0,
-
-		config: { duration: 100 }, // Opzionale: personalizza la durata dell'animazione di posizione
+		bottom: bottomMobile,
+		marginTop: bottomMobile,
+		config: { duration: 200 },
 	});
 
 	return (
@@ -72,9 +106,11 @@ export function Footer() {
 			id="footer"
 			style={{
 				...positionAnimationProps,
-				left: isFooterFixed ? 100 : 0,
-				right: isFooterFixed ? 50 : 0,
+				// left: isFooterFixed ? 100 : 0,
+				// right: isFooterFixed ? 50 : 0,
 				position: isFooterFixed ? "fixed" : "relative",
+				left: isFooterFixed ? "24px" : "0px",
+				right: isFooterFixed ? "24px" : "0px",
 			}}
 		>
 			<Container
@@ -122,10 +158,7 @@ export function Footer() {
 							>
 								Chi siamo
 							</Typography>
-							<Typography variant="body2">
-								We are XYZ company, dedicated to providing the best service to
-								our customers.
-							</Typography>
+							<Typography variant="body2">{eCommerce.ChiSiamo}</Typography>
 						</Box>
 					</Grid>
 					<Grid
@@ -152,10 +185,33 @@ export function Footer() {
 								Contattaci
 							</Typography>
 							<Typography variant="body2">
-								123 Main Street, Anytown, USA
+								{eCommerce.Contatti.indirizzo}
 							</Typography>
-							<Typography variant="body2">Email: info@example.com</Typography>
-							<Typography variant="body2">Phone: +1 234 567 8901</Typography>
+							<Typography variant="body2">
+								- {eCommerce.Contatti.telefono}
+							</Typography>
+							<Typography variant="body2">
+								- e-mail: {eCommerce.Contatti.email}
+							</Typography>
+							<Typography variant="body2">
+								- Inviare la corrispondenza in :{" "}
+								{eCommerce.Contatti.indirizzoCorrispondenza}
+							</Typography>
+							<Typography variant="body2">
+								{" "}
+								<br></br>
+							</Typography>
+							<Typography variant="body2">
+								- Orari segreteria:{" "}
+								{eCommerce.Contatti.orariSegreteria.lunedì_venerdì}
+							</Typography>
+							<Typography variant="body2">
+								- Orari estivi segreteria:{" "}
+								{eCommerce.Contatti.orariSegreteria.orariEstivi}
+							</Typography>
+							<Typography variant="body2">
+								- Agosto: {eCommerce.Contatti.orariSegreteria.agosto}
+							</Typography>
 						</Box>
 					</Grid>
 					<Grid
@@ -183,20 +239,20 @@ export function Footer() {
 							</Typography>
 
 							<Link
-								href="https://www.facebook.com/"
+								href={eCommerce.Seguici.Facebook}
 								color="inherit"
 							>
 								<Facebook />
 							</Link>
 							<Link
-								href="https://www.instagram.com/"
+								href={eCommerce.Seguici.Instagram}
 								color="inherit"
 								sx={{ pl: 1, pr: 1 }}
 							>
 								<Instagram />
 							</Link>
 							<Link
-								href="https://www.twitter.com/"
+								href={eCommerce.Seguici.Twitter}
 								color="inherit"
 							>
 								<Twitter />

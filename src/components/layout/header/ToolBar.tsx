@@ -9,22 +9,26 @@ import {
 	Typography,
 	TextField,
 	Button,
+	Avatar,
 } from "@mui/material";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
 import MailIcon from "@mui/icons-material/Mail";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Router, { useRouter } from "next/router";
 import CustomPopper from "src/components/utils/CustomPopper";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreState } from "src/components/CommonTypesInterfaces";
+import AvatarName from "src/components/account/AvatarName";
 
 const menuId = "up-account-menu";
 const StyledImageLogo = styled(Image)({
 	padding: "5px",
-	maxWidth: 190,
-	maxHeight: 60,
-	marginLeft: -30,
+	// maxWidth: 190,
+	// maxHeight: 60,
+	// marginLeft: -30,
 });
 //React.Dispatch<React.SetStateAction<string | undefined>>
 type ToolBarProps = {
@@ -42,13 +46,13 @@ export interface NavigationPoint {
 	link: string;
 }
 export const navigationPoints: NavigationPoint[] = [
-	{
-		name: "About",
-		link: "/auth/about",
-	},
+	// {
+	// 	name: "About",
+	// 	link: "/auth/about",
+	// },
 	{ name: "Home", link: "/auth/home" },
 	{ name: "Abbonamenti", link: "/auth/store" },
-	{ name: "Carrello", link: "/auth/carrello" },
+	// { name: "Carrello", link: "/auth/carrello" },
 ];
 
 export const ToolBar = ({
@@ -65,6 +69,17 @@ export const ToolBar = ({
 		React.useState<null | HTMLElement>(null);
 	const [cartPopper, setCartPopper] = React.useState<null | HTMLElement>(null);
 	const [userPopper, setUserPopper] = React.useState<null | HTMLElement>(null);
+
+	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
+	//TODO provo gli allert
+	const dispatch = useDispatch();
+	const cartLength = useSelector(
+		(state: StoreState) => state.cart[0]?.cart.length ?? 0
+	);
+
+	React.useEffect(() => {
+		setCartAlertsNum(cartLength);
+	}, [dispatch, cartLength]);
 
 	const router = useRouter();
 
@@ -117,13 +132,14 @@ export const ToolBar = ({
 						display: "grid",
 						gridTemplateColumns: "1fr 1fr 1fr",
 						width: "100%",
+						minHeight: "60px",
 					}}
 				>
 					<StyledImageLogo
 						src="/images/LogoO.png"
 						alt="Logo"
 						width={190}
-						height={70}
+						height={60}
 						priority={true}
 						sx={{ cursor: "pointer" }}
 						onClick={() => {
@@ -133,12 +149,17 @@ export const ToolBar = ({
 
 					{!noAuth ? (
 						isMobile ? (
-							<div></div>
+							<div
+								style={{
+									minHeight: "60px",
+								}}
+							></div>
 						) : (
 							<Box
 								sx={{
 									display: "flex",
 									justifyContent: "center",
+									minHeight: "60px",
 								}}
 								gap={1}
 							>
@@ -167,7 +188,11 @@ export const ToolBar = ({
 							</Box>
 						)
 					) : (
-						<div></div>
+						<div
+							style={{
+								minHeight: "60px",
+							}}
+						></div>
 					)}
 
 					<Box
@@ -209,12 +234,13 @@ export const ToolBar = ({
 						<IconButton
 							size="large"
 							aria-label={
-								cartAlerts !== 0
-									? `${cartAlerts} elementi nel Carrello`
+								cartAlertsNum !== 0
+									? `${cartAlertsNum} elementi nel Carrello`
 									: "Il Carrello è Vuoto"
 							}
 							color="inherit"
-							onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+							onClick={() => Router.push("/auth/carrello")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
@@ -230,7 +256,7 @@ export const ToolBar = ({
 							// }}
 						>
 							<Badge
-								badgeContent={cartAlerts}
+								badgeContent={cartAlertsNum}
 								color="error"
 							>
 								<ShoppingCartIcon />
@@ -253,18 +279,13 @@ export const ToolBar = ({
 							onMouseLeave={() => {
 								handlePopperClose(setUserPopper);
 							}}
-							// onMouseEnter={() => {
-							//   setTipoContesto("utente");
-							//   handleMouseEnter();
-							// }}
-							// onMouseLeave={() => {
-							//   setTipoContesto("utente");
-							//   handleMouseLeave();
-							// }}
 							color="inherit"
 						>
-							<AccountCircle />
+							{/* <AccountCircle /> */}
+
+							<AvatarName />
 						</IconButton>
+
 						<CustomPopper
 							isOpen={openUser}
 							anchorEl={userPopper}

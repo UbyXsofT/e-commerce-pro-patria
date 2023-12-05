@@ -10,16 +10,19 @@ import {
 	Card,
 	Avatar,
 	FormHelperText,
+	useMediaQuery,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 //REDUX-STORE
 import { connect } from "react-redux";
 import { setLoading } from "../../src/store/actions";
+//REDUX-STORE
+import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
 //*-----*//
 import Layout from "../../src/components/layout/Layout";
 import { useRouter } from "next/router";
-import { Container } from "@mui/system";
+import { Box, Container } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KeyIcon from "@mui/icons-material/Key";
@@ -27,8 +30,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import stringUpperCase from "src/components/utils/stringUpperCase";
 import VirtualizedAutocomplete from "src/components/account/register/VirtualizedAutocomplete";
 import {
+	authUserCheck,
+	AuthUser,
 	AutocompleteSelected,
+	changeUserData,
 	ComunePaese,
+	responseCall,
+	StoreState,
+	tokenlessAccess,
 } from "src/components/CommonTypesInterfaces";
 import getComuni from "src/components/utils/getComuni";
 import { MuiTelInput } from "mui-tel-input";
@@ -39,6 +48,11 @@ import eCommerceConf from "eCommerceConf.json";
 import { useSettings } from "src/components/layout/SettingsContext";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import { useSelector } from "react-redux";
+import callNodeService from "pages/api/callNodeService";
+import CookieManager from "src/components/cookie/CookieManager";
+//redux
+import { setAuthUser } from "src/store/actions";
 
 type AccountSettingsProps = {
 	_setLoading: (isLoading: boolean) => {
@@ -50,30 +64,57 @@ type AccountSettingsProps = {
 const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const theme = useTheme();
 	const router = useRouter();
-
 	const { openSettings, setOpenSettings } = useSettings();
 	const [interfaceState, setInterfaceState] = useState<
 		"read" | "authenticate" | "modify"
 	>("read");
-
 	const [origin, setOrigin] = useState<"changePassword" | null>(null);
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const user = useSelector((state: StoreState) => state.authUser);
+	// Gestisci il caso in cui 'user' può essere null
+	const {
+		NOME,
+		COGNOME,
+		CODFISC,
+		INDIRIZZO,
+		CITTA,
+		PROVINCIA,
+		CAP,
+		CELLULARE,
+		EMAIL,
+	} = user || {};
 
-	const name = "Mattia";
-	const surname = "Formichetti";
-	const fiscalCode = "FRMMTT04B08H282M";
-	const address = "Via Principe di Piemonte 28";
-	const city = "Colli Sul Velino";
-	const province = "Rieti";
-	const cap = "02010";
-	const phoneNumber = "+39 347 288 5462";
-	const email = "mattiaformichetti@gmail.com";
+	// Dichiarazione delle variabili locali
+	const [name, setName] = React.useState(NOME);
+	const [surname, setSurname] = React.useState(COGNOME);
+	const [fiscalCode, setFiscalCode] = React.useState(CODFISC);
+	const [localAddress, setLocalAddress] = React.useState(INDIRIZZO);
+	const [localCity, setLocalCity] = React.useState(CITTA);
+	const [localProvince, setLocalProvince] = React.useState(PROVINCIA);
+	const [localCap, setLocalCap] = React.useState(CAP);
+	const [localPhoneNumber, setLocalPhoneNumber] = React.useState(CELLULARE);
+	const [localEmail, setLocalEmail] = React.useState(EMAIL);
 
-	const [modifyAddress, setModifyAddress] = useState(address);
-	const [modifyCity, setModifyCity] = useState(city);
-	const [modifyProvince, setModifyProvince] = useState(province);
-	const [modifyCap, setModifyCap] = useState(cap);
-	const [modifyEmail, setModifyEmail] = useState(email);
-	const [modifyPhoneNumber, setModifyPhoneNumber] = useState(phoneNumber);
+	useEffect(() => {
+		console.log("*******user: ", user);
+		// Aggiorna le variabili locali quando lo stato di Redux cambia
+		setName(NOME);
+		setSurname(COGNOME);
+		setFiscalCode(CODFISC);
+		setLocalAddress(INDIRIZZO);
+		setLocalCity(CITTA);
+		setLocalProvince(PROVINCIA);
+		setLocalCap(CAP);
+		setLocalPhoneNumber(CELLULARE);
+		setLocalEmail(EMAIL);
+	}, [user]); // Dipendenza dell'effetto sullo stato di Redux
+
+	const [modifyAddress, setModifyAddress] = useState(localAddress);
+	const [modifyCity, setModifyCity] = useState(localCity);
+	const [modifyProvince, setModifyProvince] = useState(localProvince);
+	const [modifyCap, setModifyCap] = useState(localCap);
+	const [modifyEmail, setModifyEmail] = useState(localEmail);
+	const [modifyPhoneNumber, setModifyPhoneNumber] = useState(localPhoneNumber);
 
 	const [selectedComune, setSelectedComune] =
 		useState<AutocompleteSelected>(null);
@@ -82,30 +123,233 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [password, setPassword] = useState("");
 	const [wrongPassword, setWrongPassword] = useState(false);
 
-	const [captcha, setCaptcha] = useState<string | null>(null);
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 
 	useEffect(() => {
 		getComuni(setComuni);
 	}, []);
 
 	const sendData = (
-		modifyAddress: string,
-		modifyCity: string,
-		modifyProvince: string,
-		modifyCap: string,
-		modifyEmail: string,
-		modifyPhoneNumber: string
+		modifyAddress: string | undefined,
+		modifyCity: string | undefined,
+		modifyProvince: string | undefined,
+		modifyCap: string | undefined,
+		modifyEmail: string | undefined,
+		modifyPhoneNumber: string | undefined
 	) => {
-		setInterfaceState("read");
-	};
+		const fixPhoneNumber = user?.TELEFONO;
+		const userID = user?.USERID;
 
-	// TODO: Implement Password Checking
-	const passwordCheck = (password: string) => {
-		if (!captcha) {
+		const fetchData = async () => {
+			const handleCallNodeService_Resp = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					if (msg_Resp.ESITO === "1") {
+						//****** UTENTE
+						// Aggiorna lo stato dell'OGGETTO utente
+						try {
+							console.log("Aggiorna Redux AuthUser:");
+							const updatedProperties = {
+								INDIRIZZO: modifyAddress,
+								CITTA: modifyCity,
+								PROVINCIA: modifyProvince,
+								CAP: modifyCap,
+								EMAIL: modifyEmail,
+								CELLULARE: modifyPhoneNumber,
+							};
+
+							// Aggiorna solo le proprietà necessarie espandendo anche l'oggetto utente esistente
+							dispatch(setAuthUser({ ...user, ...updatedProperties }));
+						} catch (error) {
+							console.log("Aggiorna Redux AuthUser:", error);
+						}
+
+						setInterfaceState("read");
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>
+										Modifica dati anagrafici, avvenuta correttamente!
+									</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert("filled", "success", "INFO!", textAlert, true);
+					} else {
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>{msg_Resp.ERRMSG}</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+			const obyPostData: changeUserData = {
+				clienteKey: eCommerceConf.ClienteKey,
+				op: 2,
+				Codice_Cliente: userID ?? "null",
+				Indirizzo: modifyAddress ?? "null",
+				Citta: modifyCity ?? "null",
+				Provincia: modifyProvince ?? "null",
+				Cap: modifyCap ?? "null",
+				EMail: modifyEmail ?? "null",
+				Cellulare: modifyPhoneNumber ?? "null",
+				Telefono: fixPhoneNumber ?? "null",
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"save-user-data",
+					obyPostData,
+					null
+				);
+
+				handleCallNodeService_Resp(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
 			handleCaptchaError();
 			return;
 		}
-		return true;
+
+		fetchData();
+
+		//setInterfaceState("read");
+	};
+
+	const passwordCheck = (password: string) => {
+		const handleCaptchaError = async () => {
+			console.log("Si prega di completare il reCAPTCHA.");
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>Si prega di completare il reCAPTCHA.</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		};
+
+		const fetchData = async () => {
+			const handleLoginResponse = (respCall: responseCall) => {
+				const handleSuccess = (msg_Resp: any) => {
+					console.log("handleSuccess ISAUTH: ", msg_Resp.ISAUTH);
+					if (msg_Resp.ISAUTH === "1" && msg_Resp.ESITO === "1") {
+						console.log("****** origin: ", origin);
+						if (origin === "changePassword") {
+							setOrigin(null);
+							setWrongPassword(false);
+							router.push({
+								pathname: "/auth/setNewPassword",
+								query: { origin: "/auth/account" },
+							});
+							return;
+						} else {
+							setInterfaceState("modify");
+						}
+					} else {
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>Utente non autenticato!</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+					}
+				};
+
+				const msg_Resp = respCall.messageCli.message;
+				if (respCall.successCli) {
+					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					if (msg_Resp) {
+						handleSuccess(msg_Resp);
+					} else {
+						handleError("Errore nel recupero dei dati, dati incompleti!");
+					}
+				} else {
+					handleError(respCall.messageCli);
+				}
+			};
+
+			const handleError = (error: any) => {
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+			let userName = CookieManager.getCookie("username");
+			//*********** CALL NODE SERVICE
+			const obyPostData: authUserCheck = {
+				clienteKey: eCommerceConf.ClienteKey,
+				userName: userName ?? "null",
+				password: password,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"authUserCheck",
+					obyPostData,
+					null
+				);
+				handleLoginResponse(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		//*********** CALL NODE SERVICE
+
+		// Controlla se il captchaValue è valido prima di procedere con il login
+		if (!captchaValue) {
+			handleCaptchaError();
+			return;
+		}
+
+		fetchData();
 	};
 
 	const { showAlert } = useAlertMe();
@@ -113,9 +357,11 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const handleCaptchaError = async () => {
 		console.log("Si prega di completare il reCAPTCHA.");
 		const textAlert = (
-			<h3>
-				<strong>Si prega di completare il reCAPTCHA.</strong>
-			</h3>
+			<React.Fragment>
+				<h3>
+					<strong>Si prega di completare il reCAPTCHA.</strong>
+				</h3>
+			</React.Fragment>
 		);
 		await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 	};
@@ -185,7 +431,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={4.5}
 							>
 								<TextField
-									value={address}
+									value={localAddress}
 									label="Indirizzo"
 									InputProps={{
 										readOnly: true,
@@ -199,7 +445,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={1.5}
 							>
 								<TextField
-									value={cap}
+									value={localCap}
 									label="CAP"
 									InputProps={{
 										readOnly: true,
@@ -213,7 +459,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={3}
 							>
 								<TextField
-									value={city}
+									value={localCity}
 									label="Città"
 									InputProps={{
 										readOnly: true,
@@ -227,7 +473,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={3}
 							>
 								<TextField
-									value={province}
+									value={localProvince}
 									label="Provincia"
 									InputProps={{
 										readOnly: true,
@@ -242,7 +488,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<TextField
-									value={phoneNumber}
+									value={localPhoneNumber}
 									label="Telefono"
 									InputProps={{
 										readOnly: true,
@@ -256,7 +502,7 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<TextField
-									value={email}
+									value={localEmail}
 									label="Email"
 									InputProps={{
 										readOnly: true,
@@ -277,7 +523,10 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							>
 								<ButtonGroup fullWidth>
 									<Button
-										onClick={() => setInterfaceState("authenticate")}
+										onClick={() => {
+											setInterfaceState("authenticate");
+											setOrigin(null);
+										}}
 										variant="contained"
 									>
 										<EditIcon style={{ marginRight: 5 }} />
@@ -331,12 +580,17 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							justifyContent: "center",
 							alignItems: "center",
 							marginBottom: "1em",
+							height:
+								"auto" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 						}}
 					>
 						<Card
 							sx={{
 								padding: 3,
 								maxWidth: "350px",
+								height: "400px",
+								// maxHeight:
+								// 	"50vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 								display: "flex",
 								flexDirection: "column",
 							}}
@@ -365,18 +619,26 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								Inserisci la tua <strong>Password</strong> per{" "}
 								<strong>Autenticarti</strong>
 							</FormHelperText>
-							<ReCAPTCHA
-								style={{ marginTop: "1rem" }}
-								sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-								onChange={(value) => setCaptcha(value)}
-							></ReCAPTCHA>
+
+							<Box
+								sx={{
+									maxWidth: isMobile ? 240 : "auto",
+								}}
+							>
+								<ReCAPTCHA
+									style={{ marginTop: "1rem" }}
+									sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+									onChange={(value) => setCaptchaValue(value)}
+								></ReCAPTCHA>
+							</Box>
+
 							<div
 								style={{
-									marginTop: "10em",
+									marginTop: "2em",
 									display: "flex",
 									gap: 1,
 									justifyContent: "space-between",
-									marginBottom: "1em",
+									marginBottom: "2em",
 								}}
 							>
 								<Button
@@ -390,25 +652,8 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								<Button
 									variant="contained"
 									onClick={() => {
-										if (passwordCheck(password) === true) {
-											if (origin === "changePassword") {
-												setOrigin(null);
-
-												router.push({
-													pathname: "/auth/setNewPassword",
-													query: { origin: "/auth/account" },
-												});
-
-												return;
-											}
-
-											setInterfaceState("modify");
-											setWrongPassword(false);
-										} else {
-											setWrongPassword(true);
-										}
+										passwordCheck(password);
 									}}
-									disabled={!password}
 								>
 									Autentica
 								</Button>
@@ -454,14 +699,18 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 								md={6}
 							>
 								<VirtualizedAutocomplete
-									label={"Residenza"}
+									label={"Città"}
 									comuni={comuni}
-									placeOfBirth={modifyCity}
+									placeOfBirth={modifyCity ?? "null"}
 									setPlaceOfBirth={setModifyCity}
 									selectedComune={selectedComune}
 									setSelectedComune={setSelectedComune}
-									setProvinceOfBirth={setModifyProvince}
-									setCap={setModifyCap}
+									setProvinceOfBirth={
+										(setModifyProvince as React.Dispatch<
+											React.SetStateAction<string | null | undefined>
+										>) ?? null
+									}
+									setCap={setModifyCap ?? undefined}
 								/>
 							</Grid>
 							<Grid

@@ -9,6 +9,23 @@
 	"LinkCondizioni": null,
 	"LinkCookie": null,
 	"PartitaIva": "09778190158",
+	"ChiSiamo": "SG Pro Patria 1883 è una delle più prestigiose società sportive italiane. E' impegnata con successo, oltre che nella ginnastica artistica agonistica, nella promozione di molte discipline che coinvolgono migliaia di piccoli e grandi sportivi, tra cui atleti tesserati, sportivi dilettanti, bambini delle scuole primarie di Milano e tutti coloro che cercano nell'attività fisica e nello sport il benessere e un'armoniosa espressione di se stessi.",
+	"Contatti": {
+		"indirizzo": "Via Beato Angelico, 2 - 20133 Milano",
+		"telefono": "Tel. 02 -70123080",
+		"email": "info@propatria1883.it",
+		"indirizzoCorrispondenza": "Viale Romagna, 16 - 20133 Milano",
+		"orariSegreteria": {
+			"lunedì_venerdì": "8.30-13.00 ; 14.00-20.30",
+			"orariEstivi": "Giugno-Luglio: 9.30-12.30 ; 14.30-16.30",
+			"agosto": "Chiuso"
+		}
+	},
+	"Seguici": {
+		"Facebook": "https://www.facebook.com/sgpropatria1883milano",
+		"Instagram": "https://www.instagram.com/s.g.propatria1883official/",
+		"Twitter": "https://twitter.com/propatria1883"
+	},
 	"CRYPTO_KEY": "MatUby2023?-ProPatria",
 	"YOUR_RECAPTCHA_SITE_KEY": "6Lc0Rn0nAAAAAJTW76-BDPjrCQWGeVpvfNqjC6zB",
 	"Tema": "Default",
@@ -21,5 +38,6 @@
 	},
 	"UrlServerNode": "https://e-commerce.tommysgest.com:60443",
 	"MsgErrConvEcommerce": "Sembra che attualmente l'applicazione non abbia una configurazione valida. Ti invitiamo a contattare il tuo centro fitness, per ottenere ulteriori informazioni e supporto in merito a questa situazione. Grazie per la tua collaborazione.",
-	"MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!"
+	"MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!",
+	"oggetto_Mail": "TOMMYS E-Commerce"
 }

@@ -2,6 +2,8 @@ import { Dayjs } from "dayjs";
 import { Centro } from "pages/auth/store";
 import { MouseEventHandler } from "react";
 
+export type Url = string;
+
 export type Sex = null | "male" | "female";
 
 export type Focus = HTMLDivElement | null;
@@ -74,7 +76,7 @@ export type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
 export type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
 export type CaratteriSpeciali = "";
 
-export type Cookie = "accessToken" | "refreshToken";
+export type Cookie = "accessToken" | "refreshToken" | "username";
 
 export type StoreAction =
 	| SetLoading
@@ -128,6 +130,7 @@ export interface StripeKeysData {
 	PUBLISHABLE_KEY: string;
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
+	STRIPE_PORTALE_CLIENTE_LINK: Url;
 	isGetKeys: boolean;
 }
 
@@ -166,7 +169,63 @@ export interface AuthUser {
 	PARTNER: "0" | "1";
 	PAYPAL: "0" | "1";
 	LISTACENTRI: string;
+	NOME: string;
+	COGNOME: string;
+	INDIRIZZO: string;
+	CITTA: string;
+	TELEFONO: string;
+	CELLULARE: string;
+	CAP: string;
+	PROVINCIA: string;
+	CODFISC: string;
+	SCADENZEFISSE: {
+		SCADENZA: {
+			TIPO: string;
+			DESC: string;
+			FLREGULAR: string;
+			DATA: string;
+			TIPOID: string;
+			RINNOVA: string;
+		}[];
+	};
+	ABBONAMENTI: {
+		ABBONAMENTO: {
+			DESC: string;
+			DATAINIZIO: string;
+			DATAFINE: string;
+			ISCRIZIONE: string;
+			IDAGGIUNTA: string;
+			IDPACCHETTO: string;
+			GESTSOSP: string;
+			DATAINIZIOSOSP: string;
+			DATAFINESOSP: string;
+			ATTIVITA: {
+				DESC: string;
+				DATAINIZIO: string;
+				DATAFINE: string;
+				SEDUTE: string;
+			};
+		};
+	};
+	INTEGRAZIONI: string;
+	PAGAMENTI: {
+		PAGAMENTO: {
+			DATA: string;
+			DESC: string;
+			IMPORTO: string;
+		}[];
+	};
+	MONEYCARD: string;
+	LIVELLINAT: {
+		LIVELLO: {
+			IDLIV: string;
+			DATA: string;
+			DESC: string;
+			NOTES: string;
+		}[];
+	};
 }
+
 export interface UserData {
 	user: {
 		codiceFiscale: string;
@@ -200,6 +259,38 @@ export interface UserData {
 	} | null;
 }
 
+export interface NewUserData {
+	ID: String;
+	clienteKey: string;
+	Cognome: string;
+	Nome: string;
+	Data_Nascita: string;
+	Luogo_Nascita: string;
+	Sesso: string;
+	Indirizzo: string;
+	EMail: string;
+	Cellulare: string;
+	NoteD?: string;
+	CodFisc: string;
+	Citta: string;
+	Provincia: string;
+	Cap: string;
+	IDUtente: string;
+	PwdUtente: string;
+	Tipo_Prov: string;
+	Parent_CodFisc: string;
+	Parent_Nome: string;
+	Parent_Cognome: string;
+	Parent_Sesso: string;
+	Parent_Data_Nascita: string;
+	Parent_Luogo_Nascita: string;
+	Parent_Indirizzo: string;
+	Parent_Citta: string;
+	Parent_Cap: string;
+	Parent_Provincia: string;
+	Parent_Cellulare: string;
+}
+
 export interface MenuItem {
 	id: string;
 	label: string | null;
@@ -229,6 +320,25 @@ export interface tokenlessAccess {
 	refreshToken: null;
 }
 
+export interface authUserCheck {
+	clienteKey: string;
+	userName: string;
+	password: string;
+}
+
+export interface changeUserData {
+	clienteKey: string;
+	op: number;
+	Codice_Cliente: string;
+	Indirizzo: string;
+	Citta: string;
+	Provincia: string;
+	Cap: string;
+	EMail: string;
+	Cellulare: string;
+	Telefono: string;
+}
+
 export interface tokenfulAccess {
 	clienteKey: string;
 	accessToken: string;
@@ -243,6 +353,16 @@ export interface resetPsw {
 	clienteKey: string;
 	codFisc: string;
 	email: string;
+}
+
+export interface setNewPsw {
+	clienteKey: string;
+	UserID: string;
+	Pwd_New: string;
+	mittente: string;
+	destinatario: string;
+	oggetto: string;
+	corpo: string;
 }
 
 export interface responseCall {
@@ -262,6 +382,7 @@ export interface obyPostProdotti {
 
 export interface Abbonamento {
 	id: string;
+	idCentro: string;
 	nome: string;
 	prezzo: number;
 	immagine: string | null;
@@ -279,7 +400,7 @@ export interface Abbonamento {
 		daOrari: string;
 		aOrari: string;
 	};
-	quantity: number;  // Aggiunta della proprietà quantity
+	quantity: number; // Aggiunta della proprietà quantity
 }
 
 export type Cart = CartUser[];

@@ -4,6 +4,7 @@ import React, {
 	ReactElement,
 	SetStateAction,
 	useEffect,
+	useRef,
 } from "react";
 import {
 	BottomNavigation,
@@ -25,9 +26,10 @@ import DrawerSx from "./drawer/drawerSx/DrawerSx";
 import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
-import eCommerceConf from "../../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import { navigationPoints } from "./header/ToolBar";
 import { useRouter } from "next/router";
+
 type LayoutProps = {
 	children?: React.ReactNode;
 	title: string;
@@ -65,12 +67,15 @@ const Layout = ({
 	});
 
 	const router = useRouter();
-
 	const theme = useTheme();
-
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+	// Nel componente padre
+	const contentRef = React.useRef<HTMLDivElement | null>(null);
+
 	useEffect(() => {
+		console.log("********************* user: ", user);
+
 		navigationPoints.forEach((button, idx) => {
 			if (router.pathname === button.link) {
 				setBottomNavSelected(idx);
@@ -78,8 +83,6 @@ const Layout = ({
 		});
 	}, []);
 
-	// TODO: Fix Captcha Positioning
-	// TODO: Fix Footer size/position
 	// TODO: Fix Breakpoint Definition
 	// TODO: Fix Desktop Navigation Coloring
 
@@ -130,7 +133,11 @@ const Layout = ({
 				/>
 			</Head>
 
-			<animated.main style={mainAnimation}>
+			<animated.main
+				id="content"
+				ref={contentRef}
+				style={mainAnimation}
+			>
 				<Box sx={{ display: "flex" }}>
 					<Header
 						drawerDxOpen={drawerDxOpen}
@@ -167,8 +174,14 @@ const Layout = ({
 						}}
 					>
 						<AlertMe />
-						<div id="content"> {children}</div>
-						<Footer />
+
+						{/* <div id="content"> {children}</div>
+						<Footer /> */}
+						<div>
+							{children}
+							<Footer contentRef={contentRef} />
+						</div>
+
 						{isMobile ? (
 							<BottomNavigation
 								style={{

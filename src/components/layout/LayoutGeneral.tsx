@@ -13,7 +13,7 @@ import DrawerSx from "./drawer/drawerSx/DrawerSx";
 import { useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
-import eCommerceConf from "../../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import MuiAppBar from "@mui/material/AppBar";
 import { SettingsProvider } from "./SettingsContext";
 import { styled, useTheme } from "@mui/material/styles";
@@ -38,12 +38,17 @@ const LayoutGeneral = ({
 	// quando condividi questa pagina su facebook vedrai questa immagine
 	const ogImg = "/public/images/banner-social.png";
 	const theme = useTheme();
-
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+	// Nel componente padre
+	const contentRef = React.useRef<HTMLDivElement | null>(null);
 
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
 	const [drawerSxOpen, setDrawerSxOpen] = React.useState(false);
+
+	const [cartAlerts, setCartAlerts] = React.useState(1);
+
 	const pLeftDrawerOpen = "88px";
 	const pLeftDrawerClose = "24px";
 	const user = useSelector((state: StoreState) => state.authUser);
@@ -107,7 +112,11 @@ const LayoutGeneral = ({
 				/>
 			</Head>
 			<SettingsProvider>
-				<animated.main style={mainAnimation}>
+				<animated.main
+					id="content"
+					ref={contentRef}
+					style={mainAnimation}
+				>
 					<Box sx={{ display: "flex" }}>
 						<>
 							<AppBar
@@ -152,8 +161,12 @@ const LayoutGeneral = ({
 							}}
 						>
 							<AlertMe />
-							<div id="content"> {children}</div>
-							<Footer />
+							{/* <div id="content"> {children}</div>
+						<Footer /> */}
+							<div>
+								{children}
+								<Footer contentRef={contentRef} />
+							</div>
 						</Box>
 						{/* Componente CookieConsent */}
 						<CookieConsent />

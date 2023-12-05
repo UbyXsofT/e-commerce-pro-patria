@@ -9,7 +9,8 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Divider } from "@mui/material";
-import { MenuItem } from "src/components/CommonTypesInterfaces";
+import { MenuItem, StoreState } from "src/components/CommonTypesInterfaces";
+import eCommerceConf from "eCommerceConf.json";
 
 const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
 	const generateMenuItem = (
@@ -175,7 +176,7 @@ const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
 			"2",
 			"I miei ordini",
 			() => {
-				Router.push("/auth/ordini");
+				Router.push("STRIPE_PORTALE_CLIENTE_LINK");
 			},
 			<ManageHistoryIcon />,
 			null,

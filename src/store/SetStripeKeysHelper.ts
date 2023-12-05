@@ -16,6 +16,7 @@ const SetStripeKeysHelper = async (
 		PUBLISHABLE_KEY: "NO-KEY",
 		STRIPE_SECRET_KEY: "NO-KEY",
 		STRIPE_WEBHOOK_SECRET: "NO-KEY",
+		STRIPE_PORTALE_CLIENTE_LINK: "NO-URL",
 		isGetKeys: false,
 	};
 
@@ -29,10 +30,16 @@ const SetStripeKeysHelper = async (
 			) {
 				stripeKeysGetData.PUBLISHABLE_KEY =
 					msg_Resp.messageCli.message.stripeKeys.PUBLISHABLE_KEY;
+
 				stripeKeysGetData.STRIPE_SECRET_KEY =
 					msg_Resp.messageCli.message.stripeKeys.STRIPE_SECRET_KEY;
+
 				stripeKeysGetData.STRIPE_WEBHOOK_SECRET =
 					msg_Resp.messageCli.message.stripeKeys.STRIPE_WEBHOOK_SECRET;
+
+				stripeKeysGetData.STRIPE_PORTALE_CLIENTE_LINK =
+					msg_Resp.messageCli.message.stripeKeys.STRIPE_PORTALE_CLIENTE_LINK;
+
 				stripeKeysGetData.isGetKeys = true;
 			}
 		} catch (error) {

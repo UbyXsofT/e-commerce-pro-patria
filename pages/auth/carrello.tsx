@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
+import { setAuthUser } from "src/store/actions";
 
 //----------
 import {
@@ -41,6 +42,7 @@ import {
 import { removeFromCart } from "src/components/product/ProductCard";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
+import chiaveRandom from "src/components/utils/chiaveRandom";
 
 export const renderPrice = (price: number): string =>
 	price.toString().replace(".", ",");
@@ -51,9 +53,8 @@ const Carrello = () => {
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+	const authUser = useSelector((state: StoreState) => state.authUser);
 	const user = cart.at(0);
-
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 
 	type TotalPrice = {
@@ -104,12 +105,42 @@ const Carrello = () => {
 					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
 					msg_Resp
 				);
+				const msg_error_session = `Ops! Siamo spiacenti, ma al momento riscontriamo un problema
+				nella creazione della sessione di pagamento tramite Stripe.
+
+				Ti invitiamo a riprovare tra qualche istante. Se il problema
+				persiste, per favore, contatta il nostro servizio di
+				assistenza. 
+				
+				Ci scusiamo per l'inconveniente e faremo del
+				nostro meglio per risolvere la situazione al più presto.`;
 				try {
-					if (msg_Resp.messageCli.url) {
+					if (msg_Resp.successCli) {
 						window.location.href = msg_Resp.messageCli.url;
+					} else {
+						//ERROR data
+						console.log("error msg_Resp.successCli.url");
+						//ERROR data
+						const textAlert = (
+							<React.Fragment>
+								<h3>
+									<strong>{msg_error_session}</strong>
+								</h3>
+							</React.Fragment>
+						);
+						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 					}
 				} catch (error) {
+					//ERROR data
 					console.log("error CreateCheckOutSession: ", error);
+					const textAlert = (
+						<React.Fragment>
+							<h3>
+								<strong> {msg_error_session}</strong>
+							</h3>
+						</React.Fragment>
+					);
+					showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 				}
 				//success data
 			};
@@ -134,10 +165,13 @@ const Carrello = () => {
 			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-			let userId = cart[0].userId;
+
 			const obyPostDataCart = {
-				userId: userId,
 				clienteKey: eCommerceConf.ClienteKey,
+				userId: authUser?.USERID,
+				emailUser: authUser?.EMAIL,
+				emailCentro: authUser?.EMAILCENTRO,
+
 				line_items: cart[0].cart.map((item) => {
 					// Converti in stringa e rimuovi il punto decimale
 					let numeroSenzaDecimale: number = Number(
@@ -156,6 +190,7 @@ const Carrello = () => {
 						quantity: 1,
 					};
 				}),
+
 				currency: "eur",
 				mode: "payment",
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
@@ -185,7 +220,7 @@ const Carrello = () => {
 				description="This is a E-Commerce carrello page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				<Container>
+				<Container sx={{ marginBottom: "100px" }}>
 					{isCartEmpty ? (
 						<Box
 							textAlign={"center"}
@@ -223,112 +258,8 @@ const Carrello = () => {
 									user.cart.map((abbonamento) => {
 										const prices = getPrices(abbonamento);
 
-										const sconti = (
-											<Stack direction={"row"}>
-												{abbonamento.convenzione.isConv ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Convenzione
-																	</Typography>
-																	<Typography variant="subtitle2">
-																		{abbonamento.convenzione.descConve}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<Handshake color="success" />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)}
-												{abbonamento.promozione.isPromo ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Promozione
-																	</Typography>
-																	<Typography variant="subtitle2">
-																		{abbonamento.promozione.descPromo}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<Discount color="success" />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)}
-												{abbonamento.sceltaOrari.isOrari ? (
-													<Typography
-														marginBottom={3}
-														variant="h5"
-													>
-														<Tooltip
-															title={
-																<span
-																	style={{
-																		display: "flex",
-																		flexDirection: "column",
-																	}}
-																>
-																	<Typography
-																		textAlign={"center"}
-																		variant="subtitle2"
-																	>
-																		Orario Configurabile <br />
-																	</Typography>
-																	<Typography variant="h6">
-																		{`${abbonamento.sceltaOrari.daOrari} - ${abbonamento.sceltaOrari.aOrari}`}
-																	</Typography>
-																</span>
-															}
-														>
-															<IconButton>
-																<EditCalendar />
-															</IconButton>
-														</Tooltip>
-													</Typography>
-												) : (
-													<></>
-												)}
-											</Stack>
-										);
-
 										return (
-											<ListItem>
+											<ListItem key={chiaveRandom()}>
 												<ListItemText>
 													<Stack
 														alignItems={"center"}
@@ -337,7 +268,9 @@ const Carrello = () => {
 													>
 														<Image
 															src={
-																abbonamento.immagine ? abbonamento.immagine : ""
+																abbonamento.immagine
+																	? abbonamento.immagine
+																	: "/images/LogoQ.png"
 															}
 															alt={abbonamento.nome}
 															width={125}
@@ -348,9 +281,6 @@ const Carrello = () => {
 															<Box width={"200px"}>
 																<Typography variant="h6">
 																	{abbonamento.nome}
-																</Typography>
-																<Typography>
-																	{abbonamento.descrizione}
 																</Typography>
 															</Box>
 															{prices.discountedPrice ? (
@@ -395,11 +325,10 @@ const Carrello = () => {
 																	</strong>
 																</Typography>
 															)}
-															{isMobile ? sconti : <></>}
 														</Stack>
-														{!isMobile ? sconti : <></>}
 													</Stack>
 												</ListItemText>
+
 												<IconButton
 													edge="end"
 													aria-label="delete"
@@ -420,10 +349,16 @@ const Carrello = () => {
 									<></>
 								)}
 							</List>
+
 							<Stack
 								direction={"row"}
 								spacing={2}
 								justifyContent={"space-between"}
+								style={{
+									display: "grid",
+									justifyContent: "end",
+									marginTop: "50px",
+								}}
 							>
 								<Typography variant="h5">
 									{`Totale: `}

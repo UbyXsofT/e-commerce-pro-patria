@@ -32,10 +32,6 @@ import { useMediaQuery } from "@mui/material";
 import CookieManager from "src/components/cookie/CookieManager";
 // import TemaSwitch from "../../src/components/theme/TemaSwitch";
 import Router from "next/router";
-
-import { PartitaIva } from "src/components/layout/footer/PartitaIva";
-import Copyright from "src/components/layout/footer/Copyright";
-
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 
@@ -43,8 +39,8 @@ import callNodeService from "pages/api/callNodeService";
 import logOutUser from "src/components/utils/logOutUser";
 //redux
 import { setAuthUser } from "src/store/actions";
-import Layout from "src/components/layout/LayoutLogin";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+
+import { TodayOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordInput from "src/components/utils/PasswordInput";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import {
@@ -53,6 +49,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import LayoutGeneral from "src/components/layout/LayoutGeneral";
 import ReCAPTCHA from "react-google-recaptcha";
+import SetStripeKeysHelper from "src/store/SetStripeKeysHelper";
 
 const Login = () => {
 	const theme = useTheme();
@@ -77,6 +74,7 @@ const Login = () => {
 		const handleLogout = () => {
 			try {
 				logOutUser(dispatch);
+				console.log("logoutSuccess");
 			} catch (error) {
 				console.log("logoutSuccess error: ", error);
 			}
@@ -90,7 +88,12 @@ const Login = () => {
 			setPaddingTop(calculatedPaddingTop);
 		};
 
+		console.log(
+			"@@@@@@@@@ _LOGIN---- >> AuthEcommerceHelper ??? provo a commentarlo"
+		);
 		AuthEcommerceHelper(dispatch);
+		//SetStripeKeysHelper(dispatch);
+		//TODO #DA VERIFICARE PER BENE
 		handleLogout();
 		centerContent();
 		window.addEventListener("resize", centerContent);
@@ -105,9 +108,11 @@ const Login = () => {
 		const handleCaptchaError = async () => {
 			console.log("Si prega di completare il reCAPTCHA.");
 			const textAlert = (
-				<h3>
-					<strong>Si prega di completare il reCAPTCHA.</strong>
-				</h3>
+				<React.Fragment>
+					<h3>
+						<strong>Si prega di completare il reCAPTCHA.</strong>
+					</h3>
+				</React.Fragment>
 			);
 			await showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
 		};
@@ -115,6 +120,7 @@ const Login = () => {
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					CookieManager.setCookie("username", username);
 					//****** TOKENS
 					// Salva il accessToken di accesso come cookie o nello stato dell'applicazione
 					CookieManager.setCookie("accessToken", msg_Resp.accessToken);
@@ -212,39 +218,6 @@ const Login = () => {
 
 	const handleSubmit = () => {};
 
-	const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
-		noSsr: false,
-	});
-
-	const copyright = (
-		<Box style={{ width: "100%", marginTop: 30 }}>
-			<Box
-				sx={{
-					backgroundColor: (theme) => theme.palette.primary.main,
-					borderRadius: 1,
-					p: 2,
-					m: 2,
-				}}
-			>
-				<Typography
-					variant="body2"
-					align="center"
-					sx={{ color: "white" }}
-				>
-					<PartitaIva />
-				</Typography>
-
-				<Typography
-					variant="body2"
-					align="center"
-					sx={{ color: "white" }}
-				>
-					<Copyright />
-				</Typography>
-			</Box>
-		</Box>
-	);
-
 	return (
 		<ThemeProvider theme={theme}>
 			<LayoutGeneral
@@ -253,15 +226,26 @@ const Login = () => {
 				description="This is a E-Commerce login page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
+
 				<div
 					id="contenitore"
-					style={{ minHeight: "calc(100vh - 300px)", paddingBottom: "20px" }}
+					style={{
+						// minHeight: "calc(100vh - 50vh)",
+						paddingBottom: "60px",
+						height:
+							"70vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+					}}
 				>
 					<Box id="main">
 						<Grid
 							container
 							component="main"
-							sx={{ height: 400 }}
+							style={{
+								// overflowY: "scroll",
+								height:
+									"40vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+								// marginBottom: "200px",
+							}}
 						>
 							<Grid
 								container
@@ -327,9 +311,11 @@ const Login = () => {
 									>
 										<LockOutlinedIcon />
 									</Avatar>
+
 									<Typography
-										component="h3"
-										variant="h5"
+										// component="h3"
+										// variant="h5"
+										sx={{ textAlign: "center", fontSize: "3vh" }}
 									>
 										Accedi
 									</Typography>
@@ -337,7 +323,7 @@ const Login = () => {
 										component="form"
 										noValidate
 										onSubmit={handleSubmit}
-										sx={{ mt: 1 }}
+										sx={{ mt: 1, fontSize: "1vh" }}
 									>
 										<TextField
 											margin="normal"
@@ -375,23 +361,31 @@ const Login = () => {
 											margin="normal"
 										/>
 
-										<FormControlLabel
-											control={
-												<Checkbox
-													value="remember"
-													color="primary"
-													checked={ricordami}
-													onClick={() => setRicordami(!ricordami)}
-												/>
-											}
-											label="Ricordati di me"
-										/>
+										<Box sx={{ display: "flex", flexDirection: "column" }}>
+											<FormControlLabel
+												control={
+													<Checkbox
+														value="remember"
+														color="primary"
+														checked={ricordami}
+														onClick={() => setRicordami(!ricordami)}
+													/>
+												}
+												label="Ricordati di me"
+											/>
 
-										{/* Add the reCAPTCHA component */}
-										<ReCAPTCHA
-											sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-											onChange={(value) => setCaptchaValue(value)}
-										/>
+											{/* Add the reCAPTCHA component */}
+											<Box
+												sx={{
+													maxWidth: 240,
+												}}
+											>
+												<ReCAPTCHA
+													sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+													onChange={(value) => setCaptchaValue(value)}
+												/>
+											</Box>
+										</Box>
 
 										<Button
 											//   type="submit"
@@ -403,6 +397,7 @@ const Login = () => {
 										>
 											Accedi
 										</Button>
+
 										<Grid container>
 											<Grid
 												item
@@ -445,8 +440,6 @@ const Login = () => {
 												</Link>
 											</Grid>
 										</Grid>
-										{/* <Copyright sx={{ mt: 5 }} /> */}
-										{!smUp ? copyright : <div></div>}
 									</Box>
 								</Box>
 							</Grid>

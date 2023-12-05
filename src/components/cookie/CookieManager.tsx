@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
-import eCommerceConf from "../../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import { Cookie } from "../CommonTypesInterfaces";
 // Chiave di crittografia (assicurati di mantenere questa sicura e non condividerla)
 const encryptionKey = eCommerceConf.CRYPTO_KEY;

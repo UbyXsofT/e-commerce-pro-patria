@@ -24,7 +24,7 @@ import { connect } from "react-redux";
 import { setLoading } from "../../store/actions";
 //*-----*//
 import Layout from "../layout/Layout";
-import eCommerceConf from "../../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import CookieManager from "./CookieManager";

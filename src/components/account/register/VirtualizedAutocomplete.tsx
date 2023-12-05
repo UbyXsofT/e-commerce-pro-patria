@@ -146,15 +146,63 @@ const StyledPopper = styled(Popper)({
 	},
 });
 
+// type VirtualizedAutocompleteTypes = {
+// 	label: string;
+// 	comuni: ComunePaese[];
+// 	placeOfBirth: string;
+// 	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+// 	selectedComune: AutocompleteSelected;
+// 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+// 	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>>;
+// 	setCap: React.Dispatch<React.SetStateAction<string>> | null;
+// };
+
+// type VirtualizedAutocompleteTypes = {
+// 	label: string;
+// 	comuni: ComunePaese[];
+// 	placeOfBirth: string | undefined;
+// 	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+// 	selectedComune: AutocompleteSelected;
+// 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+// 	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string | undefined>>;
+// 	setCap: React.Dispatch<React.SetStateAction<string | undefined>> | null;
+// };
+
+// type VirtualizedAutocompleteTypes = {
+// 	label: string;
+// 	comuni: ComunePaese[];
+// 	placeOfBirth: string | undefined;
+// 	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+// 	selectedComune: AutocompleteSelected;
+// 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+// 	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>> | undefined;
+// 	setCap: React.Dispatch<React.SetStateAction<string>> | null;
+// };
+
+// type VirtualizedAutocompleteTypes = {
+// 	label: string;
+// 	comuni: ComunePaese[];
+// 	placeOfBirth: string | undefined;
+// 	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string | undefined>>;
+// 	selectedComune: AutocompleteSelected;
+// 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
+// 	setProvinceOfBirth?:
+// 		| React.Dispatch<React.SetStateAction<string>>
+// 		| React.Dispatch<React.SetStateAction<string | undefined>>;
+// 	setCap: React.Dispatch<React.SetStateAction<string | undefined>> | null;
+// };
+
 type VirtualizedAutocompleteTypes = {
 	label: string;
 	comuni: ComunePaese[];
 	placeOfBirth: string;
-	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
+	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string | undefined>>;
 	selectedComune: AutocompleteSelected;
 	setSelectedComune: React.Dispatch<React.SetStateAction<AutocompleteSelected>>;
-	setProvinceOfBirth?: React.Dispatch<React.SetStateAction<string>>;
-	setCap: React.Dispatch<React.SetStateAction<string>> | null;
+	setProvinceOfBirth: React.Dispatch<
+		React.SetStateAction<string | null | undefined>
+	>;
+	setCap: React.Dispatch<React.SetStateAction<string | undefined>> | null;
 };
 
 const VirtualizedAutocomplete = ({
@@ -172,12 +220,12 @@ const VirtualizedAutocomplete = ({
 			freeSolo
 			disableListWrap
 			value={selectedComune}
-			inputValue={placeOfBirth ? placeOfBirth : ""}
+			inputValue={placeOfBirth || ""}
 			onInputChange={(e, newInput) => {
 				if (!e) {
 					return;
 				}
-				setPlaceOfBirth(newInput);
+				setPlaceOfBirth(newInput || ""); // Non-null assertion operator
 			}}
 			onChange={(e, comune) => {
 				if (!comune) {
@@ -186,14 +234,15 @@ const VirtualizedAutocomplete = ({
 				}
 
 				if (typeof comune === "string") {
-					setPlaceOfBirth(comune);
-
+					setPlaceOfBirth(comune!); // Non-null assertion operator
 					return;
 				}
 				setSelectedComune(comune);
-				setPlaceOfBirth(comune.nome);
-				setProvinceOfBirth ? setProvinceOfBirth(comune.provincia.nome) : {};
-				setCap && comune.cap ? setCap(comune.cap) : {};
+				setPlaceOfBirth(comune.nome || "");
+				setProvinceOfBirth
+					? setProvinceOfBirth(comune.provincia.nome || "")
+					: undefined;
+				setCap && comune.cap ? setCap(comune.cap || "") : undefined;
 			}}
 			onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
 				setPlaceOfBirth(e.target.value.trim())
@@ -210,9 +259,8 @@ const VirtualizedAutocomplete = ({
 			renderOption={(props, option, state) =>
 				[props, option, state.index] as React.ReactNode
 			}
-			// TODO: Post React 18 update - validate this conversion, look like a hidden bug
 			getOptionLabel={(comune) =>
-				typeof comune === "string" ? comune : comune.nome
+				typeof comune === "string" ? comune : comune.nome || ""
 			}
 		/>
 	);

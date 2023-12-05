@@ -1,6 +1,6 @@
 //api/callNodeService.js
 import axios from "axios";
-import eCommerceConf from "../../eCommerceConf.json";
+import eCommerceConf from "eCommerceConf.json";
 import qs from "qs";
 import {
 	authEcommerce,
@@ -11,6 +11,7 @@ import {
 	obyPostProdotti,
 	StripeKeysData,
 	obyPostDataCart,
+	NewUserData,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -29,11 +30,15 @@ async function isNodeServiceReachable() {
 export default async function callNodeService(
 	endPoint:
 		| "login"
+		| "save-new-user"
 		| "access-ecommerce"
 		| "recupero-credenziali"
 		| "stripe/get-stripe-key"
 		| "stripe/checkout-session"
-		| "prodotti",
+		| "prodotti"
+		| "authUserCheck"
+		| "save-user-data"
+		| "cambio-password",
 	obyPostData:
 		| tokenlessAccess
 		| tokenfulAccess
@@ -41,7 +46,8 @@ export default async function callNodeService(
 		| resetPsw
 		| StripeKeysData
 		| obyPostProdotti
-		| obyPostDataCart,
+		| obyPostDataCart
+		| NewUserData,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

@@ -1,4 +1,3 @@
-//import "styles/globals.scss"; // TODO DA VERIFICARE COME CARICARLO
 import React, { use, useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
@@ -21,6 +20,7 @@ import {
 	StoreState,
 	obyPostProdotti,
 	responseCall,
+	Abbonamento,
 } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
@@ -31,9 +31,61 @@ import eCommerceConf from "eCommerceConf.json";
 import { setCentri } from "src/store/actions";
 import { Centro } from "./auth/store";
 import callNodeService from "./api/callNodeService";
+import { Any } from "react-spring";
 
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
+
+// export type FetchCentriResult =
+// 	| { centri: Centro[]; error: null }
+// 	| { centri: []; error: { message: string; prodotti?: unknown } };
+
+// export const fetchCentri = async (): Promise<FetchCentriResult> => {
+// 	const obyPostProdotti: obyPostProdotti = {
+// 		clienteKey: eCommerceConf.ClienteKey,
+// 		IDCliente: "CLABKM5",
+// 		IDCentro: 0,
+// 	};
+
+// 	try {
+// 		const respCall: responseCall = await callNodeService(
+// 			"prodotti",
+// 			obyPostProdotti,
+// 			null
+// 		);
+
+// 		const centri: Centro[] = [
+// 			{
+// 				id: 0,
+// 				name: "CORSI PRESSO LA SEDE PRINCIPALE",
+// 				subscriptions: respCall.messageCli.message.prodotti,
+// 				principale: true,
+// 			},
+// 			{
+// 				id: 1,
+// 				name: "CORSI FUORI SEDE",
+// 				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+// 			},
+// 			{
+// 				id: 2,
+// 				name: "Terzo",
+// 				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
+// 			},
+// 		];
+
+// 		return { centri, error: null };
+// 	} catch (error) {
+// 		console.error(error);
+
+// 		return {
+// 			centri: [],
+// 			error: {
+// 				message: "An error occurred",
+// 				prodotti: undefined, // o qualunque valore di default desiderato
+// 			},
+// 		};
+// 	}
+// };
 
 export const fetchCentri = async (): Promise<{
 	centri: Centro[];
@@ -55,19 +107,23 @@ export const fetchCentri = async (): Promise<{
 		const centri: Centro[] = [
 			{
 				id: 0,
-				name: "Principale",
+				name: "TUTTI",
 				subscriptions: respCall.messageCli.message.prodotti,
 				principale: true,
 			},
 			{
 				id: 1,
-				name: "Secondario",
-				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
+				name: "CORSI IN SEDE",
+				subscriptions: respCall.messageCli.message.prodotti.filter(
+					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "1"
+				),
 			},
 			{
 				id: 2,
-				name: "Terzo",
-				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
+				name: "CORSI FUORI SEDE",
+				subscriptions: respCall.messageCli.message.prodotti.filter(
+					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "2"
+				),
 			},
 		];
 
@@ -133,6 +189,10 @@ const MyApp = (props: {
 
 	useEffect(() => {
 		const checkAuthentication = async () => {
+			console.log(
+				"@@@@@@@@@ _APP ---- >> checkAuthentication requiresAuth: ",
+				requiresAuth
+			);
 			if (requiresAuth) {
 				let newAuthEcommerce = authEcommerce;
 				let newAuthUser = authUser;
@@ -148,8 +208,8 @@ const MyApp = (props: {
 				if (!newAuthEcommerce || !newAuthUser) {
 					router.push(
 						`/blockPage?titolo=ACCESSO NON AUTORIZZATO&descrizione=Sembra che tu non abbia l'autorizzazione necessaria per accedere a questa area. Al momento, non hai i privilegi per visualizzare o navigare attraverso queste pagine. Per favore, effettua nuovamente l'accesso per recuperare i tuoi diritti di accesso. &desc_azione=Clicca qui per effettuare il login e accedere.
-    
-            Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
+	
+						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
 
@@ -160,7 +220,7 @@ const MyApp = (props: {
 		};
 
 		checkAuthentication();
-	}, [requiresAuth]);
+	}, [requiresAuth, authEcommerce, authUser, centri]);
 
 	return (
 		<>
