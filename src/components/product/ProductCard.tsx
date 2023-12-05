@@ -161,7 +161,8 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 			// ref={cardRef}
 			sx={{
 				maxWidth: 345,
-				minWidth: 300,
+				minWidth: 320,
+				width: 340,
 			}}
 			// key={uniqueCardId}
 		>
@@ -173,6 +174,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 				style={{
 					borderRadius: 5,
 					objectFit: product.immagine ? "cover" : "contain",
+					backgroundColor: "#a2a2a2",
 				}}
 			/>
 

@@ -131,7 +131,7 @@ const Home = ({ setLoading }: HomeProps) => {
 								sm={8}
 								md={6}
 								component={Paper}
-								elevation={0}
+								elevation={2}
 								square
 							>
 								<Box
@@ -164,7 +164,7 @@ const Home = ({ setLoading }: HomeProps) => {
 											}}
 										>
 											Esplora le varie opzioni di navigazione nel menu
-											principale, nella barra superiore. <br />
+											principale, nella barra superiore e inferiore. <br />
 											<br />
 											Per accedere alle tue opzioni utente, clicca sull'icona
 											con le tue iniziali nella barra in alto a destra.
