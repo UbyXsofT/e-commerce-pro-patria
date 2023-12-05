@@ -74,8 +74,13 @@ const Carrello = () => {
 		let totalDiscountedPrice = 0;
 
 		cart.forEach((abbonamento) => {
+			console.log(" ****** abbonamento: ", abbonamento);
+
 			totalPrice += getPrices(abbonamento).basePrice;
 			totalDiscountedPrice += getPrice(abbonamento);
+
+			console.log(" ****** totalPrice: ", totalPrice);
+			console.log(" ****** totalDiscountedPrice: ", totalDiscountedPrice);
 		});
 
 		const totalPriceObj: TotalPrice = {

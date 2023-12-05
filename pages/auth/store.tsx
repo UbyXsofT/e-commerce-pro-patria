@@ -53,11 +53,11 @@ export interface Centro {
 
 export const getPrice = (abbonamento: Abbonamento): number => {
 	if (abbonamento.convenzione.isConv) {
-		return 24;
+		return 24.99;
 	}
 
 	if (abbonamento.promozione.isPromo) {
-		return 20;
+		return 20.99;
 	}
 
 	return abbonamento.prezzo;
