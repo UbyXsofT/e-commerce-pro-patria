@@ -161,8 +161,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 			// ref={cardRef}
 			sx={{
 				maxWidth: 345,
-				minWidth: 320,
-				width: 340,
+				width: 290,
 			}}
 			// key={uniqueCardId}
 		>

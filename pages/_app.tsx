@@ -32,7 +32,7 @@ import { setCentri } from "src/store/actions";
 import { Centro } from "./auth/store";
 import callNodeService from "./api/callNodeService";
 import { Any } from "react-spring";
-
+import fetchCentri from "src/components/utils/fetchCentri";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 
@@ -86,53 +86,6 @@ const clientSideEmotionCache = createEmotionCache();
 // 		};
 // 	}
 // };
-
-export const fetchCentri = async (): Promise<{
-	centri: Centro[];
-	error: null | unknown;
-}> => {
-	const obyPostProdotti: obyPostProdotti = {
-		clienteKey: eCommerceConf.ClienteKey,
-		IDCliente: "CLABKM5",
-		IDCentro: 0,
-	};
-
-	try {
-		const respCall: responseCall = await callNodeService(
-			"prodotti",
-			obyPostProdotti,
-			null
-		);
-
-		const centri: Centro[] = [
-			{
-				id: 0,
-				name: "TUTTI",
-				subscriptions: respCall.messageCli.message.prodotti,
-				principale: true,
-			},
-			{
-				id: 1,
-				name: "CORSI IN SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.filter(
-					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "1"
-				),
-			},
-			{
-				id: 2,
-				name: "CORSI FUORI SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.filter(
-					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "2"
-				),
-			},
-		];
-
-		return { centri, error: null };
-	} catch (error: unknown) {
-		console.log(error);
-		return { centri: [], error: error };
-	}
-};
 
 const MyApp = (props: {
 	Component: React.ComponentType<any>;
@@ -213,8 +166,13 @@ const MyApp = (props: {
 					);
 				}
 
+				// if (centri.centri.length === 0) {
+				// 	dispatch(setCentri(await fetchCentri()));
+				// }
+
 				if (centri.centri.length === 0) {
-					dispatch(setCentri(await fetchCentri()));
+					const data = await fetchCentri(authUser?.USERID, 0);
+					dispatch(setCentri(data));
 				}
 			}
 		};

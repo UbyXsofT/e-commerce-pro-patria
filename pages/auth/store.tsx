@@ -40,9 +40,10 @@ import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
 import { Box, Stack } from "@mui/system";
 import { Search } from "@mui/icons-material";
-import { fetchCentri } from "pages/_app";
+// import { fetchCentri } from "pages/_app";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import chiaveRandom from "src/components/utils/chiaveRandom";
+import fetchCentri from "src/components/utils/fetchCentri";
 
 export interface Centro {
 	id: number;
@@ -53,11 +54,11 @@ export interface Centro {
 
 export const getPrice = (abbonamento: Abbonamento): number => {
 	if (abbonamento.convenzione.isConv) {
-		return 24;
+		return 24.99;
 	}
 
 	if (abbonamento.promozione.isPromo) {
-		return 20;
+		return 20.99;
 	}
 
 	return abbonamento.prezzo;
@@ -93,14 +94,12 @@ const Store = () => {
 	// const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
 	// 	undefined
 	// );
-
+	const authUser = useSelector((state: StoreState) => state.authUser);
 	const [selectedCentro, setSelectedCentro] = useState<number>(0);
 	const [isAllSelectCenter, setIsAllSelectCenter] = React.useState(false);
-
 	const [filteredAbbonamenti, setFilteredAbbonamenti] = useState<Abbonamento[]>(
 		[]
 	);
-
 	//FILTRI
 	const [minMax, setMinMax] = useState<{
 		min: number | undefined;
@@ -115,7 +114,6 @@ const Store = () => {
 	const [search, setSearch] = useState("");
 	const [placeholder, setPlaceholder] = useState("");
 	const [orderByPrice, setOrderByPrice] = useState(false);
-
 	const isInRange = (
 		price: number,
 		priceRange: [number, number] | [undefined, undefined]
@@ -171,23 +169,27 @@ const Store = () => {
 	};
 
 	useEffect(() => {
-		console.log("@@@ centri.centri", centri.centri);
+		const fetchData = async () => {
+			console.log("@@@ centri.centri", centri.centri);
 
-		if (centri.centri.length === 0) {
-			return;
-		}
+			if (centri.centri.length === 0) {
+				return;
+			}
 
-		setCentroList(centri.centri);
-		setSelectedCentro(0 as number);
+			setCentroList(centri.centri);
+			setSelectedCentro(0 as number);
 
-		let minMax = calculateMinMax(centri.centri);
+			let minMax = calculateMinMax(centri.centri);
 
-		setMinMax(minMax);
-		setPriceRange([minMax.min, minMax.max]);
-		setPlaceholder(findRandomString(centri.centri));
+			setMinMax(minMax);
+			setPriceRange([minMax.min, minMax.max]);
+			setPlaceholder(findRandomString(centri.centri));
 
-		//console.log("@@@ centroList: ", centroList);
-		setFilteredAbbonamenti(centri.centri[selectedCentro].subscriptions);
+			//console.log("@@@ centroList: ", centroList);
+			setFilteredAbbonamenti(centri.centri[selectedCentro].subscriptions);
+		};
+
+		fetchData();
 	}, [centri]);
 
 	const updateSelectedCentro = (newValue: number) => {
@@ -217,7 +219,12 @@ const Store = () => {
 						<Button
 							variant="contained"
 							onClick={async () => {
-								dispatch(setCentri(await fetchCentri()));
+								// dispatch(setCentri(await fetchCentri()));
+
+								if (centri.centri.length === 0) {
+									const data = await fetchCentri(authUser?.USERID, 0);
+									dispatch(setCentri(data));
+								}
 							}}
 						>
 							Prova a Ricaricare
