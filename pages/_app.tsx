@@ -20,7 +20,7 @@ import {
 	StoreState,
 	obyPostProdotti,
 	responseCall,
-	Abbonamento,
+	Prodotto,
 } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
@@ -165,10 +165,6 @@ const MyApp = (props: {
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
-
-				// if (centri.centri.length === 0) {
-				// 	dispatch(setCentri(await fetchCentri()));
-				// }
 
 				if (centri.centri.length === 0) {
 					const data = await fetchCentri(authUser?.USERID, 0);

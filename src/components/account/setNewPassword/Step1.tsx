@@ -42,7 +42,7 @@ const Step1 = ({
 		<Container
 			maxWidth={"md"}
 			component={Paper}
-			sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}
+			sx={{ padding: 3, marginTop: smUp ? 3 : 0, marginBottom: "50px" }}
 		>
 			<CssBaseline />
 

@@ -29,7 +29,7 @@ import { AlertMe } from "src/components/layout/alert/AlertMe";
 import {
 	responseCall,
 	StoreState,
-	CartAbbonamento,
+	CartProdotto,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
@@ -69,13 +69,13 @@ const Carrello = () => {
 		totalDiscountedPrice: 0,
 	});
 
-	const calculateTotalPrice = (cart: CartAbbonamento[]): TotalPrice => {
+	const calculateTotalPrice = (cart: CartProdotto[]): TotalPrice => {
 		let totalPrice = 0;
 		let totalDiscountedPrice = 0;
 
-		cart.forEach((abbonamento) => {
-			totalPrice += getPrices(abbonamento).basePrice;
-			totalDiscountedPrice += getPrice(abbonamento);
+		cart.forEach((prodotto) => {
+			totalPrice += getPrices(prodotto).basePrice;
+			totalDiscountedPrice += getPrice(prodotto);
 		});
 
 		const totalPriceObj: TotalPrice = {
@@ -255,8 +255,8 @@ const Carrello = () => {
 							</Typography>
 							<List>
 								{user ? (
-									user.cart.map((abbonamento) => {
-										const prices = getPrices(abbonamento);
+									user.cart.map((prodotto) => {
+										const prices = getPrices(prodotto);
 
 										return (
 											<ListItem key={chiaveRandom()}>
@@ -268,11 +268,11 @@ const Carrello = () => {
 													>
 														<Image
 															src={
-																abbonamento.immagine
-																	? abbonamento.immagine
+																prodotto.immagine
+																	? prodotto.immagine
 																	: "/images/LogoQ.png"
 															}
-															alt={abbonamento.nome}
+															alt={prodotto.nome}
 															width={125}
 															height={125}
 															style={{ borderRadius: 5 }}
@@ -280,7 +280,7 @@ const Carrello = () => {
 														<Stack spacing={2}>
 															<Box width={"200px"}>
 																<Typography variant="h6">
-																	{abbonamento.nome}
+																	{prodotto.nome}
 																</Typography>
 															</Box>
 															{prices.discountedPrice ? (
@@ -337,7 +337,7 @@ const Carrello = () => {
 														color: theme.palette.error.main,
 													}}
 													onClick={() =>
-														removeFromCart(abbonamento, cart, dispatch)
+														removeFromCart(prodotto, cart, dispatch)
 													}
 												>
 													<DeleteRounded />

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Router from "next/router";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -13,9 +14,9 @@ import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
-	Abbonamento,
+	Prodotto,
 	Cart,
-	CartAbbonamento,
+	CartProdotto,
 	StoreState,
 } from "../CommonTypesInterfaces";
 import { setCart } from "src/store/actions";
@@ -40,11 +41,11 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 interface ProductCardProps {
-	product: Abbonamento;
+	product: Prodotto;
 }
 
 export const removeFromCart = (
-	abbonamento: Abbonamento,
+	prodotto: Prodotto,
 	cart: Cart,
 	dispatch: Dispatch
 ): void => {
@@ -53,9 +54,9 @@ export const removeFromCart = (
 	let filteredCart = null;
 
 	if (user) {
-		filteredCart = user.cart.filter((storedAbbonamento) => {
-			if (storedAbbonamento.id !== abbonamento.id) {
-				return storedAbbonamento;
+		filteredCart = user.cart.filter((storedProdotto) => {
+			if (storedProdotto.id !== prodotto.id) {
+				return storedProdotto;
 			}
 		});
 	} else {
@@ -65,7 +66,7 @@ export const removeFromCart = (
 	dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
 };
 
-const ProductCard2 = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
 	const cart = useSelector((state: StoreState) => state.cart);
 	const dispatch = useDispatch();
@@ -109,9 +110,9 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 		}
 	}, [product.descrizione]);
 
-	const addToCart = (abbonamento: Abbonamento): void => {
-		const configurableAbbonamento: CartAbbonamento = {
-			...abbonamento,
+	const addToCart = (prodotto: Prodotto): void => {
+		const configurableProdotto: CartProdotto = {
+			...prodotto,
 			configuration: null,
 		};
 
@@ -122,7 +123,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 					setCart([
 						{
 							userId: authUser?.USERID ?? "null",
-							cart: [...user.cart, configurableAbbonamento],
+							cart: [...user.cart, configurableProdotto],
 						},
 					])
 			  )
@@ -130,22 +131,22 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 					setCart([
 						{
 							userId: authUser?.USERID ?? "null",
-							cart: [configurableAbbonamento],
+							cart: [configurableProdotto],
 						},
 					])
 			  );
 	};
 
-	const isInCart = (abbonamento: Abbonamento): boolean => {
+	const isInCart = (prodotto: Prodotto): boolean => {
 		let user = cart.at(0);
 
 		if (!user) {
 			return false;
 		}
 
-		let filteredCart = user.cart.filter((storedAbbonamento) => {
-			if (storedAbbonamento.id === abbonamento.id) {
-				return storedAbbonamento;
+		let filteredCart = user.cart.filter((storedProdotto) => {
+			if (storedProdotto.id === prodotto.id) {
+				return storedProdotto;
 			}
 		});
 
@@ -158,12 +159,16 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 
 	return (
 		<Card
-			// ref={cardRef}
 			sx={{
 				maxWidth: 345,
 				width: 290,
+				cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 			}}
-			// key={uniqueCardId}
+			onClick={() =>
+				Router.push(
+					`/auth/prodotto/${encodeURIComponent(JSON.stringify(product))}`
+				)
+			}
 		>
 			<CardMedia
 				component="img"
@@ -178,7 +183,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 			/>
 
 			<CardHeader
-				sx={{ minHeight: "160px" }}
+				sx={{ minHeight: "190px" }}
 				action={
 					<span
 						style={{
@@ -276,7 +281,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 				}
 				title={product.nome}
 			></CardHeader>
-			<CardContent sx={{ minHeight: "150px" }}>
+			<CardContent sx={{ minHeight: "190px" }}>
 				<Typography
 					variant="body2"
 					color="text.secondary"
@@ -334,7 +339,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 						</Typography>
 					)}
 				</CardActions>
-				<div
+				{/* <div
 					style={{
 						display: "flex",
 						justifyContent: "center",
@@ -356,7 +361,7 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 							? "Rimuovi dal Carrello"
 							: "Aggiungi Al Carrello"}
 					</Button>
-				</div>
+				</div> */}
 			</div>
 
 			<Typography
@@ -378,4 +383,4 @@ const ProductCard2 = ({ product }: ProductCardProps) => {
 	);
 };
 
-export default ProductCard2;
+export default ProductCard;

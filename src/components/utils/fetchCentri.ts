@@ -3,7 +3,7 @@ import eCommerceConf from "eCommerceConf.json";
 import {
 	responseCall,
 	obyPostProdotti,
-	Abbonamento,
+	Prodotto,
 	StoreState,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
@@ -12,7 +12,7 @@ export interface Centro {
 	id: number;
 	name: string;
 	principale?: true;
-	subscriptions: Abbonamento[];
+	subscriptions: Prodotto[];
 }
 
 const fetchCentri = async (
@@ -46,14 +46,14 @@ const fetchCentri = async (
 				id: 1,
 				name: "CORSI IN SEDE",
 				subscriptions: respCall.messageCli.message.prodotti.filter(
-					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "1"
+					(Prodotto: Prodotto) => Prodotto.idCentro === "1"
 				),
 			},
 			{
 				id: 2,
 				name: "CORSI FUORI SEDE",
 				subscriptions: respCall.messageCli.message.prodotti.filter(
-					(Abbonamento: Abbonamento) => Abbonamento.idCentro === "2"
+					(Prodotto: Prodotto) => Prodotto.idCentro === "2"
 				),
 			},
 		];

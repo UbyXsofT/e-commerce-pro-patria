@@ -380,7 +380,7 @@ export interface obyPostProdotti {
 	IDCentro: number;
 }
 
-export interface Abbonamento {
+export interface Prodotto {
 	id: string;
 	idCentro: string;
 	nome: string;
@@ -407,15 +407,15 @@ export type Cart = CartUser[];
 
 export interface CartUser {
 	userId: string;
-	cart: CartAbbonamento[];
+	cart: CartProdotto[];
 }
 
-export interface CartAbbonamento extends Abbonamento {
+export interface CartProdotto extends Prodotto {
 	configuration: { initialDate: Dayjs } | null;
 }
 
 export interface obyPostDataCart {
-	line_items: CartAbbonamento[];
+	line_items: CartProdotto[];
 	userId: string;
 	clienteKey: string;
 	mode: string;

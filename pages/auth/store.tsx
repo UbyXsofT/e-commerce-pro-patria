@@ -32,7 +32,7 @@ import Layout from "src/components/layout/Layout";
 import {
 	responseCall,
 	obyPostProdotti,
-	Abbonamento,
+	Prodotto,
 	StoreState,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
@@ -49,34 +49,34 @@ export interface Centro {
 	id: number;
 	name: string;
 	principale?: true;
-	subscriptions: Abbonamento[];
+	subscriptions: Prodotto[];
 }
 
-export const getPrice = (abbonamento: Abbonamento): number => {
-	if (abbonamento.convenzione.isConv) {
+export const getPrice = (prodotto: Prodotto): number => {
+	if (prodotto.convenzione.isConv) {
 		return 24.99;
 	}
 
-	if (abbonamento.promozione.isPromo) {
+	if (prodotto.promozione.isPromo) {
 		return 20.99;
 	}
 
-	return abbonamento.prezzo;
+	return prodotto.prezzo;
 };
 
 export type PriceInfo = { basePrice: number; discountedPrice: number | null };
 
-export const getPrices = (abbonamento: Abbonamento): PriceInfo => {
+export const getPrices = (prodotto: Prodotto): PriceInfo => {
 	let prices: PriceInfo = {
-		basePrice: abbonamento.prezzo,
+		basePrice: prodotto.prezzo,
 		discountedPrice: null,
 	};
 
-	if (abbonamento.convenzione.isConv) {
+	if (prodotto.convenzione.isConv) {
 		prices.discountedPrice = 24.99;
 	}
 
-	if (abbonamento.promozione.isPromo) {
+	if (prodotto.promozione.isPromo) {
 		prices.discountedPrice = 20.99;
 	}
 
@@ -97,9 +97,7 @@ const Store = () => {
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const [selectedCentro, setSelectedCentro] = useState<number>(0);
 	const [isAllSelectCenter, setIsAllSelectCenter] = React.useState(false);
-	const [filteredAbbonamenti, setFilteredAbbonamenti] = useState<Abbonamento[]>(
-		[]
-	);
+	const [filteredProdotti, setFilteredProdotti] = useState<Prodotto[]>([]);
 	//FILTRI
 	const [minMax, setMinMax] = useState<{
 		min: number | undefined;
@@ -137,8 +135,8 @@ const Store = () => {
 		let max = 0;
 
 		centroList.forEach((centro) => {
-			centro.subscriptions.forEach((abbonamento) => {
-				const price = getPrice(abbonamento);
+			centro.subscriptions.forEach((prodotto) => {
+				const price = getPrice(prodotto);
 
 				if (price > max) {
 					max = price;
@@ -186,7 +184,7 @@ const Store = () => {
 			setPlaceholder(findRandomString(centri.centri));
 
 			//console.log("@@@ centroList: ", centroList);
-			setFilteredAbbonamenti(centri.centri[selectedCentro].subscriptions);
+			setFilteredProdotti(centri.centri[selectedCentro].subscriptions);
 		};
 
 		fetchData();
@@ -195,7 +193,7 @@ const Store = () => {
 	const updateSelectedCentro = (newValue: number) => {
 		console.log("@@@ updateSelectedCentro: ", newValue);
 		setSelectedCentro(newValue);
-		setFilteredAbbonamenti(centri.centri[newValue].subscriptions);
+		setFilteredProdotti(centri.centri[newValue].subscriptions);
 	};
 
 	return (
@@ -219,8 +217,6 @@ const Store = () => {
 						<Button
 							variant="contained"
 							onClick={async () => {
-								// dispatch(setCentri(await fetchCentri()));
-
 								if (centri.centri.length === 0) {
 									const data = await fetchCentri(authUser?.USERID, 0);
 									dispatch(setCentri(data));
@@ -515,7 +511,7 @@ const Store = () => {
 									}}
 								>
 									<div key={chiaveRandom()}>
-										{filteredAbbonamenti.length === 0 ? (
+										{filteredProdotti.length === 0 ? (
 											<Card
 												sx={{ width: isMobile ? "auto" : "auto", height: 110 }}
 											>
@@ -532,7 +528,7 @@ const Store = () => {
 														textAlign={"center"}
 														variant="h5"
 													>
-														Nessun Abbonamento tra i
+														Nessun Prodotto tra i
 													</Typography>
 													<Typography
 														textAlign={"center"}
@@ -564,37 +560,34 @@ const Store = () => {
 													alignContent: "center",
 												}}
 											>
-												{filteredAbbonamenti
-													.filter((abbonamento) => {
-														if (isInRange(getPrice(abbonamento), priceRange)) {
+												{filteredProdotti
+													.filter((prodotto) => {
+														if (isInRange(getPrice(prodotto), priceRange)) {
 															return true;
 														}
 														return false;
 													})
-													.filter((abbonamento) => {
+													.filter((prodotto) => {
 														if (
-															abbonamento.nome.search(
-																new RegExp(search, "i")
-															) !== -1
+															prodotto.nome.search(new RegExp(search, "i")) !==
+															-1
 														) {
 															return true;
 														}
 														return false;
 													})
-													.sort((abbonamento1, abbonamento2) => {
+													.sort((prodotto1, prodotto2) => {
 														if (orderByPrice) {
-															return (
-																getPrice(abbonamento1) - getPrice(abbonamento2)
-															);
+															return getPrice(prodotto1) - getPrice(prodotto2);
 														}
 														return 0;
 													})
-													.map((abbonamento, index) => {
-														console.log("abbonamento: ", abbonamento);
+													.map((prodotto, index) => {
+														//console.log("prodotto: ", prodotto);
 														return (
 															<ProductCard
 																key={chiaveRandom()}
-																product={abbonamento}
+																product={prodotto}
 															/>
 														);
 													})}

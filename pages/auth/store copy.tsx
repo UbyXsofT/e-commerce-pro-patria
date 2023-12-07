@@ -31,7 +31,7 @@ import Layout from "src/components/layout/Layout";
 import {
 	responseCall,
 	obyPostProdotti,
-	Abbonamento,
+	Prodotto,
 	StoreState,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
@@ -46,34 +46,34 @@ export interface Centro {
 	id: number;
 	name: string;
 	principale?: true;
-	subscriptions: Abbonamento[];
+	subscriptions: Prodotto[];
 }
 
-export const getPrice = (abbonamento: Abbonamento): number => {
-	if (abbonamento.convenzione.isConv) {
+export const getPrice = (prodotto: Prodotto): number => {
+	if (prodotto.convenzione.isConv) {
 		return 24.99;
 	}
 
-	if (abbonamento.promozione.isPromo) {
+	if (prodotto.promozione.isPromo) {
 		return 20.99;
 	}
 
-	return abbonamento.prezzo;
+	return prodotto.prezzo;
 };
 
 export type PriceInfo = { basePrice: number; discountedPrice: number | null };
 
-export const getPrices = (abbonamento: Abbonamento): PriceInfo => {
+export const getPrices = (prodotto: Prodotto): PriceInfo => {
 	let prices: PriceInfo = {
-		basePrice: abbonamento.prezzo,
+		basePrice: prodotto.prezzo,
 		discountedPrice: null,
 	};
 
-	if (abbonamento.convenzione.isConv) {
+	if (prodotto.convenzione.isConv) {
 		prices.discountedPrice = 24.99;
 	}
 
-	if (abbonamento.promozione.isPromo) {
+	if (prodotto.promozione.isPromo) {
 		prices.discountedPrice = 20.99;
 	}
 
@@ -135,8 +135,8 @@ const Store = () => {
 		let max = 0;
 
 		centroList.forEach((centro) => {
-			centro.subscriptions.forEach((abbonamento) => {
-				const price = getPrice(abbonamento);
+			centro.subscriptions.forEach((prodotto) => {
+				const price = getPrice(prodotto);
 
 				if (price > max) {
 					max = price;
@@ -418,27 +418,26 @@ const Store = () => {
 							>
 								{selectedCentri !== undefined ? (
 									selectedCentri.map((selectedCentro) => {
-										let filteredAbbonamenti = centroList[
+										let filteredProdotti = centroList[
 											selectedCentro
 										].subscriptions
-											.filter((abbonamento) => {
-												if (isInRange(getPrice(abbonamento), priceRange)) {
-													return abbonamento;
+											.filter((prodotto) => {
+												if (isInRange(getPrice(prodotto), priceRange)) {
+													return prodotto;
 												}
 											})
-											.filter((abbonamento) => {
+											.filter((prodotto) => {
 												if (
-													abbonamento.nome.search(new RegExp(search, "i")) !==
-													-1
+													prodotto.nome.search(new RegExp(search, "i")) !== -1
 												) {
-													return abbonamento;
+													return prodotto;
 												}
 											});
 
 										if (orderByPrice) {
-											filteredAbbonamenti.sort(
-												(abbonamento1, abbonamento2) =>
-													getPrice(abbonamento1) - getPrice(abbonamento2)
+											filteredProdotti.sort(
+												(prodotto1, prodotto2) =>
+													getPrice(prodotto1) - getPrice(prodotto2)
 											);
 										}
 
@@ -456,7 +455,7 @@ const Store = () => {
 													<WorkspacesIcon style={{ marginRight: "20px" }} />
 													{centroList[selectedCentro].name}
 												</Typography>
-												{filteredAbbonamenti.length === 0 ? (
+												{filteredProdotti.length === 0 ? (
 													<Card
 														sx={{ width: isMobile ? "auto" : 510, height: 510 }}
 													>
@@ -473,7 +472,7 @@ const Store = () => {
 																textAlign={"center"}
 																variant="h5"
 															>
-																Nessun Abbonamento tra i
+																Nessun Prodotto tra i
 															</Typography>
 															<Typography
 																textAlign={"center"}
@@ -505,10 +504,10 @@ const Store = () => {
 															justifyContent: "space-evenly",
 														}}
 													>
-														{filteredAbbonamenti.map((abbonamento) => (
+														{filteredProdotti.map((prodotto) => (
 															<ProductCard
-																key={abbonamento.id}
-																product={abbonamento}
+																key={prodotto.id}
+																product={prodotto}
 															/>
 														))}
 													</div>
