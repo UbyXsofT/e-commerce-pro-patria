@@ -1,7 +1,6 @@
 // store.js
 import { AnyAction, configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import { authMiddleware } from "./_middleware"; // Aggiungi il percorso corretto al tuo middleware
 import { StoreAction } from "src/components/CommonTypesInterfaces";
 
 // Definisci i riduttori per gestire gli stati
@@ -62,6 +61,15 @@ const setStripeKeysReducer = (state = false, action: AnyAction) => {
 	}
 };
 
+const setActualProduct = (state = null, action: AnyAction) => {
+	switch (action.type) {
+		case "SET_ACTUAL_PRODUCT":
+			return action.payload;
+		default:
+			return state;
+	}
+};
+
 // Crea il tuo store Redux utilizzando configureStore
 const makeStore = () =>
 	configureStore({
@@ -72,10 +80,9 @@ const makeStore = () =>
 			cart: setCartReducer,
 			centri: setCentriReducer,
 			stripeKeys: setStripeKeysReducer,
+			actualProduct: setActualProduct,
 			// Altri riduttori...
 		},
-		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().concat(authMiddleware),
 		devTools: true, // Abilita Redux DevTools
 	});
 

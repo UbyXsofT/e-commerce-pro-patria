@@ -163,7 +163,7 @@ const Store = () => {
 			centroList[centroIdx].subscriptions.length - 1
 		);
 
-		return centroList[centroIdx].subscriptions[subscriptionIdx].nome;
+		return centroList[centroIdx].subscriptions[subscriptionIdx]?.nome;
 	};
 
 	useEffect(() => {

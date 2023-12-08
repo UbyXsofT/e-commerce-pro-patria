@@ -7,7 +7,7 @@ interface ProductStepperProps {
 }
 
 const ProductStepper: React.FC<ProductStepperProps> = ({ activeStep }) => {
-	const steps = ["Step 1", "Step 2", "Step 3"]; // Aggiungi i tuoi passaggi qui
+	const steps = ["Informazioni", "Step 2", "Step 3"]; // Aggiungi i tuoi passaggi qui
 
 	return (
 		<Stepper

@@ -1,3 +1,4 @@
+//fetchCentri.ts
 import { useSelector } from "react-redux";
 import eCommerceConf from "eCommerceConf.json";
 import {
@@ -34,25 +35,27 @@ const fetchCentri = async (
 			obyPostProdotti,
 			null
 		);
+		const prodottiArray = respCall.messageCli.message?.prodotti || [];
 
+		// Verifica se la proprietà prodotti è definita prima di accedere ad essa
 		const centri: Centro[] = [
 			{
 				id: 0,
 				name: "TUTTI",
-				subscriptions: respCall.messageCli.message.prodotti,
+				subscriptions: prodottiArray || [], // Utilizza un array vuoto se prodottiArray è undefined
 				principale: true,
 			},
 			{
 				id: 1,
 				name: "CORSI IN SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.filter(
+				subscriptions: (prodottiArray || []).filter(
 					(Prodotto: Prodotto) => Prodotto.idCentro === "1"
 				),
 			},
 			{
 				id: 2,
 				name: "CORSI FUORI SEDE",
-				subscriptions: respCall.messageCli.message.prodotti.filter(
+				subscriptions: (prodottiArray || []).filter(
 					(Prodotto: Prodotto) => Prodotto.idCentro === "2"
 				),
 			},

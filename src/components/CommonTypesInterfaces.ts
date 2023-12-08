@@ -124,6 +124,7 @@ export interface StoreState {
 	cart: Cart;
 	centri: { centri: Centro[]; error: null | unknown };
 	stripeKeys: StripeKeysData;
+	actualProduct: Prodotto;
 }
 
 export interface StripeKeysData {

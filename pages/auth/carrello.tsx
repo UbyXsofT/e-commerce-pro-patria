@@ -39,7 +39,7 @@ import {
 	EditCalendar,
 	Handshake,
 } from "@mui/icons-material";
-import { removeFromCart } from "src/components/product/ProductCard";
+import { removeFromCart } from "src/components/product/ProductPage";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";

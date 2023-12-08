@@ -1,6 +1,6 @@
 import * as React from "react";
 import Router from "next/router";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -19,64 +19,43 @@ import {
 	CartProdotto,
 	StoreState,
 } from "../CommonTypesInterfaces";
-import { setCart } from "src/store/actions";
+import { setActualProduct, setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { renderPrice } from "pages/auth/carrello";
 import { Button, Tooltip } from "@mui/material";
+import FormatString from "src/components/utils/FormatString";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 
-interface ExpandMoreProps extends IconButtonProps {
-	expand: boolean;
-}
+// interface ExpandMoreProps extends IconButtonProps {
+// 	expand: boolean;
+// }
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-	const { expand, ...other } = props;
-	return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-	transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-	marginLeft: "auto",
-	transition: theme.transitions.create("transform", {
-		duration: theme.transitions.duration.shortest,
-	}),
-}));
+// const ExpandMore = styled((props: ExpandMoreProps) => {
+// 	const { expand, ...other } = props;
+// 	return <IconButton {...other} />;
+// })(({ theme, expand }) => ({
+// 	transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+// 	marginLeft: "auto",
+// 	transition: theme.transitions.create("transform", {
+// 		duration: theme.transitions.duration.shortest,
+// 	}),
+// }));
 
 interface ProductCardProps {
 	product: Prodotto;
 }
 
-export const removeFromCart = (
-	prodotto: Prodotto,
-	cart: Cart,
-	dispatch: Dispatch
-): void => {
-	const user = cart.at(0);
-
-	let filteredCart = null;
-
-	if (user) {
-		filteredCart = user.cart.filter((storedProdotto) => {
-			if (storedProdotto.id !== prodotto.id) {
-				return storedProdotto;
-			}
-		});
-	} else {
-		return;
-	}
-
-	dispatch(setCart([{ userId: "todo", cart: filteredCart }]));
-};
-
 const ProductCard = ({ product }: ProductCardProps) => {
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
-	const cart = useSelector((state: StoreState) => state.cart);
+	const theme = useTheme();
 	const dispatch = useDispatch();
+	const centri = useSelector((state: StoreState) => state.centri);
+	const authUser = useSelector((state: StoreState) => state.authUser);
 
 	const [descProdSmall, setDescProdSmall] = React.useState("");
 	const [descProdFull, setDescProdFull] = React.useState("");
-	const maxLengthSmallDescProd = 250;
-
-	const authUser = useSelector((state: StoreState) => state.authUser);
-
+	const maxLengthSmallDescProd = 300;
 	useEffect(() => {
 		if (product.promozione.isPromo) {
 			setDiscountedPrice(20.99);
@@ -84,77 +63,57 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			setDiscountedPrice(24.99);
 		}
 
-		if (product.descrizione.length > maxLengthSmallDescProd) {
+		let descrizioneProdotto = product.descrizione;
+		//let descrizioneProdotto = product.descrizione;
+		if (descrizioneProdotto.length > maxLengthSmallDescProd) {
 			// Trova l'ultima occorrenza di uno spazio prima della posizione massima
-			const lastSpaceIndex = product.descrizione.lastIndexOf(
+			const lastSpaceIndex = descrizioneProdotto.lastIndexOf(
 				" ",
 				maxLengthSmallDescProd
 			);
-
 			// Verifica se uno spazio è stato trovato
 			if (lastSpaceIndex !== -1) {
 				// Suddividi il testo alla fine della parola trovata
-				setDescProdSmall(product.descrizione.substring(0, lastSpaceIndex));
-				setDescProdFull(product.descrizione.substring(lastSpaceIndex + 1));
+				setDescProdSmall(descrizioneProdotto.substring(0, lastSpaceIndex));
+				setDescProdFull(descrizioneProdotto.substring(lastSpaceIndex + 1));
 			} else {
 				// Se non è stato trovato uno spazio, usa la posizione massima
 				setDescProdSmall(
-					product.descrizione.substring(0, maxLengthSmallDescProd)
+					descrizioneProdotto.substring(0, maxLengthSmallDescProd)
 				);
-				setDescProdFull(product.descrizione.substring(maxLengthSmallDescProd));
+				setDescProdFull(descrizioneProdotto.substring(maxLengthSmallDescProd));
 			}
 		} else {
 			// Se la lunghezza del testo è inferiore alla lunghezza massima, non è necessario suddividerlo
-			setDescProdSmall(product.descrizione);
+			setDescProdSmall(descrizioneProdotto);
 			setDescProdFull("");
 		}
+
+		console.log("XXXX - descProdSmall: ", descProdSmall.length);
+		console.log("XXXX - descProdFull: ", descProdFull.length);
 	}, [product.descrizione]);
 
-	const addToCart = (prodotto: Prodotto): void => {
-		const configurableProdotto: CartProdotto = {
-			...prodotto,
-			configuration: null,
-		};
+	const callProductPage = (productId: any) => {
+		Router.push(`/auth/prodotto/${productId}`);
 
-		let user = cart.at(0);
+		// const prodotto: Prodotto | null = useSelector(
+		// 	(state: StoreState) => state.actualProduct
+		// );
 
-		user
-			? dispatch(
-					setCart([
-						{
-							userId: authUser?.USERID ?? "null",
-							cart: [...user.cart, configurableProdotto],
-						},
-					])
-			  )
-			: dispatch(
-					setCart([
-						{
-							userId: authUser?.USERID ?? "null",
-							cart: [configurableProdotto],
-						},
-					])
-			  );
-	};
-
-	const isInCart = (prodotto: Prodotto): boolean => {
-		let user = cart.at(0);
-
-		if (!user) {
-			return false;
-		}
-
-		let filteredCart = user.cart.filter((storedProdotto) => {
-			if (storedProdotto.id === prodotto.id) {
-				return storedProdotto;
+		let actualProduct = centri.centri[0].subscriptions.filter(
+			(listProduct: any) => {
+				console.log("@@@@ xxxx ProductPage listProduct.id: ", listProduct.id);
+				console.log("@@@@ xxxx ProductPage productId: ", productId);
+				if (listProduct.id === productId) {
+					console.log(
+						"@@@@ xxxx >>>>>> ProductPage listProduct: ",
+						listProduct
+					);
+					dispatch(setActualProduct(listProduct));
+					return listProduct;
+				}
 			}
-		});
-
-		if (filteredCart.length > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		);
 	};
 
 	return (
@@ -164,11 +123,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 				width: 290,
 				cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 			}}
-			onClick={() =>
-				Router.push(
-					`/auth/prodotto/${encodeURIComponent(JSON.stringify(product))}`
-				)
-			}
+			onClick={() => callProductPage(product.id)}
 		>
 			<CardMedia
 				component="img"
@@ -281,15 +236,48 @@ const ProductCard = ({ product }: ProductCardProps) => {
 				}
 				title={product.nome}
 			></CardHeader>
-			<CardContent sx={{ minHeight: "190px" }}>
+
+			<CardContent
+				sx={{
+					minHeight: "190px",
+					height: "250px",
+					backgroundColor: (theme) =>
+						theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+					display: "flex",
+					flexDirection: "column",
+					flexWrap: "nowrap",
+					alignItems: "flex-end",
+					justifyContent: "space-around",
+				}}
+			>
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					sx={{ whiteSpace: "pre-line" }}
+				>
+					<FormatString descrizione={descProdSmall} />
+				</Typography>
+				{descProdFull.length > 0 ? <MoreHorizIcon /> : <></>}
+			</CardContent>
+
+			{/* <CardContent sx={{ minHeight: "190px" }}>
 				<Typography
 					variant="body2"
 					color="text.secondary"
 				>
 					{descProdSmall}
 				</Typography>
-			</CardContent>
-			<div>
+			</CardContent> */}
+
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "center",
+					alignItems: "center",
+					flexWrap: "nowrap",
+				}}
+			>
 				<CardActions disableSpacing>
 					{discountedPrice ? (
 						<span
@@ -297,7 +285,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 								display: "grid",
 								padding: "1em",
 								gridTemplateColumns: "1fr 1fr",
-								gap: 4,
+								gap: "3em",
 							}}
 						>
 							<Typography
@@ -339,7 +327,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 						</Typography>
 					)}
 				</CardActions>
-				{/* <div
+				<div
 					style={{
 						display: "flex",
 						justifyContent: "center",
@@ -349,22 +337,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
 					}}
 				>
 					<Button
-						onClick={() =>
-							isInCart(product)
-								? removeFromCart(product, cart, dispatch)
-								: addToCart(product)
-						}
+						onClick={() => callProductPage(product.id)}
 						variant="contained"
+						style={{ width: 240 }}
 					>
-						<ShoppingCartIcon style={{ marginRight: 20 }} />
-						{isInCart(product)
-							? "Rimuovi dal Carrello"
-							: "Aggiungi Al Carrello"}
+						<StorefrontIcon style={{ marginRight: 20 }} />
+						ACQUISTA
 					</Button>
-				</div> */}
+				</div>
 			</div>
 
-			<Typography
+			{/* <Typography
 				variant="body2"
 				color="text.secondary"
 				style={{
@@ -378,7 +361,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 				<IconButton>
 					<MoreHorizIcon />
 				</IconButton>
-			</Typography>
+			</Typography> */}
 		</Card>
 	);
 };
