@@ -45,7 +45,7 @@ import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 
 export const renderPrice = (price: number): string =>
-	price.toString().replace(".", ",");
+	price?.toString().replace(".", ",");
 
 const Carrello = () => {
 	const { showAlert } = useAlertMe();

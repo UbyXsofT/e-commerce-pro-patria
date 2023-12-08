@@ -21,6 +21,8 @@ import {
 	Toolbar,
 	Collapse,
 	Box,
+	CardMedia,
+	CardActions,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -47,6 +49,10 @@ import { Dispatch } from "redux";
 import FormatString from "../utils/FormatString";
 import fetchCentri from "../utils/fetchCentri";
 // const productPage = () => {
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { renderPrice } from "pages/auth/carrello";
+import { getPrices } from "pages/auth/store";
 
 export const removeFromCart = (
 	prodotto: Prodotto,
@@ -144,44 +150,46 @@ const ProductPage = (productId: any) => {
 				router.push("/auth/store");
 			};
 			checkCentri();
+		} else {
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		}
 
-		const fetchData = async () => {
-			const handleSuccess = (msg_Resp: any) => {
-				//success data
-			};
-			const handleError = (error: any) => {
-				//ERROR data
-				const textAlert = (
-					<React.Fragment>
-						<h3>
-							<strong>{error}</strong>
-						</h3>
-					</React.Fragment>
-				);
-				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-			};
+		// const fetchData = async () => {
+		// 	const handleSuccess = (msg_Resp: any) => {
+		// 		//success data
+		// 	};
+		// 	const handleError = (error: any) => {
+		// 		//ERROR data
+		// 		const textAlert = (
+		// 			<React.Fragment>
+		// 				<h3>
+		// 					<strong>{error}</strong>
+		// 				</h3>
+		// 			</React.Fragment>
+		// 		);
+		// 		showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		// 	};
 
-			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		// 	dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
-			const obyPostData: obyPostData = {
-				clienteKey: eCommerceConf.ClienteKey,
-			};
+		// 	const obyPostData: obyPostData = {
+		// 		clienteKey: eCommerceConf.ClienteKey,
+		// 	};
 
-			try {
-				const respCall: responseCall = await callNodeService(
-					"stripe/get-stripe-key",
-					obyPostData,
-					null
-				);
-				handleSuccess(respCall);
-			} catch (error) {
-				handleError(error);
-			} finally {
-				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-			}
-		};
-		fetchData();
+		// 	try {
+		// 		const respCall: responseCall = await callNodeService(
+		// 			"stripe/get-stripe-key",
+		// 			obyPostData,
+		// 			null
+		// 		);
+		// 		handleSuccess(respCall);
+		// 	} catch (error) {
+		// 		handleError(error);
+		// 	} finally {
+		// 		dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+		// 	}
+		// };
+		// fetchData();
 	}, [dispatch]);
 
 	return (
@@ -193,13 +201,6 @@ const ProductPage = (productId: any) => {
 			>
 				<AlertMe />
 
-				{/* <Typography
-					variant="h5"
-					component="h1"
-					gutterBottom
-				>
-					Product Details: {prodotto?.nome}
-				</Typography> */}
 				<ProductStepper activeStep={activeStep} />
 
 				<Container
@@ -218,10 +219,20 @@ const ProductPage = (productId: any) => {
 							xs={12}
 							md={6}
 						>
-							<img
-								src={prodotto?.immagine ?? undefined}
+							<CardMedia
+								component="img"
+								image={
+									prodotto?.immagine ? prodotto?.immagine : "/images/LogoQ.png"
+								}
 								alt={prodotto?.nome}
-								style={{ width: "100%", borderRadius: "5px" }}
+								style={{
+									// width: "100%",
+									objectFit: prodotto?.immagine ? "cover" : "contain",
+									borderRadius: "5px",
+									// padding: "0.5em",
+									backgroundColor: "#a2a2a2",
+									maxHeight: "420px",
+								}}
 							/>
 						</Grid>
 
@@ -239,18 +250,16 @@ const ProductPage = (productId: any) => {
 							>
 								<FormatString descrizione={prodotto?.descrizione} />
 							</Typography>
-							<Typography variant="h6">
-								Prezzo: ${prodotto?.prezzo.toFixed(2)}
-							</Typography>
 
 							{/* Bottone Aggiungi al Carrello */}
 							<div
 								style={{
 									display: "flex",
-									justifyContent: "center",
-									marginBottom: "30px",
-									bottom: 0,
-									position: "relative",
+									justifyContent: "space-between",
+									marginTop: "30px",
+									alignItems: "center",
+									flexDirection: "row",
+									flexWrap: "nowrap",
 								}}
 							>
 								<Button
@@ -266,18 +275,52 @@ const ProductPage = (productId: any) => {
 										? "Rimuovi dal Carrello"
 										: "Aggiungi Al Carrello"}
 								</Button>
+
+								<CardActions disableSpacing>
+									<Typography
+										variant="h6"
+										textAlign={"center"}
+										padding={"1rem"}
+									>
+										Prezzo: {renderPrice(prodotto?.prezzo)}€
+									</Typography>
+								</CardActions>
 							</div>
 						</Grid>
 
-						<Button
-							variant="contained"
-							disabled={activeStep === 2 ? true : false}
-							//disabled={disableButton}
-							onClick={() => setActiveStep(activeStep + 1)}
-							sx={{ mt: "auto", ml: 1 }}
+						<Grid
+							container
+							spacing={3}
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								flexWrap: "nowrap",
+								justifyContent: "space-between",
+								alignItems: "center",
+								marginLeft: "auto",
+								marginRight: "auto",
+								marginTop: "50px",
+							}}
 						>
-							Successivo
-						</Button>
+							<Button
+								variant="contained"
+								disabled={activeStep === 0 ? true : false}
+								//disabled={disableButton}
+								onClick={() => setActiveStep(activeStep - 1)}
+								sx={{ mt: "auto", ml: 1 }}
+							>
+								<ArrowBackIosNewIcon /> Precedente
+							</Button>
+							<Button
+								variant="contained"
+								disabled={activeStep === 2 ? true : false}
+								//disabled={disableButton}
+								onClick={() => setActiveStep(activeStep + 1)}
+								sx={{ mt: "auto", ml: 1 }}
+							>
+								Successivo <ArrowForwardIosIcon />
+							</Button>
+						</Grid>
 					</Grid>
 				</Container>
 			</Layout>
