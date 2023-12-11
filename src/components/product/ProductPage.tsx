@@ -23,6 +23,8 @@ import {
 	Box,
 	CardMedia,
 	CardActions,
+	Tooltip,
+	IconButton,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -51,8 +53,9 @@ import fetchCentri from "../utils/fetchCentri";
 // const productPage = () => {
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { renderPrice } from "pages/auth/carrello";
+import renderPrice from "src/components/utils/renderPrice";
 import { getPrices } from "pages/auth/store";
+import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
 
 export const removeFromCart = (
 	prodotto: Prodotto,
@@ -133,6 +136,17 @@ const ProductPage = (productId: any) => {
 			return true;
 		} else {
 			return false;
+		}
+	};
+
+	const [isInCartBtnStyle, setIsInCartBtnStyle] = React.useState("#127bd1");
+	const handleClickBtnCart = () => {
+		if (isInCart(prodotto)) {
+			removeFromCart(prodotto, cart, dispatch);
+			setIsInCartBtnStyle("#127bd1");
+		} else {
+			addToCart(prodotto);
+			setIsInCartBtnStyle("red");
 		}
 	};
 
@@ -250,6 +264,198 @@ const ProductPage = (productId: any) => {
 							>
 								<FormatString descrizione={prodotto?.descrizione} />
 							</Typography>
+							<br />
+							<br />
+							{/* <Typography
+								variant="body2"
+								color="text.secondary"
+								sx={{ whiteSpace: "pre-line" }}
+							>
+								{prodotto?.promozione.isPromo
+									? `Questo prodotto è in promozione:  ${prodotto.promozione.descPromo} `
+									: "QUESTO PRODOTTO NON E' IN PROMOZIONE"}
+							</Typography> */}
+							<Typography
+								// marginBottom={3}
+								variant="body2"
+								fontWeight="bold"
+							>
+								{prodotto.promozione.isPromo ? (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Promozione
+													</Typography>
+													<Typography variant="subtitle2">
+														{prodotto.promozione.descPromo}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<Discount color="error" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto è in promoione:
+										{prodotto.promozione.descPromo}
+									</>
+								) : (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Promozione
+													</Typography>
+													<Typography variant="subtitle2">
+														{prodotto.promozione.descPromo}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<Discount color="disabled" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto non è in promozione
+									</>
+								)}
+							</Typography>
+
+							<Typography
+								// marginBottom={3}
+								variant="body2"
+								fontWeight="bold"
+							>
+								{prodotto.convenzione.isConv ? (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Convenzione
+													</Typography>
+													<Typography variant="subtitle2">
+														{prodotto.convenzione.descConve}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<Handshake color="success" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto è in convenzione:{" "}
+										{prodotto.convenzione.descConve}
+									</>
+								) : (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Convenzione
+													</Typography>
+													<Typography variant="subtitle2">
+														{prodotto.convenzione.descConve}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<Handshake color="disabled" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto non è in convenzione
+									</>
+								)}
+							</Typography>
+
+							<Typography
+								// marginBottom={3}
+								variant="body2"
+								fontWeight="bold"
+							>
+								{prodotto?.sceltaOrari.isOrari ? (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Orario Configurabile
+													</Typography>
+													<Typography variant="subtitle2">
+														dal:
+														{prodotto.sceltaOrari.daOrari} al:
+														{prodotto.sceltaOrari.aOrari}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<EditCalendar color="info" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto è con la possibilità di scelta orario dal:
+										{prodotto.sceltaOrari.daOrari} al:
+										{prodotto.sceltaOrari.aOrari}
+									</>
+								) : (
+									<>
+										<Tooltip
+											title={
+												<span
+													style={{ display: "flex", flexDirection: "column" }}
+												>
+													<Typography
+														textAlign={"center"}
+														variant="subtitle2"
+													>
+														Orario Configurabile
+													</Typography>
+													<Typography variant="subtitle2">
+														dal:
+														{prodotto.sceltaOrari.daOrari} al:
+														{prodotto.sceltaOrari.aOrari}
+													</Typography>
+												</span>
+											}
+										>
+											<IconButton>
+												<EditCalendar color="disabled" />
+											</IconButton>
+										</Tooltip>
+										Questo prodotto non è in convenzione
+									</>
+								)}
+							</Typography>
 
 							{/* Bottone Aggiungi al Carrello */}
 							<div
@@ -258,34 +464,73 @@ const ProductPage = (productId: any) => {
 									justifyContent: "space-between",
 									marginTop: "30px",
 									alignItems: "center",
-									flexDirection: "row",
+									flexDirection: "column",
 									flexWrap: "nowrap",
 								}}
 							>
-								<Button
-									onClick={() =>
-										isInCart(prodotto)
-											? removeFromCart(prodotto, cart, dispatch)
-											: addToCart(prodotto)
-									}
-									variant="contained"
-								>
-									<ShoppingCartIcon style={{ marginRight: 20 }} />
-									{isInCart(prodotto)
-										? "Rimuovi dal Carrello"
-										: "Aggiungi Al Carrello"}
-								</Button>
-
 								<CardActions disableSpacing>
-									<Typography
-										variant="h6"
-										textAlign={"center"}
-										padding={"1rem"}
+									<span
+										style={{
+											display: "grid",
+											padding: "1em",
+											gridTemplateColumns: "1fr 1fr 1fr",
+											gap: "1em",
+										}}
 									>
-										Prezzo: {renderPrice(prodotto?.prezzo)}€
-									</Typography>
+										<Typography
+											variant="h5"
+											textAlign={"left"}
+											// color={"green"}
+										>
+											Prezzo:
+										</Typography>
+										<Typography
+											variant="h5"
+											textAlign={"center"}
+											color={"grey"}
+											style={{
+												position: "relative",
+											}}
+										>
+											{renderPrice(prodotto.prezzo)}€
+											<span
+												style={{
+													position: "absolute",
+													top: "50%",
+													left: "50%",
+													transform: "translate(-50%, -50%) rotate(-20deg)",
+													background: "red",
+													width: "100%",
+													height: "2px",
+												}}
+											></span>
+										</Typography>
+										<Typography
+											variant="h5"
+											textAlign={"center"}
+											color={"green"}
+										>
+											{renderPrice(12.6)}€
+										</Typography>
+									</span>
 								</CardActions>
 							</div>
+							<Button
+								style={{
+									width: "100%",
+									backgroundColor: isInCartBtnStyle,
+								}}
+								onClick={() => {
+									console.log("isInCartBtnStyle:", isInCartBtnStyle);
+									handleClickBtnCart();
+								}}
+								variant="contained"
+							>
+								<ShoppingCartIcon style={{ marginRight: 20 }} />
+								{isInCart(prodotto)
+									? "Rimuovi dal Carrello"
+									: "Aggiungi Al Carrello"}
+							</Button>
 						</Grid>
 
 						<Grid

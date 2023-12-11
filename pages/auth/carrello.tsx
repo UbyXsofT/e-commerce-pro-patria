@@ -43,9 +43,9 @@ import { removeFromCart } from "src/components/product/ProductPage";
 import { getPrice, getPrices } from "./store";
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
-
-export const renderPrice = (price: number): string =>
-	price?.toString().replace(".", ",");
+import renderPrice from "src/components/utils/renderPrice";
+// export const renderPrice = (price: number): string =>
+// 	price?.toString().replace(".", ",");
 
 const Carrello = () => {
 	const { showAlert } = useAlertMe();
@@ -173,14 +173,15 @@ const Carrello = () => {
 				emailCentro: authUser?.EMAILCENTRO,
 
 				line_items: cart[0].cart.map((item) => {
-					// Converti in stringa e rimuovi il punto decimale
 					let numeroSenzaDecimale: number = Number(
 						item.prezzo.toString().replace(".", "")
 					);
+					let importoInCentesimi: number = numeroSenzaDecimale * 100;
+
 					return {
 						id: item.id,
 						nome: item.nome,
-						prezzo: numeroSenzaDecimale,
+						prezzo: importoInCentesimi,
 						immagine: item.immagine,
 						descrizione: item.descrizione,
 						convenzione: item.convenzione,

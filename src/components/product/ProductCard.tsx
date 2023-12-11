@@ -22,7 +22,7 @@ import {
 import { setActualProduct, setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { renderPrice } from "pages/auth/carrello";
+import renderPrice from "src/components/utils/renderPrice";
 import { Button, Tooltip } from "@mui/material";
 import FormatString from "src/components/utils/FormatString";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -138,14 +138,25 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			/>
 
 			<CardHeader
-				sx={{ minHeight: "190px" }}
+				sx={{
+					minHeight: "230px",
+					display: "flex",
+					alignItems: "center",
+					padding: "16px",
+					justifyContent: "center",
+					flexDirection: "column",
+					flexWrap: "wrap",
+					alignContent: "flex-start",
+				}}
 				action={
 					<span
 						style={{
 							display: "flex",
-							justifyContent: "space-between",
 							alignItems: "center",
-							height: "64px",
+							justifyContent: "center",
+							flexDirection: "row",
+							flexWrap: "wrap",
+							alignContent: "center",
 						}}
 					>
 						{product.convenzione.isConv ? (
@@ -197,7 +208,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 									}
 								>
 									<IconButton>
-										<Discount color="success" />
+										<Discount color="error" />
 									</IconButton>
 								</Tooltip>
 							</Typography>
@@ -225,7 +236,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 									}
 								>
 									<IconButton>
-										<EditCalendar />
+										<EditCalendar color="info" />
 									</IconButton>
 								</Tooltip>
 							</Typography>
