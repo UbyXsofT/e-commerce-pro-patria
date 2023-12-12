@@ -266,21 +266,13 @@ const ProductPage = (productId: any) => {
 							</Typography>
 							<br />
 							<br />
-							{/* <Typography
-								variant="body2"
-								color="text.secondary"
-								sx={{ whiteSpace: "pre-line" }}
-							>
-								{prodotto?.promozione.isPromo
-									? `Questo prodotto è in promozione:  ${prodotto.promozione.descPromo} `
-									: "QUESTO PRODOTTO NON E' IN PROMOZIONE"}
-							</Typography> */}
 							<Typography
 								// marginBottom={3}
 								variant="body2"
 								fontWeight="bold"
 							>
-								{prodotto.promozione.isPromo ? (
+								
+								{prodotto?.promozione.isPromo ? (
 									<>
 										<Tooltip
 											title={
@@ -294,7 +286,7 @@ const ProductPage = (productId: any) => {
 														Promozione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto.promozione.descPromo}
+														{prodotto?.promozione?.descPromo || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -303,8 +295,8 @@ const ProductPage = (productId: any) => {
 												<Discount color="error" />
 											</IconButton>
 										</Tooltip>
-										Questo prodotto è in promoione:
-										{prodotto.promozione.descPromo}
+										Questo prodotto è in promozione:
+										{prodotto?.promozione?.descPromo || 'N.D.'}
 									</>
 								) : (
 									<>
@@ -320,7 +312,7 @@ const ProductPage = (productId: any) => {
 														Promozione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto.promozione.descPromo}
+													{prodotto?.promozione?.descPromo || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -339,7 +331,7 @@ const ProductPage = (productId: any) => {
 								variant="body2"
 								fontWeight="bold"
 							>
-								{prodotto.convenzione.isConv ? (
+								{prodotto?.convenzione?.isConv ? (
 									<>
 										<Tooltip
 											title={
@@ -353,7 +345,7 @@ const ProductPage = (productId: any) => {
 														Convenzione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto.convenzione.descConve}
+														{prodotto?.convenzione?.descConve || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -363,7 +355,7 @@ const ProductPage = (productId: any) => {
 											</IconButton>
 										</Tooltip>
 										Questo prodotto è in convenzione:{" "}
-										{prodotto.convenzione.descConve}
+										{prodotto?.convenzione?.descConve || 'N.D.'}
 									</>
 								) : (
 									<>
@@ -379,7 +371,7 @@ const ProductPage = (productId: any) => {
 														Convenzione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto.convenzione.descConve}
+														{prodotto?.convenzione?.descConve || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -398,7 +390,7 @@ const ProductPage = (productId: any) => {
 								variant="body2"
 								fontWeight="bold"
 							>
-								{prodotto?.sceltaOrari.isOrari ? (
+								{prodotto?.sceltaOrari?.isOrari ? (
 									<>
 										<Tooltip
 											title={
@@ -413,8 +405,8 @@ const ProductPage = (productId: any) => {
 													</Typography>
 													<Typography variant="subtitle2">
 														dal:
-														{prodotto.sceltaOrari.daOrari} al:
-														{prodotto.sceltaOrari.aOrari}
+														{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
+														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -424,8 +416,8 @@ const ProductPage = (productId: any) => {
 											</IconButton>
 										</Tooltip>
 										Questo prodotto è con la possibilità di scelta orario dal:
-										{prodotto.sceltaOrari.daOrari} al:
-										{prodotto.sceltaOrari.aOrari}
+										{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
+														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
 									</>
 								) : (
 									<>
@@ -442,8 +434,8 @@ const ProductPage = (productId: any) => {
 													</Typography>
 													<Typography variant="subtitle2">
 														dal:
-														{prodotto.sceltaOrari.daOrari} al:
-														{prodotto.sceltaOrari.aOrari}
+														{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
+														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
 													</Typography>
 												</span>
 											}
@@ -492,7 +484,7 @@ const ProductPage = (productId: any) => {
 												position: "relative",
 											}}
 										>
-											{renderPrice(prodotto.prezzo)}€
+											{renderPrice(prodotto?.prezzo)}€
 											<span
 												style={{
 													position: "absolute",

@@ -1,7 +1,5 @@
 // pages/[productId].tsx
 import router, { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { Prodotto, StoreState } from "src/components/CommonTypesInterfaces";
 import ProductPage from "src/components/product/ProductPage";
 
 const ProductID: React.FC = () => {
