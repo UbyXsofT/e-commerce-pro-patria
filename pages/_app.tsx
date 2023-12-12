@@ -16,12 +16,7 @@ import { wrapper } from "src/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import BlockPage from "./blockPage";
-import {
-	StoreState,
-	obyPostProdotti,
-	responseCall,
-	Prodotto,
-} from "src/components/CommonTypesInterfaces";
+import { StoreState } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
@@ -35,58 +30,6 @@ import { Any } from "react-spring";
 import fetchCentri from "src/components/utils/fetchCentri";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
-
-// export type FetchCentriResult =
-// 	| { centri: Centro[]; error: null }
-// 	| { centri: []; error: { message: string; prodotti?: unknown } };
-
-// export const fetchCentri = async (): Promise<FetchCentriResult> => {
-// 	const obyPostProdotti: obyPostProdotti = {
-// 		clienteKey: eCommerceConf.ClienteKey,
-// 		IDCliente: "CLABKM5",
-// 		IDCentro: 0,
-// 	};
-
-// 	try {
-// 		const respCall: responseCall = await callNodeService(
-// 			"prodotti",
-// 			obyPostProdotti,
-// 			null
-// 		);
-
-// 		const centri: Centro[] = [
-// 			{
-// 				id: 0,
-// 				name: "CORSI PRESSO LA SEDE PRINCIPALE",
-// 				subscriptions: respCall.messageCli.message.prodotti,
-// 				principale: true,
-// 			},
-// 			{
-// 				id: 1,
-// 				name: "CORSI FUORI SEDE",
-// 				subscriptions: respCall.messageCli.message.prodotti.slice(0, 2),
-// 			},
-// 			{
-// 				id: 2,
-// 				name: "Terzo",
-// 				subscriptions: respCall.messageCli.message.prodotti.slice(1, 3),
-// 			},
-// 		];
-
-// 		return { centri, error: null };
-// 	} catch (error) {
-// 		console.error(error);
-
-// 		return {
-// 			centri: [],
-// 			error: {
-// 				message: "An error occurred",
-// 				prodotti: undefined, // o qualunque valore di default desiderato
-// 			},
-// 		};
-// 	}
-// };
-
 const MyApp = (props: {
 	Component: React.ComponentType<any>;
 	emotionCache?: any;
