@@ -48,6 +48,22 @@ Il server o il servizio backend può quindi essere programmato per eseguire peri
 La frequenza con cui eseguire questa pulizia nel database può dipendere dalle esigenze specifiche del tuo sistema. Puoi pianificare la pulizia ad intervalli regolari o eseguirla ogni volta che viene effettuata una richiesta per verificare l'autenticazione dell'utente. L'obiettivo è rimuovere i token scaduti in modo tempestivo per mantenere il tuo sistema sicuro e leggero.
 
 
+// setting start
+Description
+        Starts the application in development mode (hot-code reloading, error
+        reporting, etc)
+
+      Usage
+        $ next dev <dir> -p <port number>
+
+      <dir> represents the directory of the Next.js application.
+      If no directory is provided, the current directory will be used.
+
+      Options
+        --port, -p      A port number on which to start the application
+        --hostname, -H  Hostname on which to start the application (default: 0.0.0.0)
+        --help, -h      Displays this message
+
 	//le risposte ottenute dalla funzione  callNodeService  che chiama il server hanno tutte una struttura JSON di questo tipo:
 	// la prima chiave successCli si riferisce allo stato della chiamata effettuata dal client, se ha avutto oppure no esito positivo
 	// messageCli conterra eventuale messaggio di errore, oppure la risposta dal server node.js che avrà anche lui la stessa struttura di oggetti success e message qui message conterrà eventuali errori in risposta oppure conterrà l'oggetto respWCF che conterrà la risposta ottenuta al servizio wcf del centro fitness
