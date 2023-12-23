@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs";
-import { Centro } from "pages/auth/store";
+import { Centro } from "src/components/inutilizzati/store";
 import { MouseEventHandler } from "react";
 
 export type Url = string;

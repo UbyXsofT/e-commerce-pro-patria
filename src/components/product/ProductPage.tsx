@@ -54,7 +54,7 @@ import fetchCentri from "../utils/fetchCentri";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import renderPrice from "src/components/utils/renderPrice";
-import { getPrices } from "pages/auth/store";
+import { getPrices } from "src/components/inutilizzati/store";
 import { Discount, EditCalendar, Handshake } from "@mui/icons-material";
 
 export const removeFromCart = (
@@ -271,7 +271,6 @@ const ProductPage = (productId: any) => {
 								variant="body2"
 								fontWeight="bold"
 							>
-								
 								{prodotto?.promozione.isPromo ? (
 									<>
 										<Tooltip
@@ -286,7 +285,7 @@ const ProductPage = (productId: any) => {
 														Promozione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto?.promozione?.descPromo || 'N.D.'}
+														{prodotto?.promozione?.descPromo || "N.D."}
 													</Typography>
 												</span>
 											}
@@ -296,7 +295,7 @@ const ProductPage = (productId: any) => {
 											</IconButton>
 										</Tooltip>
 										Questo prodotto è in promozione:
-										{prodotto?.promozione?.descPromo || 'N.D.'}
+										{prodotto?.promozione?.descPromo || "N.D."}
 									</>
 								) : (
 									<>
@@ -312,7 +311,7 @@ const ProductPage = (productId: any) => {
 														Promozione
 													</Typography>
 													<Typography variant="subtitle2">
-													{prodotto?.promozione?.descPromo || 'N.D.'}
+														{prodotto?.promozione?.descPromo || "N.D."}
 													</Typography>
 												</span>
 											}
@@ -345,7 +344,7 @@ const ProductPage = (productId: any) => {
 														Convenzione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto?.convenzione?.descConve || 'N.D.'}
+														{prodotto?.convenzione?.descConve || "N.D."}
 													</Typography>
 												</span>
 											}
@@ -355,7 +354,7 @@ const ProductPage = (productId: any) => {
 											</IconButton>
 										</Tooltip>
 										Questo prodotto è in convenzione:{" "}
-										{prodotto?.convenzione?.descConve || 'N.D.'}
+										{prodotto?.convenzione?.descConve || "N.D."}
 									</>
 								) : (
 									<>
@@ -371,7 +370,7 @@ const ProductPage = (productId: any) => {
 														Convenzione
 													</Typography>
 													<Typography variant="subtitle2">
-														{prodotto?.convenzione?.descConve || 'N.D.'}
+														{prodotto?.convenzione?.descConve || "N.D."}
 													</Typography>
 												</span>
 											}
@@ -405,8 +404,8 @@ const ProductPage = (productId: any) => {
 													</Typography>
 													<Typography variant="subtitle2">
 														dal:
-														{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
-														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
+														{prodotto?.sceltaOrari?.daOrari || "N.D."} al:
+														{prodotto?.sceltaOrari?.aOrari || "N.D."}
 													</Typography>
 												</span>
 											}
@@ -416,8 +415,8 @@ const ProductPage = (productId: any) => {
 											</IconButton>
 										</Tooltip>
 										Questo prodotto è con la possibilità di scelta orario dal:
-										{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
-														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
+										{prodotto?.sceltaOrari?.daOrari || "N.D."} al:
+										{prodotto?.sceltaOrari?.aOrari || "N.D."}
 									</>
 								) : (
 									<>
@@ -434,8 +433,8 @@ const ProductPage = (productId: any) => {
 													</Typography>
 													<Typography variant="subtitle2">
 														dal:
-														{prodotto?.sceltaOrari?.daOrari || 'N.D.'} al:
-														{prodotto?.sceltaOrari?.aOrari || 'N.D.'}
+														{prodotto?.sceltaOrari?.daOrari || "N.D."} al:
+														{prodotto?.sceltaOrari?.aOrari || "N.D."}
 													</Typography>
 												</span>
 											}

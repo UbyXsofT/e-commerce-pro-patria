@@ -39,5 +39,25 @@
 	"UrlServerNode": "https://e-commerce.tommysgest.com:60443",
 	"MsgErrConvEcommerce": "Sembra che attualmente l'applicazione non abbia una configurazione valida. Ti invitiamo a contattare il tuo centro fitness, per ottenere ulteriori informazioni e supporto in merito a questa situazione. Grazie per la tua collaborazione.",
 	"MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!",
-	"oggetto_Mail": "TOMMYS E-Commerce"
+	"oggetto_Mail": "TOMMYS E-Commerce",
+	"StepStorePage": {
+		"1": {
+			"TitoloPage": "Seleziona gruppo attività / servizio"
+		},
+		"2": {
+			"TitoloPage": "Seleziona sedi"
+		},
+		"3": {
+			"TitoloPage": "Seleziona aree"
+		},
+		"4": {
+			"TitoloPage": "Lista abbonamenti"
+		},
+		"5": {
+			"TitoloPage": "Orari"
+		},
+		"6": {
+			"TitoloPage": "Acquista riepilogo"
+		}
+	}
 }

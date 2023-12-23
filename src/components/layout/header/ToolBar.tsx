@@ -46,13 +46,8 @@ export interface NavigationPoint {
 	link: string;
 }
 export const navigationPoints: NavigationPoint[] = [
-	// {
-	// 	name: "About",
-	// 	link: "/auth/about",
-	// },
 	{ name: "Home", link: "/auth/home" },
-	{ name: "Abbonamenti", link: "/auth/store" },
-	// { name: "Carrello", link: "/auth/carrello" },
+	{ name: "Acquista", link: "/auth/store/1" }, //TODO stepPageId da gestire con actualStepPageId `/auth/store/${stepPageId}`
 ];
 
 export const ToolBar = ({

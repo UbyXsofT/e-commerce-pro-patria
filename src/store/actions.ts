@@ -1,4 +1,4 @@
-import { Centro } from "pages/auth/store";
+import { Centro } from "src/components/inutilizzati/store";
 import {
 	Cart,
 	Prodotto,

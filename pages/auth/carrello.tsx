@@ -40,7 +40,7 @@ import {
 	Handshake,
 } from "@mui/icons-material";
 import { removeFromCart } from "src/components/product/ProductPage";
-import { getPrice, getPrices } from "./store";
+import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";

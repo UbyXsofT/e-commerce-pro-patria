@@ -24,7 +24,7 @@ import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatu
 
 import eCommerceConf from "eCommerceConf.json";
 import { setCentri } from "src/store/actions";
-import { Centro } from "./auth/store";
+import { Centro } from "../src/components/inutilizzati/store";
 import callNodeService from "./api/callNodeService";
 import { Any } from "react-spring";
 import fetchCentri from "src/components/utils/fetchCentri";
