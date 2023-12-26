@@ -50,7 +50,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	const centri = useSelector((state: StoreState) => state.centri);
+	const listino = useSelector((state: StoreState) => state.listino);
 	const authUser = useSelector((state: StoreState) => state.authUser);
 
 	const [descProdSmall, setDescProdSmall] = React.useState("");
@@ -100,7 +100,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 		// 	(state: StoreState) => state.actualProduct
 		// );
 
-		let actualProduct = centri.centri[0].subscriptions.filter(
+		let actualProduct = listino.listino[0].subscriptions.filter(
 			(listProduct: any) => {
 				console.log("@@@@ xxxx ProductPage listProduct.id: ", listProduct.id);
 				console.log("@@@@ xxxx ProductPage productId: ", productId);

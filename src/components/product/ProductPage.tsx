@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 //REDUX-STORE
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setCart, setLoading, setCentri } from "src/store/actions";
+import { setCart, setLoading, setListino } from "src/store/actions";
 
 //*-----*//
 import {
@@ -49,7 +49,7 @@ import {
 import ProductStepper from "src/components/product/ProductStepper";
 import { Dispatch } from "redux";
 import FormatString from "../utils/FormatString";
-import fetchCentri from "../utils/fetchCentri";
+import fetchListino from "../utils/fetchListino";
 // const productPage = () => {
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -89,7 +89,7 @@ const ProductPage = (productId: any) => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
-	const centri = useSelector((state: StoreState) => state.centri);
+	const listino = useSelector((state: StoreState) => state.listino);
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const cart = useSelector((state: StoreState) => state.cart);
 	const addToCart = (prodotto: Prodotto): void => {
@@ -156,14 +156,14 @@ const ProductPage = (productId: any) => {
 		console.log("@@@@ xxxx ProductPage actualProduct: ", prodotto);
 
 		if (prodotto === null) {
-			const checkCentri = async () => {
-				if (centri.centri.length === 0) {
-					const data = await fetchCentri(authUser?.USERID, 0);
-					dispatch(setCentri(data));
+			const checkListino = async () => {
+				if (listino.listino.length === 0) {
+					const data = await fetchListino(authUser?.USERID, 0);
+					dispatch(setListino(data));
 				}
 				router.push("/auth/store");
 			};
-			checkCentri();
+			checkListino();
 		} else {
 			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		}

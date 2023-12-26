@@ -1,7 +1,7 @@
-import { Centro } from "src/components/inutilizzati/store";
 import {
 	Cart,
-	Prodotto,
+	Listino,
+	ActualProduct,
 	StripeKeysData,
 } from "src/components/CommonTypesInterfaces";
 
@@ -26,19 +26,19 @@ export const setCart = (cart: Cart) => ({
 	payload: cart,
 });
 
-export const setCentri = (centri: {
-	centri: Centro[];
+export const setListino = (listino: {
+	listino: Listino;
 	error: null | unknown;
 }) => ({
-	type: "SET_CENTRI",
-	payload: centri,
+	type: "SET_LISTINO",
+	payload: listino,
 });
 
 export const setStripeKeys = (stripeKeys: StripeKeysData) => ({
 	type: "SET_STRIPE_KEYS",
 	payload: stripeKeys,
 });
-export const setActualProduct = (actualProduct: Prodotto) => ({
+export const setActualProduct = (actualProduct: ActualProduct) => ({
 	type: "SET_ACTUAL_PRODUCT",
 	payload: actualProduct,
 });

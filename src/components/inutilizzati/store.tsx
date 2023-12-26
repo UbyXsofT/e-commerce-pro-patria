@@ -24,7 +24,7 @@ import {
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setCentri, setLoading } from "src/store/actions";
+import { setListino, setLoading } from "src/store/actions";
 import eCommerceConf from "eCommerceConf.json";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
@@ -40,10 +40,10 @@ import callNodeService from "pages/api/callNodeService";
 import ProductCard from "src/components/product/ProductCard";
 import { Box, Stack } from "@mui/system";
 import { Search } from "@mui/icons-material";
-// import { fetchCentri } from "pages/_app";
+// import { fetchListino } from "pages/_app";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
 import chiaveRandom from "src/components/utils/chiaveRandom";
-import fetchCentri from "src/components/utils/fetchCentri";
+import fetchListino from "src/components/utils/fetchListino";
 
 export interface Centro {
 	id: number;
@@ -88,10 +88,10 @@ const Store = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const router = useRouter();
-	const centri = useSelector((state: StoreState) => state.centri);
+	const listino = useSelector((state: StoreState) => state.listino);
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const [centroList, setCentroList] = useState<undefined | Centro[]>(undefined);
-	// const [selectedCentri, setSelectedCentri] = useState<undefined | number[]>(
+	// const [selectedListino, setSelectedListino] = useState<undefined | number[]>(
 	// 	undefined
 	// );
 	const authUser = useSelector((state: StoreState) => state.authUser);
@@ -168,32 +168,32 @@ const Store = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			console.log("@@@ centri.centri", centri.centri);
+			console.log("@@@ listino.listino", listino.listino);
 
-			if (centri.centri.length === 0) {
+			if (listino.listino.length === 0) {
 				return;
 			}
 
-			setCentroList(centri.centri);
+			setCentroList(listino.listino);
 			setSelectedCentro(0 as number);
 
-			let minMax = calculateMinMax(centri.centri);
+			let minMax = calculateMinMax(listino.listino);
 
 			setMinMax(minMax);
 			setPriceRange([minMax.min, minMax.max]);
-			setPlaceholder(findRandomString(centri.centri));
+			setPlaceholder(findRandomString(listino.listino));
 
 			//console.log("@@@ centroList: ", centroList);
-			setFilteredProdotti(centri.centri[selectedCentro].subscriptions);
+			setFilteredProdotti(listino.listino[selectedCentro].subscriptions);
 		};
 
 		fetchData();
-	}, [centri]);
+	}, [listino]);
 
 	const updateSelectedCentro = (newValue: number) => {
 		console.log("@@@ updateSelectedCentro: ", newValue);
 		setSelectedCentro(newValue);
-		setFilteredProdotti(centri.centri[newValue].subscriptions);
+		setFilteredProdotti(listino.listino[newValue].subscriptions);
 	};
 
 	return (
@@ -203,7 +203,7 @@ const Store = () => {
 				description="This is a E-Commerce store page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				{centri.error ? (
+				{listino.error ? (
 					<Box
 						textAlign={"center"}
 						marginTop={12}
@@ -217,9 +217,9 @@ const Store = () => {
 						<Button
 							variant="contained"
 							onClick={async () => {
-								if (centri.centri.length === 0) {
-									const data = await fetchCentri(authUser?.USERID, 0);
-									dispatch(setCentri(data));
+								if (listino.listino.length === 0) {
+									const data = await fetchListino(authUser?.USERID, 0);
+									dispatch(setListino(data));
 								}
 							}}
 						>

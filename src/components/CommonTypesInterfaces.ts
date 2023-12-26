@@ -1,5 +1,4 @@
 import { Dayjs } from "dayjs";
-import { Centro } from "src/components/inutilizzati/store";
 import { MouseEventHandler } from "react";
 
 export type Url = string;
@@ -11,27 +10,6 @@ export type Focus = HTMLDivElement | null;
 export type AutocompleteSelected = ComunePaese | null;
 
 export type Date = Dayjs | null;
-
-// export type ComunePaese = {
-// 	codice: string;
-// 	nome: string;
-// 	nomeStraniero?: string | null;
-// 	codiceCatastale?: string;
-// 	cap?: string;
-// 	prefisso?: string | null;
-// 	provincia: {
-// 		nome: string;
-// 		regione?: string;
-// 	};
-// 	email?: string | null;
-// 	pec?: string | null;
-// 	telefono?: string | null;
-// 	fax?: string | null;
-// 	coordinate?: {
-// 		lat: number;
-// 		lng: number;
-// 	};
-// };
 
 export type ComunePaese = Comune | Paese;
 
@@ -83,7 +61,7 @@ export type StoreAction =
 	| SetAuthEcommerce
 	| SetAuthUser
 	| SetCart
-	| SetCentri
+	| SetListino
 	| SetStripeKeys;
 
 export type SetLoading = {
@@ -106,9 +84,9 @@ export type SetCart = {
 	payload: Cart;
 };
 
-export type SetCentri = {
-	type: "SET_CENTRI";
-	payload: { centri: Centro[]; error: null | unknown };
+export type SetListino = {
+	type: "SET_LISTINO";
+	payload: { listino: Listino; error: null | unknown };
 };
 
 export type SetStripeKeys = {
@@ -116,16 +94,6 @@ export type SetStripeKeys = {
 	payload: StripeKeysData;
 };
 //*--*//
-
-export interface StoreState {
-	loading: boolean;
-	authEcommerce: boolean;
-	authUser: AuthUser | null;
-	cart: Cart;
-	centri: { centri: Centro[]; error: null | unknown };
-	stripeKeys: StripeKeysData;
-	actualProduct: Prodotto;
-}
 
 export interface StripeKeysData {
 	PUBLISHABLE_KEY: string;
@@ -381,27 +349,74 @@ export interface obyPostProdotti {
 	IDCentro: number;
 }
 
-export interface Prodotto {
-	id: string;
-	idCentro: string;
-	nome: string;
-	prezzo: number;
-	immagine: string | null;
-	descrizione: string;
-	convenzione: {
-		isConv: boolean;
-		descConve: string;
-	};
-	promozione: {
-		isPromo: boolean;
-		descPromo: string;
-	};
-	sceltaOrari: {
-		isOrari: boolean;
-		daOrari: string;
-		aOrari: string;
-	};
-	quantity: number; // Aggiunta della proprietà quantity
+// export interface Prodotto {
+// 	id: string;
+// 	nome: string;
+// 	prezzo: number;
+// 	immagine: string | null;
+// 	descrizione: string;
+// 	convenzione: {
+// 		isConv: boolean;
+// 		descConve: string;
+// 	};
+// 	promozione: {
+// 		isPromo: boolean;
+// 		descPromo: string;
+// 	};
+// 	sceltaOrari: {
+// 		isOrari: boolean;
+// 		daOrari: string;
+// 		aOrari: string;
+// 	};
+// 	quantity: number; // Aggiunta della proprietà quantity
+// }
+
+export type Listino = {
+	gruppo: { gruppo: Gruppo[]; error: null | unknown };
+	sede: { gruppo: Sede[]; error: null | unknown };
+	area: { gruppo: Area[]; error: null | unknown };
+	abbonamento: { gruppo: Abbonamento[]; error: null | unknown };
+} | null;
+
+export interface Gruppo {
+	id: number;
+	CODGRUPPO: string;
+	DESGRUPPO: string;
+}
+
+export interface Sede {
+	id: number;
+	IDSEDE: string;
+	DESCSEDE: string;
+	NOTESEDE: string;
+}
+
+export interface Area {
+	id: number;
+	CODAREA: string;
+	DESAREA: string;
+}
+
+export interface Abbonamento {
+	id: number;
+	CODABB: string; // codice abbonamento
+	DESABB: string; // descrizione
+	IMPORTO: string; // imposto di listino
+	PROMO: "0" | "1" | "2"; // 0=nessuna offerta, 1=in promozione, 2=in convenzione
+	IMPORTOS: string; // importo scontato, 0 se non c’è sconto
+	SCELTAF: string; // 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+	NOSOSP: string; // 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+	DATAINI: string; // data proposta come inizio abbonamento
+	PERIODOATT: string; // giorni disponibili per l’attivazione (se =0 vale la dataini)
+	FREQUENZAS: string; //frequenza settimanale (per scegliere gli orari deve essere >0)
+}
+
+export interface ActualProduct {
+	gruppo: Gruppo;
+	sede: Sede;
+	area: Area;
+	abbonamento: Abbonamento;
+	error: null | unknown;
 }
 
 export type Cart = CartUser[];
@@ -411,7 +426,7 @@ export interface CartUser {
 	cart: CartProdotto[];
 }
 
-export interface CartProdotto extends Prodotto {
+export interface CartProdotto extends Abbonamento {
 	configuration: { initialDate: Dayjs } | null;
 }
 
@@ -422,4 +437,14 @@ export interface obyPostDataCart {
 	mode: string;
 	success_url: string;
 	cancel_url: string;
+}
+
+export interface StoreState {
+	loading: boolean;
+	authEcommerce: boolean;
+	authUser: AuthUser | null;
+	cart: Cart;
+	listino: { listino: Listino; error: null | unknown };
+	stripeKeys: StripeKeysData;
+	actualProduct: { actualProduct: ActualProduct };
 }

@@ -23,11 +23,11 @@ import { SettingsProvider } from "src/components/layout/SettingsContext";
 import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
 
 import eCommerceConf from "eCommerceConf.json";
-import { setCentri } from "src/store/actions";
+import { setListino } from "src/store/actions";
 import { Centro } from "../src/components/inutilizzati/store";
 import callNodeService from "./api/callNodeService";
 import { Any } from "react-spring";
-import fetchCentri from "src/components/utils/fetchCentri";
+import fetchListino from "src/components/utils/fetchListino";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 const MyApp = (props: {
@@ -40,7 +40,7 @@ const MyApp = (props: {
 	const router = useRouter();
 	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
 	const authUser = useSelector((state: StoreState) => state.authUser);
-	const centri = useSelector((state: StoreState) => state.centri);
+	const listino = useSelector((state: StoreState) => state.listino);
 	const dispatch = useDispatch();
 
 	const requiresAuth = router.pathname.startsWith("/auth");
@@ -108,16 +108,16 @@ const MyApp = (props: {
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
-
-				if (centri.centri.length === 0) {
-					const data = await fetchCentri(authUser?.USERID, 0);
-					dispatch(setCentri(data));
+				console.log("****** CHECK LISTINO: ", listino.listino);
+				if (listino.listino === null) {
+					const data = await fetchListino(authUser?.USERID, 0);
+					dispatch(setListino({ listino: data.listino, error: null }));
 				}
 			}
 		};
 
 		checkAuthentication();
-	}, [requiresAuth, authEcommerce, authUser, centri]);
+	}, [requiresAuth, authEcommerce, authUser, listino]);
 
 	return (
 		<>

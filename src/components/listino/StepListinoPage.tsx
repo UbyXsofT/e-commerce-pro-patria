@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 //REDUX-STORE
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setCart, setLoading, setCentri } from "src/store/actions";
+import { setCart, setLoading, setListino } from "src/store/actions";
 //*-----*//
 import {
 	Box,
@@ -20,11 +20,11 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import callNodeService from "pages/api/callNodeService";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
-import fetchCentri from "src/components/utils/fetchCentri";
-import BtnStepStore from "./BtnStepStore";
+import fetchListino from "src/components/utils/fetchListino";
+import BtnStepStore from "./BtnStepListino";
 import { StoreState } from "../CommonTypesInterfaces";
 
-const StepStorePage = (stepPageId: any) => {
+const StepListinoPage = (stepPageId: any) => {
 	const router = useRouter();
 	const [activeStepPageId, setActiveStepPageId] = React.useState(
 		stepPageId.stepId
@@ -34,8 +34,8 @@ const StepStorePage = (stepPageId: any) => {
 	);
 	const theme = useTheme();
 
-	//TODO MODIFICARE CENTRI E fetchCentri PERCHè PRENDEREMO TUTTI I DATI DELLO STORE IN UN UNICO FETCH
-	const centri = useSelector((state: StoreState) => state.centri);
+	//TODO MODIFICARE CENTRI E fetchListino PERCHè PRENDEREMO TUTTI I DATI DELLO STORE IN UN UNICO FETCH
+	const listino = useSelector((state: StoreState) => state.listino);
 	const authUser = useSelector((state: StoreState) => state.authUser);
 
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -75,7 +75,7 @@ const StepStorePage = (stepPageId: any) => {
 			>
 				<AlertMe />
 
-				{centri.error ? (
+				{listino.error ? (
 					<Box
 						textAlign={"center"}
 						marginTop={12}
@@ -89,9 +89,10 @@ const StepStorePage = (stepPageId: any) => {
 						<Button
 							variant="contained"
 							onClick={async () => {
-								if (centri.centri.length === 0) {
-									const data = await fetchCentri(authUser?.USERID, 0);
-									dispatch(setCentri(data));
+								console.log("****** CHECK LISTINO: ", listino.listino);
+								if (listino.listino === null) {
+									const data = await fetchListino(authUser?.USERID, 0);
+									dispatch(setListino({ listino: data.listino, error: null }));
 								}
 							}}
 						>
@@ -143,4 +144,4 @@ const StepStorePage = (stepPageId: any) => {
 	);
 };
 
-export default StepStorePage;
+export default StepListinoPage;

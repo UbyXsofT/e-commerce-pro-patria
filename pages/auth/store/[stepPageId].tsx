@@ -1,12 +1,12 @@
 // pages/[productId].tsx
 import router, { useRouter } from "next/router";
-import StepStorePage from "src/components/store/StepStorePage";
+import StepListinoPage from "src/components/listino/StepListinoPage";
 
-const StepStorePageID: React.FC = () => {
+const StepListinoPageID: React.FC = () => {
 	const router = useRouter();
 	const { stepPageId } = router.query;
-	console.log("@@@@@@@ ----- ********* StepStorePageID:", stepPageId);
-	return <StepStorePage stepId={stepPageId} />;
+	console.log("@@@@@@@ ----- ********* StepListinoPageID:", stepPageId);
+	return <StepListinoPage stepId={stepPageId} />;
 };
 
-export default StepStorePageID;
+export default StepListinoPageID;
