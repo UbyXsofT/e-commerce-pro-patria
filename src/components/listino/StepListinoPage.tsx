@@ -104,6 +104,12 @@ const StepListinoPage = (stepPageId: any) => {
 						<Typography variant="h4">
 							<WorkspacesIcon style={{ marginRight: "20px" }} />
 							{eCommerceConfType.StepStorePage[activeStepPageId]?.TitoloPage}
+							{/* "StepStorePage": {"1": {"TitoloPage": "Seleziona gruppo attività / servizio"},
+																	"2": {"TitoloPage": "Seleziona sedi"},
+																	"3": {"TitoloPage": "Seleziona aree"},
+																	"4": {"TitoloPage": "Lista abbonamenti"},
+																	"5": {"TitoloPage": "Orari"},
+																	"6": {"TitoloPage": "Acquista riepilogo"} */}
 						</Typography>
 						<Container
 							style={{

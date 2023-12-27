@@ -373,28 +373,28 @@ export interface obyPostProdotti {
 
 export type Listino = {
 	gruppo: { gruppo: Gruppo[]; error: null | unknown };
-	sede: { gruppo: Sede[]; error: null | unknown };
-	area: { gruppo: Area[]; error: null | unknown };
-	abbonamento: { gruppo: Abbonamento[]; error: null | unknown };
+	sede: { sede: Sede[]; error: null | unknown };
+	area: { area: Area[]; error: null | unknown };
+	abbonamento: { abbonamento: Abbonamento[]; error: null | unknown };
 } | null;
 
 export interface Gruppo {
 	id: number;
-	CODGRUPPO: string;
-	DESGRUPPO: string;
+	CODGRUPPO: string; //codice gruppo
+	DESGRUPPO: string; //descrizione
 }
 
 export interface Sede {
 	id: number;
-	IDSEDE: string;
-	DESCSEDE: string;
-	NOTESEDE: string;
+	IDSEDE: string; // id sede
+	DESCSEDE: string; // descrizione sede
+	NOTESEDE: string; // note della sede
 }
 
 export interface Area {
 	id: number;
-	CODAREA: string;
-	DESAREA: string;
+	CODAREA: string; // codice
+	DESAREA: string; // descrizione area
 }
 
 export interface Abbonamento {

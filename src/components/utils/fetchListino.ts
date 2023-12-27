@@ -23,14 +23,24 @@ const fetchListino = async (
 	};
 
 	try {
-		const respCall: responseCall = await callNodeService(
-			"prodotti",
-			obyPostProdotti,
-			null
-		);
+		// const respCall: responseCall = await callNodeService(
+		// 	"prodotti",
+		// 	obyPostProdotti,
+		// 	null
+		// );
 
-		const listinoArray = respCall.messageCli.message?.prodotti || null;
+		const respCall = await fetch("/data/data.json");
+
+		// Verifica che la richiesta sia stata eseguita correttamente (status 200)
+		if (!respCall.ok) {
+			throw new Error(`Errore durante la richiesta: ${respCall.statusText}`);
+		}
+
+		const listinoResponse = await respCall.json();
+
+		const listinoArray = listinoResponse || null;
 		console.log("listinoArray: ", listinoArray);
+
 		return { listino: listinoArray, error: null };
 	} catch (error: unknown) {
 		console.log(error);

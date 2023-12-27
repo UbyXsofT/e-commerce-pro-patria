@@ -1,0 +1,135 @@
+{
+   "LISTINO": {
+      "GRUPPO": [
+         {
+            "CODGRUPPO": "G001",
+            "DESGRUPPO": "Gruppo A",
+            "SEDE": [
+               {
+                  "IDSEDE": "S001",
+                  "DESCSEDE": "Sede Principale",
+                  "NOTESEDE": "Questa è la sede principale",
+                  "AREA": [
+                     {
+                        "CODAREA": "A001",
+                        "DESAREA": "Area Fitness",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB001",
+                              "DESABB": "Abbonamento Mensile",
+                              "IMPORTO": "50.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "45.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-01-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           },
+                           {
+                              "CODABB": "AB002",
+                              "DESABB": "Abbonamento Trimestrale",
+                              "IMPORTO": "120.00",
+                              "PROMO": "0",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "2023-02-15",
+                              "PERIODOATT": "90",
+                              "FREQUENZAS": "2"
+                           }
+                        ]
+                     },
+                     {
+                        "CODAREA": "A002",
+                        "DESAREA": "Area Cardio",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB003",
+                              "DESABB": "Abbonamento Annuale",
+                              "IMPORTO": "300.00",
+                              "PROMO": "2",
+                              "IMPORTOS": "250.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-03-01",
+                              "PERIODOATT": "365",
+                              "FREQUENZAS": "4"
+                           }
+                        ]
+                     }
+                  ]
+               },
+               {
+                  "IDSEDE": "S002",
+                  "DESCSEDE": "Sede Secondaria",
+                  "NOTESEDE": "Questa è una sede secondaria",
+                  "AREA": [
+                     {
+                        "CODAREA": "A003",
+                        "DESAREA": "Area Yoga",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB004",
+                              "DESABB": "Abbonamento Mensile",
+                              "IMPORTO": "60.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "55.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-04-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "CODGRUPPO": "G002",
+            "DESGRUPPO": "Gruppo B",
+            "SEDE": [
+               {
+                  "IDSEDE": "S003",
+                  "DESCSEDE": "Sede Principale",
+                  "NOTESEDE": "Questa è la sede principale",
+                  "AREA": [
+                     {
+                        "CODAREA": "A004",
+                        "DESAREA": "Area Fitness",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB005",
+                              "DESABB": "Abbonamento Mensile",
+                              "IMPORTO": "50.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "45.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-01-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           },
+                           {
+                              "CODABB": "AB006",
+                              "DESABB": "Abbonamento Trimestrale",
+                              "IMPORTO": "120.00",
+                              "PROMO": "0",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "2023-02-15",
+                              "PERIODOATT": "90",
+                              "FREQUENZAS": "2"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+}
