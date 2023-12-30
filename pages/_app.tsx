@@ -40,7 +40,7 @@ const MyApp = (props: {
 	const router = useRouter();
 	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
 	const authUser = useSelector((state: StoreState) => state.authUser);
-	const listino = useSelector((state: StoreState) => state.listino);
+	const listinoState = useSelector((state: StoreState) => state.listino);
 	const dispatch = useDispatch();
 
 	const requiresAuth = router.pathname.startsWith("/auth");
@@ -108,16 +108,33 @@ const MyApp = (props: {
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
-				console.log("****** CHECK LISTINO: ", listino.listino);
-				if (listino.listino === null) {
-					const data = await fetchListino(authUser?.USERID, 0);
-					dispatch(setListino({ listino: data.listino, error: null }));
+
+				// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
+				console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
+
+				if (listinoState.listino === null) {
+					try {
+						// Effettua la richiesta asincrona
+						const data = await fetchListino(authUser?.USERID, 0);
+						console.log("****** 2) DATA: ", data);
+						// Aggiorna lo stato Redux utilizzando la tua azione setListino
+						dispatch(setListino({ listino: data.listino, error: null }));
+					} catch (error) {
+						// Gestisci eventuali errori durante la richiesta
+						console.error("Errore durante il fetch del listino:", error);
+						dispatch(
+							setListino({
+								listino: null,
+								error: error || "Errore sconosciuto",
+							})
+						);
+					}
 				}
 			}
 		};
 
 		checkAuthentication();
-	}, [requiresAuth, authEcommerce, authUser, listino]);
+	}, [requiresAuth, authEcommerce, authUser, listinoState.listino]);
 
 	return (
 		<>

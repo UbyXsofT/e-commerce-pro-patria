@@ -40,14 +40,25 @@ type ToolBarProps = {
 	cartAlerts: number | null;
 	isMobile: boolean;
 	noAuth: boolean;
+	btnSelected: string;
+	setBtnSelected: string | null;
 };
 export interface NavigationPoint {
 	name: string;
 	link: string;
 }
+
+const stepParams = {
+	stepPageId: 0,
+	titlePage: "step",
+	// altri parametri...
+};
+//const encodedParams = encodeURIComponent(JSON.stringify(stepParams));
+const encodedParams = encodeURIComponent(JSON.stringify(stepParams));
+
 export const navigationPoints: NavigationPoint[] = [
 	{ name: "Home", link: "/auth/home" },
-	{ name: "Acquista", link: "/auth/store/1" }, //TODO stepPageId da gestire con actualStepPageId `/auth/store/${stepPageId}`
+	{ name: "Acquista", link: `/auth/acquista/${encodedParams}` }, //TODO stepPageId da gestire con actualStepPageId `/auth/acquista/${stepPageId}`
 ];
 
 export const ToolBar = ({
@@ -71,7 +82,6 @@ export const ToolBar = ({
 	const cartLength = useSelector(
 		(state: StoreState) => state.cart[0]?.cart.length ?? 0
 	);
-
 	React.useEffect(() => {
 		setCartAlertsNum(cartLength);
 	}, [dispatch, cartLength]);
@@ -99,16 +109,7 @@ export const ToolBar = ({
 	const openCart = Boolean(cartPopper);
 	const openUser = Boolean(userPopper);
 
-	// const handleButtonClick = (target: string) => {
-	// 	if (target !== tipoContesto && drawerDxOpen) {
-	// 		setTipoContesto(target);
-	// 	} else {
-	// 		setTipoContesto(target);
-	// 		setDrawerDxOpen(!drawerDxOpen);
-	// 	}
-	// };
-
-	const handleButtonClick = (target: string) => {
+	const handleButtonClickDrawer = (target: string) => {
 		if (setTipoContesto && setDrawerDxOpen) {
 			if (target !== tipoContesto && drawerDxOpen) {
 				setTipoContesto(target);
@@ -168,13 +169,18 @@ export const ToolBar = ({
 										}}
 										variant={"contained"}
 										color={
-											router.pathname === button.link ? "success" : "primary"
+											button.name &&
+											router.pathname
+												.toLowerCase()
+												.includes(button.name.toLowerCase())
+												? "success"
+												: "primary"
 										}
-										onClick={() =>
+										onClick={() => {
 											router.pathname === button.link
 												? {}
-												: Router.push(button.link)
-										}
+												: Router.push(button.link);
+										}}
 										key={idx}
 									>
 										{button.name}
@@ -269,7 +275,7 @@ export const ToolBar = ({
 							aria-label="account of current user"
 							aria-controls={menuId}
 							aria-haspopup="true"
-							onClick={() => handleButtonClick("utente")} // Chiamata corretta alla funzione
+							onClick={() => handleButtonClickDrawer("utente")} // Chiamata corretta alla funzione
 							onMouseEnter={(e) => handlePopperOpen(e, setUserPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setUserPopper);

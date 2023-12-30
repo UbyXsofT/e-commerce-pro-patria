@@ -40,6 +40,7 @@ const setCartReducer = (state = [], action: AnyAction) => {
 	}
 };
 
+// Modifica la chiave dell'azione o semplifica la struttura dello stato
 const setListinoReducer = (
 	state = { listino: null, error: null },
 	action: AnyAction

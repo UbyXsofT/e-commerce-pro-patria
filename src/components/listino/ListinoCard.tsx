@@ -27,226 +27,244 @@ import { setActualProduct, setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import renderPrice from "src/components/utils/renderPrice";
-import { Button, Tooltip } from "@mui/material";
+import { Box, Button, Container, Grid, Tooltip } from "@mui/material";
 import FormatString from "src/components/utils/FormatString";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-
+import GroupsIcon from "@mui/icons-material/Groups";
+import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 interface ListinoCardProps {
-	itemCard: any;
-	tipo: Gruppo | Sede | Area | Abbonamento;
+	itemsCard: any;
+	tipo: number;
 }
 
-const ListinoCard = ({ itemCard, tipo }: ListinoCardProps) => {
-	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
+const ListinoCard = ({ itemsCard, tipo }: ListinoCardProps) => {
+	const [discountedPrice, setDiscountedPrice] = React.useState<null | number>(
+		null
+	);
+
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	const listino = useSelector((state: StoreState) => state.listino);
-	const authUser = useSelector((state: StoreState) => state.authUser);
+	// const listino = useSelector((state: StoreState) => state.listino);
+	//const authUser = useSelector((state: StoreState) => state.authUser);
 
 	const [descProdSmall, setDescProdSmall] = React.useState("");
 	const [descProdFull, setDescProdFull] = React.useState("");
 	const maxLengthSmallDescProd = 300;
 
 	useEffect(() => {
-		// if (itemCard.promozione.isPromo) {
-		// 	setDiscountedPrice(20.99);
-		// } else if (itemCard.convenzione.isConv) {
-		// 	setDiscountedPrice(24.99);
-		// }
+		if (itemsCard?.promozione === 1) {
+			//promozione
+			setDiscountedPrice(20.99);
+		} else if (itemsCard?.promozione === 2) {
+			//convenzione
+			setDiscountedPrice(24.99);
+		}
 
-		let descrizioneProdotto = itemCard.descrizione;
-		//let descrizioneProdotto = itemCard.descrizione;
-		if (descrizioneProdotto.length > maxLengthSmallDescProd) {
+		let descCard = itemsCard.descrizione;
+		descCard += `\n\n codice: item.CODABB,
+descrizione: item.DESABB, //descrizione
+importo: item.IMPORTO, //importo a listino
+promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
+importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
+sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
+periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
+frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)`;
+
+		//let descCard = itemsCard.descrizione;
+		if (descCard.length > maxLengthSmallDescProd) {
 			// Trova l'ultima occorrenza di uno spazio prima della posizione massima
-			const lastSpaceIndex = descrizioneProdotto.lastIndexOf(
-				" ",
-				maxLengthSmallDescProd
-			);
+			const lastSpaceIndex = descCard.lastIndexOf(" ", maxLengthSmallDescProd);
 			// Verifica se uno spazio è stato trovato
 			if (lastSpaceIndex !== -1) {
 				// Suddividi il testo alla fine della parola trovata
-				setDescProdSmall(descrizioneProdotto.substring(0, lastSpaceIndex));
-				setDescProdFull(descrizioneProdotto.substring(lastSpaceIndex + 1));
+				setDescProdSmall(descCard.substring(0, lastSpaceIndex));
+				setDescProdFull(descCard.substring(lastSpaceIndex + 1));
 			} else {
 				// Se non è stato trovato uno spazio, usa la posizione massima
-				setDescProdSmall(
-					descrizioneProdotto.substring(0, maxLengthSmallDescProd)
-				);
-				setDescProdFull(descrizioneProdotto.substring(maxLengthSmallDescProd));
+				setDescProdSmall(descCard.substring(0, maxLengthSmallDescProd));
+				setDescProdFull(descCard.substring(maxLengthSmallDescProd));
 			}
 		} else {
 			// Se la lunghezza del testo è inferiore alla lunghezza massima, non è necessario suddividerlo
-			setDescProdSmall(descrizioneProdotto);
+			setDescProdSmall(descCard);
 			setDescProdFull("");
 		}
 
 		console.log("XXXX - descProdSmall: ", descProdSmall.length);
 		console.log("XXXX - descProdFull: ", descProdFull.length);
-	}, [itemCard.descrizione]);
+	}, [itemsCard.descrizione]);
 
 	return (
 		<Card
 			sx={{
-				maxWidth: 345,
-				width: 290,
+				maxWidth: "345px",
+				width: "290px",
+				// height: "540px",
+				marginTop: "25px",
+				marginBottom: "25px",
 				cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 			}}
 			//onClick={() => callProductPage(product.id)}
 		>
 			{/* <CardMedia
 				component="img"
-				image={itemCard.immagine ? itemCard.immagine : "/images/LogoQ.png"}
-				alt={itemCard.nome}
+				image={itemsCard.immagine ? itemsCard.immagine : "/images/LogoQ.png"}
+				alt={itemsCard.nome}
 				height={260}
 				style={{
 					borderRadius: 5,
-					objectFit: itemCard.immagine ? "cover" : "contain",
+					objectFit: itemsCard.immagine ? "cover" : "contain",
 					backgroundColor: "#a2a2a2",
 				}}
-			/> */}
+			/> 
+			
+			
+	codice: item.CODABB,
+								descrizione: item.DESABB, //descrizione
+								importo: item.IMPORTO, //importo a listino
+								promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
+								importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
+								sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+								noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+								dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
+								periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
+								frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)
+
+			
+			*/}
 
 			<CardHeader
 				sx={{
-					minHeight: "230px",
+					minHeight: "70px",
 					display: "flex",
-					alignItems: "center",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					alignItems: "stretch",
 					padding: "16px",
-					justifyContent: "center",
-					flexDirection: "column",
-					flexWrap: "wrap",
-					alignContent: "flex-start",
 				}}
-				action={
-					<span
-						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-							flexDirection: "row",
-							flexWrap: "wrap",
-							alignContent: "center",
-						}}
-					>
-						{itemCard.convenzione.isConv ? (
-							<Typography
-								marginBottom={3}
-								variant="h5"
+				title={
+					<div>
+						<div style={{ display: "flex", alignItems: "center" }}>
+							{itemsCard.tipo === "GRUPPO" && <GroupsIcon />}
+							{itemsCard.tipo === "SEDE" && <NotListedLocationIcon />}
+							<div style={{ marginLeft: "8px" }}>
+								{itemsCard.tipo === "GRUPPO"
+									? itemsCard?.descrizione
+									: itemsCard?.tipo}
+							</div>
+						</div>
+
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								justifyContent: "flex-end",
+								alignItems: "center",
+								borderTop: "#454545 1px solid",
+								marginTop: "10px",
+								paddingTop: "10px",
+							}}
+						>
+							<Tooltip
+								title={
+									<span style={{ display: "flex", flexDirection: "column" }}>
+										<Typography
+											textAlign="center"
+											variant="subtitle2"
+										>
+											Contiene convenzione
+										</Typography>
+									</span>
+								}
 							>
-								<Tooltip
-									title={
-										<span style={{ display: "flex", flexDirection: "column" }}>
-											<Typography
-												textAlign={"center"}
-												variant="subtitle2"
-											>
-												Convenzione
-											</Typography>
-											<Typography variant="subtitle2">
-												{itemCard.convenzione.descConve}
-											</Typography>
-										</span>
-									}
-								>
-									<IconButton>
-										<Handshake color="success" />
-									</IconButton>
-								</Tooltip>
-							</Typography>
-						) : (
-							<></>
-						)}
-						{itemCard.promozione.isPromo ? (
-							<Typography
-								marginBottom={3}
-								variant="h5"
+								<IconButton>
+									<Handshake color="success" />
+								</IconButton>
+							</Tooltip>
+
+							<Tooltip
+								title={
+									<span style={{ display: "flex", flexDirection: "column" }}>
+										<Typography
+											textAlign={"center"}
+											variant="subtitle2"
+										>
+											Contiene promozioni
+										</Typography>
+									</span>
+								}
 							>
-								<Tooltip
-									title={
-										<span style={{ display: "flex", flexDirection: "column" }}>
-											<Typography
-												textAlign={"center"}
-												variant="subtitle2"
-											>
-												Promozione
-											</Typography>
-											<Typography variant="subtitle2">
-												{itemCard.promozione.descPromo}
-											</Typography>
-										</span>
-									}
-								>
-									<IconButton>
-										<Discount color="error" />
-									</IconButton>
-								</Tooltip>
-							</Typography>
-						) : (
-							<></>
-						)}
-						{itemCard.sceltaOrari.isOrari ? (
-							<Typography
-								marginBottom={3}
-								variant="h5"
+								<IconButton>
+									<Discount color="error" />
+								</IconButton>
+							</Tooltip>
+
+							<Tooltip
+								title={
+									<span style={{ display: "flex", flexDirection: "column" }}>
+										<Typography
+											textAlign={"center"}
+											variant="subtitle2"
+										>
+											Contiene abbonamento sospendibile
+										</Typography>
+									</span>
+								}
 							>
-								<Tooltip
-									title={
-										<span style={{ display: "flex", flexDirection: "column" }}>
-											<Typography
-												textAlign={"center"}
-												variant="subtitle2"
-											>
-												Orario Configurabile <br />
-											</Typography>
-											<Typography variant="h6">
-												{`${itemCard.sceltaOrari.daOrari} - ${itemCard.sceltaOrari.aOrari}`}
-											</Typography>
-										</span>
-									}
-								>
-									<IconButton>
-										<EditCalendar color="info" />
-									</IconButton>
-								</Tooltip>
-							</Typography>
-						) : (
-							<></>
-						)}
-					</span>
+								<IconButton>
+									<ToggleOffIcon color="info" />
+								</IconButton>
+							</Tooltip>
+
+							<Tooltip
+								title={
+									<span style={{ display: "flex", flexDirection: "column" }}>
+										<Typography
+											textAlign={"center"}
+											variant="subtitle2"
+										>
+											Contiene abbonamento con scelta attività ad orario
+										</Typography>
+									</span>
+								}
+							>
+								<IconButton>
+									<EditCalendar color="warning" />
+								</IconButton>
+							</Tooltip>
+
+							{/* Altre icone... */}
+						</div>
+					</div>
 				}
-				title={itemCard.nome}
 			></CardHeader>
-
-			<CardContent
-				sx={{
-					minHeight: "190px",
-					height: "250px",
-					backgroundColor: (theme) =>
-						theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
-					display: "flex",
-					flexDirection: "column",
-					flexWrap: "nowrap",
-					alignItems: "flex-end",
-					justifyContent: "space-around",
-				}}
-			>
-				<Typography
-					variant="body2"
-					color="text.secondary"
-					sx={{ whiteSpace: "pre-line" }}
+			{itemsCard.tipo !== "GRUPPO" && (
+				<CardContent
+					sx={{
+						minHeight: "190px",
+						height: "300px",
+						backgroundColor: (theme) =>
+							theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+						display: "flex",
+						flexDirection: "column",
+						flexWrap: "nowrap",
+						alignItems: "flex-end",
+						justifyContent: "space-around",
+					}}
 				>
-					<FormatString descrizione={descProdSmall} />
-				</Typography>
-				{descProdFull.length > 0 ? <MoreHorizIcon /> : <></>}
-			</CardContent>
-
-			{/* <CardContent sx={{ minHeight: "190px" }}>
-				<Typography
-					variant="body2"
-					color="text.secondary"
-				>
-					{descProdSmall}
-				</Typography>
-			</CardContent> */}
+					<Typography
+						variant="body2"
+						color="text.secondary"
+						sx={{ whiteSpace: "pre-line" }}
+					>
+						<FormatString descrizione={descProdSmall} />
+					</Typography>
+					{descProdFull.length > 0 ? <MoreHorizIcon /> : <></>}
+				</CardContent>
+			)}
 
 			<div
 				style={{
@@ -275,7 +293,10 @@ const ListinoCard = ({ itemCard, tipo }: ListinoCardProps) => {
 									position: "relative",
 								}}
 							>
-								{renderPrice(itemCard.prezzo)}€
+								{itemsCard?.importo
+									? renderPrice(itemsCard?.importo ? itemsCard.importo : 0.0) +
+									  "€"
+									: ""}
 								<span
 									style={{
 										position: "absolute",
@@ -293,7 +314,13 @@ const ListinoCard = ({ itemCard, tipo }: ListinoCardProps) => {
 								textAlign={"center"}
 								color={"green"}
 							>
-								{renderPrice(discountedPrice)}€
+								{itemsCard?.importoScontato
+									? renderPrice(
+											itemsCard?.importoScontato
+												? itemsCard.importoScontato
+												: 0.0
+									  ) + "€"
+									: ""}
 							</Typography>
 						</span>
 					) : (
@@ -302,10 +329,14 @@ const ListinoCard = ({ itemCard, tipo }: ListinoCardProps) => {
 							textAlign={"center"}
 							padding={"1rem"}
 						>
-							{renderPrice(itemCard.prezzo)}€
+							{itemsCard?.importo
+								? renderPrice(itemsCard?.importo ? itemsCard.importo : 0.0) +
+								  "€"
+								: ""}
 						</Typography>
 					)}
 				</CardActions>
+
 				<div
 					style={{
 						display: "flex",
@@ -320,27 +351,10 @@ const ListinoCard = ({ itemCard, tipo }: ListinoCardProps) => {
 						variant="contained"
 						style={{ width: 240 }}
 					>
-						<StorefrontIcon style={{ marginRight: 20 }} />
-						ACQUISTA
+						{itemsCard?.importo ? "ACQUISTA" : "SELEZIONA"}
 					</Button>
 				</div>
 			</div>
-
-			{/* <Typography
-				variant="body2"
-				color="text.secondary"
-				style={{
-					display: "flex",
-					flexDirection: "row",
-					justifyContent: "center",
-					alignItems: "center",
-				}}
-			>
-				Visualizza scheda completa prodotto
-				<IconButton>
-					<MoreHorizIcon />
-				</IconButton>
-			</Typography> */}
 		</Card>
 	);
 };

@@ -161,7 +161,7 @@ const ProductPage = (productId: any) => {
 					const data = await fetchListino(authUser?.USERID, 0);
 					dispatch(setListino(data));
 				}
-				router.push("/auth/store");
+				router.push("/auth/acquista");
 			};
 			checkListino();
 		} else {

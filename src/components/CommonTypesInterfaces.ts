@@ -371,44 +371,96 @@ export interface obyPostProdotti {
 // 	quantity: number; // Aggiunta della proprietà quantity
 // }
 
-export type Listino = {
-	gruppo: { gruppo: Gruppo[]; error: null | unknown };
-	sede: { sede: Sede[]; error: null | unknown };
-	area: { area: Area[]; error: null | unknown };
-	abbonamento: { abbonamento: Abbonamento[]; error: null | unknown };
-} | null;
+// export type Listino = {
+// 	LISTINO: { GRUPPO: Gruppo; error: null | unknown };
+// 	// gruppo: { gruppo: Gruppo[]; error: null | unknown };
+// 	// sede: { sede: Sede[]; error: null | unknown };
+// 	// area: { area: Area[]; error: null | unknown };
+// 	// abbonamento: { abbonamento: Abbonamento[]; error: null | unknown };
+// } | null;
 
-export interface Gruppo {
-	id: number;
-	CODGRUPPO: string; //codice gruppo
-	DESGRUPPO: string; //descrizione
-}
+// export interface Gruppo {
+// 	id: number;
+// 	CODGRUPPO: string; //codice gruppo
+// 	DESGRUPPO: string; //descrizione
+// 	LISTINO: { GRUPPO: Gruppo; error: null | unknown };
+// }
 
-export interface Sede {
-	id: number;
-	IDSEDE: string; // id sede
-	DESCSEDE: string; // descrizione sede
-	NOTESEDE: string; // note della sede
+// export interface Sede {
+// 	id: number;
+// 	IDSEDE: string; // id sede
+// 	DESCSEDE: string; // descrizione sede
+// 	NOTESEDE: string; // note della sede
+// }
+
+// export interface Area {
+// 	id: number;
+// 	CODAREA: string; // codice
+// 	DESAREA: string; // descrizione area
+// }
+
+// export interface Abbonamento {
+// 	id: number;
+// 	CODABB: string; // codice abbonamento
+// 	DESABB: string; // descrizione
+// 	IMPORTO: string; // imposto di listino
+// 	PROMO: "0" | "1" | "2"; // 0=nessuna offerta, 1=in promozione, 2=in convenzione
+// 	IMPORTOS: string; // importo scontato, 0 se non c’è sconto
+// 	SCELTAF: string; // 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+// 	NOSOSP: string; // 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+// 	DATAINI: string; // data proposta come inizio abbonamento
+// 	PERIODOATT: string; // giorni disponibili per l’attivazione (se =0 vale la dataini)
+// 	FREQUENZAS: string; //frequenza settimanale (per scegliere gli orari deve essere >0)
+// }
+
+export interface Abbonamento {
+	CODABB: string;
+	DESABB: string;
+	IMPORTO: string;
+	PROMO: "0" | "1" | "2";
+	IMPORTOS: string;
+	SCELTAF: string;
+	NOSOSP: string;
+	DATAINI: string;
+	PERIODOATT: string;
+	FREQUENZAS: string;
 }
 
 export interface Area {
-	id: number;
-	CODAREA: string; // codice
-	DESAREA: string; // descrizione area
+	CODAREA: string;
+	DESAREA: string;
+	ABBONAMENTO: Abbonamento[];
 }
 
-export interface Abbonamento {
-	id: number;
-	CODABB: string; // codice abbonamento
-	DESABB: string; // descrizione
-	IMPORTO: string; // imposto di listino
-	PROMO: "0" | "1" | "2"; // 0=nessuna offerta, 1=in promozione, 2=in convenzione
-	IMPORTOS: string; // importo scontato, 0 se non c’è sconto
-	SCELTAF: string; // 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
-	NOSOSP: string; // 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
-	DATAINI: string; // data proposta come inizio abbonamento
-	PERIODOATT: string; // giorni disponibili per l’attivazione (se =0 vale la dataini)
-	FREQUENZAS: string; //frequenza settimanale (per scegliere gli orari deve essere >0)
+export interface Sede {
+	IDSEDE: string;
+	DESCSEDE: string;
+	NOTESEDE: string;
+	AREA: Area[];
+}
+
+export interface Gruppo {
+	CODGRUPPO: string;
+	DESGRUPPO: string;
+	SEDE: Sede[];
+}
+
+export type ListinoData = {
+	[key: string]: Item[]; // Indicizzazione con una chiave di tipo stringa
+};
+
+export type Item = {
+	// La struttura generica di un elemento
+	// Può contenere campi diversi in base al tipo
+};
+
+// export interface ListinoData {
+// 	GRUPPO: Gruppo[];
+// }
+
+export interface Listino {
+	listino: ListinoData;
+	error: null | unknown;
 }
 
 export interface ActualProduct {
@@ -444,7 +496,8 @@ export interface StoreState {
 	authEcommerce: boolean;
 	authUser: AuthUser | null;
 	cart: Cart;
-	listino: { listino: Listino; error: null | unknown };
+	// listino: { listino: Listino; error: null | unknown };
+	listino: Listino;
 	stripeKeys: StripeKeysData;
 	actualProduct: { actualProduct: ActualProduct };
 }

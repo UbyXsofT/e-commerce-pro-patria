@@ -233,7 +233,7 @@ const Login = () => {
 						// minHeight: "calc(100vh - 50vh)",
 						paddingBottom: "60px",
 						height:
-							"70vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
+							"80vh" /* o qualsiasi percentuale desiderata rispetto all'altezza della finestra */,
 					}}
 				>
 					<Box id="main">

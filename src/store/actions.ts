@@ -27,7 +27,7 @@ export const setCart = (cart: Cart) => ({
 });
 
 export const setListino = (listino: {
-	listino: Listino;
+	listino: Listino | null;
 	error: null | unknown;
 }) => ({
 	type: "SET_LISTINO",

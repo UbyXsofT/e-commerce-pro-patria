@@ -20,29 +20,43 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import callNodeService from "pages/api/callNodeService";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
-import fetchListino from "src/components/utils/fetchListino";
-import BtnStepStore from "./BtnStepListino";
-import { StoreState } from "../CommonTypesInterfaces";
 
-const StepListinoPage = (stepPageId: any) => {
+import GroupsIcon from "@mui/icons-material/Groups";
+import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
+import BtnStepStore from "./BtnStepListino";
+import {
+	Abbonamento,
+	Area,
+	Gruppo,
+	Item,
+	Sede,
+	StoreState,
+} from "../CommonTypesInterfaces";
+import ListinoCard from "./ListinoCard";
+import ListinoErrorBox from "./ListinoErrorBox";
+
+interface StepListinoPageProps {
+	activeStepPageId: number;
+	setActiveStepPageId: any;
+}
+
+const StepListinoPage: React.FC<StepListinoPageProps> = ({
+	activeStepPageId,
+	setActiveStepPageId,
+}) => {
 	const router = useRouter();
-	const [activeStepPageId, setActiveStepPageId] = React.useState(
-		stepPageId.stepId
-	);
 	const [endStep, setEndStep] = React.useState(
 		Object.keys(eCommerceConf.StepStorePage).length
 	);
 	const theme = useTheme();
-
 	//TODO MODIFICARE CENTRI E fetchListino PERCHè PRENDEREMO TUTTI I DATI DELLO STORE IN UN UNICO FETCH
-	const listino = useSelector((state: StoreState) => state.listino);
-	const authUser = useSelector((state: StoreState) => state.authUser);
-
+	const listinoState = useSelector((state: StoreState) => state.listino);
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const { showAlert } = useAlertMe();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const [cardComponent, setCardComponent] = React.useState([]);
 
-	// Dichiarazione del tipo per StepStorePage
+	const [tagTipo, setTagTipo] = React.useState("GRUPPO");
 	type StepStorePageType = {
 		[key: number]: {
 			TitoloPage: string;
@@ -54,70 +68,168 @@ const StepListinoPage = (stepPageId: any) => {
 		StepStorePage: eCommerceConf.StepStorePage,
 	};
 
-	React.useEffect(() => {
-		console.log("@@@@ xxxx StepStorePage stepPageId: ", stepPageId);
-		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
-		dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-	}, [dispatch]);
+	// Funzioni di verifica del tipo
+	function isGruppo(item: Item): item is Gruppo {
+		return (item as Gruppo).CODGRUPPO !== undefined;
+	}
+	function isSede(item: Item): item is Sede {
+		return (item as Sede).IDSEDE !== undefined;
+	}
+	function isArea(item: Item): item is Area {
+		return (item as Area).CODAREA !== undefined;
+	}
+	function isAbbonamento(item: Item): item is Abbonamento {
+		return (item as Abbonamento).CODABB !== undefined;
+	}
+
+	function setTipo(tipo: number) {
+		switch (tipo) {
+			case 1:
+				setTagTipo("GRUPPO");
+			case 2:
+				setTagTipo("SEDE");
+			case 3:
+				setTagTipo("AREA");
+			case 4:
+				setTagTipo("ABBONAMENTO");
+		}
+	}
 
 	React.useEffect(() => {
-		if (stepPageId !== activeStepPageId) {
-			router.push(`/auth/store/${activeStepPageId}`);
-		}
+		createCardComponents(activeStepPageId);
 	}, [activeStepPageId]);
+
+	const createCardComponents = (tipo: number) => {
+		let cardComponents = [] as any;
+		setTipo(tipo);
+		console.log("tipo: ", tipo);
+		console.log("tagTipo: ", tagTipo);
+		console.log(
+			"listinoState.listino[tagTipo]: ",
+			listinoState.listino[tagTipo]
+		);
+
+		if (
+			listinoState &&
+			listinoState.listino &&
+			`listinoState.listino.${tagTipo}`
+		) {
+			listinoState.listino[tagTipo].forEach((item) => {
+				// Usa item come un elemento generico, puoi controllare il tipo specifico all'interno del loop
+				if (isGruppo(item)) {
+					// Tratta item come Gruppo
+					cardComponents.push(
+						<ListinoCard
+							key={item.CODGRUPPO}
+							itemsCard={{
+								tipo: tagTipo,
+								codice: item.CODGRUPPO,
+								descrizione: item.DESGRUPPO,
+								aSede: item.SEDE.length > 1 ? true : false,
+							}}
+							tipo={1}
+						/>
+					);
+				} else if (isSede(item)) {
+					// Tratta item come Sede
+					cardComponents.push(
+						<ListinoCard
+							key={item.IDSEDE}
+							itemsCard={{
+								tipo: tagTipo,
+								codice: item.IDSEDE,
+								descrizione: item.DESCSEDE,
+								note: item.NOTESEDE,
+							}}
+							tipo={1}
+						/>
+					);
+				} else if (isArea(item)) {
+					// Tratta item come Area
+					cardComponents.push(
+						<ListinoCard
+							key={item.CODAREA}
+							itemsCard={{
+								tipo: tagTipo,
+								codice: item.CODAREA,
+								descrizione: item.DESAREA,
+							}}
+							tipo={1}
+						/>
+					);
+				} else if (isAbbonamento(item)) {
+					// Tratta item come Abbonamento
+					cardComponents.push(
+						<ListinoCard
+							key={item.CODABB}
+							itemsCard={{
+								tipo: tagTipo,
+								codice: item.CODABB,
+								descrizione: item.DESABB, //descrizione
+								importo: item.IMPORTO, //importo a listino
+								promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
+								importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
+								sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+								noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+								dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
+								periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
+								frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)
+							}}
+							tipo={1}
+						/>
+					);
+				}
+
+				console.log("Item:", item);
+			});
+		} else {
+			console.log("Dati non presenti o struttura non corretta.");
+		}
+
+		console.log("ListinoCard cardComponents: ", cardComponents);
+		setCardComponent(cardComponents);
+	};
+
+	// Logica per la gestione della selezione del gruppo
+	const handleSelection = (selectedId: number) => {};
 
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
 				//digitare il titolo della pagina e la descrizione della pagina.
-				title={`Pagina del prodotto | E-Commerce ${eCommerceConf.NomeEcommerce}`}
-				description="This is a E-Commerce product page, using React.js Next.js and Material-UI. Powered by Byteware srl."
+				title={`Pagina selezione prodotti | E-Commerce ${eCommerceConf.NomeEcommerce}`}
+				description="This is a E-Commerce products select page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
 
-				{listino.error ? (
-					<Box
-						textAlign={"center"}
-						marginTop={12}
-					>
-						<Typography
-							gutterBottom
-							variant="h4"
-						>
-							<strong>Qualcosa è andato storto</strong>
-						</Typography>
-						<Button
-							variant="contained"
-							onClick={async () => {
-								console.log("****** CHECK LISTINO: ", listino.listino);
-								if (listino.listino === null) {
-									const data = await fetchListino(authUser?.USERID, 0);
-									dispatch(setListino({ listino: data.listino, error: null }));
-								}
-							}}
-						>
-							Prova a Ricaricare
-						</Button>
-					</Box>
+				{listinoState.error ? (
+					<ListinoErrorBox />
 				) : (
 					<>
 						<Typography variant="h4">
-							<WorkspacesIcon style={{ marginRight: "20px" }} />
+							{activeStepPageId === 1 ? (
+								<GroupsIcon style={{ marginRight: "20px" }} />
+							) : (
+								<WorkspacesIcon style={{ marginRight: "20px" }} />
+							)}
 							{eCommerceConfType.StepStorePage[activeStepPageId]?.TitoloPage}
-							{/* "StepStorePage": {"1": {"TitoloPage": "Seleziona gruppo attività / servizio"},
-																	"2": {"TitoloPage": "Seleziona sedi"},
-																	"3": {"TitoloPage": "Seleziona aree"},
-																	"4": {"TitoloPage": "Lista abbonamenti"},
-																	"5": {"TitoloPage": "Orari"},
-																	"6": {"TitoloPage": "Acquista riepilogo"} */}
 						</Typography>
 						<Container
 							style={{
 								marginTop: "1em",
-								marginBottom: "1em",
+								marginBottom: "3em",
+								height: "auto",
 							}}
 						>
-							<Grid container>
+							<Grid
+								container
+								style={{
+									display: "flex",
+									width: "100%",
+									flexDirection: "row",
+									justifyContent: "space-around",
+								}}
+							>
 								{isMobile ? (
 									// Contenuto per dispositivi mobili
 									<>
@@ -126,6 +238,7 @@ const StepListinoPage = (stepPageId: any) => {
 											setActiveStepPageId={setActiveStepPageId}
 											endStep={endStep}
 										/>
+										{cardComponent}
 										<BtnStepStore
 											activeStepPageId={activeStepPageId}
 											setActiveStepPageId={setActiveStepPageId}
@@ -134,6 +247,7 @@ const StepListinoPage = (stepPageId: any) => {
 									</>
 								) : (
 									<>
+										{cardComponent}
 										<BtnStepStore
 											activeStepPageId={activeStepPageId}
 											setActiveStepPageId={setActiveStepPageId}

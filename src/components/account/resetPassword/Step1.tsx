@@ -8,6 +8,7 @@ import {
 	Paper,
 	Link,
 	CssBaseline,
+	Box,
 } from "@mui/material";
 
 import eCommerceConf from "eCommerceConf.json";
@@ -55,7 +56,7 @@ const Step1 = ({
 		<Container
 			maxWidth={"md"}
 			component={Paper}
-			sx={{ padding: 3, marginTop: smUp ? 3 : 0 }}
+			sx={{ padding: 3, marginTop: smUp ? 3 : 0, marginBottom: "10vh" }}
 		>
 			<CssBaseline />
 
@@ -124,6 +125,11 @@ const Step1 = ({
 							display: "flex",
 							justifyContent: "space-between",
 							marginTop: 3,
+							flexDirection: "column",
+							flexWrap: "nowrap",
+							alignItems: "stretch",
+							flexFlow: "column",
+							height: "180px",
 						}}
 					>
 						<Link
@@ -148,11 +154,17 @@ const Step1 = ({
 						>
 							Annulla
 						</Link>
-						<ReCAPTCHA
-							style={{ marginRight: "1rem" }}
-							sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
-							onChange={(value) => setCaptcha(value)}
-						/>
+						<Box
+							sx={{
+								maxWidth: 240,
+							}}
+						>
+							<ReCAPTCHA
+								style={{ marginRight: "1rem" }}
+								sitekey={eCommerceConf.YOUR_RECAPTCHA_SITE_KEY}
+								onChange={(value) => setCaptcha(value)}
+							/>
+						</Box>
 						<Button
 							variant="contained"
 							sx={{ mt: "auto" }}

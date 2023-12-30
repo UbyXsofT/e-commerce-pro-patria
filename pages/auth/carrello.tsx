@@ -236,7 +236,7 @@ const Carrello = () => {
 							<Typography variant="h5">
 								Per Aggiungere Prodotti visita gli{" "}
 								<Link
-									onClick={() => Router.push("/auth/store")}
+									onClick={() => Router.push("/auth/acquista")}
 									sx={{
 										mt: 2,
 										textAlign: "center",

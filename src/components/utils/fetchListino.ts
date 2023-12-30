@@ -39,9 +39,9 @@ const fetchListino = async (
 		const listinoResponse = await respCall.json();
 
 		const listinoArray = listinoResponse || null;
-		console.log("listinoArray: ", listinoArray);
+		console.log("fetchListino Array: ", listinoArray);
 
-		return { listino: listinoArray, error: null };
+		return { listino: listinoArray.LISTINO, error: null };
 	} catch (error: unknown) {
 		console.log(error);
 		return { listino: null, error: error };
