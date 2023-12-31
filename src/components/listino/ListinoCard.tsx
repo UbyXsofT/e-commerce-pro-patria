@@ -32,7 +32,7 @@ import FormatString from "src/components/utils/FormatString";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import GroupsIcon from "@mui/icons-material/Groups";
 import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
-import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import ToggleOff from "@mui/icons-material/ToggleOff";
 interface ListinoCardProps {
 	itemsCard: any;
 	tipo: number;
@@ -175,7 +175,7 @@ frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli ora
 											textAlign="center"
 											variant="subtitle2"
 										>
-											Contiene convenzione
+											Contiene abbonamento in convenzione
 										</Typography>
 									</span>
 								}
@@ -192,7 +192,7 @@ frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli ora
 											textAlign={"center"}
 											variant="subtitle2"
 										>
-											Contiene promozioni
+											Contiene abbonamento in promozione
 										</Typography>
 									</span>
 								}
@@ -215,7 +215,7 @@ frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli ora
 								}
 							>
 								<IconButton>
-									<ToggleOffIcon color="info" />
+									<ToggleOff color="warning" />
 								</IconButton>
 							</Tooltip>
 
@@ -232,7 +232,7 @@ frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli ora
 								}
 							>
 								<IconButton>
-									<EditCalendar color="warning" />
+									<EditCalendar color="info" />
 								</IconButton>
 							</Tooltip>
 

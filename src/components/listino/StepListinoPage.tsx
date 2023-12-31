@@ -9,6 +9,9 @@ import {
 	Button,
 	Container,
 	Grid,
+	IconButton,
+	Paper,
+	Tooltip,
 	Typography,
 	useMediaQuery,
 } from "@mui/material";
@@ -34,7 +37,9 @@ import {
 } from "../CommonTypesInterfaces";
 import ListinoCard from "./ListinoCard";
 import ListinoErrorBox from "./ListinoErrorBox";
-
+import { Discount, EditCalendar, Handshake, Info } from "@mui/icons-material";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import LegendaIcone from "./LegendaIcone";
 interface StepListinoPageProps {
 	activeStepPageId: number;
 	setActiveStepPageId: any;
@@ -55,6 +60,21 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 	const { showAlert } = useAlertMe();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const [cardComponent, setCardComponent] = React.useState([]);
+
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+	// Aggiungi uno stato per gestire il padding del corpo
+	const [bodyPadding, setBodyPadding] = React.useState("0px");
+
+	const openModal = () => {
+		setIsModalOpen(true);
+		// setBodyPadding("10px"); // Imposta il padding desiderato
+	};
+
+	const closeModal = () => {
+		// setBodyPadding("0px"); // Rimuovi il padding
+		setIsModalOpen(false);
+	};
 
 	const [tagTipo, setTagTipo] = React.useState("GRUPPO");
 	type StepStorePageType = {
@@ -130,55 +150,56 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 							tipo={1}
 						/>
 					);
-				} else if (isSede(item)) {
-					// Tratta item come Sede
-					cardComponents.push(
-						<ListinoCard
-							key={item.IDSEDE}
-							itemsCard={{
-								tipo: tagTipo,
-								codice: item.IDSEDE,
-								descrizione: item.DESCSEDE,
-								note: item.NOTESEDE,
-							}}
-							tipo={1}
-						/>
-					);
-				} else if (isArea(item)) {
-					// Tratta item come Area
-					cardComponents.push(
-						<ListinoCard
-							key={item.CODAREA}
-							itemsCard={{
-								tipo: tagTipo,
-								codice: item.CODAREA,
-								descrizione: item.DESAREA,
-							}}
-							tipo={1}
-						/>
-					);
-				} else if (isAbbonamento(item)) {
-					// Tratta item come Abbonamento
-					cardComponents.push(
-						<ListinoCard
-							key={item.CODABB}
-							itemsCard={{
-								tipo: tagTipo,
-								codice: item.CODABB,
-								descrizione: item.DESABB, //descrizione
-								importo: item.IMPORTO, //importo a listino
-								promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
-								importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
-								sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
-								noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
-								dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
-								periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
-								frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)
-							}}
-							tipo={1}
-						/>
-					);
 				}
+				// } else if (isSede(item)) {
+				// 	// Tratta item come Sede
+				// 	cardComponents.push(
+				// 		<ListinoCard
+				// 			key={item.IDSEDE}
+				// 			itemsCard={{
+				// 				tipo: tagTipo,
+				// 				codice: item.IDSEDE,
+				// 				descrizione: item.DESCSEDE,
+				// 				note: item.NOTESEDE,
+				// 			}}
+				// 			tipo={1}
+				// 		/>
+				// 	);
+				// } else if (isArea(item)) {
+				// 	// Tratta item come Area
+				// 	cardComponents.push(
+				// 		<ListinoCard
+				// 			key={item.CODAREA}
+				// 			itemsCard={{
+				// 				tipo: tagTipo,
+				// 				codice: item.CODAREA,
+				// 				descrizione: item.DESAREA,
+				// 			}}
+				// 			tipo={1}
+				// 		/>
+				// 	);
+				// } else if (isAbbonamento(item)) {
+				// 	// Tratta item come Abbonamento
+				// 	cardComponents.push(
+				// 		<ListinoCard
+				// 			key={item.CODABB}
+				// 			itemsCard={{
+				// 				tipo: tagTipo,
+				// 				codice: item.CODABB,
+				// 				descrizione: item.DESABB, //descrizione
+				// 				importo: item.IMPORTO, //importo a listino
+				// 				promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
+				// 				importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
+				// 				sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+				// 				noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+				// 				dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
+				// 				periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
+				// 				frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)
+				// 			}}
+				// 			tipo={1}
+				// 		/>
+				// 	);
+				// }
 
 				console.log("Item:", item);
 			});
@@ -201,19 +222,50 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 				description="This is a E-Commerce products select page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
+				{/* Componente LegendaIcone con stato del modale controllato dal componente padre */}
 
 				{listinoState.error ? (
 					<ListinoErrorBox />
 				) : (
 					<>
-						<Typography variant="h4">
-							{activeStepPageId === 1 ? (
-								<GroupsIcon style={{ marginRight: "20px" }} />
-							) : (
-								<WorkspacesIcon style={{ marginRight: "20px" }} />
-							)}
-							{eCommerceConfType.StepStorePage[activeStepPageId]?.TitoloPage}
-						</Typography>
+						<Grid
+							container
+							style={{
+								justifyContent: "space-between",
+								paddingRight: bodyPadding,
+							}}
+						>
+							<Typography variant="h4">
+								{activeStepPageId === 1 ? (
+									<GroupsIcon style={{ marginRight: "20px" }} />
+								) : (
+									<WorkspacesIcon style={{ marginRight: "20px" }} />
+								)}
+								{eCommerceConfType.StepStorePage[activeStepPageId]?.TitoloPage}
+							</Typography>
+
+							<Tooltip
+								title={
+									<span style={{ display: "flex", flexDirection: "column" }}>
+										<Typography
+											textAlign={"center"}
+											variant="subtitle2"
+										>
+											Visualizza legenda icone
+										</Typography>
+									</span>
+								}
+							>
+								<IconButton
+									onClick={() => {
+										openModal();
+									}}
+								>
+									<Info color="info" />
+								</IconButton>
+							</Tooltip>
+						</Grid>
+
 						<Container
 							style={{
 								marginTop: "1em",
@@ -257,6 +309,10 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 								)}
 							</Grid>
 						</Container>
+						<LegendaIcone
+							isOpen={isModalOpen}
+							onClose={closeModal}
+						/>
 					</>
 				)}
 			</Layout>
