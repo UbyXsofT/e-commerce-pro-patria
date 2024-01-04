@@ -54,11 +54,11 @@ const stepParams = {
 	// altri parametri...
 };
 //const encodedParams = encodeURIComponent(JSON.stringify(stepParams));
-const encodedParams = encodeURIComponent(JSON.stringify(stepParams));
+//const encodedParams = encodeURIComponent(JSON.stringify(stepParams));
 
 export const navigationPoints: NavigationPoint[] = [
 	{ name: "Home", link: "/auth/home" },
-	{ name: "Acquista", link: `/auth/acquista/${encodedParams}` }, //TODO stepPageId da gestire con actualStepPageId `/auth/acquista/${stepPageId}`
+	{ name: "Acquista", link: `/auth/acquista/prodotti` }, //TODO stepPageId da gestire con actualStepPageId `/auth/acquista/${stepPageId}`
 ];
 
 export const ToolBar = ({

@@ -10,6 +10,9 @@ import {
 	Container,
 	Grid,
 	IconButton,
+	List,
+	ListItem,
+	ListItemText,
 	Paper,
 	Tooltip,
 	Typography,
@@ -23,10 +26,23 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import callNodeService from "pages/api/callNodeService";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
-
+import PlaceIcon from "@mui/icons-material/Place";
 import GroupsIcon from "@mui/icons-material/Groups";
 import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
-import BtnStepStore from "./BtnStepListino";
+import BtnStepStore from "./Stepper/BtnStepListino";
+
+import ListinoCard from "src/components/listino/Card/ListinoCard";
+import ListinoErrorBox from "./Utils/ListinoErrorBox";
+import {
+	ConstructionOutlined,
+	Discount,
+	EditCalendar,
+	Handshake,
+	Info,
+} from "@mui/icons-material";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import LegendaIcone from "./Utils/LegendaIcone";
+
 import {
 	Abbonamento,
 	Area,
@@ -34,55 +50,42 @@ import {
 	Item,
 	Sede,
 	StoreState,
-} from "../CommonTypesInterfaces";
-import ListinoCard from "./ListinoCard";
-import ListinoErrorBox from "./ListinoErrorBox";
-import { Discount, EditCalendar, Handshake, Info } from "@mui/icons-material";
-import ToggleOffIcon from "@mui/icons-material/ToggleOff";
-import LegendaIcone from "./LegendaIcone";
-interface StepListinoPageProps {
-	activeStepPageId: number;
-	setActiveStepPageId: any;
-}
+} from "src/components/CommonTypesInterfaces";
+import chiaveRandom from "../utils/chiaveRandom";
 
-const StepListinoPage: React.FC<StepListinoPageProps> = ({
-	activeStepPageId,
-	setActiveStepPageId,
-}) => {
-	const router = useRouter();
-	const [endStep, setEndStep] = React.useState(
-		Object.keys(eCommerceConf.StepStorePage).length
-	);
+const StepListinoPage = () => {
+	//const [activeStepPageId, setActiveStepPageId] = React.useState(1);
+	const [stepSelectOby, setStepSelectOby] = React.useState({
+		stepId: 1,
+		endStep: 1,
+		codice: "0",
+	});
 	const theme = useTheme();
 	//TODO MODIFICARE CENTRI E fetchListino PERCHè PRENDEREMO TUTTI I DATI DELLO STORE IN UN UNICO FETCH
 	const listinoState = useSelector((state: StoreState) => state.listino);
+
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const { showAlert } = useAlertMe();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const [cardComponent, setCardComponent] = React.useState([]);
-
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
-
 	// Aggiungi uno stato per gestire il padding del corpo
 	const [bodyPadding, setBodyPadding] = React.useState("0px");
 
+	const storyStep = [] as any;
+	const [storySteps, setStorySteps] = React.useState([]);
+
 	const openModal = () => {
 		setIsModalOpen(true);
-		// setBodyPadding("10px"); // Imposta il padding desiderato
 	};
-
 	const closeModal = () => {
-		// setBodyPadding("0px"); // Rimuovi il padding
 		setIsModalOpen(false);
 	};
-
-	const [tagTipo, setTagTipo] = React.useState("GRUPPO");
 	type StepStorePageType = {
 		[key: number]: {
 			TitoloPage: string;
 		};
 	};
-
 	// Utilizzo del tipo dichiarato
 	const eCommerceConfType: { StepStorePage: StepStorePageType } = {
 		StepStorePage: eCommerceConf.StepStorePage,
@@ -102,113 +105,279 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 		return (item as Abbonamento).CODABB !== undefined;
 	}
 
-	function setTipo(tipo: number) {
-		switch (tipo) {
-			case 1:
-				setTagTipo("GRUPPO");
-			case 2:
-				setTagTipo("SEDE");
-			case 3:
-				setTagTipo("AREA");
-			case 4:
-				setTagTipo("ABBONAMENTO");
-		}
-	}
-
 	React.useEffect(() => {
-		createCardComponents(activeStepPageId);
-	}, [activeStepPageId]);
+		createCardComponents(stepSelectOby.stepId);
+	}, [stepSelectOby.stepId]);
 
-	const createCardComponents = (tipo: number) => {
-		let cardComponents = [] as any;
-		setTipo(tipo);
-		console.log("tipo: ", tipo);
-		console.log("tagTipo: ", tagTipo);
-		console.log(
-			"listinoState.listino[tagTipo]: ",
-			listinoState.listino[tagTipo]
-		);
-
-		if (
-			listinoState &&
-			listinoState.listino &&
-			`listinoState.listino.${tagTipo}`
-		) {
-			listinoState.listino[tagTipo].forEach((item) => {
-				// Usa item come un elemento generico, puoi controllare il tipo specifico all'interno del loop
-				if (isGruppo(item)) {
-					// Tratta item come Gruppo
-					cardComponents.push(
-						<ListinoCard
-							key={item.CODGRUPPO}
-							itemsCard={{
-								tipo: tagTipo,
-								codice: item.CODGRUPPO,
-								descrizione: item.DESGRUPPO,
-								aSede: item.SEDE.length > 1 ? true : false,
-							}}
-							tipo={1}
-						/>
-					);
-				}
-				// } else if (isSede(item)) {
-				// 	// Tratta item come Sede
-				// 	cardComponents.push(
-				// 		<ListinoCard
-				// 			key={item.IDSEDE}
-				// 			itemsCard={{
-				// 				tipo: tagTipo,
-				// 				codice: item.IDSEDE,
-				// 				descrizione: item.DESCSEDE,
-				// 				note: item.NOTESEDE,
-				// 			}}
-				// 			tipo={1}
-				// 		/>
-				// 	);
-				// } else if (isArea(item)) {
-				// 	// Tratta item come Area
-				// 	cardComponents.push(
-				// 		<ListinoCard
-				// 			key={item.CODAREA}
-				// 			itemsCard={{
-				// 				tipo: tagTipo,
-				// 				codice: item.CODAREA,
-				// 				descrizione: item.DESAREA,
-				// 			}}
-				// 			tipo={1}
-				// 		/>
-				// 	);
-				// } else if (isAbbonamento(item)) {
-				// 	// Tratta item come Abbonamento
-				// 	cardComponents.push(
-				// 		<ListinoCard
-				// 			key={item.CODABB}
-				// 			itemsCard={{
-				// 				tipo: tagTipo,
-				// 				codice: item.CODABB,
-				// 				descrizione: item.DESABB, //descrizione
-				// 				importo: item.IMPORTO, //importo a listino
-				// 				promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
-				// 				importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
-				// 				sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
-				// 				noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
-				// 				dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
-				// 				periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
-				// 				frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)
-				// 			}}
-				// 			tipo={1}
-				// 		/>
-				// 	);
-				// }
-
-				console.log("Item:", item);
-			});
-		} else {
-			console.log("Dati non presenti o struttura non corretta.");
+	// Funzione ricorsiva per contare Aree
+	const countAree = (items: Sede[] | Aree[], tipo: any): number => {
+		console.log("countAree items: ", items);
+		switch (tipo) {
+			case "GRUPPO":
+				return items.reduce((acc, sede) => acc + sede.AREA.length, 0);
+			case "SEDE":
+				return items.reduce((acc, area) => acc + area.length, 0);
 		}
+	};
+
+	// Funzione ricorsiva per contare Abbonamenti
+	const countAbbonamenti = (items: Sede[] | Aree[], tipo: any): number => {
+		console.log("countAbbonamenti items: ", items);
+		switch (tipo) {
+			case "GRUPPO":
+				return items.reduce(
+					(acc, sede) =>
+						acc +
+						sede.AREA.reduce(
+							(areaAcc, area) => areaAcc + area.ABBONAMENTO.length,
+							0
+						),
+					0
+				);
+			case "SEDE":
+				return items.reduce(
+					(areaAcc, area) => areaAcc + area.ABBONAMENTO.length,
+					0
+				);
+		}
+	};
+
+	// Funzione per ottenere il numero totale di Aree e Abbonamenti
+	const getTotals = (
+		items: Gruppo | Sede | Area,
+		tipo: any
+	): { totals: {} } => {
+		console.log("getTotals items", items);
+
+		switch (tipo) {
+			case "GRUPPO":
+				return {
+					numeroSedi: items.SEDE.length,
+					numeroAree: countAree(items.SEDE, tipo),
+					numeroAbbonamenti: countAbbonamenti(items.SEDE, tipo),
+				};
+			case "SEDE":
+				return {
+					numeroSedi: 0,
+					numeroAree: items.length,
+					numeroAbbonamenti: countAbbonamenti(items, tipo),
+				};
+		}
+	};
+
+	const findInformazioni = (item, stepId) => {
+		const allRequest = [
+			{ name: "promo", tipo: "PROMO", valore: "1", stepId },
+			{ name: "convenzioni", tipo: "PROMO", valore: "2", stepId },
+			{ name: "sospensioni", tipo: "NOSOSP", valore: "0", stepId },
+			{ name: "sceltaOrario", tipo: "SCELTAF", valore: "0", stepId },
+		];
+
+		// Dichiarare un array per le informazioni
+		const arrayInfoData = [];
+
+		const infoData = {};
+
+		allRequest.forEach((richiesta) => {
+			const { name, tipo, valore, stepId } = richiesta;
+
+			switch (stepId) {
+				case 1: //"GRUPPO"
+					const numero = item["SEDE"]
+						.map((sede) =>
+							sede.AREA.flatMap((area) =>
+								area.ABBONAMENTO.filter((abb) => abb[tipo] === valore)
+							)
+						)
+						.flat().length;
+					//console.log("RICHIESTA NUM ABB x ICONE promo ecc --> CASE NUM: ",numero);
+					const totals = getTotals(item, "GRUPPO");
+
+					// Aggiungere informazioni
+					const infoObject = {
+						name: name,
+						item: item,
+						tipo: tipo,
+						numero: numero,
+						...totals,
+					};
+					// Aggiungere l'oggetto all'oggetto infoData
+					infoData[name] = infoObject;
+					return;
+				case 2: //"SEDE"
+					const numero2 = item["AREA"]
+						.map((area) =>
+							area.ABBONAMENTO.filter((abb) => abb[tipo] === valore)
+						)
+						.flat().length;
+
+					//console.log("RICHIESTA NUM ABBONAMENTI --> CASE NUMERO2: ", numero2);
+					const totals2 = getTotals(item["AREA"], "SEDE");
+
+					// Aggiungere informazioni
+					const infoObject2 = {
+						name: name,
+						item: item,
+						tipo: tipo,
+						numero: numero2,
+						...totals2,
+					};
+
+					// Aggiungere l'oggetto all'oggetto infoData
+					infoData[name] = infoObject2;
+					return;
+				case 3: //"AREA"
+					return;
+				case 4: //ABBONAMENTO
+					return;
+			}
+		});
+
+		arrayInfoData.push(infoData);
+		return arrayInfoData[0];
+	};
+
+	const createCardComponents = (stepId: number) => {
+		let cardComponents = [] as any;
+		let idCount = 0;
+		let gruppoDesideratoTrovato = false;
+		console.log("@@@ --> createCardComponents stepId: ", stepId);
+
+		listinoState.listino["GRUPPO"].forEach((item) => {
+			idCount += 1;
+			console.log("@@@ --> idCount: ", idCount);
+
+			switch (stepId) {
+				case 1: //"GRUPPO"
+					//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
+					setStepSelectOby((prevStepSelectOby) => ({
+						...prevStepSelectOby,
+						//spread operator per recuperare tutti i valori precedenti
+						endStep: 1, //disabilito button successivo
+					}));
+
+					const informazioni = findInformazioni(item, stepId);
+					console.log("@@@ --> informazioni: ", informazioni);
+					if (isGruppo(item)) {
+						cardComponents.push(
+							<ListinoCard
+								key={item.CODGRUPPO}
+								itemsCard={{
+									tipo: "GRUPPO",
+									codice: item.CODGRUPPO,
+									descrizione: item.DESGRUPPO,
+									aPromozioni: informazioni.promo.numero > 0 ? true : false,
+									aConvenzioni:
+										informazioni.convenzioni.numero > 0 ? true : false,
+									aSospensioni:
+										informazioni.sospensioni.numero > 0 ? true : false,
+									aSceltaOrario:
+										informazioni.sceltaOrario.numero > 0 ? true : false,
+									numeroSedi: informazioni.promo.numeroSedi,
+									numeroAree: informazioni.promo.numeroAree,
+									numeroAbbonamenti: informazioni.promo.numeroAbbonamenti,
+									aSede: item.SEDE.length > 1 ? true : false,
+								}}
+								stepSelectOby={stepSelectOby}
+								setStepSelectOby={setStepSelectOby}
+							/>
+						);
+						console.log("@@@ IS GRUPPO: ", item);
+					}
+					return;
+
+				case 2: //"SEDE"
+					if (!gruppoDesideratoTrovato) {
+						const gruppoDesiderato = listinoState.listino["GRUPPO"].find(
+							(gruppo) => {
+								if (
+									isGruppo(gruppo) &&
+									gruppo.CODGRUPPO === stepSelectOby.codice
+								) {
+									storyStep.push(
+										<Typography
+											key={chiaveRandom()}
+											variant="h6"
+											style={{ display: "contents" }}
+										>
+											<GroupsIcon
+												style={{ marginRight: "20px" }}
+												color="success"
+											/>
+											{gruppo.DESGRUPPO}
+										</Typography>
+									);
+									return true;
+								}
+								return false;
+							}
+						);
+
+						console.log("@@@ IS SEDE gruppoDesiderato: ", gruppoDesiderato);
+
+						// Imposta la variabile di stato se il gruppoDesiderato è stato trovato
+						if (gruppoDesiderato && isGruppo(gruppoDesiderato)) {
+							if (gruppoDesiderato.SEDE.length > 1) {
+								gruppoDesideratoTrovato = true;
+								// forEach sulle sedi se il gruppoDesiderato esiste
+								gruppoDesiderato.SEDE.forEach((sede) => {
+									// Ora 'sede' è un oggetto del tipo Sede
+									console.log("@@@ SEDE EACH: ", sede);
+									const informazioni = findInformazioni(sede, stepId);
+									console.log("@@@ --> informazioni: ", informazioni);
+
+									if (isSede(sede)) {
+										cardComponents.push(
+											<ListinoCard
+												key={sede.IDSEDE}
+												itemsCard={{
+													tipo: "SEDE",
+													codice: sede.IDSEDE,
+													descrizione: sede.DESCSEDE,
+													aPromozioni:
+														informazioni.promo.numero > 0 ? true : false,
+													aConvenzioni:
+														informazioni.convenzioni.numero > 0 ? true : false,
+													aSospensioni:
+														informazioni.sospensioni.numero > 0 ? true : false,
+													aSceltaOrario:
+														informazioni.sceltaOrario.numero > 0 ? true : false,
+													numeroSedi: informazioni.promo.numeroSedi,
+													numeroAree: informazioni.promo.numeroAree,
+													numeroAbbonamenti:
+														informazioni.promo.numeroAbbonamenti,
+													note: sede.NOTESEDE,
+													aArea: sede.AREA.length > 1 ? true : false,
+												}}
+												stepSelectOby={stepSelectOby}
+												setStepSelectOby={setStepSelectOby}
+											/>
+										);
+									}
+									console.log("@@@ IS SEDE: ", sede);
+								});
+							} else {
+								console.log("TORNO INDIETRO DI UNO STEP");
+								//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
+								setStepSelectOby((prevStepSelectOby) => ({
+									...prevStepSelectOby,
+									//spread operator per recuperare tutti i valori precedenti
+									stepId: stepId - 1, //disabilito button successivo
+								}));
+							}
+						}
+					}
+					return;
+				case 3: //"AREA"
+					return;
+				case 4: //ABBONAMENTO
+					return;
+			}
+		});
 
 		console.log("ListinoCard cardComponents: ", cardComponents);
 		setCardComponent(cardComponents);
+		setStorySteps(storyStep);
 	};
 
 	// Logica per la gestione della selezione del gruppo
@@ -236,12 +405,21 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 							}}
 						>
 							<Typography variant="h4">
-								{activeStepPageId === 1 ? (
-									<GroupsIcon style={{ marginRight: "20px" }} />
+								{stepSelectOby.stepId === 1 ? (
+									<GroupsIcon
+										style={{ marginRight: "20px" }}
+										color="success"
+									/>
 								) : (
-									<WorkspacesIcon style={{ marginRight: "20px" }} />
+									<PlaceIcon
+										style={{ marginRight: "20px" }}
+										color="warning"
+									/>
 								)}
-								{eCommerceConfType.StepStorePage[activeStepPageId]?.TitoloPage}
+								{
+									eCommerceConfType.StepStorePage[stepSelectOby.stepId]
+										?.TitoloPage
+								}
 							</Typography>
 
 							<Tooltip
@@ -264,8 +442,23 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 									<Info color="info" />
 								</IconButton>
 							</Tooltip>
+							<LegendaIcone
+								isOpen={isModalOpen}
+								onClose={closeModal}
+							/>
 						</Grid>
-
+						<Grid
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								flexWrap: "nowrap",
+								alignItems: "center",
+								justifyContent: "flex-start",
+								marginLeft: "50px",
+							}}
+						>
+							{storySteps}
+						</Grid>
 						<Container
 							style={{
 								marginTop: "1em",
@@ -286,33 +479,26 @@ const StepListinoPage: React.FC<StepListinoPageProps> = ({
 									// Contenuto per dispositivi mobili
 									<>
 										<BtnStepStore
-											activeStepPageId={activeStepPageId}
-											setActiveStepPageId={setActiveStepPageId}
-											endStep={endStep}
+											stepSelectOby={stepSelectOby}
+											setStepSelectOby={setStepSelectOby}
 										/>
 										{cardComponent}
 										<BtnStepStore
-											activeStepPageId={activeStepPageId}
-											setActiveStepPageId={setActiveStepPageId}
-											endStep={endStep}
+											stepSelectOby={stepSelectOby}
+											setStepSelectOby={setStepSelectOby}
 										/>
 									</>
 								) : (
 									<>
 										{cardComponent}
 										<BtnStepStore
-											activeStepPageId={activeStepPageId}
-											setActiveStepPageId={setActiveStepPageId}
-											endStep={endStep}
+											stepSelectOby={stepSelectOby}
+											setStepSelectOby={setStepSelectOby}
 										/>
 									</>
 								)}
 							</Grid>
 						</Container>
-						<LegendaIcone
-							isOpen={isModalOpen}
-							onClose={closeModal}
-						/>
 					</>
 				)}
 			</Layout>

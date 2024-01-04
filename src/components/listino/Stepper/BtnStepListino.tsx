@@ -5,33 +5,38 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import React from "react";
 
 type Props = {
-	activeStepPageId: number;
-	setActiveStepPageId: any;
-	endStep: number;
+	stepSelectOby: {
+		stepId: number;
+		endStep: number;
+		codice: string;
+	};
+	setStepSelectOby: React.Dispatch<
+		React.SetStateAction<{
+			stepId: number;
+			endStep: number;
+			codice: string;
+		}>
+	>;
 };
 
-export const BtnStepStore = ({
-	activeStepPageId,
-	setActiveStepPageId,
-	endStep,
-}: Props) => {
+export const BtnStepStore = ({ stepSelectOby, setStepSelectOby }: Props) => {
 	// Stato per il valore di disabilitazione del pulsante precedente
 	const [isPreviousButtonDisabled, setIsPreviousButtonDisabled] =
-		React.useState(activeStepPageId === 1);
+		React.useState(stepSelectOby.stepId === 1);
 
 	// Calcola il valore di disabilitazione del pulsante successivo
-	const isNextButtonDisabled = activeStepPageId >= endStep;
+	const isNextButtonDisabled = stepSelectOby.stepId >= stepSelectOby.endStep;
 
 	// Effetto per controllare e aggiornare il valore iniziale del pulsante precedente
 	React.useEffect(() => {
-		// Controlla se activeStepPageId è una stringa e convertila in un numero
+		// Controlla se stepSelectOby.stepId è una stringa e convertila in un numero
 		const parsedActiveStepPageId =
-			typeof activeStepPageId === "string"
-				? parseInt(activeStepPageId, 10)
-				: activeStepPageId;
+			typeof stepSelectOby.stepId === "string"
+				? parseInt(stepSelectOby.stepId, 10)
+				: stepSelectOby.stepId;
 
 		setIsPreviousButtonDisabled(parsedActiveStepPageId === 1);
-	}, [activeStepPageId]);
+	}, [stepSelectOby.stepId]);
 
 	return (
 		<Grid
@@ -50,8 +55,11 @@ export const BtnStepStore = ({
 				variant="contained"
 				disabled={isPreviousButtonDisabled}
 				onClick={() =>
-					activeStepPageId !== null
-						? setActiveStepPageId(activeStepPageId - 1)
+					stepSelectOby.stepId !== null
+						? setStepSelectOby((prevStepSelectOby) => ({
+								...prevStepSelectOby,
+								stepId: prevStepSelectOby.stepId - 1,
+						  }))
 						: 1
 				}
 				// sx={{ mt: "auto", ml: 1 }}
@@ -62,12 +70,14 @@ export const BtnStepStore = ({
 				variant="contained"
 				disabled={isNextButtonDisabled}
 				onClick={() =>
-					activeStepPageId !== null
-						? setActiveStepPageId(
-								typeof activeStepPageId === "string"
-									? parseInt(activeStepPageId, 10) + 1
-									: activeStepPageId + 1
-						  )
+					stepSelectOby.stepId !== null
+						? setStepSelectOby((prevStepSelectOby) => ({
+								...prevStepSelectOby,
+								stepId:
+									typeof prevStepSelectOby.stepId === "string"
+										? parseInt(prevStepSelectOby.stepId, 10) + 1
+										: prevStepSelectOby.stepId + 1,
+						  }))
 						: 1
 				}
 				// sx={{ mt: "auto", ml: 1 }}

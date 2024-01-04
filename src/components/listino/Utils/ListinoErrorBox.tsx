@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setListino } from "src/store/actions";
-import { StoreState } from "../CommonTypesInterfaces";
-import fetchListino from "../utils/fetchListino";
+import { StoreState } from "../../CommonTypesInterfaces";
+import fetchListino from "../../utils/fetchListino";
 
 const ListinoErrorBox = () => {
 	const dispatch = useDispatch();

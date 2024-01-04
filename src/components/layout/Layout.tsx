@@ -74,7 +74,7 @@ const Layout = ({
 	const contentRef = React.useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
-		console.log("********************* user: ", user);
+		// console.log("********************* user: ", user);
 
 		navigationPoints.forEach((button, idx) => {
 			if (router.pathname === button.link) {

@@ -1,7 +1,11 @@
 import {
+	AutoAwesomeMosaic,
 	Discount,
 	EditCalendar,
+	Groups,
 	Handshake,
+	MotionPhotosAuto,
+	Place,
 	ToggleOff,
 } from "@mui/icons-material";
 import {
@@ -157,6 +161,100 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 								</IconButton>
 								<Typography variant="body2">
 									Contiene abbonamento con scelta attività ad orario
+								</Typography>
+							</Grid>
+
+							<Divider
+								sx={{
+									marginTop: "2px",
+									marginBottom: "2px",
+									marginLeft: "0px",
+									marginRight: "20px",
+								}}
+							/>
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>
+									<Groups color="success" />
+								</IconButton>
+								<Typography variant="body2">Identifica un gruppo</Typography>
+							</Grid>
+
+							<Divider
+								sx={{
+									marginTop: "2px",
+									marginBottom: "2px",
+									marginLeft: "0px",
+									marginRight: "20px",
+								}}
+							/>
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>
+									<Place color="warning" />
+								</IconButton>
+								<Typography variant="body2">Identifica una sede</Typography>
+							</Grid>
+
+							<Divider
+								sx={{
+									marginTop: "2px",
+									marginBottom: "2px",
+									marginLeft: "0px",
+									marginRight: "20px",
+								}}
+							/>
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>
+									<AutoAwesomeMosaic color="error" />
+								</IconButton>
+								<Typography variant="body2">Identifica un area</Typography>
+							</Grid>
+
+							<Divider
+								sx={{
+									marginTop: "2px",
+									marginBottom: "2px",
+									marginLeft: "0px",
+									marginRight: "20px",
+								}}
+							/>
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>
+									<MotionPhotosAuto color="info" />
+								</IconButton>
+								<Typography variant="body2">
+									Identifica un abbonamento
 								</Typography>
 							</Grid>
 						</Grid>
