@@ -98,56 +98,116 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 				Informazioni:
 			</Typography>
 			<Divider sx={{ mb: 1 }} />
+
 			{itemsCard.tipo === "GRUPPO" ? (
-				<Grid
-					sx={{
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "flex-start",
-						alignItems: "center",
-						flexWrap: "nowrap",
-					}}
-				>
-					<IconButton>
-						<Place color="warning" />
-					</IconButton>
-					<Typography variant="body2">SEDI: {itemsCard.numeroSedi}</Typography>
-				</Grid>
+				<>
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<Place color="warning" />
+						</IconButton>
+						<Typography variant="body2">
+							SEDI: {itemsCard.numeroSedi}
+						</Typography>
+					</Grid>
+
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<AutoAwesomeMosaic color="error" />
+						</IconButton>
+						<Typography variant="body2">
+							AREE: {itemsCard.numeroAree}
+						</Typography>
+					</Grid>
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<MotionPhotosAuto color="info" />
+						</IconButton>
+						<Typography variant="body2">
+							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
+						</Typography>
+					</Grid>
+				</>
+			) : itemsCard.tipo === "SEDE" ? (
+				<>
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<AutoAwesomeMosaic color="error" />
+						</IconButton>
+						<Typography variant="body2">
+							AREE: {itemsCard.numeroAree}
+						</Typography>
+					</Grid>
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<MotionPhotosAuto color="info" />
+						</IconButton>
+						<Typography variant="body2">
+							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
+						</Typography>
+					</Grid>
+				</>
+			) : itemsCard.tipo === "AREA" ? (
+				<>
+					<Grid
+						sx={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexWrap: "nowrap",
+						}}
+					>
+						<IconButton>
+							<MotionPhotosAuto color="info" />
+						</IconButton>
+						<Typography variant="body2">
+							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
+						</Typography>
+					</Grid>
+				</>
 			) : (
 				<></>
 			)}
-
-			<Grid
-				sx={{
-					display: "flex",
-					flexDirection: "row",
-					justifyContent: "flex-start",
-					alignItems: "center",
-					flexWrap: "nowrap",
-				}}
-			>
-				<IconButton>
-					<AutoAwesomeMosaic color="error" />
-				</IconButton>
-				<Typography variant="body2">AREE: {itemsCard.numeroAree}</Typography>
-			</Grid>
-
-			<Grid
-				sx={{
-					display: "flex",
-					flexDirection: "row",
-					justifyContent: "flex-start",
-					alignItems: "center",
-					flexWrap: "nowrap",
-				}}
-			>
-				<IconButton>
-					<MotionPhotosAuto color="info" />
-				</IconButton>
-				<Typography variant="body2">
-					ABBONAMENTI: {itemsCard.numeroAbbonamenti}
-				</Typography>
-			</Grid>
 
 			<Typography
 				variant="body2"

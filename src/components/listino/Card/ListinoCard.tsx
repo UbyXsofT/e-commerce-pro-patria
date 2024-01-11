@@ -41,28 +41,16 @@ import {
 	Cart,
 	CartProdotto,
 	StoreState,
+	StoreAction,
 	Gruppo,
 	Area,
 	Sede,
 	Abbonamento,
+	ListinoCardProps,
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "./CardContentData";
-
-interface ListinoCardProps {
-	itemsCard: any;
-	stepSelectOby: {
-		stepId: number;
-		endStep: number;
-		codice: string;
-	};
-	setStepSelectOby: React.Dispatch<
-		React.SetStateAction<{
-			stepId: number;
-			endStep: number;
-			codice: string;
-		}>
-	>;
-}
+import { StepListino, StepListinoData } from "src/store/interfaces";
+import { setStepListino } from "src/store/actions";
 
 const ListinoCard = ({
 	itemsCard,
@@ -72,9 +60,137 @@ const ListinoCard = ({
 	const [discountedPrice, setDiscountedPrice] = React.useState<null | number>(
 		null
 	);
-
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+	const stateStepListino = useSelector(
+		(state: StoreState) => state.stepListino
+	);
+	const dispatch = useDispatch();
+
+	React.useEffect(() => {
+		//console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+	}, []);
+
+	const handleClick = (itemData: any) => {
+		//console.log("@+<>@+<>@+handleClick<>@<>+@+<>+<>+<>+ ListinoCard - itemsCard",itemData);
+
+		const step = itemsCard;
+
+		const newStep: StepListinoData = {
+			stepId: step?.stepId,
+			tipo: step?.tipo,
+			codice: step?.codice,
+			descrizione: step?.descrizione,
+			onPrevStep: step?.onPrevStep,
+			onNextStep: step?.onNextStep,
+			aPromozioni: step?.aPromozioni,
+			aConvenzioni: step?.aConvenzioni,
+			aSospensioni: step?.aSospensioni,
+			aSceltaOrario: step?.aSceltaOrario,
+			numeroSedi: step?.numeroSedi,
+			numeroAree: step?.numeroAree,
+			numeroAbbonamenti: step?.numeroAbbonamenti,
+			abbonamento: {
+				CODABB: step?.abbonamento?.CODABB,
+				DESABB: step?.abbonamento?.DESABB,
+				IMPORTO: step?.abbonamento?.IMPORTO,
+				PROMO: step?.abbonamento?.PROMO,
+				IMPORTOS: step?.abbonamento?.IMPORTOS,
+				SCELTAF: step?.abbonamento?.SCELTAF,
+				NOSOSP: step?.abbonamento?.NOSOSP,
+				DATAINI: step?.abbonamento?.DATAINI,
+				PERIODOATT: step?.abbonamento?.PERIODOATT,
+				FREQUENZAS: step?.abbonamento?.FREQUENZAS,
+			},
+		};
+
+		const updatedStepListino = [
+			...stateStepListino.stepListino,
+			newStep as StepListinoData,
+		];
+
+		dispatch(setStepListino({ stepListino: updatedStepListino } as any));
+		console.log(
+			"@@@@@@@@@@@@@@@@@@@@@@@ CHECK STATUS ---- >>>>>>>> stateStepListino: ",
+			stateStepListino
+		);
+		if (newStep.codice !== null) {
+			let newStepId = newStep.stepId;
+			// switch (newStep.tipo) {
+			// 	case "GRUPPO":
+			// 		if (newStep.onNextStep === true) {
+			// 			//vado a sede
+			// 			newStepId += 1;
+			// 		} else {
+			// 			//salto la sede
+			// 			newStepId += 2;
+			// 		}
+			// 		break;
+			// 	case "SEDE":
+			// 		break;
+			// 	case "AREA":
+			// 		break;
+
+			// 	default:
+			// 		break;
+			// }
+			if (newStep.onNextStep === true) {
+				//vado a sede
+				newStepId += 1;
+			} else {
+				//salto la sede
+				newStepId += 2;
+			}
+			setStepSelectOby({
+				stepId: newStepId,
+				endStep: 1,
+				codice: newStep.codice,
+			});
+		}
+
+		// stepSelectOby.codice !== null
+		// 	? setStepSelectOby((prevStepSelectOby) => ({
+		// 			...prevStepSelectOby,
+		// 			codice: itemsCard.codice,
+		// 			stepId:
+		// 				itemsCard.tipo === "GRUPPO"
+		// 					? itemsCard.aSede === true
+		// 						? prevStepSelectOby.stepId + 1 //vado a sede
+		// 						: prevStepSelectOby.stepId + 2 //salto la sede
+		// 					: itemsCard.tipo === "SEDE"
+		// 					? itemsCard.aArea === true
+		// 						? prevStepSelectOby.stepId + 1 //vado a area
+		// 						: prevStepSelectOby.stepId + 2 //salto l'Area
+		// 					: itemsCard.tipo === "AREA"
+		// 					? itemsCard.aAbbonamento === true
+		// 						? prevStepSelectOby.stepId + 1 //vado a l'abbonamento
+		// 						: 0 //ERRORE NON HO ABBONAMENTO ???
+		// 					: 0,
+		// 	  }))
+		// 	: "NESSUN CODICE";
+	};
+
+	// 	stepSelectOby.codice !== null
+	// 		? setStepSelectOby((prevStepSelectOby) => ({
+	// 				...prevStepSelectOby,
+	// 				codice: itemsCard.codice,
+	// 				stepId:
+	// 					itemsCard.tipo === "GRUPPO"
+	// 						? itemsCard.aSede === true
+	// 							? prevStepSelectOby.stepId + 1 //vado a sede
+	// 							: prevStepSelectOby.stepId + 2 //salto la sede
+	// 						: itemsCard.tipo === "SEDE"
+	// 						? itemsCard.aArea === true
+	// 							? prevStepSelectOby.stepId + 1 //vado a area
+	// 							: prevStepSelectOby.stepId + 2 //salto l'Area
+	// 						: itemsCard.tipo === "AREA"
+	// 						? itemsCard.aAbbonamento === true
+	// 							? prevStepSelectOby.stepId + 1 //vado a l'abbonamento
+	// 							: 0 //ERRORE NON HO ABBONAMENTO ???
+	// 						: 0,
+	// 		  }))
+	// 		: "NESSUN CODICE";
+	// };
 
 	return (
 		<Card
@@ -83,7 +199,7 @@ const ListinoCard = ({
 				width: isMobile ? "290px" : "350px",
 				marginTop: "25px",
 				marginBottom: "25px",
-				cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
+				//cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 			}}
 			//onClick={() => callProductPage(product.id)}
 		>
@@ -199,18 +315,9 @@ const ListinoCard = ({
 					}}
 				>
 					<Button
-						onClick={() =>
-							stepSelectOby.codice !== null
-								? setStepSelectOby((prevStepSelectOby) => ({
-										...prevStepSelectOby,
-										codice: itemsCard.codice,
-										stepId:
-											itemsCard.aSede === true
-												? prevStepSelectOby.stepId + 1 //vado a sede
-												: prevStepSelectOby.stepId + 2, //salto la sede
-								  }))
-								: "NESSUN CODICE"
-						}
+						onClick={() => {
+							handleClick(itemsCard);
+						}}
 						variant="contained"
 						style={{ width: 240 }}
 					>

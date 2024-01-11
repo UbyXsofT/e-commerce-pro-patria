@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 import { MouseEventHandler } from "react";
+import { StoreActionTypes, StoreStateInterfaces } from "src/store/interfaces";
 
 export type Url = string;
 
@@ -55,45 +56,6 @@ export type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
 export type CaratteriSpeciali = "";
 
 export type Cookie = "accessToken" | "refreshToken" | "username";
-
-export type StoreAction =
-	| SetLoading
-	| SetAuthEcommerce
-	| SetAuthUser
-	| SetCart
-	| SetListino
-	| SetStripeKeys;
-
-export type SetLoading = {
-	type: "SET_LOADING";
-	payload: boolean;
-};
-
-export type SetAuthEcommerce = {
-	type: "SET_AUTH_ECOMMERCE";
-	payload: boolean;
-};
-
-export type SetAuthUser = {
-	type: "SET_AUTH_USER";
-	payload: UserData;
-};
-
-export type SetCart = {
-	type: "SET_CART";
-	payload: Cart;
-};
-
-export type SetListino = {
-	type: "SET_LISTINO";
-	payload: { listino: Listino; error: null | unknown };
-};
-
-export type SetStripeKeys = {
-	type: "SET_STRIPE_KEYS";
-	payload: StripeKeysData;
-};
-//*--*//
 
 export interface StripeKeysData {
 	PUBLISHABLE_KEY: string;
@@ -454,10 +416,6 @@ export type Item = {
 	// Può contenere campi diversi in base al tipo
 };
 
-// export interface ListinoData {
-// 	GRUPPO: Gruppo[];
-// }
-
 export interface Listino {
 	listino: ListinoData;
 	error: null | unknown;
@@ -469,6 +427,22 @@ export interface ActualProduct {
 	area: Area;
 	abbonamento: Abbonamento;
 	error: null | unknown;
+}
+
+export interface ListinoCardProps {
+	itemsCard: any;
+	stepSelectOby: {
+		stepId: number;
+		endStep: number;
+		codice: string;
+	};
+	setStepSelectOby: React.Dispatch<
+		React.SetStateAction<{
+			stepId: number;
+			endStep: number;
+			codice: string;
+		}>
+	>;
 }
 
 export type Cart = CartUser[];
@@ -491,13 +465,5 @@ export interface obyPostDataCart {
 	cancel_url: string;
 }
 
-export interface StoreState {
-	loading: boolean;
-	authEcommerce: boolean;
-	authUser: AuthUser | null;
-	cart: Cart;
-	// listino: { listino: Listino; error: null | unknown };
-	listino: Listino;
-	stripeKeys: StripeKeysData;
-	actualProduct: { actualProduct: ActualProduct };
-}
+export type StoreAction = StoreActionTypes;
+export interface StoreState extends StoreStateInterfaces {}

@@ -1,7 +1,17 @@
 // store.js
-import { AnyAction, configureStore } from "@reduxjs/toolkit";
+//import { AnyAction, configureStore } from "@reduxjs/toolkit";
+// Azioni
+import {
+	AnyAction,
+	configureStore,
+	createAction,
+	createSlice,
+	PayloadAction,
+} from "@reduxjs/toolkit";
+
 import { createWrapper } from "next-redux-wrapper";
 import { StoreAction } from "src/components/CommonTypesInterfaces";
+import { StepListino, StepListinoData } from "./interfaces";
 
 // Definisci i riduttori per gestire gli stati
 const loadingReducer = (state = false, action: AnyAction) => {
@@ -70,10 +80,62 @@ const setStripeKeysReducer = (state = false, action: AnyAction) => {
 	}
 };
 
-const setActualProduct = (state = null, action: AnyAction) => {
+const setActualProductReducer = (state = null, action: AnyAction) => {
 	switch (action.type) {
 		case "SET_ACTUAL_PRODUCT":
 			return action.payload;
+		default:
+			return state;
+	}
+};
+
+const setStepListinoReducer = (
+	state = { stepListino: [] as any },
+	action: AnyAction
+) => {
+	switch (action.type) {
+		case "SET_STEP_LISTINO": {
+			const newStep = action.payload.stepListino;
+
+			console.log("@@@ >>>> SET_STEP_LISTINO --- newStep: ", newStep);
+
+			// Assicurati che newStep non sia undefined o null
+			if (newStep && newStep.stepId !== undefined && newStep.stepId !== null) {
+				const existingStepIndex = state.stepListino?.some(
+					(step: StepListinoData) => step.stepId === newStep.stepId
+				);
+
+				if (existingStepIndex) {
+					// Logica per l'aggiornamento se lo stepId esiste
+					const updatedState = {
+						...state,
+						stepListino: state.stepListino?.map((step: StepListinoData) =>
+							step.stepId === newStep.stepId ? { ...step, ...newStep } : step
+						),
+					};
+
+					console.log(
+						"@@@ >>>> STORE : -------- XXXXX ----  Updated State:",
+						updatedState
+					);
+					return updatedState;
+				} else {
+					// Logica per l'aggiunta se lo stepId non esiste
+					const newState = {
+						...state,
+						stepListino: [...state.stepListino, newStep],
+					};
+
+					console.log(
+						"@@@ >>>> STORE : -------- XXXXX ----  New State:",
+						newState
+					);
+					return newState;
+				}
+			} else {
+				// Logica gestione errori se newStep o newStep.stepId sono undefined o null
+			}
+		}
 		default:
 			return state;
 	}
@@ -89,7 +151,8 @@ const makeStore = () =>
 			cart: setCartReducer,
 			listino: setListinoReducer,
 			stripeKeys: setStripeKeysReducer,
-			actualProduct: setActualProduct,
+			actualProduct: setActualProductReducer,
+			stepListino: setStepListinoReducer,
 			// Altri riduttori...
 		},
 		devTools: true, // Abilita Redux DevTools
