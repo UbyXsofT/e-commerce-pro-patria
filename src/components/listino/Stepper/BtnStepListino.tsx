@@ -9,12 +9,14 @@ type Props = {
 		stepId: number;
 		endStep: number;
 		codice: string;
+		isClickNext: boolean;
 	};
 	setStepSelectOby: React.Dispatch<
 		React.SetStateAction<{
 			stepId: number;
 			endStep: number;
 			codice: string;
+			isClickNext: boolean;
 		}>
 	>;
 };
@@ -59,6 +61,7 @@ export const BtnStepStore = ({ stepSelectOby, setStepSelectOby }: Props) => {
 						? setStepSelectOby((prevStepSelectOby) => ({
 								...prevStepSelectOby,
 								stepId: prevStepSelectOby.stepId - 1,
+								isClickNext: false,
 						  }))
 						: 1
 				}
@@ -77,6 +80,7 @@ export const BtnStepStore = ({ stepSelectOby, setStepSelectOby }: Props) => {
 									typeof prevStepSelectOby.stepId === "string"
 										? parseInt(prevStepSelectOby.stepId, 10) + 1
 										: prevStepSelectOby.stepId + 1,
+								isClickNext: true,
 						  }))
 						: 1
 				}

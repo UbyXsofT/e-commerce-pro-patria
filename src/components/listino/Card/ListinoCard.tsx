@@ -51,6 +51,7 @@ import {
 import CardContentData from "./CardContentData";
 import { StepListino, StepListinoData } from "src/store/interfaces";
 import { setStepListino } from "src/store/actions";
+import trovaCodice from "../Utils/trovaCodice";
 
 const ListinoCard = ({
 	itemsCard,
@@ -62,135 +63,29 @@ const ListinoCard = ({
 	);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-	const stateStepListino = useSelector(
-		(state: StoreState) => state.stepListino
-	);
-	const dispatch = useDispatch();
+	const listinoState = useSelector((state: StoreState) => state.listino);
 
 	React.useEffect(() => {
-		//console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+		console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
 	}, []);
 
 	const handleClick = (itemData: any) => {
-		//console.log("@+<>@+<>@+handleClick<>@<>+@+<>+<>+<>+ ListinoCard - itemsCard",itemData);
-
-		const step = itemsCard;
-
-		const newStep: StepListinoData = {
-			stepId: step?.stepId,
-			tipo: step?.tipo,
-			codice: step?.codice,
-			descrizione: step?.descrizione,
-			onPrevStep: step?.onPrevStep,
-			onNextStep: step?.onNextStep,
-			aPromozioni: step?.aPromozioni,
-			aConvenzioni: step?.aConvenzioni,
-			aSospensioni: step?.aSospensioni,
-			aSceltaOrario: step?.aSceltaOrario,
-			numeroSedi: step?.numeroSedi,
-			numeroAree: step?.numeroAree,
-			numeroAbbonamenti: step?.numeroAbbonamenti,
-			abbonamento: {
-				CODABB: step?.abbonamento?.CODABB,
-				DESABB: step?.abbonamento?.DESABB,
-				IMPORTO: step?.abbonamento?.IMPORTO,
-				PROMO: step?.abbonamento?.PROMO,
-				IMPORTOS: step?.abbonamento?.IMPORTOS,
-				SCELTAF: step?.abbonamento?.SCELTAF,
-				NOSOSP: step?.abbonamento?.NOSOSP,
-				DATAINI: step?.abbonamento?.DATAINI,
-				PERIODOATT: step?.abbonamento?.PERIODOATT,
-				FREQUENZAS: step?.abbonamento?.FREQUENZAS,
-			},
-		};
-
-		const updatedStepListino = [
-			...stateStepListino.stepListino,
-			newStep as StepListinoData,
-		];
-
-		dispatch(setStepListino({ stepListino: updatedStepListino } as any));
 		console.log(
-			"@@@@@@@@@@@@@@@@@@@@@@@ CHECK STATUS ---- >>>>>>>> stateStepListino: ",
-			stateStepListino
+			"@+<>@+<>@+handleClick<>@<>+@+<>+<>+<>+ ListinoCard - itemsCard",
+			itemData
 		);
-		if (newStep.codice !== null) {
-			let newStepId = newStep.stepId;
-			// switch (newStep.tipo) {
-			// 	case "GRUPPO":
-			// 		if (newStep.onNextStep === true) {
-			// 			//vado a sede
-			// 			newStepId += 1;
-			// 		} else {
-			// 			//salto la sede
-			// 			newStepId += 2;
-			// 		}
-			// 		break;
-			// 	case "SEDE":
-			// 		break;
-			// 	case "AREA":
-			// 		break;
-
-			// 	default:
-			// 		break;
-			// }
-			if (newStep.onNextStep === true) {
-				//vado a sede
-				newStepId += 1;
-			} else {
-				//salto la sede
-				newStepId += 2;
-			}
-			setStepSelectOby({
+		const step = itemsCard;
+		if (step?.codice !== null) {
+			let newStepId = (step.stepId += 1);
+			setStepSelectOby((prevStepSelectOby) => ({
+				...prevStepSelectOby,
 				stepId: newStepId,
 				endStep: 1,
-				codice: newStep.codice,
-			});
+				codice: step?.codice,
+				isClickNext: true,
+			}));
 		}
-
-		// stepSelectOby.codice !== null
-		// 	? setStepSelectOby((prevStepSelectOby) => ({
-		// 			...prevStepSelectOby,
-		// 			codice: itemsCard.codice,
-		// 			stepId:
-		// 				itemsCard.tipo === "GRUPPO"
-		// 					? itemsCard.aSede === true
-		// 						? prevStepSelectOby.stepId + 1 //vado a sede
-		// 						: prevStepSelectOby.stepId + 2 //salto la sede
-		// 					: itemsCard.tipo === "SEDE"
-		// 					? itemsCard.aArea === true
-		// 						? prevStepSelectOby.stepId + 1 //vado a area
-		// 						: prevStepSelectOby.stepId + 2 //salto l'Area
-		// 					: itemsCard.tipo === "AREA"
-		// 					? itemsCard.aAbbonamento === true
-		// 						? prevStepSelectOby.stepId + 1 //vado a l'abbonamento
-		// 						: 0 //ERRORE NON HO ABBONAMENTO ???
-		// 					: 0,
-		// 	  }))
-		// 	: "NESSUN CODICE";
 	};
-
-	// 	stepSelectOby.codice !== null
-	// 		? setStepSelectOby((prevStepSelectOby) => ({
-	// 				...prevStepSelectOby,
-	// 				codice: itemsCard.codice,
-	// 				stepId:
-	// 					itemsCard.tipo === "GRUPPO"
-	// 						? itemsCard.aSede === true
-	// 							? prevStepSelectOby.stepId + 1 //vado a sede
-	// 							: prevStepSelectOby.stepId + 2 //salto la sede
-	// 						: itemsCard.tipo === "SEDE"
-	// 						? itemsCard.aArea === true
-	// 							? prevStepSelectOby.stepId + 1 //vado a area
-	// 							: prevStepSelectOby.stepId + 2 //salto l'Area
-	// 						: itemsCard.tipo === "AREA"
-	// 						? itemsCard.aAbbonamento === true
-	// 							? prevStepSelectOby.stepId + 1 //vado a l'abbonamento
-	// 							: 0 //ERRORE NON HO ABBONAMENTO ???
-	// 						: 0,
-	// 		  }))
-	// 		: "NESSUN CODICE";
-	// };
 
 	return (
 		<Card
@@ -260,9 +155,14 @@ const ListinoCard = ({
 									position: "relative",
 								}}
 							>
-								{itemsCard?.importo
-									? renderPrice(itemsCard?.importo ? itemsCard.importo : 0.0) +
-									  "€"
+								{itemsCard.tipo === "ABBONAMENTO"
+									? itemsCard?.abbonamento?.IMPORTO
+										? renderPrice(
+												itemsCard?.abbonamento?.IMPORTO
+													? itemsCard.abbonamento?.IMPORTO
+													: 0.0
+										  ) + "€"
+										: ""
 									: ""}
 								<span
 									style={{
@@ -281,12 +181,14 @@ const ListinoCard = ({
 								textAlign={"center"}
 								color={"green"}
 							>
-								{itemsCard?.importoScontato
-									? renderPrice(
-											itemsCard?.importoScontato
-												? itemsCard.importoScontato
-												: 0.0
-									  ) + "€"
+								{itemsCard.tipo === "ABBONAMENTO"
+									? itemsCard?.abbonamento?.IMPORTOS
+										? renderPrice(
+												itemsCard?.abbonamento?.IMPORTOS
+													? itemsCard.abbonamento?.IMPORTOS
+													: 0.0
+										  ) + "€"
+										: ""
 									: ""}
 							</Typography>
 						</span>
@@ -296,9 +198,14 @@ const ListinoCard = ({
 							textAlign={"center"}
 							padding={"1rem"}
 						>
-							{itemsCard?.importo
-								? renderPrice(itemsCard?.importo ? itemsCard.importo : 0.0) +
-								  "€"
+							{itemsCard.tipo === "ABBONAMENTO"
+								? itemsCard?.abbonamento?.IMPORTO
+									? renderPrice(
+											itemsCard?.abbonamento?.IMPORTO
+												? itemsCard.abbonamento?.IMPORTO
+												: 0.0
+									  ) + "€"
+									: ""
 								: ""}
 						</Typography>
 					)}
@@ -321,7 +228,7 @@ const ListinoCard = ({
 						variant="contained"
 						style={{ width: 240 }}
 					>
-						{itemsCard?.importo ? "ACQUISTA" : "SELEZIONA"}
+						{itemsCard?.tipo === "ABBONAMENTO" ? "ACQUISTA" : "SELEZIONA"}
 					</Button>
 				</div>
 			</div>

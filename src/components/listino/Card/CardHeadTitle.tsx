@@ -25,11 +25,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 				{itemsCard.tipo === "AREA" && <AutoAwesomeMosaic color="error" />}
 				{itemsCard.tipo === "ABBONAMENTO" && <MotionPhotosAuto color="info" />}
 
-				<div style={{ marginLeft: "8px" }}>
-					{itemsCard.tipo === "GRUPPO" || itemsCard.tipo === "SEDE"
-						? itemsCard?.descrizione
-						: itemsCard?.tipo}
-				</div>
+				<div style={{ marginLeft: "8px" }}>{itemsCard?.descrizione}</div>
 			</div>
 
 			<Divider />

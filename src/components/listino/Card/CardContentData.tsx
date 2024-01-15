@@ -15,9 +15,10 @@ import {
 import React from "react";
 import FormatString from "src/components/utils/FormatString";
 import DescFullTxt from "./DescFullTxt";
+import { itemsCard } from "src/components/CommonTypesInterfaces";
 
 interface CardHeadTitleProps {
-	itemsCard: any;
+	itemsCard: itemsCard;
 }
 
 const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
@@ -45,17 +46,15 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 		// 	setDiscountedPrice(24.99);
 		// }
 
-		let descCard = itemsCard.descrizione;
-		// 		descCard += `\n\n codice: item.CODABB,
-		// descrizione: item.DESABB, //descrizione
-		// importo: item.IMPORTO, //importo a listino
-		// promozione: item.PROMO, //0=nessuna offerta, 1=in promozione, 2=in convenzione
-		// importoScontato: item.IMPORTOS, //importo scontato, 0 se non c’è sconto
-		// sceltaFine: item.SCELTAF, //0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
-		// noSospensione: item.NOSOSP, //0=abbonamento sospendibile, <>0 abbonamento non sospendibile
-		// dataIniziale: item.DATAINI, //data proposta come inizio abbonamento
-		// periodoAttivabile: item.PERIODOATT, //giorni disponibili per l’attivazione (se =0 vale la dataini)
-		// frequenzaSedute: item.FREQUENZAS, //frequenza settimanale (per scegliere gli orari deve essere >0)`;
+		let descCard = "n.d.";
+
+		if (itemsCard.tipo === "SEDE") {
+			descCard = itemsCard.note ? itemsCard.note : "";
+		} else if (itemsCard.tipo === "ABBONAMENTO") {
+			descCard = `CODICE: ${itemsCard.abbonamento.CODABB} \n DATAINI: ${itemsCard.abbonamento.DATAINI} \n DESABB: : ${itemsCard.abbonamento.DESABB} \n IMPORTO: ${itemsCard.abbonamento.IMPORTO} \n IMPORTOS: ${itemsCard.abbonamento.IMPORTOS} \n NOSOSP: ${itemsCard.abbonamento.NOSOSP} \n PERIODOATT: ${itemsCard.abbonamento.PERIODOATT} \n PROMO: ${itemsCard.abbonamento.PROMO} \n SCELTAF: ${itemsCard.abbonamento.SCELTAF} \n `;
+		} else {
+			descCard = itemsCard.descrizione;
+		}
 
 		//let descCard = itemsCard.descrizione;
 		if (descCard.length > maxLengthSmallDescProd) {
@@ -213,7 +212,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 				variant="body2"
 				sx={{ fontWeight: "bold", mt: 2 }}
 			>
-				Descrizione:
+				Descrizione/Note:
 			</Typography>
 			<Divider sx={{ mb: 1 }} />
 			<Typography
@@ -221,11 +220,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 				color="text.secondary"
 				sx={{ whiteSpace: "pre-line", height: "100px", overflow: "hidden" }}
 			>
-				<FormatString
-					descrizione={
-						itemsCard.tipo !== "SEDE" ? descProdSmall : itemsCard.note
-					}
-				/>
+				<FormatString descrizione={descProdSmall} />
 			</Typography>
 
 			<DescFullTxt

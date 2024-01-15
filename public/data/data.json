@@ -16,10 +16,10 @@
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB001",
-                              "DESABB": "Abbonamento Mensile",
-                              "IMPORTO": "50.00",
+                              "DESABB": "Abbonamento 1",
+                              "IMPORTO": "100.00",
                               "PROMO": "1",
-                              "IMPORTOS": "45.00",
+                              "IMPORTOS": "50.00",
                               "SCELTAF": "1",
                               "NOSOSP": "0",
                               "DATAINI": "2023-01-01",
@@ -28,11 +28,11 @@
                            },
                            {
                               "CODABB": "AB002",
-                              "DESABB": "Abbonamento Trimestrale",
-                              "IMPORTO": "120.00",
+                              "DESABB": "Abbonamento 2",
+                              "IMPORTO": "200.00",
                               "PROMO": "0",
                               "IMPORTOS": "0.00",
-                              "SCELTAF": "0",
+                              "SCELTAF": "100.00",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",
                               "PERIODOATT": "90",
@@ -46,10 +46,10 @@
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB003",
-                              "DESABB": "Abbonamento Annuale",
+                              "DESABB": "Abbonamento 3",
                               "IMPORTO": "300.00",
                               "PROMO": "2",
-                              "IMPORTOS": "250.00",
+                              "IMPORTOS": "150.00",
                               "SCELTAF": "1",
                               "NOSOSP": "0",
                               "DATAINI": "2023-03-01",
@@ -71,10 +71,10 @@
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB004",
-                              "DESABB": "Abbonamento Mensile",
-                              "IMPORTO": "60.00",
+                              "DESABB": "Abbonamento 4",
+                              "IMPORTO": "400.00",
                               "PROMO": "1",
-                              "IMPORTOS": "55.00",
+                              "IMPORTOS": "200.00",
                               "SCELTAF": "1",
                               "NOSOSP": "0",
                               "DATAINI": "2023-04-01",
@@ -102,10 +102,10 @@
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB005",
-                              "DESABB": "Abbonamento Mensile",
-                              "IMPORTO": "50.00",
+                              "DESABB": "Abbonamento 5",
+                              "IMPORTO": "500.00",
                               "PROMO": "1",
-                              "IMPORTOS": "45.00",
+                              "IMPORTOS": "250.00",
                               "SCELTAF": "1",
                               "NOSOSP": "0",
                               "DATAINI": "2023-01-01",
@@ -114,10 +114,10 @@
                            },
                            {
                               "CODABB": "AB006",
-                              "DESABB": "Abbonamento Trimestrale",
-                              "IMPORTO": "120.00",
+                              "DESABB": "Abbonamento 6",
+                              "IMPORTO": "600.00",
                               "PROMO": "0",
-                              "IMPORTOS": "0.00",
+                              "IMPORTOS": "300.00",
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",

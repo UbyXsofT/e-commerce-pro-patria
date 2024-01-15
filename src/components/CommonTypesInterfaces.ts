@@ -191,7 +191,7 @@ export interface UserData {
 }
 
 export interface NewUserData {
-	ID: String;
+	ID: string;
 	clienteKey: string;
 	Cognome: string;
 	Nome: string;
@@ -311,69 +311,23 @@ export interface obyPostProdotti {
 	IDCentro: number;
 }
 
-// export interface Prodotto {
-// 	id: string;
-// 	nome: string;
-// 	prezzo: number;
-// 	immagine: string | null;
-// 	descrizione: string;
-// 	convenzione: {
-// 		isConv: boolean;
-// 		descConve: string;
-// 	};
-// 	promozione: {
-// 		isPromo: boolean;
-// 		descPromo: string;
-// 	};
-// 	sceltaOrari: {
-// 		isOrari: boolean;
-// 		daOrari: string;
-// 		aOrari: string;
-// 	};
-// 	quantity: number; // Aggiunta della proprietà quantity
-// }
-
-// export type Listino = {
-// 	LISTINO: { GRUPPO: Gruppo; error: null | unknown };
-// 	// gruppo: { gruppo: Gruppo[]; error: null | unknown };
-// 	// sede: { sede: Sede[]; error: null | unknown };
-// 	// area: { area: Area[]; error: null | unknown };
-// 	// abbonamento: { abbonamento: Abbonamento[]; error: null | unknown };
-// } | null;
-
-// export interface Gruppo {
-// 	id: number;
-// 	CODGRUPPO: string; //codice gruppo
-// 	DESGRUPPO: string; //descrizione
-// 	LISTINO: { GRUPPO: Gruppo; error: null | unknown };
-// }
-
-// export interface Sede {
-// 	id: number;
-// 	IDSEDE: string; // id sede
-// 	DESCSEDE: string; // descrizione sede
-// 	NOTESEDE: string; // note della sede
-// }
-
-// export interface Area {
-// 	id: number;
-// 	CODAREA: string; // codice
-// 	DESAREA: string; // descrizione area
-// }
-
-// export interface Abbonamento {
-// 	id: number;
-// 	CODABB: string; // codice abbonamento
-// 	DESABB: string; // descrizione
-// 	IMPORTO: string; // imposto di listino
-// 	PROMO: "0" | "1" | "2"; // 0=nessuna offerta, 1=in promozione, 2=in convenzione
-// 	IMPORTOS: string; // importo scontato, 0 se non c’è sconto
-// 	SCELTAF: string; // 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
-// 	NOSOSP: string; // 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
-// 	DATAINI: string; // data proposta come inizio abbonamento
-// 	PERIODOATT: string; // giorni disponibili per l’attivazione (se =0 vale la dataini)
-// 	FREQUENZAS: string; //frequenza settimanale (per scegliere gli orari deve essere >0)
-// }
+export interface itemsCard {
+	stepId: number;
+	tipo: "GRUPPO" | "SEDE" | "AREA" | "ABBONAMENTO";
+	codice: string;
+	descrizione: string;
+	onNextStep: boolean;
+	onPrevStep: boolean;
+	aPromozioni: boolean;
+	aConvenzioni: boolean;
+	aSospensioni: boolean;
+	aSceltaOrario: boolean;
+	numeroSedi: string;
+	numeroAree: string;
+	numeroAbbonamenti: string;
+	abbonamento: Abbonamento;
+	note?: string; // Proprietà opzionale
+}
 
 export interface Abbonamento {
 	CODABB: string;
@@ -435,12 +389,14 @@ export interface ListinoCardProps {
 		stepId: number;
 		endStep: number;
 		codice: string;
+		isClickNext: boolean;
 	};
 	setStepSelectOby: React.Dispatch<
 		React.SetStateAction<{
 			stepId: number;
 			endStep: number;
 			codice: string;
+			isClickNext: boolean;
 		}>
 	>;
 }

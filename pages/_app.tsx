@@ -110,26 +110,26 @@ const MyApp = (props: {
 				}
 
 				// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
-				console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
+				// console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
 
-				if (listinoState.listino === null) {
-					try {
-						// Effettua la richiesta asincrona
-						const data = await fetchListino(authUser?.USERID, 0);
-						console.log("****** 2) DATA: ", data);
-						// Aggiorna lo stato Redux utilizzando la tua azione setListino
-						dispatch(setListino({ listino: data.listino, error: null }));
-					} catch (error) {
-						// Gestisci eventuali errori durante la richiesta
-						console.error("Errore durante il fetch del listino:", error);
-						dispatch(
-							setListino({
-								listino: null,
-								error: error || "Errore sconosciuto",
-							})
-						);
-					}
-				}
+				// if (listinoState.listino === null) {
+				// 	try {
+				// 		// Effettua la richiesta asincrona
+				// 		const data = await fetchListino(authUser?.USERID, 0);
+				// 		console.log("****** 2) DATA: ", data);
+				// 		// Aggiorna lo stato Redux utilizzando la tua azione setListino
+				// 		dispatch(setListino({ listino: data.listino, error: null }));
+				// 	} catch (error) {
+				// 		// Gestisci eventuali errori durante la richiesta
+				// 		console.error("Errore durante il fetch del listino:", error);
+				// 		dispatch(
+				// 			setListino({
+				// 				listino: null,
+				// 				error: error || "Errore sconosciuto",
+				// 			})
+				// 		);
+				// 	}
+				// }
 			}
 		};
 
