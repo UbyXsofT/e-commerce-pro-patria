@@ -47,6 +47,7 @@ import {
 	Sede,
 	Abbonamento,
 	ListinoCardProps,
+	itemsCard,
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "./CardContentData";
 import { StepListino, StepListinoData } from "src/store/interfaces";
@@ -58,9 +59,9 @@ const ListinoCard = ({
 	stepSelectOby,
 	setStepSelectOby,
 }: ListinoCardProps) => {
-	const [discountedPrice, setDiscountedPrice] = React.useState<null | number>(
-		null
-	);
+	// const [prezzoScontato, setPrezzoScontato] = React.useState<null | number>(
+	// 	null
+	// );
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const listinoState = useSelector((state: StoreState) => state.listino);
@@ -77,6 +78,7 @@ const ListinoCard = ({
 		const step = itemsCard;
 		if (step?.codice !== null) {
 			let newStepId = (step.stepId += 1);
+
 			setStepSelectOby((prevStepSelectOby) => ({
 				...prevStepSelectOby,
 				stepId: newStepId,
@@ -138,7 +140,7 @@ const ListinoCard = ({
 				}}
 			>
 				<CardActions disableSpacing>
-					{discountedPrice ? (
+					{itemsCard?.abbonamento?.IMPORTOS !== "0.00" ? (
 						<span
 							style={{
 								display: "grid",
@@ -185,7 +187,7 @@ const ListinoCard = ({
 									? itemsCard?.abbonamento?.IMPORTOS
 										? renderPrice(
 												itemsCard?.abbonamento?.IMPORTOS
-													? itemsCard.abbonamento?.IMPORTOS
+													? itemsCard?.abbonamento?.IMPORTOS
 													: 0.0
 										  ) + "€"
 										: ""

@@ -38,14 +38,6 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 	const maxLengthSmallDescProd = 300;
 
 	React.useEffect(() => {
-		// if (itemsCard?.promozione === 1) {
-		// 	//promozione
-		// 	setDiscountedPrice(20.99);
-		// } else if (itemsCard?.promozione === 2) {
-		// 	//convenzione
-		// 	setDiscountedPrice(24.99);
-		// }
-
 		let descCard = "n.d.";
 
 		if (itemsCard.tipo === "SEDE") {
@@ -90,13 +82,19 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 				alignItems: "stretch",
 			}}
 		>
-			<Typography
-				variant="body2"
-				sx={{ fontWeight: "bold" }}
-			>
-				Informazioni:
-			</Typography>
-			<Divider sx={{ mb: 1 }} />
+			{itemsCard.tipo !== "ABBONAMENTO" ? (
+				<>
+					<Typography
+						variant="body2"
+						sx={{ fontWeight: "bold" }}
+					>
+						Informazioni:
+					</Typography>
+					<Divider sx={{ mb: 1 }} />
+				</>
+			) : (
+				<></>
+			)}
 
 			{itemsCard.tipo === "GRUPPO" ? (
 				<>

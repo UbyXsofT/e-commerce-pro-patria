@@ -3,25 +3,31 @@ import { Button, Grid } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import React from "react";
+import { ListinoCardProps } from "src/components/CommonTypesInterfaces";
 
-type Props = {
-	stepSelectOby: {
-		stepId: number;
-		endStep: number;
-		codice: string;
-		isClickNext: boolean;
-	};
-	setStepSelectOby: React.Dispatch<
-		React.SetStateAction<{
-			stepId: number;
-			endStep: number;
-			codice: string;
-			isClickNext: boolean;
-		}>
-	>;
-};
+// type Props = {
+// 	stepSelectOby: {
+// 		stepId: number;
+// 		endNavStepId: number;
+// 		endStep: number;
+// 		codice: string;
+// 		isClickNext: boolean;
+// 	};
+// 	setStepSelectOby: React.Dispatch<
+// 		React.SetStateAction<{
+// 			stepId: number;
+// 			endNavStepId: number;
+// 			endStep: number;
+// 			codice: string;
+// 			isClickNext: boolean;
+// 		}>
+// 	>;
+// };
 
-export const BtnStepStore = ({ stepSelectOby, setStepSelectOby }: Props) => {
+export const BtnStepStore = ({
+	stepSelectOby,
+	setStepSelectOby,
+}: ListinoCardProps) => {
 	// Stato per il valore di disabilitazione del pulsante precedente
 	const [isPreviousButtonDisabled, setIsPreviousButtonDisabled] =
 		React.useState(stepSelectOby.stepId === 1);

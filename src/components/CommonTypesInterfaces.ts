@@ -387,6 +387,7 @@ export interface ListinoCardProps {
 	itemsCard: any;
 	stepSelectOby: {
 		stepId: number;
+		endNavStepId: number;
 		endStep: number;
 		codice: string;
 		isClickNext: boolean;
@@ -394,6 +395,7 @@ export interface ListinoCardProps {
 	setStepSelectOby: React.Dispatch<
 		React.SetStateAction<{
 			stepId: number;
+			endNavStepId: number;
 			endStep: number;
 			codice: string;
 			isClickNext: boolean;

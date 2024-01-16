@@ -60,28 +60,28 @@ const Carrello = () => {
 	type TotalPrice = {
 		toShow: boolean;
 		totalPrice: number;
-		totalDiscountedPrice: number;
+		totalprezzoScontato: number;
 	};
 
 	const [totalPrice, setTotalPrice] = useState<TotalPrice>({
 		toShow: true,
 		totalPrice: 0,
-		totalDiscountedPrice: 0,
+		totalprezzoScontato: 0,
 	});
 
 	const calculateTotalPrice = (cart: CartProdotto[]): TotalPrice => {
 		let totalPrice = 0;
-		let totalDiscountedPrice = 0;
+		let totalprezzoScontato = 0;
 
 		cart.forEach((prodotto) => {
 			totalPrice += getPrices(prodotto).basePrice;
-			totalDiscountedPrice += getPrice(prodotto);
+			totalprezzoScontato += getPrice(prodotto);
 		});
 
 		const totalPriceObj: TotalPrice = {
-			toShow: totalPrice !== totalDiscountedPrice ? true : false,
+			toShow: totalPrice !== totalprezzoScontato ? true : false,
 			totalPrice: Number(totalPrice.toFixed(2)),
-			totalDiscountedPrice: Number(totalDiscountedPrice.toFixed(2)),
+			totalprezzoScontato: Number(totalprezzoScontato.toFixed(2)),
 		};
 
 		return totalPriceObj;
@@ -284,7 +284,7 @@ const Carrello = () => {
 																	{prodotto.nome}
 																</Typography>
 															</Box>
-															{prices.discountedPrice ? (
+															{prices.prezzoScontato ? (
 																<Stack
 																	direction={"row"}
 																	spacing={2}
@@ -294,7 +294,7 @@ const Carrello = () => {
 																		textAlign={"center"}
 																		color={"green"}
 																	>
-																		{renderPrice(prices.discountedPrice)}€
+																		{renderPrice(prices.prezzoScontato)}€
 																	</Typography>
 																	<Typography
 																		variant="h6"
@@ -375,7 +375,7 @@ const Carrello = () => {
 												color={"green"}
 											>
 												<strong>
-													{renderPrice(totalPrice.totalDiscountedPrice)}€
+													{renderPrice(totalPrice.totalprezzoScontato)}€
 												</strong>
 											</Typography>
 											<Typography

@@ -47,7 +47,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-	const [discountedPrice, setDiscountedPrice] = useState<null | number>(null);
+	const [prezzoScontato, setPrezzoScontato] = useState<null | number>(null);
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const listino = useSelector((state: StoreState) => state.listino);
@@ -58,9 +58,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
 	const maxLengthSmallDescProd = 300;
 	useEffect(() => {
 		if (product.promozione.isPromo) {
-			setDiscountedPrice(20.99);
+			setPrezzoScontato(20.99);
 		} else if (product.convenzione.isConv) {
-			setDiscountedPrice(24.99);
+			setPrezzoScontato(24.99);
 		}
 
 		let descrizioneProdotto = product.descrizione;
@@ -290,7 +290,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 				}}
 			>
 				<CardActions disableSpacing>
-					{discountedPrice ? (
+					{prezzoScontato ? (
 						<span
 							style={{
 								display: "grid",
@@ -325,7 +325,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 								textAlign={"center"}
 								color={"green"}
 							>
-								{renderPrice(discountedPrice)}€
+								{renderPrice(prezzoScontato)}€
 							</Typography>
 						</span>
 					) : (

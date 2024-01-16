@@ -10,9 +10,10 @@ import {
 	Groups,
 	Place,
 } from "@mui/icons-material";
+import { itemsCard } from "src/components/CommonTypesInterfaces";
 
 interface CardHeadTitleProps {
-	itemsCard: any;
+	itemsCard: itemsCard;
 }
 
 const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {

@@ -64,20 +64,20 @@ export const getPrice = (prodotto: Prodotto): number => {
 	return prodotto.prezzo;
 };
 
-export type PriceInfo = { basePrice: number; discountedPrice: number | null };
+export type PriceInfo = { basePrice: number; prezzoScontato: number | null };
 
 export const getPrices = (prodotto: Prodotto): PriceInfo => {
 	let prices: PriceInfo = {
 		basePrice: prodotto.prezzo,
-		discountedPrice: null,
+		prezzoScontato: null,
 	};
 
 	if (prodotto.convenzione.isConv) {
-		prices.discountedPrice = 24.99;
+		prices.prezzoScontato = 24.99;
 	}
 
 	if (prodotto.promozione.isPromo) {
-		prices.discountedPrice = 20.99;
+		prices.prezzoScontato = 20.99;
 	}
 
 	return prices;

@@ -55,15 +55,16 @@ import trovaCodice from "./Utils/trovaCodice";
 import trovaCodiceNextOby from "./Utils/trovaCodiceNextOby";
 import fetchListino from "../utils/fetchListino";
 import { animated, useSpring } from "react-spring";
+
 const StepListinoPage = () => {
 	//const [activeStepPageId, setActiveStepPageId] = React.useState(1);
 	const [stepSelectOby, setStepSelectOby] = React.useState({
 		stepId: 1,
+		endNavStepId: 5,
 		endStep: 1,
 		codice: "0",
 		isClickNext: true,
 	});
-	let storyStepSelectOby = [] as any;
 
 	const theme = useTheme();
 	//TODO MODIFICARE CENTRI E fetchListino PERCHè PRENDEREMO TUTTI I DATI DELLO STORE IN UN UNICO FETCH
@@ -89,8 +90,9 @@ const StepListinoPage = () => {
 
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-	let storyStep_SubTitleComp = [] as any;
-	const [storySteps, setStorySteps] = React.useState([]);
+	const [storyStep_SubTitleComp, setStoryStep_SubTitleComp] = React.useState(
+		[] as JSX.Element[]
+	);
 
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -124,18 +126,23 @@ const StepListinoPage = () => {
 
 	React.useEffect(() => {
 		if (stepSelectOby.stepId !== 1) {
-			storyStepSelectOby.push(stepSelectOby);
 		} else if (stepSelectOby.stepId === 1) {
 			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
-			storyStepSelectOby = [];
-
+			setStoryStep_SubTitleComp([]);
 			console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
 			if (listinoState.listino === null) {
 				aggiornaListino();
 			}
 		}
 
-		createCardComponents(stepSelectOby.stepId);
+		if (stepSelectOby.stepId < stepSelectOby.endNavStepId) {
+			createCardComponents(stepSelectOby.stepId);
+		} else {
+			setStepSelectOby((prev) => ({
+				...prev,
+				stepId: prev.stepId - 1,
+			}));
+		}
 	}, [stepSelectOby.stepId, listinoState.listino]);
 
 	const aggiornaListino = async () => {
@@ -323,22 +330,6 @@ const StepListinoPage = () => {
 		return arrayInfoData[0];
 	};
 
-	//const gruppoConSedeDesiderata = sedeDesiderata;
-	//TODO DA SISTEMARE I SOTTOTITOLI
-	// storyStep_SubTitleComp.push(
-	// 	<Typography
-	// 		key={chiaveRandom()}
-	// 		variant="h6"
-	// 		style={{ display: "contents" }}
-	// 	>
-	// 		<AutoAwesomeMosaic
-	// 			style={{ marginRight: "20px" }}
-	// 			color="error"
-	// 		/>
-	// 		{areaDesiderata?.DESAREA}
-	// 	</Typography>
-	// );
-
 	const createCardComponents = async (stepId: number) => {
 		let cardComponents = [] as any;
 		let idCount = 0;
@@ -347,7 +338,6 @@ const StepListinoPage = () => {
 		let areaDesiderataTrovata = false;
 
 		console.log("@@@ --> createCardComponents stepId: ", stepId);
-		//console.log("@x@x@---> stateStepListino1: ", stateStepListino);
 		// Aggiungi un nuovo passo con uno stepId univoco
 		if (
 			listinoState?.listino &&
@@ -360,13 +350,11 @@ const StepListinoPage = () => {
 
 				switch (stepId) {
 					case 1: //"GRUPPO"
-						//console.log("CANCELLO I DATI MEMORIZZATI DEGLI STEP");
-
 						//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
 						setStepSelectOby((prevStepSelectOby) => ({
 							...prevStepSelectOby,
 							//spread operator per recuperare tutti i valori precedenti
-							endStep: 1, //disabilito button successivo
+							endStep: 1,
 						}));
 						const infoAbb = findInfoAbb(gruppo, stepId);
 						//console.log("@@@ --> infoAbb: ", infoAbb);
@@ -442,6 +430,35 @@ const StepListinoPage = () => {
 							const sediDelGruppo = percorso?.SEDE;
 							console.log("@@@@>>>> sediDelGruppo  <<<@@@@", sediDelGruppo);
 
+							if (
+								stepSelectOby.isClickNext === true &&
+								storyStep_SubTitleComp.length + 2 <= stepId
+							) {
+								setStoryStep_SubTitleComp((prevState) => [
+									...prevState,
+									<Typography
+										key={chiaveRandom()}
+										variant="subtitle1"
+										style={{ display: "flex", alignItems: "center" }}
+									>
+										<Groups
+											color="success"
+											style={{ marginRight: "5px", marginLeft: "20px" }}
+										/>
+										{percorso?.DESGRUPPO}
+									</Typography>,
+								]);
+							} else {
+								// Rimuovi l'elemento dall'array utilizzando l'indice
+								const indexToRemove =
+									stepId - 1; /* indice dell'elemento da rimuovere */
+								setStoryStep_SubTitleComp((prevState) => {
+									const newState = [...prevState];
+									newState.splice(indexToRemove, 1);
+									return newState;
+								});
+							}
+
 							if (sediDelGruppo?.length > 1) {
 								gruppoDesideratoTrovato = true;
 								// forEach sulle sedi se il gruppoDesiderato esiste
@@ -501,16 +518,24 @@ const StepListinoPage = () => {
 							} else {
 								console.log("gruppoDesiderato.SEDE.length 0");
 								//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
+								// Rimuovi l'elemento dall'array utilizzando l'indice
+								const indexToRemove =
+									stepId - 1; /* indice dell'elemento da rimuovere */
+								setStoryStep_SubTitleComp((prevState) => {
+									const newState = [...prevState];
+									newState.splice(indexToRemove, 1);
+									return newState;
+								});
 								if (stepSelectOby.isClickNext === true) {
 									setStepSelectOby((prevStepSelectOby) => ({
 										...prevStepSelectOby,
-										stepId: stepId + 1, //disabilito button successivo
+										stepId: stepId + 1,
 										codice: sediDelGruppo[0].IDSEDE,
 									}));
 								} else {
 									setStepSelectOby((prevStepSelectOby) => ({
 										...prevStepSelectOby,
-										stepId: stepId - 1, //disabilito button successivo
+										stepId: stepId - 1,
 										codice: sediDelGruppo[0].IDSEDE,
 									}));
 								}
@@ -538,6 +563,35 @@ const StepListinoPage = () => {
 							// Cerca il GRUPPO che contiene l'AREA desiderata
 							const areeDellaSede = percorso?.AREA;
 							console.log("@@@@>>>> areeDellaSede  <<<@@@@", areeDellaSede);
+
+							if (
+								stepSelectOby.isClickNext === true &&
+								storyStep_SubTitleComp.length + 2 <= stepId
+							) {
+								setStoryStep_SubTitleComp((prevState) => [
+									...prevState,
+									<Typography
+										key={chiaveRandom()}
+										variant="subtitle1"
+										style={{ display: "flex", alignItems: "center" }}
+									>
+										<Place
+											color="warning"
+											style={{ marginRight: "5px", marginLeft: "20px" }}
+										/>
+										{percorso?.DESCSEDE}
+									</Typography>,
+								]);
+							} else {
+								// Rimuovi l'elemento dall'array utilizzando l'indice
+								const indexToRemove =
+									stepId - 1; /* indice dell'elemento da rimuovere */
+								setStoryStep_SubTitleComp((prevState) => {
+									const newState = [...prevState];
+									newState.splice(indexToRemove, 1);
+									return newState;
+								});
+							}
 
 							if (areeDellaSede?.length > 1) {
 								// Imposta la variabile di stato se il sedeDesiderataTrovata è stato trovato
@@ -605,17 +659,24 @@ const StepListinoPage = () => {
 									"gruppoConSedeDesiderata.SEDE  areeDellaSede.length 0"
 								);
 								//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
-
+								// Rimuovi l'elemento dall'array utilizzando l'indice
+								const indexToRemove =
+									stepId - 1; /* indice dell'elemento da rimuovere */
+								setStoryStep_SubTitleComp((prevState) => {
+									const newState = [...prevState];
+									newState.splice(indexToRemove, 1);
+									return newState;
+								});
 								if (stepSelectOby.isClickNext === true) {
 									setStepSelectOby((prevStepSelectOby) => ({
 										...prevStepSelectOby,
-										stepId: stepId + 1, //disabilito button successivo
+										stepId: stepId + 1,
 										codice: areeDellaSede[0]?.CODAREA,
 									}));
 								} else {
 									setStepSelectOby((prevStepSelectOby) => ({
 										...prevStepSelectOby,
-										stepId: stepId - 1, //disabilito button successivo
+										stepId: stepId - 1,
 										codice: areeDellaSede[0]?.CODAREA,
 									}));
 								}
@@ -646,8 +707,38 @@ const StepListinoPage = () => {
 							const abbonamentiDellArea = percorso?.ABBONAMENTO;
 							console.log(
 								"@@@@>>>> abbonamentiDellArea  <<<@@@@",
-								abbonamentiDellArea
+								abbonamentiDellArea,
+								storyStep_SubTitleComp.length
 							);
+
+							if (
+								stepSelectOby.isClickNext === true &&
+								storyStep_SubTitleComp.length + 2 <= stepId
+							) {
+								setStoryStep_SubTitleComp((prevState) => [
+									...prevState,
+									<Typography
+										key={chiaveRandom()}
+										variant="subtitle1"
+										style={{ display: "flex", alignItems: "center" }}
+									>
+										<AutoAwesomeMosaic
+											color="error"
+											style={{ marginRight: "5px", marginLeft: "20px" }}
+										/>
+										{percorso?.DESAREA}
+									</Typography>,
+								]);
+							} else {
+								// Rimuovi l'elemento dall'array utilizzando l'indice
+								const indexToRemove =
+									stepId - 1; /* indice dell'elemento da rimuovere */
+								setStoryStep_SubTitleComp((prevState) => {
+									const newState = [...prevState];
+									newState.splice(indexToRemove, 1);
+									return newState;
+								});
+							}
 
 							if (abbonamentiDellArea?.length > 0) {
 								areaDesiderataTrovata = true;
@@ -709,13 +800,13 @@ const StepListinoPage = () => {
 								if (stepSelectOby.isClickNext === true) {
 									// setStepSelectOby((prevStepSelectOby) => ({
 									// 	...prevStepSelectOby,
-									// 	stepId: stepId + 1, //disabilito button successivo
+									// 	stepId: stepId + 1,
 									// 	codice: abbonamentiDellArea[0].CODABB,
 									// }));
 								} else {
 									setStepSelectOby((prevStepSelectOby) => ({
 										...prevStepSelectOby,
-										stepId: stepId - 1, //disabilito button successivo
+										stepId: stepId - 1,
 										codice: abbonamentiDellArea[0].CODABB,
 									}));
 								}
@@ -737,20 +828,17 @@ const StepListinoPage = () => {
 				aggiornaListino();
 			}
 		}
-		//console.log("XXXXX - ListinoCard cardComponents: ", cardComponents);
-		//console.log("XXXXX - storyStep_SubTitleComp: ", storyStep_SubTitleComp);
-		//console.log("XXXXX - storySteps: ", storySteps);
 
-		////----
 		const btnStepS = (
 			<BtnStepStore
 				stepSelectOby={stepSelectOby}
 				setStepSelectOby={setStepSelectOby}
+				itemsCard={undefined}
 			/>
 		);
+
 		setBtnStep(btnStepS);
 		setCardComponent(cardComponents);
-		//setStorySteps(storyStep_SubTitleComp);
 	};
 
 	return (
@@ -837,10 +925,14 @@ const StepListinoPage = () => {
 								flexWrap: "nowrap",
 								alignItems: "center",
 								justifyContent: "flex-start",
-								marginLeft: "50px",
+								minHeight: "50px",
 							}}
 						>
-							{storySteps}
+							{storyStep_SubTitleComp.map((element: any, index: any) => {
+								console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
+								console.log("index: ", index);
+								return <React.Fragment key={index}>{element}</React.Fragment>;
+							})}
 						</Grid>
 						<Container
 							style={{
@@ -856,6 +948,7 @@ const StepListinoPage = () => {
 									width: "100%",
 									flexDirection: "row",
 									justifyContent: "space-around",
+									minHeight: "660px",
 								}}
 							>
 								{isMobile ? (
