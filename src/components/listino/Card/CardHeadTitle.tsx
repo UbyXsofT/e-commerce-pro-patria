@@ -21,10 +21,30 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 	return (
 		<div>
 			<div style={{ display: "flex", alignItems: "center" }}>
-				{itemsCard.tipo === "GRUPPO" && <Groups color="success" />}
-				{itemsCard.tipo === "SEDE" && <Place color="warning" />}
-				{itemsCard.tipo === "AREA" && <AutoAwesomeMosaic color="error" />}
-				{itemsCard.tipo === "ABBONAMENTO" && <MotionPhotosAuto color="info" />}
+				{itemsCard.tipo === "GRUPPO" && (
+					<Groups
+						color="success"
+						fontSize="large"
+					/>
+				)}
+				{itemsCard.tipo === "SEDE" && (
+					<Place
+						color="warning"
+						fontSize="large"
+					/>
+				)}
+				{itemsCard.tipo === "AREA" && (
+					<AutoAwesomeMosaic
+						color="error"
+						fontSize="large"
+					/>
+				)}
+				{itemsCard.tipo === "ABBONAMENTO" && (
+					<MotionPhotosAuto
+						color="info"
+						fontSize="large"
+					/>
+				)}
 
 				<div style={{ marginLeft: "8px" }}>{itemsCard?.descrizione}</div>
 			</div>
@@ -54,7 +74,10 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<Handshake color="success" />
+							<Handshake
+								color="success"
+								fontSize="medium"
+							/>
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -76,7 +99,10 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<Discount color="error" />
+							<Discount
+								color="error"
+								fontSize="small"
+							/>
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -98,7 +124,10 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<ToggleOff color="warning" />
+							<ToggleOff
+								color="warning"
+								fontSize="medium"
+							/>
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -119,7 +148,10 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<EditCalendar color="info" />
+							<EditCalendar
+								color="info"
+								fontSize="medium"
+							/>
 						</IconButton>
 					</Tooltip>
 				) : (

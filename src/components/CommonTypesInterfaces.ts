@@ -308,7 +308,6 @@ export interface obyPostData {
 export interface obyPostProdotti {
 	clienteKey: string;
 	IDCliente: string;
-	IDCentro: number;
 }
 
 export interface itemsCard {
@@ -326,12 +325,13 @@ export interface itemsCard {
 	numeroAree: string;
 	numeroAbbonamenti: string;
 	abbonamento: Abbonamento;
-	note?: string; // Proprietà opzionale
+	note: string; // Proprietà opzionale
 }
 
 export interface Abbonamento {
 	CODABB: string;
 	DESABB: string;
+	NOTEABB: string;
 	IMPORTO: string;
 	PROMO: "0" | "1" | "2";
 	IMPORTOS: string;
@@ -345,6 +345,7 @@ export interface Abbonamento {
 export interface Area {
 	CODAREA: string;
 	DESAREA: string;
+	NOTEAREA: string;
 	ABBONAMENTO: Abbonamento[];
 }
 
@@ -358,6 +359,7 @@ export interface Sede {
 export interface Gruppo {
 	CODGRUPPO: string;
 	DESGRUPPO: string;
+	NOTEGRUPPO: string;
 	SEDE: Sede[];
 }
 
@@ -375,13 +377,13 @@ export interface Listino {
 	error: null | unknown;
 }
 
-export interface ActualProduct {
-	gruppo: Gruppo;
-	sede: Sede;
-	area: Area;
-	abbonamento: Abbonamento;
-	error: null | unknown;
+export interface Prodotto {
+	codice: Abbonamento["CODABB"];
+	prezzo: number;
+	quantity: number; // Aggiunta della proprietà quantity
 }
+
+export interface ActualProduct extends Prodotto {}
 
 export interface ListinoCardProps {
 	itemsCard: any;
@@ -410,7 +412,7 @@ export interface CartUser {
 	cart: CartProdotto[];
 }
 
-export interface CartProdotto extends Abbonamento {
+export interface CartProdotto extends Prodotto {
 	configuration: { initialDate: Dayjs } | null;
 }
 

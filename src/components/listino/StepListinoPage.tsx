@@ -149,7 +149,7 @@ const StepListinoPage = () => {
 		//if (listinoState.listino === null) {
 		try {
 			// Effettua la richiesta asincrona
-			const data = fetchListino(authUser?.USERID, 0);
+			const data = fetchListino(authUser?.USERID);
 			console.log("****** 2) DATA: ", data);
 			// Aggiorna lo stato Redux utilizzando la tua azione setListino
 			dispatch(setListino({ listino: (await data).listino, error: null }));
@@ -337,7 +337,7 @@ const StepListinoPage = () => {
 		let sedeDesiderataTrovata = false;
 		let areaDesiderataTrovata = false;
 
-		console.log("@@@ --> createCardComponents stepId: ", stepId);
+		//console.log("@@@ --> createCardComponents stepId: ", stepId);
 		// Aggiungi un nuovo passo con uno stepId univoco
 		if (
 			listinoState?.listino &&
@@ -364,6 +364,7 @@ const StepListinoPage = () => {
 								tipo: "GRUPPO",
 								codice: gruppo.CODGRUPPO,
 								descrizione: gruppo.DESGRUPPO,
+								note: gruppo.NOTEGRUPPO,
 								onNextStep: gruppo.SEDE.length > 1 ? true : false,
 								onPrevStep: false,
 								aPromozioni: infoAbb.promo.numero > 0 ? true : false,
@@ -376,6 +377,7 @@ const StepListinoPage = () => {
 								abbonamento: {
 									CODABB: "n.d",
 									DESABB: "n.d",
+									NOTEABB: "n.d",
 									IMPORTO: "n.d",
 									PROMO: "n.d",
 									IMPORTOS: "n.d",
@@ -405,7 +407,7 @@ const StepListinoPage = () => {
 						return;
 
 					case 2: //"SEDE"
-						console.log("SEDE stepSelectOby : ", stepSelectOby);
+						//console.log("SEDE stepSelectOby : ", stepSelectOby);
 						//console.log("listinoState.listino[GRUPPO]: ",listinoState.listino["GRUPPO"]);
 						//console.log("gruppo: ", gruppo);
 
@@ -417,18 +419,18 @@ const StepListinoPage = () => {
 								listinoState.listino,
 								codiceDaCercare
 							);
-							console.log(
-								"@@@@>>>> chkCodeSede  <<<@@@@",
-								chkCodeSede[0].GRUPPO
-							);
+							//console.log(
+							//	"@@@@>>>> chkCodeSede  <<<@@@@",
+							//	chkCodeSede[0].GRUPPO
+							//);
 							let percorso = trovaCodiceNextOby(
 								listinoState.listino,
 								chkCodeSede[0].GRUPPO,
 								["CODGRUPPO"]
 							);
-							console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+							//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
 							const sediDelGruppo = percorso?.SEDE;
-							console.log("@@@@>>>> sediDelGruppo  <<<@@@@", sediDelGruppo);
+							//console.log("@@@@>>>> sediDelGruppo  <<<@@@@", sediDelGruppo);
 
 							if (
 								stepSelectOby.isClickNext === true &&
@@ -464,7 +466,7 @@ const StepListinoPage = () => {
 								// forEach sulle sedi se il gruppoDesiderato esiste
 								sediDelGruppo.forEach((sede: Sede) => {
 									// Ora 'sede' è un oggetto del tipo Sede
-									console.log("@@@ SEDE EACH: ", sede);
+									//console.log("@@@ SEDE EACH: ", sede);
 									const infoAbb = findInfoAbb(sede, stepId);
 									//console.log("@@@ --> infoAbb: ", infoAbb);
 
@@ -474,6 +476,7 @@ const StepListinoPage = () => {
 											tipo: "SEDE",
 											codice: sede.IDSEDE,
 											descrizione: sede.DESCSEDE,
+											note: sede.NOTESEDE,
 											onNextStep: sede.AREA.length > 1 ? true : false,
 											onPrevStep: false,
 											aPromozioni: infoAbb.promo.numero > 0 ? true : false,
@@ -489,6 +492,7 @@ const StepListinoPage = () => {
 											abbonamento: {
 												CODABB: "n.d",
 												DESABB: "n.d",
+												NOTEABB: "n.d",
 												IMPORTO: "n.d",
 												PROMO: "n.d",
 												IMPORTOS: "n.d",
@@ -513,10 +517,10 @@ const StepListinoPage = () => {
 											</div>
 										);
 									}
-									console.log("@@@ IS SEDE: ", sede);
+									//console.log("@@@ IS SEDE: ", sede);
 								});
 							} else {
-								console.log("gruppoDesiderato.SEDE.length 0");
+								//console.log("gruppoDesiderato.SEDE.length 0");
 								//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
 								// Rimuovi l'elemento dall'array utilizzando l'indice
 								const indexToRemove =
@@ -543,7 +547,7 @@ const StepListinoPage = () => {
 						}
 						return;
 					case 3: //"AREA"
-						console.log("AREA stepSelectOby : ", stepSelectOby);
+						//console.log("AREA stepSelectOby : ", stepSelectOby);
 						//PER OTTENERE LE AREE HO BISOGNO DELLO STEP PRECEDENTE
 						//QUINDI HO IDSEDE OPPURE CODGRUPPO
 						if (!sedeDesiderataTrovata) {
@@ -552,17 +556,17 @@ const StepListinoPage = () => {
 								listinoState.listino,
 								codiceDaCercare
 							);
-							console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[1].SEDE);
+							//console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[1].SEDE);
 							let percorso = trovaCodiceNextOby(
 								listinoState.listino,
 								chkCodeSede[1].SEDE,
 								["IDSEDE"]
 							);
-							console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+							//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
 
 							// Cerca il GRUPPO che contiene l'AREA desiderata
 							const areeDellaSede = percorso?.AREA;
-							console.log("@@@@>>>> areeDellaSede  <<<@@@@", areeDellaSede);
+							//console.log("@@@@>>>> areeDellaSede  <<<@@@@", areeDellaSede);
 
 							if (
 								stepSelectOby.isClickNext === true &&
@@ -599,7 +603,7 @@ const StepListinoPage = () => {
 
 								areeDellaSede?.forEach((area: Area) => {
 									// Ora 'area' è un oggetto del tipo area
-									console.log("@@@ area EACH: ", area);
+									//console.log("@@@ area EACH: ", area);
 									const infoAbb = findInfoAbb(area, stepId);
 									//console.log("@@@ --> infoAbb: ", infoAbb);
 
@@ -609,6 +613,7 @@ const StepListinoPage = () => {
 											tipo: "AREA",
 											codice: area.CODAREA,
 											descrizione: area.DESAREA,
+											note: area.NOTEAREA,
 											onNextStep: area.ABBONAMENTO.length > 1 ? true : false,
 											onPrevStep: false,
 											aPromozioni: infoAbb.promo.numero > 0 ? true : false,
@@ -624,6 +629,7 @@ const StepListinoPage = () => {
 											abbonamento: {
 												CODABB: "n.d",
 												DESABB: "n.d",
+												NOTEABB: "n.d",
 												IMPORTO: "n.d",
 												PROMO: "n.d",
 												IMPORTOS: "n.d",
@@ -648,16 +654,16 @@ const StepListinoPage = () => {
 											</div>
 										);
 									}
-									console.log("@@@ IS AREA: ", area);
+									//console.log("@@@ IS AREA: ", area);
 								});
 
-								console.log("Aree della SEDE:", areeDellaSede);
+								//console.log("Aree della SEDE:", areeDellaSede);
 								//console.log("Abbonamenti della SEDE:", abbonamentiDellaSede);
 								return;
 							} else {
-								console.log(
-									"gruppoConSedeDesiderata.SEDE  areeDellaSede.length 0"
-								);
+								// console.log(
+								// 	"gruppoConSedeDesiderata.SEDE  areeDellaSede.length 0"
+								// );
 								//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
 								// Rimuovi l'elemento dall'array utilizzando l'indice
 								const indexToRemove =
@@ -686,7 +692,7 @@ const StepListinoPage = () => {
 						}
 						return;
 					case 4: //ABBONAMENTO
-						console.log("ABBONAMENTO stepSelectOby : ", stepSelectOby);
+						//console.log("ABBONAMENTO stepSelectOby : ", stepSelectOby);
 						//console.log("listinoState.listino: ", listinoState.listino);
 
 						//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
@@ -697,19 +703,19 @@ const StepListinoPage = () => {
 								listinoState.listino,
 								codiceDaCercare
 							);
-							console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[2].AREA);
+							//console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[2].AREA);
 							let percorso = trovaCodiceNextOby(
 								listinoState.listino,
 								chkCodeSede[2].AREA,
 								["CODAREA"]
 							);
-							console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+							//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
 							const abbonamentiDellArea = percorso?.ABBONAMENTO;
-							console.log(
-								"@@@@>>>> abbonamentiDellArea  <<<@@@@",
-								abbonamentiDellArea,
-								storyStep_SubTitleComp.length
-							);
+							// console.log(
+							// 	"@@@@>>>> abbonamentiDellArea  <<<@@@@",
+							// 	abbonamentiDellArea,
+							// 	storyStep_SubTitleComp.length
+							// );
 
 							if (
 								stepSelectOby.isClickNext === true &&
@@ -744,13 +750,14 @@ const StepListinoPage = () => {
 								areaDesiderataTrovata = true;
 								abbonamentiDellArea.forEach((abbonamento: Abbonamento) => {
 									// Ora 'abbonamento' è un oggetto del tipo abbonamento
-									console.log("@@@ abbonamento EACH: ", abbonamento);
+									//console.log("@@@ abbonamento EACH: ", abbonamento);
 									if (isAbbonamento(abbonamento)) {
 										const itemsCard = {
 											stepId: stepId,
 											tipo: "ABBONAMENTO",
 											codice: abbonamento?.CODABB,
 											descrizione: abbonamento.DESABB,
+											note: abbonamento.NOTEABB,
 											onNextStep: false,
 											onPrevStep: true,
 											aPromozioni: abbonamento.PROMO === "1" ? true : false,
@@ -763,6 +770,7 @@ const StepListinoPage = () => {
 											abbonamento: {
 												CODABB: abbonamento?.CODABB,
 												DESABB: abbonamento?.DESABB,
+												NOTEABB: abbonamento?.NOTEABB,
 												IMPORTO: abbonamento?.IMPORTO,
 												PROMO: abbonamento?.PROMO,
 												IMPORTOS: abbonamento?.IMPORTOS,
@@ -787,15 +795,15 @@ const StepListinoPage = () => {
 											</div>
 										);
 									}
-									console.log("@@@ IS ABBONAMENTO: ", abbonamento);
+									//console.log("@@@ IS ABBONAMENTO: ", abbonamento);
 								});
 
-								console.log("abbonamento dell AREA:", abbonamentiDellArea);
+								//console.log("abbonamento dell AREA:", abbonamentiDellArea);
 								return;
 							} else {
-								console.log(
-									"gruppoConAreaDesiderata.AREA  abbonamentiDellArea.length 0"
-								);
+								// console.log(
+								// 	"gruppoConAreaDesiderata.AREA  abbonamentiDellArea.length 0"
+								// );
 								//TODO "A QUESTO PUNTO DOBBIAMO ANDARE DIRETTAMENTE ALL'ABBONAMENTO"
 								if (stepSelectOby.isClickNext === true) {
 									// setStepSelectOby((prevStepSelectOby) => ({
@@ -862,26 +870,38 @@ const StepListinoPage = () => {
 								paddingRight: "0px",
 							}}
 						>
-							<Typography variant="h4">
+							<Typography
+								variant="h4"
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									flexWrap: "nowrap",
+									alignItems: "center",
+								}}
+							>
 								{stepSelectOby.stepId === 1 ? (
 									<Groups
 										style={{ marginRight: "20px" }}
 										color="success"
+										fontSize="large"
 									/>
 								) : stepSelectOby.stepId === 2 ? (
 									<Place
 										style={{ marginRight: "20px" }}
 										color="warning"
+										fontSize="large"
 									/>
 								) : stepSelectOby.stepId === 3 ? (
 									<AutoAwesomeMosaic
 										style={{ marginRight: "20px" }}
 										color="error"
+										fontSize="large"
 									/>
 								) : stepSelectOby.stepId === 4 ? (
 									<MotionPhotosAuto
 										style={{ marginRight: "20px" }}
 										color="info"
+										fontSize="large"
 									/>
 								) : (
 									<></>
@@ -929,8 +949,8 @@ const StepListinoPage = () => {
 							}}
 						>
 							{storyStep_SubTitleComp.map((element: any, index: any) => {
-								console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
-								console.log("index: ", index);
+								// console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
+								// console.log("index: ", index);
 								return <React.Fragment key={index}>{element}</React.Fragment>;
 							})}
 						</Grid>

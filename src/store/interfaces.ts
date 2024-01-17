@@ -85,7 +85,7 @@ export interface StoreStateInterfaces {
 	cart: Cart;
 	listino: Listino;
 	stripeKeys: StripeKeysData;
-	actualProduct: { actualProduct: ActualProduct };
+	actualProduct: ActualProduct;
 	listinoCardProps: ListinoCardProps;
 	stepListino: StepListino;
 }

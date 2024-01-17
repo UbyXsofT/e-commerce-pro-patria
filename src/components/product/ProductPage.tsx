@@ -158,7 +158,7 @@ const ProductPage = (productId: any) => {
 		if (prodotto === null) {
 			const checkListino = async () => {
 				if (listino.listino.length === 0) {
-					const data = await fetchListino(authUser?.USERID, 0);
+					const data = await fetchListino(authUser?.USERID);
 					dispatch(setListino(data));
 				}
 				router.push("/auth/acquista");

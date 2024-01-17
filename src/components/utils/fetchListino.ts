@@ -10,8 +10,7 @@ import {
 import callNodeService from "pages/api/callNodeService";
 
 const fetchListino = async (
-	IDCliente: string | undefined,
-	IDCentro: number
+	IDCliente: string | undefined
 ): Promise<{
 	listino: Listino | null;
 	error: null | unknown;
@@ -19,7 +18,6 @@ const fetchListino = async (
 	const obyPostProdotti: obyPostProdotti = {
 		clienteKey: eCommerceConf.ClienteKey,
 		IDCliente: IDCliente ?? "",
-		IDCentro: IDCentro,
 	};
 
 	try {

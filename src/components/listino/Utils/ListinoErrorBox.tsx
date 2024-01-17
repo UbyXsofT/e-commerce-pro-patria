@@ -28,7 +28,7 @@ const ListinoErrorBox = () => {
 					if (!listinoState.listino) {
 						try {
 							// Effettua la richiesta asincrona
-							const data = await fetchListino(authUser?.USERID, 0);
+							const data = await fetchListino(authUser?.USERID);
 
 							// Aggiorna lo stato Redux utilizzando la tua azione setListino
 							dispatch(setListino({ listino: data.listino, error: null }));

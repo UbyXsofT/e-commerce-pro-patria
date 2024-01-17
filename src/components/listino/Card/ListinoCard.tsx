@@ -18,6 +18,7 @@ import {
 	Place,
 	AutoAwesomeMosaic,
 	MotionPhotosAuto,
+	Storefront,
 } from "@mui/icons-material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -48,6 +49,8 @@ import {
 	Abbonamento,
 	ListinoCardProps,
 	itemsCard,
+	Prodotto,
+	ActualProduct,
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "./CardContentData";
 import { StepListino, StepListinoData } from "src/store/interfaces";
@@ -64,17 +67,112 @@ const ListinoCard = ({
 	// );
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const listinoState = useSelector((state: StoreState) => state.listino);
+	const authUser = useSelector((state: StoreState) => state.authUser);
+	const cart = useSelector((state: StoreState) => state.cart);
+
+	const prodotto: Prodotto | null = useSelector(
+		(state: StoreState) => state.actualProduct
+	);
+
+	const removeFromCart = (
+		prodotto: Prodotto,
+		cart: Cart,
+		dispatch: Dispatch
+	): void => {
+		const user = cart.at(0);
+		console.log("removeFromCart");
+		let filteredCart = null;
+
+		if (user) {
+			filteredCart = user.cart.filter((inCartProdotto) => {
+				if (inCartProdotto?.codice !== prodotto?.codice) {
+					return inCartProdotto;
+				}
+			});
+		} else {
+			return;
+		}
+
+		dispatch(setCart([{ userId: user.userId, cart: filteredCart }]));
+	};
+
+	const addToCart = (prodotto: Prodotto): void => {
+		const configurableProdotto: CartProdotto = {
+			...prodotto,
+			configuration: null,
+		};
+
+		let user = cart.at(0);
+		console.log("addToCart");
+		user
+			? dispatch(
+					setCart([
+						{
+							userId: authUser?.USERID ?? "null",
+							cart: [...user.cart, configurableProdotto],
+						},
+					])
+			  )
+			: dispatch(
+					setCart([
+						{
+							userId: authUser?.USERID ?? "null",
+							cart: [configurableProdotto],
+						},
+					])
+			  );
+	};
+
+	const isInCart = (prodotto: Prodotto): boolean => {
+		let user = cart.at(0);
+
+		console.log("^^^^^^^^^^^^^^^^^^^^^^^^ isInCart user:", user);
+		if (!user) {
+			return false;
+		}
+
+		let filteredCart = user.cart.filter((inCartProdotto) => {
+			console.log(
+				"^^^^^^^^^^^^^^^^^^^^^^^^ isInCart filteredCart inCartProdotto:",
+				inCartProdotto
+			);
+			if (inCartProdotto?.codice === prodotto?.codice) {
+				return inCartProdotto;
+			}
+		});
+
+		if (filteredCart.length > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	//dispatch(setActualProduct(listProduct));
+
+	const [isInCartBtnStyle, setIsInCartBtnStyle] = React.useState("#127bd1");
+
+	const handleClickBtnCart = (itemsCard: itemsCard) => {
+		console.log("handleClickBtnCart");
+		const actualProduct: ActualProduct = itemsCard as unknown as ActualProduct;
+		if (actualProduct?.codice !== null) {
+			if (isInCart(actualProduct)) {
+				removeFromCart(actualProduct, cart, dispatch);
+				setIsInCartBtnStyle("#127bd1");
+			} else {
+				addToCart(actualProduct);
+				setIsInCartBtnStyle("red");
+			}
+		}
+	};
 
 	React.useEffect(() => {
-		console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+		//console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
 	}, []);
 
-	const handleClick = (itemData: any) => {
-		console.log(
-			"@+<>@+<>@+handleClick<>@<>+@+<>+<>+<>+ ListinoCard - itemsCard",
-			itemData
-		);
+	const handleClick = (itemData: itemsCard) => {
 		const step = itemsCard;
 		if (step?.codice !== null) {
 			let newStepId = (step.stepId += 1);
@@ -98,7 +196,7 @@ const ListinoCard = ({
 				marginBottom: "25px",
 				//cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 			}}
-			//onClick={() => callProductPage(product.id)}
+			//onClick={() => callProductPage(product.codice)}
 		>
 			<CardHeader
 				sx={{
@@ -223,15 +321,34 @@ const ListinoCard = ({
 						position: "relative",
 					}}
 				>
-					<Button
-						onClick={() => {
-							handleClick(itemsCard);
-						}}
-						variant="contained"
-						style={{ width: 240 }}
-					>
-						{itemsCard?.tipo === "ABBONAMENTO" ? "ACQUISTA" : "SELEZIONA"}
-					</Button>
+					{itemsCard?.tipo === "ABBONAMENTO" ? (
+						<Button
+							style={{
+								width: "100%",
+								backgroundColor: isInCartBtnStyle,
+							}}
+							onClick={() => {
+								console.log("isInCartBtnStyle:", isInCartBtnStyle);
+								handleClickBtnCart(itemsCard);
+							}}
+							variant="contained"
+						>
+							<ShoppingCartIcon style={{ marginRight: 20 }} />
+							{isInCart(itemsCard)
+								? "Rimuovi dal Carrello"
+								: "Aggiungi Al Carrello"}
+						</Button>
+					) : (
+						<Button
+							onClick={() => {
+								handleClick(itemsCard);
+							}}
+							variant="contained"
+							style={{ width: 240 }}
+						>
+							SELEZIONA
+						</Button>
+					)}
 				</div>
 			</div>
 		</Card>

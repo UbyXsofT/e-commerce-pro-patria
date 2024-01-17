@@ -38,39 +38,37 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 	const maxLengthSmallDescProd = 300;
 
 	React.useEffect(() => {
-		let descCard = "n.d.";
+		let cardNote = "n.d.";
 
-		if (itemsCard.tipo === "SEDE") {
-			descCard = itemsCard.note ? itemsCard.note : "";
-		} else if (itemsCard.tipo === "ABBONAMENTO") {
-			descCard = `CODICE: ${itemsCard.abbonamento.CODABB} \n DATAINI: ${itemsCard.abbonamento.DATAINI} \n DESABB: : ${itemsCard.abbonamento.DESABB} \n IMPORTO: ${itemsCard.abbonamento.IMPORTO} \n IMPORTOS: ${itemsCard.abbonamento.IMPORTOS} \n NOSOSP: ${itemsCard.abbonamento.NOSOSP} \n PERIODOATT: ${itemsCard.abbonamento.PERIODOATT} \n PROMO: ${itemsCard.abbonamento.PROMO} \n SCELTAF: ${itemsCard.abbonamento.SCELTAF} \n `;
+		if (itemsCard.tipo === "ABBONAMENTO") {
+			cardNote = `CODICE: ${itemsCard.abbonamento.CODABB} \n DATAINI: ${itemsCard.abbonamento.DATAINI} \n DESABB: : ${itemsCard.abbonamento.DESABB} \n IMPORTO: ${itemsCard.abbonamento.IMPORTO} \n IMPORTOS: ${itemsCard.abbonamento.IMPORTOS} \n NOSOSP: ${itemsCard.abbonamento.NOSOSP} \n PERIODOATT: ${itemsCard.abbonamento.PERIODOATT} \n PROMO: ${itemsCard.abbonamento.PROMO} \n SCELTAF: ${itemsCard.abbonamento.SCELTAF} \n\n\n  note: ${itemsCard.note}`;
 		} else {
-			descCard = itemsCard.descrizione;
+			cardNote = itemsCard.note ? itemsCard.note : "";
 		}
 
-		//let descCard = itemsCard.descrizione;
-		if (descCard.length > maxLengthSmallDescProd) {
+		//let cardNote = itemsCard.descrizione;
+		if (cardNote.length > maxLengthSmallDescProd) {
 			// Trova l'ultima occorrenza di uno spazio prima della posizione massima
-			const lastSpaceIndex = descCard.lastIndexOf(" ", maxLengthSmallDescProd);
+			const lastSpaceIndex = cardNote.lastIndexOf(" ", maxLengthSmallDescProd);
 			// Verifica se uno spazio è stato trovato
 			if (lastSpaceIndex !== -1) {
 				// Suddividi il testo alla fine della parola trovata
-				setDescProdSmall(descCard.substring(0, lastSpaceIndex));
-				setDescProdFull(descCard.substring(lastSpaceIndex + 1));
+				setDescProdSmall(cardNote.substring(0, lastSpaceIndex));
+				setDescProdFull(cardNote.substring(lastSpaceIndex + 1));
 			} else {
 				// Se non è stato trovato uno spazio, usa la posizione massima
-				setDescProdSmall(descCard.substring(0, maxLengthSmallDescProd));
-				setDescProdFull(descCard.substring(maxLengthSmallDescProd));
+				setDescProdSmall(cardNote.substring(0, maxLengthSmallDescProd));
+				setDescProdFull(cardNote.substring(maxLengthSmallDescProd));
 			}
 		} else {
 			// Se la lunghezza del testo è inferiore alla lunghezza massima, non è necessario suddividerlo
-			setDescProdSmall(descCard);
+			setDescProdSmall(cardNote);
 			setDescProdFull("");
 		}
 
 		//console.log("XXXX - descProdSmall: ", descProdSmall.length);
 		//console.log("XXXX - descProdFull: ", descProdFull.length);
-	}, [itemsCard.descrizione]);
+	}, [itemsCard.note]);
 
 	return (
 		<Grid
@@ -107,7 +105,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<Place color="warning" />
 						</IconButton>
 						<Typography variant="body2">
@@ -124,7 +122,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<AutoAwesomeMosaic color="error" />
 						</IconButton>
 						<Typography variant="body2">
@@ -140,7 +138,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<MotionPhotosAuto color="info" />
 						</IconButton>
 						<Typography variant="body2">
@@ -159,7 +157,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<AutoAwesomeMosaic color="error" />
 						</IconButton>
 						<Typography variant="body2">
@@ -175,7 +173,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<MotionPhotosAuto color="info" />
 						</IconButton>
 						<Typography variant="body2">
@@ -194,7 +192,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton>
+						<IconButton style={{ width: "40px" }}>
 							<MotionPhotosAuto color="info" />
 						</IconButton>
 						<Typography variant="body2">
@@ -216,7 +214,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 			<Typography
 				variant="caption"
 				color="text.secondary"
-				sx={{ whiteSpace: "pre-line", height: "100px", overflow: "hidden" }}
+				sx={{ whiteSpace: "pre-line", overflow: "hidden" }}
 			>
 				<FormatString descrizione={descProdSmall} />
 			</Typography>

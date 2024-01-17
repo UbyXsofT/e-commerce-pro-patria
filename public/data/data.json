@@ -4,6 +4,7 @@
          {
             "CODGRUPPO": "G001",
             "DESGRUPPO": "Gruppo A",
+            "NOTEGRUPPO": "NOTE 1 = GRUPPO DESCRIZIONE",
             "SEDE": [
                {
                   "IDSEDE": "S001",
@@ -13,10 +14,12 @@
                      {
                         "CODAREA": "A001",
                         "DESAREA": "Area Fitness",
+                        "NOTEAREA": "NOTE Area 1 = Area DESCRIZIONE",
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB001",
                               "DESABB": "Abbonamento 1",
+                              "NOTEABB": "NOTE ABB 1 = ABB DESCRIZIONE",
                               "IMPORTO": "100.00",
                               "PROMO": "1",
                               "IMPORTOS": "50.00",
@@ -29,6 +32,7 @@
                            {
                               "CODABB": "AB002",
                               "DESABB": "Abbonamento 2",
+                              "NOTEABB": "NOTE ABB 2 = ABB DESCRIZIONE",
                               "IMPORTO": "200.00",
                               "PROMO": "0",
                               "IMPORTOS": "0",
@@ -43,10 +47,12 @@
                      {
                         "CODAREA": "A002",
                         "DESAREA": "Area Cardio",
+                        "NOTEAREA": "NOTE Area 2 = Area DESCRIZIONE",
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB003",
                               "DESABB": "Abbonamento 3",
+                              "NOTEABB": "NOTE ABB 3 = ABB DESCRIZIONE",
                               "IMPORTO": "300.00",
                               "PROMO": "2",
                               "IMPORTOS": "150.00",
@@ -68,10 +74,12 @@
                      {
                         "CODAREA": "A003",
                         "DESAREA": "Area Yoga",
+                        "NOTEAREA": "NOTE Area 3 = Area DESCRIZIONE",
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB004",
                               "DESABB": "Abbonamento 4",
+                              "NOTEABB": "NOTE ABB 4 = ABB DESCRIZIONE",
                               "IMPORTO": "400.00",
                               "PROMO": "1",
                               "IMPORTOS": "200.00",
@@ -90,6 +98,7 @@
          {
             "CODGRUPPO": "G002",
             "DESGRUPPO": "Gruppo B",
+            "NOTEGRUPPO": "NOTE 2 = GRUPPO DESCRIZIONE",
             "SEDE": [
                {
                   "IDSEDE": "S003",
@@ -99,10 +108,12 @@
                      {
                         "CODAREA": "A004",
                         "DESAREA": "Area Fitness",
+                        "NOTEAREA": "NOTE Area 4 = Area DESCRIZIONE",
                         "ABBONAMENTO": [
                            {
                               "CODABB": "AB005",
                               "DESABB": "Abbonamento 5",
+                              "NOTEABB": "NOTE ABB 5 = ABB DESCRIZIONE",
                               "IMPORTO": "500.00",
                               "PROMO": "1",
                               "IMPORTOS": "250.00",
@@ -115,6 +126,7 @@
                            {
                               "CODABB": "AB006",
                               "DESABB": "Abbonamento 6",
+                              "NOTEABB": "NOTE ABB 6 = ABB DESCRIZIONE",
                               "IMPORTO": "600.00",
                               "PROMO": "0",
                               "IMPORTOS": "300.00",
