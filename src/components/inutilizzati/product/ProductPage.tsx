@@ -46,10 +46,10 @@ import {
 	StoreState,
 	Cart,
 } from "src/components/CommonTypesInterfaces";
-import ProductStepper from "src/components/product/ProductStepper";
+import ProductStepper from "src/components/inutilizzati/product/ProductStepper";
 import { Dispatch } from "redux";
-import FormatString from "../utils/FormatString";
-import fetchListino from "../utils/fetchListino";
+import FormatString from "../../utils/FormatString";
+import fetchListino from "../../utils/fetchListino";
 // const productPage = () => {
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";

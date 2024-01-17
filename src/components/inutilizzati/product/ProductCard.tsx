@@ -18,7 +18,7 @@ import {
 	Cart,
 	CartProdotto,
 	StoreState,
-} from "../CommonTypesInterfaces";
+} from "../../CommonTypesInterfaces";
 import { setActualProduct, setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";

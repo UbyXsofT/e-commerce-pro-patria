@@ -203,6 +203,7 @@ export const ToolBar = ({
 								: { display: "none" }
 						}
 					>
+						{/* NOTIFICHE --->						
 						<IconButton
 							size="large"
 							aria-label={
@@ -230,7 +231,7 @@ export const ToolBar = ({
 							isOpen={openPopper}
 							anchorEl={notificationsPopper}
 							content="Messaggi e Avvisi"
-						/>
+						/> */}
 
 						<IconButton
 							size="large"

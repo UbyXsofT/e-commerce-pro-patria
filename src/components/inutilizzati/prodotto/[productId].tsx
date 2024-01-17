@@ -1,6 +1,6 @@
 // pages/[productId].tsx
 import router, { useRouter } from "next/router";
-import ProductPage from "src/components/product/ProductPage";
+import ProductPage from "src/components/inutilizzati/product/ProductPage";
 
 const ProductID: React.FC = () => {
 	const router = useRouter();

@@ -24,9 +24,9 @@ import eCommerceConf from "eCommerceConf.json";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import callNodeService from "pages/api/callNodeService";
-import BtnStepStore from "./Stepper/BtnStepListino";
-import ListinoCard from "src/components/listino/Card/ListinoCard";
-import ListinoErrorBox from "./Utils/ListinoErrorBox";
+import BtnStepStore from "./stepper/BtnStepListino";
+import ListinoCard from "src/components/listino/card/ListinoCard";
+import ListinoErrorBox from "src/components/listino/utils/ListinoErrorBox";
 import {
 	ConstructionOutlined,
 	Discount,
@@ -39,7 +39,7 @@ import {
 	MotionPhotosAuto,
 } from "@mui/icons-material";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
-import LegendaIcone from "./Utils/LegendaIcone";
+import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 
 import {
 	Abbonamento,
@@ -51,10 +51,11 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import chiaveRandom from "../utils/chiaveRandom";
 import { Dispatch } from "redux";
-import trovaCodice from "./Utils/trovaCodice";
-import trovaCodiceNextOby from "./Utils/trovaCodiceNextOby";
-import fetchListino from "../utils/fetchListino";
+import trovaCodice from "src/components/listino/utils/trovaCodice";
+import trovaCodiceNextOby from "src/components/listino/utils/trovaCodiceNextOby";
+import fetchListino from "src/components/utils/fetchListino";
 import { animated, useSpring } from "react-spring";
+import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
 
 const StepListinoPage = () => {
 	//const [activeStepPageId, setActiveStepPageId] = React.useState(1);
@@ -88,27 +89,9 @@ const StepListinoPage = () => {
 		config: { duration: 500 }, // Imposta la durata dell'animazione in millisecondi
 	});
 
-	const [isModalOpen, setIsModalOpen] = React.useState(false);
-
 	const [storyStep_SubTitleComp, setStoryStep_SubTitleComp] = React.useState(
 		[] as JSX.Element[]
 	);
-
-	const openModal = () => {
-		setIsModalOpen(true);
-	};
-	const closeModal = () => {
-		setIsModalOpen(false);
-	};
-	type StepStorePageType = {
-		[key: number]: {
-			TitoloPage: string;
-		};
-	};
-	// Utilizzo del tipo dichiarato
-	const eCommerceConfType: { StepStorePage: StepStorePageType } = {
-		StepStorePage: eCommerceConf.StepStorePage,
-	};
 
 	// Funzioni di verifica del tipo
 	function isGruppo(item: Item): item is Gruppo {
@@ -863,97 +846,12 @@ const StepListinoPage = () => {
 					<ListinoErrorBox />
 				) : (
 					<>
-						<Grid
-							container
-							style={{
-								justifyContent: "space-between",
-								paddingRight: "0px",
-							}}
-						>
-							<Typography
-								variant="h4"
-								style={{
-									display: "flex",
-									flexDirection: "row",
-									flexWrap: "nowrap",
-									alignItems: "center",
-								}}
-							>
-								{stepSelectOby.stepId === 1 ? (
-									<Groups
-										style={{ marginRight: "20px" }}
-										color="success"
-										fontSize="large"
-									/>
-								) : stepSelectOby.stepId === 2 ? (
-									<Place
-										style={{ marginRight: "20px" }}
-										color="warning"
-										fontSize="large"
-									/>
-								) : stepSelectOby.stepId === 3 ? (
-									<AutoAwesomeMosaic
-										style={{ marginRight: "20px" }}
-										color="error"
-										fontSize="large"
-									/>
-								) : stepSelectOby.stepId === 4 ? (
-									<MotionPhotosAuto
-										style={{ marginRight: "20px" }}
-										color="info"
-										fontSize="large"
-									/>
-								) : (
-									<></>
-								)}
+						<HeadListinoPage
+							stepSelectOby={stepSelectOby}
+							setStepSelectOby={setStepSelectOby}
+							storyStep_SubTitleComp={storyStep_SubTitleComp}
+						/>
 
-								{
-									eCommerceConfType.StepStorePage[stepSelectOby.stepId]
-										?.TitoloPage
-								}
-							</Typography>
-
-							<Tooltip
-								title={
-									<span style={{ display: "flex", flexDirection: "column" }}>
-										<Typography
-											textAlign={"center"}
-											variant="subtitle2"
-										>
-											Visualizza legenda icone
-										</Typography>
-									</span>
-								}
-							>
-								<IconButton
-									onClick={() => {
-										openModal();
-									}}
-								>
-									<Info color="info" />
-								</IconButton>
-							</Tooltip>
-							<LegendaIcone
-								isOpen={isModalOpen}
-								onClose={closeModal}
-							/>
-						</Grid>
-						<Grid
-							style={{
-								display: "flex",
-								flexDirection: "row",
-								flexWrap: "nowrap",
-								alignItems: "center",
-								justifyContent: "flex-start",
-								minHeight: "50px",
-							}}
-						>
-							{storyStep_SubTitleComp.map((element: any, index: any) => {
-								// console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
-								// console.log("index: ", index);
-								return <React.Fragment key={index}>{element}</React.Fragment>;
-							})}
-						</Grid>
 						<Container
 							style={{
 								marginTop: "1em",

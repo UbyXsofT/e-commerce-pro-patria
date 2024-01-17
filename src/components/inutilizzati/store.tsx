@@ -37,7 +37,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 // import ProductCard from "src/components/product/ProductCard";
-import ProductCard from "src/components/product/ProductCard";
+import ProductCard from "src/components/inutilizzati/product/ProductCard";
 import { Box, Stack } from "@mui/system";
 import { Search } from "@mui/icons-material";
 // import { fetchListino } from "pages/_app";

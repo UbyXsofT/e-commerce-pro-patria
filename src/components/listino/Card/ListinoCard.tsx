@@ -36,7 +36,7 @@ import {
 	useMediaQuery,
 } from "@mui/material";
 import FormatString from "src/components/utils/FormatString";
-import CardHeadTitle from "./CardHeadTitle";
+import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
 import {
 	Listino,
 	Cart,
@@ -52,10 +52,11 @@ import {
 	Prodotto,
 	ActualProduct,
 } from "src/components/CommonTypesInterfaces";
-import CardContentData from "./CardContentData";
+import CardContentData from "src/components/listino/card/CardContentData";
 import { StepListino, StepListinoData } from "src/store/interfaces";
 import { setStepListino } from "src/store/actions";
-import trovaCodice from "../Utils/trovaCodice";
+import trovaCodice from "../utils/trovaCodice";
+import { red } from "@mui/material/colors";
 
 const ListinoCard = ({
 	itemsCard,
@@ -152,7 +153,7 @@ const ListinoCard = ({
 
 	//dispatch(setActualProduct(listProduct));
 
-	const [isInCartBtnStyle, setIsInCartBtnStyle] = React.useState("#127bd1");
+	//const [isInCartBtnStyle, setIsInCartBtnStyle] = React.useState("#127bd1");
 
 	const handleClickBtnCart = (itemsCard: itemsCard) => {
 		console.log("handleClickBtnCart");
@@ -160,10 +161,10 @@ const ListinoCard = ({
 		if (actualProduct?.codice !== null) {
 			if (isInCart(actualProduct)) {
 				removeFromCart(actualProduct, cart, dispatch);
-				setIsInCartBtnStyle("#127bd1");
+				//setIsInCartBtnStyle("#127bd1");
 			} else {
 				addToCart(actualProduct);
-				setIsInCartBtnStyle("red");
+				//setIsInCartBtnStyle("red");
 			}
 		}
 	};
@@ -238,7 +239,12 @@ const ListinoCard = ({
 				}}
 			>
 				<CardActions disableSpacing>
-					{itemsCard?.abbonamento?.IMPORTOS !== "0.00" ? (
+					{/* {console.log(
+						"@@@@@ IMPORTO SCONTATO:",
+						itemsCard?.abbonamento?.IMPORTOS
+					)} */}
+					{itemsCard?.abbonamento?.IMPORTOS !== "0.00" &&
+					itemsCard?.abbonamento?.IMPORTOS !== "0" ? (
 						<span
 							style={{
 								display: "grid",
@@ -322,22 +328,35 @@ const ListinoCard = ({
 					}}
 				>
 					{itemsCard?.tipo === "ABBONAMENTO" ? (
-						<Button
-							style={{
-								width: "100%",
-								backgroundColor: isInCartBtnStyle,
-							}}
-							onClick={() => {
-								console.log("isInCartBtnStyle:", isInCartBtnStyle);
-								handleClickBtnCart(itemsCard);
-							}}
-							variant="contained"
-						>
-							<ShoppingCartIcon style={{ marginRight: 20 }} />
-							{isInCart(itemsCard)
-								? "Rimuovi dal Carrello"
-								: "Aggiungi Al Carrello"}
-						</Button>
+						isInCart(itemsCard) ? (
+							<Button
+								style={{
+									width: "100%",
+									backgroundColor: "red",
+								}}
+								onClick={() => {
+									handleClickBtnCart(itemsCard);
+								}}
+								variant="contained"
+							>
+								<ShoppingCartIcon style={{ marginRight: 20 }} />
+								Rimuovi dal Carrello
+							</Button>
+						) : (
+							<Button
+								style={{
+									width: "100%",
+									backgroundColor: "#127bd1",
+								}}
+								onClick={() => {
+									handleClickBtnCart(itemsCard);
+								}}
+								variant="contained"
+							>
+								<ShoppingCartIcon style={{ marginRight: 20 }} />
+								Aggiungi Al Carrello
+							</Button>
+						)
 					) : (
 						<Button
 							onClick={() => {

@@ -96,12 +96,11 @@ const Home = ({ setLoading }: HomeProps) => {
 								elevation={0}
 								square
 								sx={{
-									backgroundImage: "url(/images/wallpaper.jpg)",
+									// backgroundImage: "url(/images/wallpaper.jpg)",
 									backgroundRepeat: "no-repeat",
 									backgroundSize: "cover",
 									backgroundPosition: "center",
 									position: "relative",
-									//display: !isMobile ? "block" : "none",
 								}}
 							>
 								<div
