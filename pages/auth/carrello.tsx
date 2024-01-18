@@ -39,8 +39,12 @@ import {
 	EditCalendar,
 	Handshake,
 } from "@mui/icons-material";
-import { removeFromCart } from "src/components/inutilizzati/product/ProductPage";
-import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
+import {
+	numeroSenzaDecimale,
+	removeFromCart,
+	importoInCentesimi,
+} from "src/components/listino/utils/functionsCart";
+// import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";
@@ -57,34 +61,36 @@ const Carrello = () => {
 	const user = cart.at(0);
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 
-	type TotalPrice = {
-		toShow: boolean;
-		totalPrice: number;
-		totalprezzoScontato: number;
+	type Prezzi = {
+		//toShow: boolean;
+		totalePrezzo: number;
+		totalePrezzoScontato: number;
 	};
 
-	const [totalPrice, setTotalPrice] = useState<TotalPrice>({
-		toShow: true,
-		totalPrice: 0,
-		totalprezzoScontato: 0,
+	const [Prezzi, setPrezzi] = useState<Prezzi>({
+		//toShow: true,
+		totalePrezzo: 0,
+		totalePrezzoScontato: 0,
 	});
 
-	const calculateTotalPrice = (cart: CartProdotto[]): TotalPrice => {
-		let totalPrice = 0;
-		let totalprezzoScontato = 0;
+	const calculateTotalePrezzo = (cart: CartProdotto[]): Prezzi => {
+		let totalePrezzo = 0;
+		let totalePrezzoScontato = 0;
 
 		cart.forEach((prodotto) => {
-			totalPrice += getPrices(prodotto).basePrice;
-			totalprezzoScontato += getPrice(prodotto);
+			totalePrezzo += prodotto.prezzo;
+			totalePrezzoScontato += prodotto.prezzoScontato
+				? prodotto.prezzoScontato
+				: prodotto.prezzo;
 		});
 
-		const totalPriceObj: TotalPrice = {
-			toShow: totalPrice !== totalprezzoScontato ? true : false,
-			totalPrice: Number(totalPrice.toFixed(2)),
-			totalprezzoScontato: Number(totalprezzoScontato.toFixed(2)),
+		const totalePrezzoObj: Prezzi = {
+			//toShow: totalePrezzo !== totalePrezzoScontato ? true : false,
+			totalePrezzo: Number(totalePrezzo.toFixed(2)),
+			totalePrezzoScontato: Number(totalePrezzoScontato.toFixed(2)),
 		};
 
-		return totalPriceObj;
+		return totalePrezzoObj;
 	};
 
 	useEffect(() => {
@@ -93,7 +99,7 @@ const Carrello = () => {
 			return;
 		}
 
-		setTotalPrice(calculateTotalPrice(user.cart));
+		setPrezzi(calculateTotalePrezzo(user.cart));
 	}, [cart]);
 
 	const handleCheckOut = () => {
@@ -171,23 +177,24 @@ const Carrello = () => {
 				userId: authUser?.USERID,
 				emailUser: authUser?.EMAIL,
 				emailCentro: authUser?.EMAILCENTRO,
-
 				line_items: cart[0].cart.map((item) => {
-					let numeroSenzaDecimale: number = Number(
-						item.prezzo.toString().replace(".", "")
-					);
-					let importoInCentesimi: number = numeroSenzaDecimale * 100;
+					let prezzo = item.prezzoScontato ? item.prezzoScontato : item.prezzo;
+					let importoFix: number;
+
+					// importoFix = importoInCentesimi(
+					// 	numeroSenzaDecimale(prezzo.toString())
+					// );
+					//importoFix = numeroSenzaDecimale(prezzo.toString());
+					importoFix = importoInCentesimi(prezzo);
+					console.log("CHK --- > prezzo : ", prezzo);
+					console.log("CHK --- > importoFix : ", importoFix);
 
 					return {
-						id: item.id,
+						id: item.codice,
 						nome: item.nome,
-						prezzo: importoInCentesimi,
+						prezzo: importoFix,
 						immagine: item.immagine,
-						descrizione: item.descrizione,
-						convenzione: item.convenzione,
-						promozione: item.promozione,
-						sceltaOrari: item.sceltaOrari,
-						configuration: item.configuration,
+						info: item.info,
 						quantity: 1,
 					};
 				}),
@@ -198,6 +205,8 @@ const Carrello = () => {
 				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
 			};
 
+			console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
+			//return;
 			try {
 				const respCall: responseCall = await callNodeService(
 					"stripe/checkout-session",
@@ -234,9 +243,9 @@ const Carrello = () => {
 								<strong>Il Carrello è vuoto</strong>
 							</Typography>
 							<Typography variant="h5">
-								Per Aggiungere Prodotti visita gli{" "}
+								Per Aggiungere Prodotti visita la sezione{" "}
 								<Link
-									onClick={() => Router.push("/auth/acquista")}
+									onClick={() => Router.push("/auth/acquista/prodotti")}
 									sx={{
 										mt: 2,
 										textAlign: "center",
@@ -245,7 +254,7 @@ const Carrello = () => {
 											theme.palette.mode === "light" ? "black" : "white",
 									}}
 								>
-									Abbonamenti
+									Acquista
 								</Link>
 							</Typography>
 						</Box>
@@ -257,8 +266,6 @@ const Carrello = () => {
 							<List>
 								{user ? (
 									user.cart.map((prodotto) => {
-										const prices = getPrices(prodotto);
-
 										return (
 											<ListItem key={chiaveRandom()}>
 												<ListItemText>
@@ -267,7 +274,7 @@ const Carrello = () => {
 														spacing={2}
 														direction={isMobile ? "column" : "row"}
 													>
-														<Image
+														{/* <Image
 															src={
 																prodotto.immagine
 																	? prodotto.immagine
@@ -277,14 +284,14 @@ const Carrello = () => {
 															width={125}
 															height={125}
 															style={{ borderRadius: 5 }}
-														/>
+														/> */}
 														<Stack spacing={2}>
 															<Box width={"200px"}>
 																<Typography variant="h6">
 																	{prodotto.nome}
 																</Typography>
 															</Box>
-															{prices.prezzoScontato ? (
+															{prodotto.prezzoScontato ? (
 																<Stack
 																	direction={"row"}
 																	spacing={2}
@@ -294,7 +301,7 @@ const Carrello = () => {
 																		textAlign={"center"}
 																		color={"green"}
 																	>
-																		{renderPrice(prices.prezzoScontato)}€
+																		{renderPrice(prodotto.prezzoScontato)}€
 																	</Typography>
 																	<Typography
 																		variant="h6"
@@ -304,7 +311,7 @@ const Carrello = () => {
 																			position: "relative",
 																		}}
 																	>
-																		{renderPrice(prices.basePrice)}€
+																		{renderPrice(prodotto.prezzo)}€
 																		<span
 																			style={{
 																				position: "absolute",
@@ -322,7 +329,7 @@ const Carrello = () => {
 															) : (
 																<Typography variant="h6">
 																	<strong>
-																		{renderPrice(prices.basePrice)}€
+																		{renderPrice(prodotto.prezzo)}€
 																	</strong>
 																</Typography>
 															)}
@@ -363,46 +370,51 @@ const Carrello = () => {
 							>
 								<Typography variant="h5">
 									{`Totale: `}
-									{totalPrice.toShow ? (
-										<Stack
-											display={"inline-flex"}
-											direction={"row"}
-											spacing={2}
+
+									<Stack
+										display={"inline-flex"}
+										direction={"row"}
+										spacing={2}
+									>
+										<Typography
+											variant="h5"
+											textAlign={"center"}
+											color={"green"}
 										>
-											<Typography
-												variant="h5"
-												textAlign={"center"}
-												color={"green"}
-											>
-												<strong>
-													{renderPrice(totalPrice.totalprezzoScontato)}€
-												</strong>
-											</Typography>
-											<Typography
-												variant="h5"
-												textAlign={"center"}
-												color={"grey"}
+											<strong>
+												{renderPrice(Prezzi.totalePrezzoScontato)}€
+											</strong>
+										</Typography>
+										<Typography
+											variant="h5"
+											textAlign={"center"}
+											color={"grey"}
+											style={{
+												position: "relative",
+											}}
+										>
+											{renderPrice(Prezzi.totalePrezzo)}€
+											<span
 												style={{
-													position: "relative",
+													position: "absolute",
+													top: "50%",
+													left: "50%",
+													transform: "translate(-50%, -50%) rotate(-20deg)",
+													background: "red",
+													width: "100%",
+													height: "2px",
 												}}
-											>
-												{renderPrice(totalPrice.totalPrice)}€
-												<span
-													style={{
-														position: "absolute",
-														top: "50%",
-														left: "50%",
-														transform: "translate(-50%, -50%) rotate(-20deg)",
-														background: "red",
-														width: "100%",
-														height: "2px",
-													}}
-												></span>
-											</Typography>
-										</Stack>
-									) : (
-										<strong>{renderPrice(totalPrice.totalPrice)}€</strong>
-									)}
+											></span>
+										</Typography>
+									</Stack>
+
+									{/* // <strong>
+										// 	{console.log("Prezzi: ", Prezzi)}
+										// 	{Prezzi.totalePrezzoScontato > 0
+										// 		? renderPrice(Prezzi.totalePrezzoScontato)
+										// 		: renderPrice(Prezzi.totalePrezzo)}{" "}
+										// 	€
+										// </strong> */}
 								</Typography>
 
 								<Button

@@ -40,8 +40,6 @@ type ToolBarProps = {
 	cartAlerts: number | null;
 	isMobile: boolean;
 	noAuth: boolean;
-	btnSelected: string;
-	setBtnSelected: string | null;
 };
 export interface NavigationPoint {
 	name: string;

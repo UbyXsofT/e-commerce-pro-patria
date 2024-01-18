@@ -377,14 +377,6 @@ export interface Listino {
 	error: null | unknown;
 }
 
-export interface Prodotto {
-	codice: Abbonamento["CODABB"];
-	prezzo: number;
-	quantity: number; // Aggiunta della proprietà quantity
-}
-
-export interface ActualProduct extends Prodotto {}
-
 export interface ListinoCardProps {
 	itemsCard: any;
 	stepSelectOby: {
@@ -412,9 +404,9 @@ export interface CartUser {
 	cart: CartProdotto[];
 }
 
-export interface CartProdotto extends Prodotto {
-	configuration: { initialDate: Dayjs } | null;
-}
+// export interface CartProdotto extends Prodotto {
+// 	configuration: { initialDate: Dayjs } | null;
+// }
 
 export interface obyPostDataCart {
 	line_items: CartProdotto[];
@@ -424,6 +416,18 @@ export interface obyPostDataCart {
 	success_url: string;
 	cancel_url: string;
 }
+
+export interface CartProdotto {
+	codice: Abbonamento["CODABB"];
+	nome: string;
+	prezzo: number;
+	prezzoScontato: number;
+	immagine: any;
+	info: string;
+	quantity: number; // Aggiunta della proprietà quantity
+}
+
+export interface ActualProduct extends CartProdotto {}
 
 export type StoreAction = StoreActionTypes;
 export interface StoreState extends StoreStateInterfaces {}

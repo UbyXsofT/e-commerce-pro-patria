@@ -3,39 +3,19 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setListino } from "src/store/actions";
 //*-----*//
-import { Container, Grid, Typography, useMediaQuery } from "@mui/material";
+import { Container, Grid, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import Layout from "src/components/layout/Layout";
 import eCommerceConf from "eCommerceConf.json";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
-import BtnStepStore from "./stepper/BtnStepListino";
-import ListinoCard from "src/components/listino/card/ListinoCard";
 import ListinoErrorBox from "src/components/listino/utils/ListinoErrorBox";
-import { Place, Groups, AutoAwesomeMosaic } from "@mui/icons-material";
-import {
-	Abbonamento,
-	Area,
-	Gruppo,
-	Item,
-	Sede,
-	StoreState,
-} from "src/components/CommonTypesInterfaces";
-import chiaveRandom from "src/components/utils/chiaveRandom";
-import trovaCodice from "src/components/listino/utils/trovaCodice";
-import trovaCodiceNextOby from "src/components/listino/utils/trovaCodiceNextOby";
+import { StoreState } from "src/components/CommonTypesInterfaces";
 import fetchListino from "src/components/utils/fetchListino";
-import { animated, useSpring } from "react-spring";
+import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
-import findInfoAbb from "src/components/listino/utils/findInfoAbb";
-import {
-	isGruppo,
-	isSede,
-	isArea,
-	isAbbonamento,
-} from "src/components/listino/utils/checkTipo";
-import createCard from "./card/createCard";
+import CreateCard from "src/components/listino/card/CreateCard";
 
 const StepListinoPage = () => {
 	const springPropsCards = useSpring({
@@ -87,18 +67,8 @@ const StepListinoPage = () => {
 	};
 
 	React.useEffect(() => {
-		if (stepSelectOby.stepId !== 1) {
-		} else if (stepSelectOby.stepId === 1) {
-			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
-			setStoryStep_SubTitleComp([]);
-			console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
-			if (listinoState.listino === null) {
-				aggiornaListino();
-			}
-		}
-
 		if (stepSelectOby.stepId < stepSelectOby.endNavStepId) {
-			createCard(
+			CreateCard(
 				stepSelectOby.stepId,
 				listinoState,
 				stepSelectOby,
@@ -115,6 +85,28 @@ const StepListinoPage = () => {
 				...prev,
 				stepId: prev.stepId - 1,
 			}));
+		}
+
+		if (stepSelectOby.stepId === 1) {
+			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
+			setStoryStep_SubTitleComp([]);
+			console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
+			if (listinoState.listino === null) {
+				aggiornaListino();
+			}
+		} else {
+			// Rimuovi gli elementi a destra dall'array utilizzando l'indice
+			const indexToRemove =
+				stepSelectOby.stepId; /* indice dall'inizio da cui iniziare a rimuovere */
+
+			setStoryStep_SubTitleComp((prevState2) => {
+				console.log(
+					"****** CHECK) ---- setStoryStep_SubTitleComp: ",
+					storyStep_SubTitleComp
+				);
+				const newState = prevState2.slice(0, prevState2.length);
+				return newState;
+			});
 		}
 	}, [stepSelectOby.stepId, listinoState.listino]);
 

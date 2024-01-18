@@ -24,7 +24,6 @@ import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatu
 
 import eCommerceConf from "eCommerceConf.json";
 import { setListino } from "src/store/actions";
-import { Centro } from "../src/components/inutilizzati/store";
 import callNodeService from "./api/callNodeService";
 import { Any } from "react-spring";
 import fetchListino from "src/components/utils/fetchListino";
