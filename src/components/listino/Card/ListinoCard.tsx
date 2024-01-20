@@ -38,34 +38,23 @@ import {
 import FormatString from "src/components/utils/FormatString";
 import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
 import {
-	Listino,
-	Cart,
-	CartProdotto,
 	StoreState,
-	StoreAction,
-	Gruppo,
-	Area,
-	Sede,
-	Abbonamento,
 	ListinoCardProps,
 	itemsCard,
-	Prodotto,
 	ActualProduct,
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "src/components/listino/card/CardContentData";
-import { StepListino, StepListinoData } from "src/store/interfaces";
-import { setStepListino } from "src/store/actions";
-import trovaCodice from "../utils/trovaCodice";
-import { red } from "@mui/material/colors";
+import {
+	addToCart,
+	isInCart,
+	removeFromCart,
+} from "src/components/listino/utils/functionsCart";
 
 const ListinoCard = ({
 	itemsCard,
 	stepSelectOby,
 	setStepSelectOby,
 }: ListinoCardProps) => {
-	// const [prezzoScontato, setPrezzoScontato] = React.useState<null | number>(
-	// 	null
-	// );
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
@@ -73,104 +62,52 @@ const ListinoCard = ({
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const cart = useSelector((state: StoreState) => state.cart);
 
-	const prodotto: Prodotto | null = useSelector(
-		(state: StoreState) => state.actualProduct
-	);
+	// const prodotto: ActualProduct | null = useSelector(
+	// 	(state: StoreState) => state.actualProduct
+	// );
 
-	const removeFromCart = (
-		prodotto: Prodotto,
-		cart: Cart,
-		dispatch: Dispatch
-	): void => {
-		const user = cart.at(0);
-		console.log("removeFromCart");
-		let filteredCart = null;
-
-		if (user) {
-			filteredCart = user.cart.filter((inCartProdotto) => {
-				if (inCartProdotto?.codice !== prodotto?.codice) {
-					return inCartProdotto;
-				}
-			});
-		} else {
-			return;
-		}
-
-		dispatch(setCart([{ userId: user.userId, cart: filteredCart }]));
+	let actualProduct: ActualProduct = {
+		codice: itemsCard.codice,
+		nome: itemsCard.descrizione,
+		prezzo: Number(itemsCard.abbonamento.IMPORTO),
+		prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
+		immagine: [],
+		info: "informazioni",
+		quantity: 1,
 	};
-
-	const addToCart = (prodotto: Prodotto): void => {
-		const configurableProdotto: CartProdotto = {
-			...prodotto,
-			configuration: null,
-		};
-
-		let user = cart.at(0);
-		console.log("addToCart");
-		user
-			? dispatch(
-					setCart([
-						{
-							userId: authUser?.USERID ?? "null",
-							cart: [...user.cart, configurableProdotto],
-						},
-					])
-			  )
-			: dispatch(
-					setCart([
-						{
-							userId: authUser?.USERID ?? "null",
-							cart: [configurableProdotto],
-						},
-					])
-			  );
-	};
-
-	const isInCart = (prodotto: Prodotto): boolean => {
-		let user = cart.at(0);
-
-		console.log("^^^^^^^^^^^^^^^^^^^^^^^^ isInCart user:", user);
-		if (!user) {
-			return false;
-		}
-
-		let filteredCart = user.cart.filter((inCartProdotto) => {
-			console.log(
-				"^^^^^^^^^^^^^^^^^^^^^^^^ isInCart filteredCart inCartProdotto:",
-				inCartProdotto
-			);
-			if (inCartProdotto?.codice === prodotto?.codice) {
-				return inCartProdotto;
-			}
-		});
-
-		if (filteredCart.length > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	//dispatch(setActualProduct(listProduct));
-
-	//const [isInCartBtnStyle, setIsInCartBtnStyle] = React.useState("#127bd1");
 
 	const handleClickBtnCart = (itemsCard: itemsCard) => {
 		console.log("handleClickBtnCart");
-		const actualProduct: ActualProduct = itemsCard as unknown as ActualProduct;
+		actualProduct = {
+			codice: itemsCard.codice,
+			nome: itemsCard.descrizione,
+			prezzo: Number(itemsCard.abbonamento.IMPORTO),
+			prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
+			immagine: [],
+			info: "informazioni",
+			quantity: 1,
+		}; //itemsCard as unknown as ActualProduct;
+
 		if (actualProduct?.codice !== null) {
-			if (isInCart(actualProduct)) {
+			if (isInCart(actualProduct, cart, dispatch)) {
 				removeFromCart(actualProduct, cart, dispatch);
-				//setIsInCartBtnStyle("#127bd1");
 			} else {
-				addToCart(actualProduct);
-				//setIsInCartBtnStyle("red");
+				addToCart(actualProduct, cart, dispatch, authUser);
 			}
 		}
 	};
 
 	React.useEffect(() => {
 		//console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+		actualProduct = {
+			codice: itemsCard.codice,
+			nome: itemsCard.descrizione,
+			prezzo: Number(itemsCard.abbonamento.IMPORTO),
+			prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
+			immagine: [],
+			info: "informazioni",
+			quantity: 1,
+		}; //itemsCard as unknown as ActualProduct;
 	}, []);
 
 	const handleClick = (itemData: itemsCard) => {
@@ -328,7 +265,7 @@ const ListinoCard = ({
 					}}
 				>
 					{itemsCard?.tipo === "ABBONAMENTO" ? (
-						isInCart(itemsCard) ? (
+						isInCart(actualProduct, cart, dispatch) ? (
 							<Button
 								style={{
 									width: "100%",

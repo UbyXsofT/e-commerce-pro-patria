@@ -95,18 +95,24 @@ const StepListinoPage = () => {
 				aggiornaListino();
 			}
 		} else {
-			// Rimuovi gli elementi a destra dall'array utilizzando l'indice
-			const indexToRemove =
-				stepSelectOby.stepId; /* indice dall'inizio da cui iniziare a rimuovere */
-
-			setStoryStep_SubTitleComp((prevState2) => {
-				console.log(
-					"****** CHECK) ---- setStoryStep_SubTitleComp: ",
-					storyStep_SubTitleComp
-				);
-				const newState = prevState2.slice(0, prevState2.length);
-				return newState;
-			});
+			// // Rimuovi gli elementi a destra dall'array utilizzando l'indice
+			// const indexToRemove =
+			// 	stepSelectOby.stepId -
+			// 	3; /* indice dall'inizio da cui iniziare a rimuovere */
+			// console.log("Original state before slice:", storyStep_SubTitleComp);
+			// console.log("Index to remove:", indexToRemove);
+			// console.log("Array length:", storyStep_SubTitleComp.length);
+			// let newStateStoryTitle = storyStep_SubTitleComp.slice(indexToRemove);
+			// console.log("New state:", newStateStoryTitle);
+			// //setStoryStep_SubTitleComp(newStateStoryTitle);
+			// setStoryStep_SubTitleComp((prevState2) => {
+			// 	console.log(
+			// 		"****** CHECK) ---- setStoryStep_SubTitleComp: ",
+			// 		storyStep_SubTitleComp
+			// 	);
+			// 	const newState = prevState2.slice(0, prevState2.length);
+			// 	return newState;
+			// });
 		}
 	}, [stepSelectOby.stepId, listinoState.listino]);
 

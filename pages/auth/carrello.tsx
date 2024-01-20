@@ -11,6 +11,7 @@ import {
 	List,
 	ListItem,
 	ListItemText,
+	Paper,
 	Tooltip,
 	Typography,
 	useMediaQuery,
@@ -267,14 +268,18 @@ const Carrello = () => {
 								{user ? (
 									user.cart.map((prodotto) => {
 										return (
-											<ListItem key={chiaveRandom()}>
-												<ListItemText>
-													<Stack
-														alignItems={"center"}
-														spacing={2}
-														direction={isMobile ? "column" : "row"}
-													>
-														{/* <Image
+											<Paper
+												elevation={1}
+												style={{ marginBottom: "1rem" }}
+											>
+												<ListItem key={chiaveRandom()}>
+													<ListItemText>
+														<Stack
+															alignItems={"center"}
+															spacing={2}
+															direction={isMobile ? "column" : "row"}
+														>
+															{/* <Image
 															src={
 																prodotto.immagine
 																	? prodotto.immagine
@@ -285,72 +290,73 @@ const Carrello = () => {
 															height={125}
 															style={{ borderRadius: 5 }}
 														/> */}
-														<Stack spacing={2}>
-															<Box width={"200px"}>
-																<Typography variant="h6">
-																	{prodotto.nome}
-																</Typography>
-															</Box>
-															{prodotto.prezzoScontato ? (
-																<Stack
-																	direction={"row"}
-																	spacing={2}
-																>
-																	<Typography
-																		variant="h6"
-																		textAlign={"center"}
-																		color={"green"}
-																	>
-																		{renderPrice(prodotto.prezzoScontato)}€
+															<Stack spacing={2}>
+																<Box width={"200px"}>
+																	<Typography variant="h6">
+																		{prodotto.nome}
 																	</Typography>
-																	<Typography
-																		variant="h6"
-																		textAlign={"center"}
-																		color={"grey"}
-																		style={{
-																			position: "relative",
-																		}}
+																</Box>
+																{prodotto.prezzoScontato ? (
+																	<Stack
+																		direction={"row"}
+																		spacing={2}
 																	>
-																		{renderPrice(prodotto.prezzo)}€
-																		<span
+																		<Typography
+																			variant="h6"
+																			textAlign={"center"}
+																			color={"green"}
+																		>
+																			{renderPrice(prodotto.prezzoScontato)}€
+																		</Typography>
+																		<Typography
+																			variant="h6"
+																			textAlign={"center"}
+																			color={"grey"}
 																			style={{
-																				position: "absolute",
-																				top: "50%",
-																				left: "50%",
-																				transform:
-																					"translate(-50%, -50%) rotate(-20deg)",
-																				background: "red",
-																				width: "100%",
-																				height: "2px",
+																				position: "relative",
 																			}}
-																		></span>
+																		>
+																			{renderPrice(prodotto.prezzo)}€
+																			<span
+																				style={{
+																					position: "absolute",
+																					top: "50%",
+																					left: "50%",
+																					transform:
+																						"translate(-50%, -50%) rotate(-20deg)",
+																					background: "red",
+																					width: "100%",
+																					height: "2px",
+																				}}
+																			></span>
+																		</Typography>
+																	</Stack>
+																) : (
+																	<Typography variant="h6">
+																		<strong>
+																			{renderPrice(prodotto.prezzo)}€
+																		</strong>
 																	</Typography>
-																</Stack>
-															) : (
-																<Typography variant="h6">
-																	<strong>
-																		{renderPrice(prodotto.prezzo)}€
-																	</strong>
-																</Typography>
-															)}
+																)}
+															</Stack>
 														</Stack>
-													</Stack>
-												</ListItemText>
+													</ListItemText>
 
-												<IconButton
-													edge="end"
-													aria-label="delete"
-													sx={{
-														marginRight: "auto",
-														color: theme.palette.error.main,
-													}}
-													onClick={() =>
-														removeFromCart(prodotto, cart, dispatch)
-													}
-												>
-													<DeleteRounded />
-												</IconButton>
-											</ListItem>
+													<IconButton
+														edge="end"
+														aria-label="delete"
+														sx={{
+															marginRight: "auto",
+															color: theme.palette.error.main,
+														}}
+														onClick={() =>
+															removeFromCart(prodotto, cart, dispatch)
+														}
+													>
+														<DeleteRounded />
+													</IconButton>
+												</ListItem>
+											</Paper>
 										);
 									})
 								) : (

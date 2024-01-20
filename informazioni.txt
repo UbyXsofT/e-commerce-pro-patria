@@ -77,3 +77,36 @@ Description
 	//----------> },
 	//------> }
 	//-> }
+
+
+
+	<LISTINO>
+		<GRUPPO>
+      <CODGRUPPO>…</CODGRUPPO>
+      <DESGRUPPO>…</DESGRUPPO>
+			<NOTEGRUPPO>…</NOTEGRUPPO>
+         <SEDE>
+           <IDSEDE>…</IDSEDE>
+           <DESCSEDE>…</DESCSEDE>
+           <NOTESEDE>…</NOTESEDE>
+							<AREA>
+								<CODAREA>…</CODAREA>
+								<DESAREA>…</DESAREA>
+								<NOTEAREA>…</NOTEAREA>
+									<ABBONAMENTO>
+												<CODABB></CODABB> codice abbonamento
+												<DESABB></DESABB> descrizione
+												<NOTEABB></NOTEABB> note
+												<IMPORTO></IMPORTO> importo a listino
+												<PROMO></PROMO> 0=nessuna offerta, 1=in promozione, 2=in convenzione
+												<IMPORTOS></IMPORTOS> importo scontato, 0 se non c’è sconto
+												<SCELTAF></SCELTAF> 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+												<NOSOSP></NOSOSP> 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
+												<DATAINI></DATAINI> data proposta come inizio abbonamento
+												<PERIODOATT></PERIODOATT> giorni disponibili per l’attivazione (se =0 vale la dataini)
+												<FREQUENZAS></FREQUENZAS> frequenza settimanale (per scegliere gli orari deve essere >0)
+									</ABBONAMENTO>
+              </AREA>
+					</SEDE>
+    </GRUPPO>
+</LISTINO>

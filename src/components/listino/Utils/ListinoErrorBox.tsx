@@ -23,7 +23,7 @@ const ListinoErrorBox = () => {
 			<Button
 				variant="contained"
 				onClick={async () => {
-					console.log("****** CHECK LISTINO: ", listinoState.listino);
+					//console.log("****** CHECK LISTINO: ", listinoState.listino);
 
 					if (!listinoState.listino) {
 						try {

@@ -15,7 +15,7 @@ const countAree = (item: any[], tipo: string): number => {
 
 // // Funzione ricorsiva per contare Abbonamenti
 const countAbbonamenti = (item: any[], tipo: string): number => {
-	console.log("countAbbonamenti item: ", item);
+	//console.log("countAbbonamenti item: ", item);
 	switch (tipo) {
 		case "GRUPPO":
 			return item.reduce(
@@ -39,8 +39,8 @@ const countAbbonamenti = (item: any[], tipo: string): number => {
 
 // Funzione per ottenere il numero totale di Aree e Abbonamenti
 export default function getTotals(item: any, entityType: string) {
-	console.log("getTotals item", item);
-	console.log("getTotals entityType", entityType);
+	// console.log("getTotals item", item);
+	// console.log("getTotals entityType", entityType);
 	let numeroSedi = 0;
 	let numeroAree = 0;
 	let numeroAbbonamenti = 0;

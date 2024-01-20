@@ -32,7 +32,9 @@ export default function findInfoAbb(item: any, stepId: number) {
 				const numero = item["SEDE"]
 					.map((sede: any) =>
 						sede.AREA.flatMap((area: any) =>
-							area.ABBONAMENTO.filter((abb: any) => abb[tipo] === valore)
+							area.ABBONAMENTO.filter((abb: any) =>
+								tipo === "SCELTAF" ? abb[tipo] !== valore : abb[tipo] === valore
+							)
 						)
 					)
 					.flat().length;
@@ -49,11 +51,14 @@ export default function findInfoAbb(item: any, stepId: number) {
 				};
 				// Aggiungere l'oggetto all'oggetto infoData
 				infoData[name] = infoObject;
+				console.log("CASE GRUPPO: infoObject: ", infoObject);
 				return;
 			case 2: //"SEDE"
 				const numero2 = item["AREA"]
 					.map((area: any) =>
-						area.ABBONAMENTO.filter((abb: any) => abb[tipo] === valore)
+						area.ABBONAMENTO.filter((abb: any) =>
+							tipo === "SCELTAF" ? abb[tipo] !== valore : abb[tipo] === valore
+						)
 					)
 					.flat().length;
 
@@ -73,7 +78,12 @@ export default function findInfoAbb(item: any, stepId: number) {
 				infoData[name] = infoObject2;
 				return;
 			case 3: //"AREA"
-				const numero3 = item["ABBONAMENTO"].length;
+				const numero3 = item["ABBONAMENTO"]
+					.filter((abb: any) =>
+						tipo === "SCELTAF" ? abb[tipo] !== valore : abb[tipo] === valore
+					)
+					.flat().length;
+
 				//console.log("RICHIESTA NUM ABBONAMENTI --> CASE numero3: ", numero3);
 				const totals3 = getTotals(item["ABBONAMENTO"], "AREA");
 

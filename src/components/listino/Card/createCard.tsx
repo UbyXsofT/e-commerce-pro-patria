@@ -1,7 +1,7 @@
 import React from "react";
 import Groups from "@mui/icons-material/Groups";
 import Place from "@mui/icons-material/Place";
-import { Typography } from "@mui/material";
+import { IconButton, Tooltip, Typography } from "@mui/material";
 import { style, color } from "@mui/system";
 import { animated, SpringValue, useSpring } from "react-spring";
 import {
@@ -18,8 +18,9 @@ import trovaCodiceNextOby from "../utils/trovaCodiceNextOby";
 import ListinoCard from "./ListinoCard";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import { AutoAwesomeMosaic } from "@mui/icons-material";
+import addSubTitleIconStep from "../utils/addSubTitleIconStep";
 
-export default function createCardComponents(
+export default function CreateCard(
 	stepId: number,
 	listinoState: Listino,
 	stepSelectOby: {
@@ -55,7 +56,7 @@ export default function createCardComponents(
 	let sedeDesiderataTrovata = false;
 	let areaDesiderataTrovata = false;
 
-	//console.log("@@@ --> createCardComponents stepId: ", stepId);
+	//console.log("@@@ --> CreateCard stepId: ", stepId);
 	// Aggiungi un nuovo passo con uno stepId univoco
 	if (
 		listinoState?.listino &&
@@ -154,27 +155,22 @@ export default function createCardComponents(
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
 						) {
-							setStoryStep_SubTitleComp((prevState) => [
-								...prevState,
-								<Typography
-									key={chiaveRandom()}
-									variant="subtitle1"
-									style={{ display: "flex", alignItems: "center" }}
-								>
-									<Groups
-										color="success"
-										style={{ marginRight: "5px", marginLeft: "20px" }}
-									/>
-									{percorso?.DESGRUPPO}
-								</Typography>,
-							]);
+							addSubTitleIconStep(
+								stepSelectOby,
+								setStepSelectOby,
+								storyStep_SubTitleComp,
+								setStoryStep_SubTitleComp,
+								percorso?.DESGRUPPO,
+								stepId - 1,
+								<Groups color="success" />
+							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice
 							const indexToRemove =
 								stepId - 1; /* indice dell'elemento da rimuovere */
 							setStoryStep_SubTitleComp((prevState) => {
 								const newState = [...prevState];
-								newState.splice(indexToRemove, 1);
+								newState.splice(indexToRemove, storyStep_SubTitleComp.length);
 								return newState;
 							});
 						}
@@ -288,27 +284,22 @@ export default function createCardComponents(
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
 						) {
-							setStoryStep_SubTitleComp((prevState) => [
-								...prevState,
-								<Typography
-									key={chiaveRandom()}
-									variant="subtitle1"
-									style={{ display: "flex", alignItems: "center" }}
-								>
-									<Place
-										color="warning"
-										style={{ marginRight: "5px", marginLeft: "20px" }}
-									/>
-									{percorso?.DESCSEDE}
-								</Typography>,
-							]);
+							addSubTitleIconStep(
+								stepSelectOby,
+								setStepSelectOby,
+								storyStep_SubTitleComp,
+								setStoryStep_SubTitleComp,
+								percorso?.DESCSEDE,
+								stepId - 1,
+								<Place color="warning" />
+							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice
 							const indexToRemove =
 								stepId - 1; /* indice dell'elemento da rimuovere */
 							setStoryStep_SubTitleComp((prevState) => {
 								const newState = [...prevState];
-								newState.splice(indexToRemove, 1);
+								newState.splice(indexToRemove, storyStep_SubTitleComp.length);
 								return newState;
 							});
 						}
@@ -435,27 +426,22 @@ export default function createCardComponents(
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
 						) {
-							setStoryStep_SubTitleComp((prevState) => [
-								...prevState,
-								<Typography
-									key={chiaveRandom()}
-									variant="subtitle1"
-									style={{ display: "flex", alignItems: "center" }}
-								>
-									<AutoAwesomeMosaic
-										color="error"
-										style={{ marginRight: "5px", marginLeft: "20px" }}
-									/>
-									{percorso?.DESAREA}
-								</Typography>,
-							]);
+							addSubTitleIconStep(
+								stepSelectOby,
+								setStepSelectOby,
+								storyStep_SubTitleComp,
+								setStoryStep_SubTitleComp,
+								percorso?.DESAREA,
+								stepId - 1,
+								<AutoAwesomeMosaic color="error" />
+							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice
 							const indexToRemove =
 								stepId - 1; /* indice dell'elemento da rimuovere */
 							setStoryStep_SubTitleComp((prevState) => {
 								const newState = [...prevState];
-								newState.splice(indexToRemove, 1);
+								newState.splice(indexToRemove, storyStep_SubTitleComp.length);
 								return newState;
 							});
 						}
@@ -476,7 +462,7 @@ export default function createCardComponents(
 										onPrevStep: true,
 										aPromozioni: abbonamento.PROMO === "1" ? true : false,
 										aConvenzioni: abbonamento.PROMO === "2" ? true : false,
-										aSospensioni: abbonamento.PROMO === "0" ? true : false,
+										aSospensioni: abbonamento.NOSOSP === "0" ? true : false,
 										aSceltaOrario: abbonamento.SCELTAF !== "0" ? true : false,
 										numeroSedi: 0,
 										numeroAree: 0,

@@ -86,10 +86,10 @@ export const isInCart = (
 	}
 
 	let filteredCart = user.cart.filter((inCartProdotto) => {
-		console.log(
-			"^^^^^^^^^^^^^^^^^^^^^^^^ isInCart filteredCart inCartProdotto:",
-			inCartProdotto
-		);
+		// console.log(
+		// 	"^^^^^^^^^^^^^^^^^^^^^^^^ isInCart filteredCart inCartProdotto:",
+		// 	inCartProdotto
+		// );
 		if (inCartProdotto?.codice === prodotto?.codice) {
 			return inCartProdotto;
 		}

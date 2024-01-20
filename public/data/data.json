@@ -23,8 +23,8 @@
                               "IMPORTO": "100.50",
                               "PROMO": "1",
                               "IMPORTOS": "50.25",
-                              "SCELTAF": "1",
-                              "NOSOSP": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
                               "DATAINI": "2023-01-01",
                               "PERIODOATT": "30",
                               "FREQUENZAS": "3"
@@ -36,7 +36,7 @@
                               "IMPORTO": "200.00",
                               "PROMO": "0",
                               "IMPORTOS": "0",
-                              "SCELTAF": "100.00",
+                              "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",
                               "PERIODOATT": "90",
@@ -54,10 +54,10 @@
                               "DESABB": "Abbonamento 3",
                               "NOTEABB": "NOTE ABB 3 = ABB DESCRIZIONE",
                               "IMPORTO": "300.00",
-                              "PROMO": "2",
+                              "PROMO": "0",
                               "IMPORTOS": "150.00",
-                              "SCELTAF": "1",
-                              "NOSOSP": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
                               "DATAINI": "2023-03-01",
                               "PERIODOATT": "365",
                               "FREQUENZAS": "4"
@@ -115,13 +115,13 @@
                               "DESABB": "Abbonamento 5",
                               "NOTEABB": "NOTE ABB 5 = ABB DESCRIZIONE",
                               "IMPORTO": "500.00",
-                              "PROMO": "1",
+                              "PROMO": "0",
                               "IMPORTOS": "250.00",
-                              "SCELTAF": "1",
-                              "NOSOSP": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
                               "DATAINI": "2023-01-01",
-                              "PERIODOATT": "30",
-                              "FREQUENZAS": "3"
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "0"
                            },
                            {
                               "CODABB": "AB006",
@@ -135,6 +135,194 @@
                               "DATAINI": "2023-02-15",
                               "PERIODOATT": "90",
                               "FREQUENZAS": "2"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "CODGRUPPO": "G003",
+            "DESGRUPPO": "Gruppo C",
+            "NOTEGRUPPO": "NOTE 3 = GRUPPO DESCRIZIONE",
+            "SEDE": [
+               {
+                  "IDSEDE": "S004",
+                  "DESCSEDE": "Sede 4",
+                  "NOTESEDE": "Questa è la sede 4",
+                  "AREA": [
+                     {
+                        "CODAREA": "A005",
+                        "DESAREA": "Area 5",
+                        "NOTEAREA": "NOTE Area 5 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB007",
+                              "DESABB": "Abbonamento 7",
+                              "NOTEABB": "NOTE ABB 7 = ABB DESCRIZIONE",
+                              "IMPORTO": "100.50",
+                              "PROMO": "1",
+                              "IMPORTOS": "50.25",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "2023-01-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           },
+                           {
+                              "CODABB": "AB008",
+                              "DESABB": "Abbonamento 8",
+                              "NOTEABB": "NOTE ABB 8 = ABB DESCRIZIONE",
+                              "IMPORTO": "200.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "2023-02-15",
+                              "PERIODOATT": "90",
+                              "FREQUENZAS": "2"
+                           }
+                        ]
+                     },
+                     {
+                        "CODAREA": "A006",
+                        "DESAREA": "Area 6",
+                        "NOTEAREA": "NOTE Area 6 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB009",
+                              "DESABB": "Abbonamento 9",
+                              "NOTEABB": "NOTE ABB 9 = ABB DESCRIZIONE",
+                              "IMPORTO": "300.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "150.00",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "2023-03-01",
+                              "PERIODOATT": "365",
+                              "FREQUENZAS": "4"
+                           }
+                        ]
+                     }
+                  ]
+               },
+               {
+                  "IDSEDE": "S005",
+                  "DESCSEDE": "Sede 5",
+                  "NOTESEDE": "Questa è una sede 5",
+                  "AREA": [
+                     {
+                        "CODAREA": "A007",
+                        "DESAREA": "Area 7",
+                        "NOTEAREA": "NOTE Area 7 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB010",
+                              "DESABB": "Abbonamento 10",
+                              "NOTEABB": "NOTE ABB 10 = ABB DESCRIZIONE",
+                              "IMPORTO": "400.00",
+                              "PROMO": "1",
+                              "IMPORTOS": "200.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-04-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "CODGRUPPO": "G004",
+            "DESGRUPPO": "Gruppo D",
+            "NOTEGRUPPO": "NOTE 4 = GRUPPO DESCRIZIONE",
+            "SEDE": [
+               {
+                  "IDSEDE": "S006",
+                  "DESCSEDE": "Sede 6",
+                  "NOTESEDE": "Questa è la sede 6",
+                  "AREA": [
+                     {
+                        "CODAREA": "A008",
+                        "DESAREA": "Area 8",
+                        "NOTEAREA": "NOTE Area 8 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB011",
+                              "DESABB": "Abbonamento 11",
+                              "NOTEABB": "NOTE ABB 11 = ABB DESCRIZIONE",
+                              "IMPORTO": "100.50",
+                              "PROMO": "1",
+                              "IMPORTOS": "50.25",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-01-01",
+                              "PERIODOATT": "30",
+                              "FREQUENZAS": "3"
+                           },
+                           {
+                              "CODABB": "AB012",
+                              "DESABB": "Abbonamento 12",
+                              "NOTEABB": "NOTE ABB 12 = ABB DESCRIZIONE",
+                              "IMPORTO": "200.00",
+                              "PROMO": "0",
+                              "IMPORTOS": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-02-15",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "1"
+                           }
+                        ]
+                     },
+                     {
+                        "CODAREA": "A009",
+                        "DESAREA": "Area 9",
+                        "NOTEAREA": "NOTE Area 9 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB013",
+                              "DESABB": "Abbonamento 13",
+                              "NOTEABB": "NOTE ABB 13 = ABB DESCRIZIONE",
+                              "IMPORTO": "1000.00",
+                              "PROMO": "2",
+                              "IMPORTOS": "500.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "DATAINI": "2023-03-01",
+                              "PERIODOATT": "365",
+                              "FREQUENZAS": "4"
+                           }
+                        ]
+                     }
+                  ]
+               },
+               {
+                  "IDSEDE": "S007",
+                  "DESCSEDE": "Sede 7",
+                  "NOTESEDE": "Questa è una sede 7",
+                  "AREA": [
+                     {
+                        "CODAREA": "A010",
+                        "DESAREA": "Area 10",
+                        "NOTEAREA": "NOTE Area 10 = Area DESCRIZIONE",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB014",
+                              "DESABB": "Abbonamento 14",
+                              "NOTEABB": "NOTE ABB 14 = ABB DESCRIZIONE",
+                              "IMPORTO": "700.00",
+                              "PROMO": "0",
+                              "IMPORTOS": "0",
+                              "SCELTAF": "0",
+                              "NOSOSP": "1",
+                              "DATAINI": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "0"
                            }
                         ]
                      }

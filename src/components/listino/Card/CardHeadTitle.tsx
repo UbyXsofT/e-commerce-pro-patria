@@ -56,6 +56,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 					flexDirection: "row",
 					justifyContent: "flex-end",
 					alignItems: "center",
+					height: "40px",
 					// borderTop: "#454545 1px solid",
 					// marginTop: "10px",
 				}}
