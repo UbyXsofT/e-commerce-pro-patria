@@ -8,14 +8,9 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import eCommerceConf from "eCommerceConf.json";
-import {
-	Info,
-	Place,
-	Groups,
-	AutoAwesomeMosaic,
-	MotionPhotosAuto,
-} from "@mui/icons-material";
+import { Info } from "@mui/icons-material";
 import LegendaIcone from "../utils/LegendaIcone";
+import myIcons from "src/theme/IconsDefine";
 
 const HeadListinoPage = ({
 	stepSelectOby,
@@ -64,29 +59,25 @@ const HeadListinoPage = ({
 					}}
 				>
 					{stepSelectOby.stepId === 1 ? (
-						<Groups
-							style={{ marginRight: "20px" }}
-							color="success"
-							fontSize="large"
-						/>
+						React.cloneElement(myIcons.GruppoIcon, {
+							fontSize: "large",
+							style: { marginRight: "20px" },
+						})
 					) : stepSelectOby.stepId === 2 ? (
-						<Place
-							style={{ marginRight: "20px" }}
-							color="warning"
-							fontSize="large"
-						/>
+						React.cloneElement(myIcons.SedeIcon, {
+							fontSize: "large",
+							style: { marginRight: "20px" },
+						})
 					) : stepSelectOby.stepId === 3 ? (
-						<AutoAwesomeMosaic
-							style={{ marginRight: "20px" }}
-							color="error"
-							fontSize="large"
-						/>
+						React.cloneElement(myIcons.AreaIcon, {
+							fontSize: "large",
+							style: { marginRight: "20px" },
+						})
 					) : stepSelectOby.stepId === 4 ? (
-						<MotionPhotosAuto
-							style={{ marginRight: "20px" }}
-							color="info"
-							fontSize="large"
-						/>
+						React.cloneElement(myIcons.AbbIcon, {
+							fontSize: "large",
+							style: { marginRight: "20px" },
+						})
 					) : (
 						<></>
 					)}

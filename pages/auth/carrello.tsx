@@ -34,12 +34,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
-import {
-	DeleteRounded,
-	Discount,
-	EditCalendar,
-	Handshake,
-} from "@mui/icons-material";
+import { DeleteRounded } from "@mui/icons-material";
 import {
 	numeroSenzaDecimale,
 	removeFromCart,
