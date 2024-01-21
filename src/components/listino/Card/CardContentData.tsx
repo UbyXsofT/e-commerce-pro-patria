@@ -1,13 +1,6 @@
-import StorefrontIcon from "@mui/icons-material/Storefront";
-import GroupsIcon from "@mui/icons-material/Groups";
-//import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
 import Place from "@mui/icons-material/Place";
-import ToggleOff from "@mui/icons-material/ToggleOff";
 import { Divider, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import {
-	Discount,
-	EditCalendar,
-	Handshake,
 	AutoAwesomeMosaic,
 	MotionPhotosAuto,
 	MoreHoriz,
@@ -16,6 +9,7 @@ import React from "react";
 import FormatString from "src/components/utils/FormatString";
 import DescFullTxt from "./DescFullTxt";
 import { itemsCard } from "src/components/CommonTypesInterfaces";
+import myIcons from "src/theme/IconsDefine";
 
 interface CardHeadTitleProps {
 	itemsCard: itemsCard;
@@ -106,7 +100,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 						}}
 					>
 						<IconButton style={{ width: "40px" }}>
-							<Place color="warning" />
+							{myIcons.SedeIcon}
 						</IconButton>
 						<Typography variant="body2">
 							SEDI: {itemsCard.numeroSedi}
@@ -123,7 +117,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 						}}
 					>
 						<IconButton style={{ width: "40px" }}>
-							<AutoAwesomeMosaic color="error" />
+							{myIcons.AreaIcon}
 						</IconButton>
 						<Typography variant="body2">
 							AREE: {itemsCard.numeroAree}
@@ -138,9 +132,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton style={{ width: "40px" }}>
-							<MotionPhotosAuto color="info" />
-						</IconButton>
+						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
 						<Typography variant="body2">
 							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
 						</Typography>
@@ -158,7 +150,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 						}}
 					>
 						<IconButton style={{ width: "40px" }}>
-							<AutoAwesomeMosaic color="error" />
+							{myIcons.AreaIcon}
 						</IconButton>
 						<Typography variant="body2">
 							AREE: {itemsCard.numeroAree}
@@ -173,9 +165,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton style={{ width: "40px" }}>
-							<MotionPhotosAuto color="info" />
-						</IconButton>
+						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
 						<Typography variant="body2">
 							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
 						</Typography>
@@ -192,9 +182,7 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 							flexWrap: "nowrap",
 						}}
 					>
-						<IconButton style={{ width: "40px" }}>
-							<MotionPhotosAuto color="info" />
-						</IconButton>
+						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
 						<Typography variant="body2">
 							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
 						</Typography>

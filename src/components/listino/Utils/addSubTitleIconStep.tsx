@@ -1,21 +1,6 @@
-import { Groups } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import chiaveRandom from "src/components/utils/chiaveRandom";
-// const indexToRemove = 3; /* indice dall'inizio da cui iniziare a rimuovere */
-// console.log(
-//   "Original state before slice:",
-//   storyStep_SubTitleComp
-// );
-// console.log("Index to remove:", indexToRemove);
-// console.log(
-//   "Array length:",
-//   storyStep_SubTitleComp.length
-// );
-// let newStateStoryTitle =
-//   storyStep_SubTitleComp.slice(indexToRemove);
-// console.log("New state:", newStateStoryTitle);
-// setStoryStep_SubTitleComp(newStateStoryTitle);
 
 export default function addSubTitleIconStep(
 	stepSelectOby: {

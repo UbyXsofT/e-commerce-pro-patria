@@ -1,16 +1,7 @@
-import StorefrontIcon from "@mui/icons-material/Storefront";
-import ToggleOff from "@mui/icons-material/ToggleOff";
 import { Divider, IconButton, Tooltip, Typography } from "@mui/material";
-import {
-	Discount,
-	EditCalendar,
-	Handshake,
-	AutoAwesomeMosaic,
-	MotionPhotosAuto,
-	Groups,
-	Place,
-} from "@mui/icons-material";
 import { itemsCard } from "src/components/CommonTypesInterfaces";
+import myIcons from "src/theme/IconsDefine";
+import React from "react";
 
 interface CardHeadTitleProps {
 	itemsCard: itemsCard;
@@ -21,30 +12,14 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 	return (
 		<div>
 			<div style={{ display: "flex", alignItems: "center" }}>
-				{itemsCard.tipo === "GRUPPO" && (
-					<Groups
-						color="success"
-						fontSize="large"
-					/>
-				)}
-				{itemsCard.tipo === "SEDE" && (
-					<Place
-						color="warning"
-						fontSize="large"
-					/>
-				)}
-				{itemsCard.tipo === "AREA" && (
-					<AutoAwesomeMosaic
-						color="error"
-						fontSize="large"
-					/>
-				)}
-				{itemsCard.tipo === "ABBONAMENTO" && (
-					<MotionPhotosAuto
-						color="info"
-						fontSize="large"
-					/>
-				)}
+				{itemsCard.tipo === "GRUPPO" &&
+					React.cloneElement(myIcons.GruppoIcon, { fontSize: "large" })}
+				{itemsCard.tipo === "SEDE" &&
+					React.cloneElement(myIcons.SedeIcon, { fontSize: "large" })}
+				{itemsCard.tipo === "AREA" &&
+					React.cloneElement(myIcons.AreaIcon, { fontSize: "large" })}
+				{itemsCard.tipo === "ABBONAMENTO" &&
+					React.cloneElement(myIcons.AbbIcon, { fontSize: "large" })}
 
 				<div style={{ marginLeft: "8px" }}>{itemsCard?.descrizione}</div>
 			</div>
@@ -75,10 +50,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<Handshake
-								color="success"
-								fontSize="medium"
-							/>
+							{React.cloneElement(myIcons.ConvIcon, { fontSize: "medium" })}
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -100,10 +72,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<Discount
-								color="error"
-								fontSize="small"
-							/>
+							{React.cloneElement(myIcons.PromoIcon, { fontSize: "medium" })}
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -125,10 +94,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<ToggleOff
-								color="warning"
-								fontSize="medium"
-							/>
+							{React.cloneElement(myIcons.SospIcon, { fontSize: "medium" })}
 						</IconButton>
 					</Tooltip>
 				) : (
@@ -149,16 +115,14 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 						}
 					>
 						<IconButton>
-							<EditCalendar
-								color="info"
-								fontSize="medium"
-							/>
+							{React.cloneElement(myIcons.OrarioAtvIcon, {
+								fontSize: "medium",
+							})}
 						</IconButton>
 					</Tooltip>
 				) : (
 					<></> //CONTIENE ABBONAMENTO SENZA SCELTA ATTIVITA' AD ORARIO
 				)}
-				{/* Altre icone... */}
 			</div>
 		</div>
 	);

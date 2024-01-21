@@ -1,14 +1,4 @@
 import {
-	AutoAwesomeMosaic,
-	Discount,
-	EditCalendar,
-	Groups,
-	Handshake,
-	MotionPhotosAuto,
-	Place,
-	ToggleOff,
-} from "@mui/icons-material";
-import {
 	Divider,
 	Grid,
 	IconButton,

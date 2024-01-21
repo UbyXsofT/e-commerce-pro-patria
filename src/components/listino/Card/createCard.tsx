@@ -1,9 +1,5 @@
 import React from "react";
-import Groups from "@mui/icons-material/Groups";
-import Place from "@mui/icons-material/Place";
-import { IconButton, Tooltip, Typography } from "@mui/material";
-import { style, color } from "@mui/system";
-import { animated, SpringValue, useSpring } from "react-spring";
+import { animated, SpringValue } from "react-spring";
 import {
 	Sede,
 	Area,
@@ -17,8 +13,8 @@ import trovaCodice from "../utils/trovaCodice";
 import trovaCodiceNextOby from "../utils/trovaCodiceNextOby";
 import ListinoCard from "./ListinoCard";
 import chiaveRandom from "src/components/utils/chiaveRandom";
-import { AutoAwesomeMosaic } from "@mui/icons-material";
 import addSubTitleIconStep from "../utils/addSubTitleIconStep";
+import myIcons from "src/theme/IconsDefine";
 
 export default function CreateCard(
 	stepId: number,
@@ -162,7 +158,7 @@ export default function CreateCard(
 								setStoryStep_SubTitleComp,
 								percorso?.DESGRUPPO,
 								stepId - 1,
-								<Groups color="success" />
+								React.cloneElement(myIcons.GruppoIcon, { fontSize: "medium" })
 							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice
@@ -291,7 +287,7 @@ export default function CreateCard(
 								setStoryStep_SubTitleComp,
 								percorso?.DESCSEDE,
 								stepId - 1,
-								<Place color="warning" />
+								React.cloneElement(myIcons.SedeIcon, { fontSize: "medium" })
 							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice
@@ -433,7 +429,7 @@ export default function CreateCard(
 								setStoryStep_SubTitleComp,
 								percorso?.DESAREA,
 								stepId - 1,
-								<AutoAwesomeMosaic color="error" />
+								React.cloneElement(myIcons.AreaIcon, { fontSize: "medium" })
 							);
 						} else {
 							// Rimuovi l'elemento dall'array utilizzando l'indice

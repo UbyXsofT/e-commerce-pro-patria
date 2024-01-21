@@ -1,41 +1,14 @@
 import * as React from "react";
-import Router from "next/router";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import {
-	Discount,
-	EditCalendar,
-	Handshake,
-	ArrowRight,
-	Place,
-	AutoAwesomeMosaic,
-	MotionPhotosAuto,
-	Storefront,
-} from "@mui/icons-material";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { setActualProduct, setCart } from "src/store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "redux";
 import renderPrice from "src/components/utils/renderPrice";
-import {
-	Box,
-	Button,
-	Container,
-	Divider,
-	Grid,
-	Tooltip,
-	useMediaQuery,
-} from "@mui/material";
-import FormatString from "src/components/utils/FormatString";
+import { Button, useMediaQuery } from "@mui/material";
 import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
 import {
 	StoreState,
@@ -50,21 +23,12 @@ import {
 	removeFromCart,
 } from "src/components/listino/utils/functionsCart";
 
-const ListinoCard = ({
-	itemsCard,
-	stepSelectOby,
-	setStepSelectOby,
-}: ListinoCardProps) => {
+const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
-	const listinoState = useSelector((state: StoreState) => state.listino);
+	const dispatch = useDispatch();
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const cart = useSelector((state: StoreState) => state.cart);
-
-	// const prodotto: ActualProduct | null = useSelector(
-	// 	(state: StoreState) => state.actualProduct
-	// );
 
 	let actualProduct: ActualProduct = {
 		codice: itemsCard.codice,

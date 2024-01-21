@@ -1,14 +1,4 @@
 import {
-	AutoAwesomeMosaic,
-	Discount,
-	EditCalendar,
-	Groups,
-	Handshake,
-	MotionPhotosAuto,
-	Place,
-	ToggleOff,
-} from "@mui/icons-material";
-import {
 	Divider,
 	Grid,
 	IconButton,
@@ -22,6 +12,8 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+
+import myIcons from "src/theme/IconsDefine";
 
 const style = {
 	// position: "absolute" as "absolute",
@@ -84,9 +76,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<Handshake color="success" />
-								</IconButton>
+								<IconButton>{myIcons.ConvIcon}</IconButton>
 								<Typography variant="body2">
 									Contiene abbonamento in convenzione
 								</Typography>
@@ -108,9 +98,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<Discount color="error" />
-								</IconButton>
+								<IconButton>{myIcons.PromoIcon}</IconButton>
 								<Typography variant="body2">
 									Contiene abbonamento in promozione
 								</Typography>
@@ -132,9 +120,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<ToggleOff color="warning" />
-								</IconButton>
+								<IconButton>{myIcons.SospIcon}</IconButton>
 								<Typography variant="body2">
 									Contiene abbonamento sospendibile
 								</Typography>
@@ -156,9 +142,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<EditCalendar color="info" />
-								</IconButton>
+								<IconButton>{myIcons.OrarioAtvIcon}</IconButton>
 								<Typography variant="body2">
 									Contiene abbonamento con scelta attività ad orario
 								</Typography>
@@ -181,9 +165,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<Groups color="success" />
-								</IconButton>
+								<IconButton>{myIcons.GruppoIcon}</IconButton>
 								<Typography variant="body2">Identifica un gruppo</Typography>
 							</Grid>
 
@@ -204,9 +186,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<Place color="warning" />
-								</IconButton>
+								<IconButton>{myIcons.SedeIcon}</IconButton>
 								<Typography variant="body2">Identifica una sede</Typography>
 							</Grid>
 
@@ -227,9 +207,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<AutoAwesomeMosaic color="error" />
-								</IconButton>
+								<IconButton>{myIcons.AreaIcon}</IconButton>
 								<Typography variant="body2">Identifica un area</Typography>
 							</Grid>
 
@@ -250,9 +228,7 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									flexWrap: "nowrap",
 								}}
 							>
-								<IconButton>
-									<MotionPhotosAuto color="info" />
-								</IconButton>
+								<IconButton>{myIcons.AbbIcon}</IconButton>
 								<Typography variant="body2">
 									Identifica un abbonamento
 								</Typography>
@@ -266,162 +242,3 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 };
 
 export default LegendaIcone;
-
-// import {
-// 	Discount,
-// 	EditCalendar,
-// 	Handshake,
-// 	ToggleOff,
-// } from "@mui/icons-material";
-// import { Divider, Grid, IconButton, Paper, Typography } from "@mui/material";
-
-// import * as React from "react";
-// import Backdrop from "@mui/material/Backdrop";
-// import Box from "@mui/material/Box";
-// import Modal from "@mui/material/Modal";
-// import Fade from "@mui/material/Fade";
-
-// const style = {
-// 	position: "absolute" as "absolute",
-// 	top: "50%",
-// 	left: "50%",
-// 	transform: "translate(-50%, -50%)",
-// 	width: 400,
-// 	boxShadow: 12,
-// 	p: 0.3,
-// };
-
-// interface LegendaIconeProps {
-// 	isOpen: boolean;
-// 	onClose: () => void;
-// }
-// const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
-// 	return (
-// 		<div>
-// 			<Modal
-// 				open={isOpen}
-// 				onClose={onClose}
-// 				closeAfterTransition
-// 				slots={{ backdrop: Backdrop }}
-// 				slotProps={{
-// 					backdrop: {
-// 						timeout: 500,
-// 					},
-// 				}}
-// 			>
-// 				{/* <Fade in={open}> */}
-// 				<Box sx={style}>
-// 					<Paper
-// 						elevation={2}
-// 						style={{ height: "100%" }}
-// 					>
-// 						<Grid
-// 							container
-// 							sx={{
-// 								display: "flex",
-// 								flexDirection: "column",
-// 								justifyContent: "space-between",
-// 								alignItems: "stretch",
-// 								padding: "16px",
-// 							}}
-// 						>
-// 							<Typography variant="h6">Legenda icone</Typography>
-// 							<Divider />
-// 							<Grid
-// 								sx={{
-// 									display: "flex",
-// 									flexDirection: "row",
-// 									justifyContent: "flex-start",
-// 									alignItems: "center",
-// 									flexWrap: "nowrap",
-// 								}}
-// 							>
-// 								<IconButton>
-// 									<Handshake color="success" />
-// 								</IconButton>
-// 								<Typography variant="body2">
-// 									Contiene abbonamento in convenzione
-// 								</Typography>
-// 							</Grid>
-// 							<Divider
-// 								sx={{
-// 									marginTop: "2px",
-// 									marginBottom: "2px",
-// 									marginLeft: "0px",
-// 									marginRight: "20px",
-// 								}}
-// 							/>
-// 							<Grid
-// 								sx={{
-// 									display: "flex",
-// 									flexDirection: "row",
-// 									justifyContent: "flex-start",
-// 									alignItems: "center",
-// 									flexWrap: "nowrap",
-// 								}}
-// 							>
-// 								<IconButton>
-// 									<Discount color="error" />
-// 								</IconButton>
-// 								<Typography variant="body2">
-// 									Contiene abbonamento in promozione
-// 								</Typography>
-// 							</Grid>
-// 							<Divider
-// 								sx={{
-// 									marginTop: "2px",
-// 									marginBottom: "2px",
-// 									marginLeft: "0px",
-// 									marginRight: "20px",
-// 								}}
-// 							/>
-// 							<Grid
-// 								sx={{
-// 									display: "flex",
-// 									flexDirection: "row",
-// 									justifyContent: "flex-start",
-// 									alignItems: "center",
-// 									flexWrap: "nowrap",
-// 								}}
-// 							>
-// 								<IconButton>
-// 									<ToggleOff color="warning" />
-// 								</IconButton>
-// 								<Typography variant="body2">
-// 									Contiene abbonamento sospendibile
-// 								</Typography>
-// 							</Grid>
-// 							<Divider
-// 								sx={{
-// 									marginTop: "2px",
-// 									marginBottom: "2px",
-// 									marginLeft: "0px",
-// 									marginRight: "20px",
-// 								}}
-// 							/>
-// 							<Grid
-// 								sx={{
-// 									display: "flex",
-// 									flexDirection: "row",
-// 									justifyContent: "flex-start",
-// 									alignItems: "center",
-// 									flexWrap: "nowrap",
-// 								}}
-// 							>
-// 								<IconButton>
-// 									<EditCalendar color="info" />
-// 								</IconButton>
-// 								<Typography variant="body2">
-// 									Contiene abbonamento con scelta attività ad orario
-// 								</Typography>
-// 							</Grid>
-// 						</Grid>
-// 					</Paper>
-// 				</Box>
-// 				{/* </Fade> */}
-// 			</Modal>
-// 		</div>
-// 	);
-// };
-
-// export default LegendaIcone;
