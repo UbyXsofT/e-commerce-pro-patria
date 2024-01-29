@@ -9,7 +9,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import eCommerceConf from "eCommerceConf.json";
 import { Info } from "@mui/icons-material";
-import LegendaIcone from "../utils/LegendaIcone";
+import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import myIcons from "src/theme/IconsDefine";
 
 const HeadListinoPage = ({

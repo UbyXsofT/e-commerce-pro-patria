@@ -5,6 +5,7 @@ import {
 	Area,
 	Abbonamento,
 	Listino,
+	itemsCard,
 } from "src/components/CommonTypesInterfaces";
 import BtnStepStore from "../stepper/BtnStepListino";
 import { isAbbonamento, isArea, isGruppo, isSede } from "../utils/checkTipo";
@@ -15,6 +16,7 @@ import ListinoCard from "./ListinoCard";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import addSubTitleIconStep from "../utils/addSubTitleIconStep";
 import myIcons from "src/theme/IconsDefine";
+import createItemsCard from "../utils/creaItemsCard";
 
 export default function CreateCard(
 	stepId: number,
@@ -74,35 +76,11 @@ export default function CreateCard(
 					const infoAbb = findInfoAbb(gruppo, stepId);
 					//console.log("@@@ --> infoAbb: ", infoAbb);
 					if (isGruppo(gruppo)) {
-						const itemsCard = {
-							stepId: stepId,
-							tipo: "GRUPPO",
-							codice: gruppo.CODGRUPPO,
-							descrizione: gruppo.DESGRUPPO,
-							note: gruppo.NOTEGRUPPO,
-							onNextStep: gruppo.SEDE.length > 1 ? true : false,
-							onPrevStep: false,
-							aPromozioni: infoAbb.promo.numero > 0 ? true : false,
-							aConvenzioni: infoAbb.convenzioni.numero > 0 ? true : false,
-							aSospensioni: infoAbb.sospensioni.numero > 0 ? true : false,
-							aSceltaOrario: infoAbb.sceltaOrario.numero > 0 ? true : false,
-							numeroSedi: infoAbb.promo.numeroSedi,
-							numeroAree: infoAbb.promo.numeroAree,
-							numeroAbbonamenti: infoAbb.promo.numeroAbbonamenti,
-							abbonamento: {
-								CODABB: "n.d",
-								DESABB: "n.d",
-								NOTEABB: "n.d",
-								IMPORTO: "n.d",
-								PROMO: "n.d",
-								IMPORTOS: "n.d",
-								SCELTAF: "n.d",
-								NOSOSP: "n.d",
-								DATAINI: "n.d",
-								PERIODOATT: "n.d",
-								FREQUENZAS: "n.d",
-							},
-						};
+						const itemsCard = createItemsCard(
+							"GRUPPO",
+							stepId,
+							gruppo
+						) as itemsCard;
 
 						cardComponents.push(
 							<div key={chiaveRandom()}>
@@ -181,37 +159,11 @@ export default function CreateCard(
 								//console.log("@@@ --> infoAbb: ", infoAbb);
 
 								if (isSede(sede)) {
-									const itemsCard = {
-										stepId: stepId,
-										tipo: "SEDE",
-										codice: sede.IDSEDE,
-										descrizione: sede.DESCSEDE,
-										note: sede.NOTESEDE,
-										onNextStep: sede.AREA.length > 1 ? true : false,
-										onPrevStep: false,
-										aPromozioni: infoAbb.promo.numero > 0 ? true : false,
-										aConvenzioni: infoAbb.convenzioni.numero > 0 ? true : false,
-										aSospensioni: infoAbb.sospensioni.numero > 0 ? true : false,
-										aSceltaOrario:
-											infoAbb.sceltaOrario.numero > 0 ? true : false,
-										numeroSedi: infoAbb.promo.numeroSedi,
-										numeroAree: infoAbb.promo.numeroAree,
-										numeroAbbonamenti: infoAbb.promo.numeroAbbonamenti,
-										abbonamento: {
-											CODABB: "n.d",
-											DESABB: "n.d",
-											NOTEABB: "n.d",
-											IMPORTO: "n.d",
-											PROMO: "n.d",
-											IMPORTOS: "n.d",
-											SCELTAF: "n.d",
-											NOSOSP: "n.d",
-											DATAINI: "n.d",
-											PERIODOATT: "n.d",
-											FREQUENZAS: "n.d",
-										},
-									};
-
+									const itemsCard = createItemsCard(
+										"SEDE",
+										stepId,
+										sede
+									) as itemsCard;
 									cardComponents.push(
 										<div key={chiaveRandom()}>
 											<animated.div style={springPropsCards}>
@@ -311,37 +263,11 @@ export default function CreateCard(
 								//console.log("@@@ --> infoAbb: ", infoAbb);
 
 								if (isArea(area)) {
-									const itemsCard = {
-										stepId: stepId,
-										tipo: "AREA",
-										codice: area.CODAREA,
-										descrizione: area.DESAREA,
-										note: area.NOTEAREA,
-										onNextStep: area.ABBONAMENTO.length > 1 ? true : false,
-										onPrevStep: false,
-										aPromozioni: infoAbb.promo.numero > 0 ? true : false,
-										aConvenzioni: infoAbb.convenzioni.numero > 0 ? true : false,
-										aSospensioni: infoAbb.sospensioni.numero > 0 ? true : false,
-										aSceltaOrario:
-											infoAbb.sceltaOrario.numero > 0 ? true : false,
-										numeroSedi: infoAbb.promo.numeroSedi,
-										numeroAree: infoAbb.promo.numeroAree,
-										numeroAbbonamenti: infoAbb.promo.numeroAbbonamenti,
-										abbonamento: {
-											CODABB: "n.d",
-											DESABB: "n.d",
-											NOTEABB: "n.d",
-											IMPORTO: "n.d",
-											PROMO: "n.d",
-											IMPORTOS: "n.d",
-											SCELTAF: "n.d",
-											NOSOSP: "n.d",
-											DATAINI: "n.d",
-											PERIODOATT: "n.d",
-											FREQUENZAS: "n.d",
-										},
-									};
-
+									const itemsCard = createItemsCard(
+										"AREA",
+										stepId,
+										area
+									) as itemsCard;
 									cardComponents.push(
 										<div key={chiaveRandom()}>
 											<animated.div style={springPropsCards}>
@@ -448,35 +374,11 @@ export default function CreateCard(
 								// Ora 'abbonamento' è un oggetto del tipo abbonamento
 								//console.log("@@@ abbonamento EACH: ", abbonamento);
 								if (isAbbonamento(abbonamento)) {
-									const itemsCard = {
-										stepId: stepId,
-										tipo: "ABBONAMENTO",
-										codice: abbonamento?.CODABB,
-										descrizione: abbonamento.DESABB,
-										note: abbonamento.NOTEABB,
-										onNextStep: false,
-										onPrevStep: true,
-										aPromozioni: abbonamento.PROMO === "1" ? true : false,
-										aConvenzioni: abbonamento.PROMO === "2" ? true : false,
-										aSospensioni: abbonamento.NOSOSP === "0" ? true : false,
-										aSceltaOrario: abbonamento.SCELTAF !== "0" ? true : false,
-										numeroSedi: 0,
-										numeroAree: 0,
-										numeroAbbonamenti: 0,
-										abbonamento: {
-											CODABB: abbonamento?.CODABB,
-											DESABB: abbonamento?.DESABB,
-											NOTEABB: abbonamento?.NOTEABB,
-											IMPORTO: abbonamento?.IMPORTO,
-											PROMO: abbonamento?.PROMO,
-											IMPORTOS: abbonamento?.IMPORTOS,
-											SCELTAF: abbonamento?.SCELTAF,
-											NOSOSP: abbonamento?.NOSOSP,
-											DATAINI: abbonamento?.DATAINI,
-											PERIODOATT: abbonamento?.PERIODOATT,
-											FREQUENZAS: abbonamento?.FREQUENZAS,
-										},
-									};
+									const itemsCard = createItemsCard(
+										"ABBONAMENTO",
+										stepId,
+										abbonamento
+									) as itemsCard;
 
 									cardComponents.push(
 										<div key={chiaveRandom()}>
