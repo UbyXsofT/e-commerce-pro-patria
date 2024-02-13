@@ -80,7 +80,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 					<></>
 				)}
 
-				{itemsCard?.aSospensioni ? ( //CONTIENE ABBONAMENTO SOSPENDIBILE
+				{/* {itemsCard?.aSospensioni ? ( //CONTIENE ABBONAMENTO SOSPENDIBILE
 					<Tooltip
 						title={
 							<span style={{ display: "flex", flexDirection: "column" }}>
@@ -99,7 +99,7 @@ const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
 					</Tooltip>
 				) : (
 					<></> //CONTIENE ABBONAMENTO NON SOSPENDIBILE
-				)}
+				)} */}
 
 				{itemsCard?.aSceltaOrario ? ( //CONTIENE ABBONAMENTO CON SCELTA ATTIVITA' AD ORARIO
 					<Tooltip

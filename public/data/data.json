@@ -39,7 +39,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",
-                              "PERIODOATT": "90",
+                              "PERIODOATT": "5",
                               "FREQUENZAS": "2"
                            }
                         ]
@@ -59,7 +59,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-03-01",
-                              "PERIODOATT": "365",
+                              "PERIODOATT": "1",
                               "FREQUENZAS": "4"
                            }
                         ]
@@ -133,7 +133,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",
-                              "PERIODOATT": "90",
+                              "PERIODOATT": "10",
                               "FREQUENZAS": "2"
                            }
                         ]
@@ -167,7 +167,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-01-01",
-                              "PERIODOATT": "30",
+                              "PERIODOATT": "10",
                               "FREQUENZAS": "3"
                            },
                            {
@@ -180,7 +180,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-02-15",
-                              "PERIODOATT": "90",
+                              "PERIODOATT": "5",
                               "FREQUENZAS": "2"
                            }
                         ]
@@ -200,7 +200,7 @@
                               "SCELTAF": "0",
                               "NOSOSP": "1",
                               "DATAINI": "2023-03-01",
-                              "PERIODOATT": "365",
+                              "PERIODOATT": "10",
                               "FREQUENZAS": "4"
                            }
                         ]

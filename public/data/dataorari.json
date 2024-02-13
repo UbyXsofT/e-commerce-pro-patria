@@ -1,0 +1,58 @@
+{
+  "SELATTIVITA": {
+    "ATTIVITA": [
+      {
+        "TIPO": "2",
+        "CODATT": "CS000012",
+        "DESATT": "SPINNING",
+        "ORARI": {
+          "ORARIO": [
+            {
+              "IDORARIO": "10",
+              "GIORNO": "LUNEDI",
+              "ORAINIZIO": "09:00",
+              "ORAFINE": "10:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": "BAMBINI"
+            },
+            {
+              "IDORARIO": "12",
+              "GIORNO": "MERCOLEDI",
+              "ORAINIZIO": "11:00",
+              "ORAFINE": "12:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": {}
+            }
+          ]
+        }
+      },
+      {
+        "TIPO": "2",
+        "CODATT": "CS000015",
+        "DESATT": "KARATE",
+        "ORARI": {
+          "ORARIO": [
+            {
+              "IDORARIO": "20",
+              "GIORNO": "MARTEDI",
+              "ORAINIZIO": "15:00",
+              "ORAFINE": "16:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": "BAMBINI"
+            },
+            {
+              "IDORARIO": "22",
+              "GIORNO": "VENERDI",
+              "ORAINIZIO": "17:00",
+              "ORAFINE": "18:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": {}
+            }
+          ]
+        }
+      }
+    ],
+    "ESITO": {},
+    "ERRMSG": {}
+  }
+}

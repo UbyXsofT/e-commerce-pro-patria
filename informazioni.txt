@@ -110,3 +110,311 @@ Description
 					</SEDE>
     </GRUPPO>
 </LISTINO>
+
+
+
+
+
+
+	<div
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						alignItems: "center",
+						flexWrap: "nowrap",
+						// alignItems: "stretch",
+						padding: "10px",
+					}}
+				>
+					<CardActions disableSpacing>
+						{itemsCard?.abbonamento?.IMPORTOS !== "0.00" &&
+						itemsCard?.abbonamento?.IMPORTOS !== "0" ? (
+							<span
+								style={{
+									display: "grid",
+									padding: "2px",
+									gridTemplateColumns: "1fr 1fr",
+									gap: "3em",
+								}}
+							>
+								<Typography
+									variant="h5"
+									textAlign={"center"}
+									color={"grey"}
+									style={{
+										position: "relative",
+									}}
+								>
+									{itemsCard.tipo === "ABBONAMENTO"
+										? itemsCard?.abbonamento?.IMPORTO
+											? renderPrice(
+													itemsCard?.abbonamento?.IMPORTO
+														? itemsCard.abbonamento?.IMPORTO
+														: 0.0
+											  ) + "€"
+											: ""
+										: ""}
+									<span
+										style={{
+											position: "absolute",
+											top: "50%",
+											left: "50%",
+											transform: "translate(-50%, -50%) rotate(-20deg)",
+											background: "red",
+											width: "100%",
+											height: "2px",
+										}}
+									></span>
+								</Typography>
+								<Typography
+									variant="h5"
+									textAlign={"center"}
+									color={"green"}
+								>
+									{itemsCard.tipo === "ABBONAMENTO"
+										? itemsCard?.abbonamento?.IMPORTOS
+											? renderPrice(
+													itemsCard?.abbonamento?.IMPORTOS
+														? itemsCard?.abbonamento?.IMPORTOS
+														: 0.0
+											  ) + "€"
+											: ""
+										: ""}
+								</Typography>
+							</span>
+						) : (
+							<Typography
+								variant="h5"
+								textAlign={"center"}
+								padding={"2px"}
+							>
+								{itemsCard.tipo === "ABBONAMENTO"
+									? itemsCard?.abbonamento?.IMPORTO
+										? renderPrice(
+												itemsCard?.abbonamento?.IMPORTO
+													? itemsCard.abbonamento?.IMPORTO
+													: 0.0
+										  ) + "€"
+										: ""
+									: ""}
+							</Typography>
+						)}
+					</CardActions>
+
+					{/* STEPPER */}
+					<div
+						id="footerCard"
+						style={{
+							marginBottom: "10px",
+						}}
+					>
+						{itemsCard?.tipo === "ABBONAMENTO" ? (
+							// isInCart(actualProduct, cart, dispatch) ? (
+							// 	<Button
+							// 		style={{
+							// 			width: "100%",
+							// 			backgroundColor: "red",
+							// 		}}
+							// 		onClick={() => {
+							// 			handleClickBtnCart(itemsCard);
+							// 		}}
+							// 		variant="contained"
+							// 	>
+							// 		<ShoppingCartIcon style={{ marginRight: 20 }} />
+							// 		Rimuovi dal Carrello
+							// 	</Button>
+							// ) : (
+							// 	<Button
+							// 		style={{
+							// 			width: "100%",
+							// 			backgroundColor: "#127bd1",
+							// 		}}
+							// 		onClick={() => {
+							// 			handleClickBtnCart(itemsCard);
+							// 		}}
+							// 		variant="contained"
+							// 	>
+							// 		<ShoppingCartIcon style={{ marginRight: 20 }} />
+							// 		Aggiungi Al Carrello
+							// 	</Button>
+							// )
+
+							itemsCard?.abbonamento?.PERIODOATT > 0 ? ( //BISOGNA INSERIRE LA DATA DI ATTIVAZIONE
+								<>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											marginBottom: "20px",
+											height: "70px",
+											// backgroundColor: (theme) =>
+											// 	theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+											flexWrap: "nowrap",
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+									>
+										<Typography
+											variant="subtitle1"
+											textAlign={"center"}
+											color={(theme) =>
+												theme.palette.mode === "light" ? "#323232" : "#dfdfdf"
+											}
+										>
+											Data inizio abbonamento:
+										</Typography>
+										<Typography
+											variant="body1"
+											textAlign={"center"}
+											color={(theme) => theme.palette.warning.main}
+										>
+											{selectedValueCalendario.toString() === "01-01-1970"
+												? dayjs(itemsCard?.abbonamento?.DATAINI)
+														.locale("it")
+														.format("DD-MM-YYYY")
+												: selectedValueCalendario.toString()}
+											{/* 
+											{dayjs(itemsCard?.abbonamento?.DATAINI)
+												.locale("it")
+												.format("DD-MM-YYYY")} */}
+										</Typography>
+									</Box>
+									<div
+										style={{
+											display: "flex",
+											// flexDirection: "column",
+										}}
+									>
+										<Button
+											style={{
+												width: "100%",
+												backgroundColor: theme.palette.warning.main,
+												marginRight: "5px",
+												height: "60px",
+											}}
+											onClick={() => {
+												handleClickOpenCalendario();
+												//handleClickBtnCart(itemsCard);
+											}}
+											variant="contained"
+										>
+											{isMobile ? (
+												<></>
+											) : (
+												<IconButton sx={{ color: "#dfdfdf" }}>
+													{React.cloneElement(myIcons.OrarioAtvIcon, {
+														color: "#dfdfdf",
+													})}
+												</IconButton>
+											)}
+											SCEGLI DATA INIZIO
+										</Button>
+										<Box sx={{ mb: "5px", mt: "5px" }} />
+										<Button
+											style={{
+												width: "100%",
+												backgroundColor: theme.palette.primary.main,
+												height: "60px",
+											}}
+											onClick={() => {
+												handleClickConferma(itemsCard);
+												//handleClickBtnCart(itemsCard);
+											}}
+											variant="contained"
+										>
+											{isMobile ? (
+												<></>
+											) : (
+												<IconButton sx={{ color: "#dfdfdf" }}>
+													{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+														color: "#dfdfdf",
+													})}
+												</IconButton>
+											)}
+											CONFERMA
+										</Button>
+									</div>
+								</>
+							) : (
+								<>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "column",
+											marginBottom: "20px",
+											height: "70px",
+											// backgroundColor: (theme) =>
+											// 	theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+											flexWrap: "nowrap",
+											justifyContent: "center",
+											alignItems: "center",
+										}}
+									>
+										<Typography
+											variant="subtitle1"
+											textAlign={"center"}
+											color={(theme) =>
+												theme.palette.mode === "light" ? "#323232" : "#dfdfdf"
+											}
+										>
+											Data inizio abbonamento:
+										</Typography>
+										<Typography
+											variant="body1"
+											textAlign={"center"}
+											color={(theme) => theme.palette.warning.main}
+										>
+											{dayjs(itemsCard.abbonamento.DATAINI)
+												.locale("it")
+												.format("DD-MM-YYYY")}
+										</Typography>
+									</Box>
+									<Button
+										style={{
+											width: "100%",
+											backgroundColor: theme.palette.primary.main,
+											height: "60px",
+										}}
+										onClick={() => {
+											//handleClickBtnCart(itemsCard);
+											handleClickConferma(itemsCard);
+										}}
+										variant="contained"
+									>
+										{isMobile ? (
+											<></>
+										) : (
+											<IconButton sx={{ color: "#dfdfdf" }}>
+												{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+													color: "#dfdfdf",
+												})}
+											</IconButton>
+										)}
+										CONFERMA
+									</Button>
+								</>
+							)
+						) : (
+							//NON E' ABBONAMENTO
+							<Button
+								onClick={() => {
+									handleClick(itemsCard);
+								}}
+								variant="contained"
+								style={{ width: "100%" }}
+							>
+								{isMobile ? (
+									<></>
+								) : (
+									<IconButton sx={{ color: "#dfdfdf" }}>
+										{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+											color: "#dfdfdf",
+										})}
+									</IconButton>
+								)}
+								SELEZIONA
+							</Button>
+						)}
+					</div>
+				</div>

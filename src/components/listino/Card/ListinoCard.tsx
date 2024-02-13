@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import renderPrice from "src/components/utils/renderPrice";
-import { Button, useMediaQuery } from "@mui/material";
+import { Box, Button, Divider, IconButton, useMediaQuery } from "@mui/material";
 import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
 import {
 	StoreState,
@@ -17,18 +17,51 @@ import {
 	ActualProduct,
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "src/components/listino/card/CardContentData";
+import CardActionsData from "src/components/listino/card/CardActionsData";
 import {
 	addToCart,
 	isInCart,
 	removeFromCart,
 } from "src/components/listino/utils/functionsCart";
+import myIcons from "src/theme/IconsDefine";
+import { color } from "@mui/system";
+import Calendario from "src/components/utils/Calendario";
 
-const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import dayjs from "dayjs";
+import "dayjs/locale/it";
+import isoWeek from "dayjs/plugin/isoWeek";
+import { Dialog, DialogTitle } from "@mui/material";
+
+//dayjs.extend(isoWeek);
+
+const ListinoCard = ({
+	itemsCard,
+	setStepSelectOby,
+	stepSelectOby,
+}: ListinoCardProps) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const dispatch = useDispatch();
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const cart = useSelector((state: StoreState) => state.cart);
+	// //-- calendario --//
+	// const [openCalendario, setOpenCalendario] = React.useState(false);
+	// const [selectedValueCalendario, setSelectedValueCalendario] = React.useState(
+	// 	dayjs("1970-01-01").locale("it").format("DD-MM-YYYY")
+	// );
+
+	// const handleClickOpenCalendario = () => {
+	// 	setOpenCalendario(true);
+	// };
+
+	// const handleCloseCalendario = (value: any) => {
+	// 	console.log("@@@ --- handleCloseCalendario", value);
+	// 	setOpenCalendario(false);
+	// 	setSelectedValueCalendario(value);
+	// };
 
 	let actualProduct: ActualProduct = {
 		codice: itemsCard.codice,
@@ -39,6 +72,20 @@ const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
 		info: "informazioni",
 		quantity: 1,
 	};
+
+	// const handleClickConferma = (itemsCard: itemsCard) => {
+	// 	console.log("handleClickConferma");
+	// 	//(tag SCELTAF>0 e FREQUENZAS>0)
+	// 	if (
+	// 		Number(itemsCard.abbonamento.SCELTAF) > 0 &&
+	// 		Number(itemsCard.abbonamento.FREQUENZAS) > 0
+	// 	) {
+	// 		//
+	// 		console.log("VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI");
+	// 	} else {
+	// 		console.log("ANDIAMO AL RIEPILOGO");
+	// 	}
+	// };
 
 	const handleClickBtnCart = (itemsCard: itemsCard) => {
 		console.log("handleClickBtnCart");
@@ -51,7 +98,6 @@ const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
 			info: "informazioni",
 			quantity: 1,
 		}; //itemsCard as unknown as ActualProduct;
-
 		if (actualProduct?.codice !== null) {
 			if (isInCart(actualProduct, cart, dispatch)) {
 				removeFromCart(actualProduct, cart, dispatch);
@@ -62,7 +108,9 @@ const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
 	};
 
 	React.useEffect(() => {
-		//console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+		console.log("@+@+@+@+@++++ useEffect ListinoCard - itemsCard", itemsCard);
+		// const formattedDate = dayjs().locale("it").format("DD-MM-YYYY");
+		// setSelectedValueCalendario(formattedDate);
 		actualProduct = {
 			codice: itemsCard.codice,
 			nome: itemsCard.descrizione,
@@ -74,204 +122,81 @@ const ListinoCard = ({ itemsCard, setStepSelectOby }: ListinoCardProps) => {
 		}; //itemsCard as unknown as ActualProduct;
 	}, []);
 
-	const handleClick = (itemData: itemsCard) => {
-		const step = itemsCard;
-		if (step?.codice !== null) {
-			let newStepId = (step.stepId += 1);
+	// const handleClick = (itemData: itemsCard) => {
+	// 	const step = itemsCard;
+	// 	if (step?.codice !== null) {
+	// 		let newStepId = (step.stepId += 1);
 
-			setStepSelectOby((prevStepSelectOby) => ({
-				...prevStepSelectOby,
-				stepId: newStepId,
-				endStep: 1,
-				codice: step?.codice,
-				isClickNext: true,
-			}));
-		}
-	};
+	// 		setStepSelectOby((prevStepSelectOby) => ({
+	// 			...prevStepSelectOby,
+	// 			stepId: newStepId,
+	// 			endStep: 1,
+	// 			codice: step?.codice,
+	// 			isClickNext: true,
+	// 		}));
+	// 	}
+	// };
 
 	return (
-		<Card
-			sx={{
-				maxWidth: isMobile ? "290px" : "350px",
-				width: isMobile ? "290px" : "350px",
-				marginTop: "25px",
-				marginBottom: "25px",
-				//cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
-			}}
-			//onClick={() => callProductPage(product.codice)}
-		>
-			<CardHeader
+		<>
+			{/* <Calendario
+				open={openCalendario}
+				onClose={handleCloseCalendario}
+				minDate={dayjs(itemsCard?.abbonamento?.DATAINI)}
+				maxDate={dayjs(itemsCard?.abbonamento?.DATAINI).add(
+					itemsCard?.abbonamento?.PERIODOATT,
+					"day"
+				)}
+			/> */}
+
+			<Card
 				sx={{
-					minHeight: "70px",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "space-between",
-					alignItems: "stretch",
-					padding: "16px",
+					maxWidth: isMobile ? "290px" : "350px",
+					width: isMobile ? "290px" : "350px",
+					marginTop: "25px",
+					marginBottom: "25px",
+					height: "auto",
+					//cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
 				}}
-				title={<CardHeadTitle itemsCard={itemsCard} />}
-			></CardHeader>
-
-			{/* {itemsCard.tipo !== "GRUPPO" ? ( // NON E' UN GRUPPO */}
-			<CardContent
-				sx={{
-					marginTop: "-10px",
-					minHeight: "300px",
-					backgroundColor: (theme) =>
-						theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
-					display: "flex",
-					flexDirection: "column",
-					flexWrap: "nowrap",
-					alignItems: "flex-start",
-					justifyContent: "space-between",
-					// margin: "10px",
-				}}
+				//onClick={() => callProductPage(product.codice)}
 			>
-				<CardContentData itemsCard={itemsCard} />
-			</CardContent>
-
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "center",
-					alignItems: "center",
-					flexWrap: "nowrap",
-				}}
-			>
-				<CardActions disableSpacing>
-					{/* {console.log(
-						"@@@@@ IMPORTO SCONTATO:",
-						itemsCard?.abbonamento?.IMPORTOS
-					)} */}
-					{itemsCard?.abbonamento?.IMPORTOS !== "0.00" &&
-					itemsCard?.abbonamento?.IMPORTOS !== "0" ? (
-						<span
-							style={{
-								display: "grid",
-								padding: "1em",
-								gridTemplateColumns: "1fr 1fr",
-								gap: "3em",
-							}}
-						>
-							<Typography
-								variant="h5"
-								textAlign={"center"}
-								color={"grey"}
-								style={{
-									position: "relative",
-								}}
-							>
-								{itemsCard.tipo === "ABBONAMENTO"
-									? itemsCard?.abbonamento?.IMPORTO
-										? renderPrice(
-												itemsCard?.abbonamento?.IMPORTO
-													? itemsCard.abbonamento?.IMPORTO
-													: 0.0
-										  ) + "€"
-										: ""
-									: ""}
-								<span
-									style={{
-										position: "absolute",
-										top: "50%",
-										left: "50%",
-										transform: "translate(-50%, -50%) rotate(-20deg)",
-										background: "red",
-										width: "100%",
-										height: "2px",
-									}}
-								></span>
-							</Typography>
-							<Typography
-								variant="h5"
-								textAlign={"center"}
-								color={"green"}
-							>
-								{itemsCard.tipo === "ABBONAMENTO"
-									? itemsCard?.abbonamento?.IMPORTOS
-										? renderPrice(
-												itemsCard?.abbonamento?.IMPORTOS
-													? itemsCard?.abbonamento?.IMPORTOS
-													: 0.0
-										  ) + "€"
-										: ""
-									: ""}
-							</Typography>
-						</span>
-					) : (
-						<Typography
-							variant="h5"
-							textAlign={"center"}
-							padding={"1rem"}
-						>
-							{itemsCard.tipo === "ABBONAMENTO"
-								? itemsCard?.abbonamento?.IMPORTO
-									? renderPrice(
-											itemsCard?.abbonamento?.IMPORTO
-												? itemsCard.abbonamento?.IMPORTO
-												: 0.0
-									  ) + "€"
-									: ""
-								: ""}
-						</Typography>
-					)}
-				</CardActions>
-
-				{/* STEPPER */}
-				<div
-					style={{
+				<CardHeader
+					sx={{
+						minheight: "70px",
 						display: "flex",
-						justifyContent: "center",
-						marginBottom: "30px",
-						bottom: 0,
-						position: "relative",
+						flexDirection: "column",
+						justifyContent: "space-between",
+						alignItems: "stretch",
+						padding: "16px",
+					}}
+					title={<CardHeadTitle itemsCard={itemsCard} />}
+				></CardHeader>
+
+				{/* {itemsCard.tipo !== "GRUPPO" ? ( // NON E' UN GRUPPO */}
+				<CardContent
+					sx={{
+						marginTop: "-10px",
+						minHeight: "120px",
+						backgroundColor: (theme) =>
+							theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+						display: "flex",
+						flexDirection: "column",
+						flexWrap: "nowrap",
+						alignItems: "flex-start",
+						justifyContent: "space-between",
+						// margin: "10px",
 					}}
 				>
-					{itemsCard?.tipo === "ABBONAMENTO" ? (
-						isInCart(actualProduct, cart, dispatch) ? (
-							<Button
-								style={{
-									width: "100%",
-									backgroundColor: "red",
-								}}
-								onClick={() => {
-									handleClickBtnCart(itemsCard);
-								}}
-								variant="contained"
-							>
-								<ShoppingCartIcon style={{ marginRight: 20 }} />
-								Rimuovi dal Carrello
-							</Button>
-						) : (
-							<Button
-								style={{
-									width: "100%",
-									backgroundColor: "#127bd1",
-								}}
-								onClick={() => {
-									handleClickBtnCart(itemsCard);
-								}}
-								variant="contained"
-							>
-								<ShoppingCartIcon style={{ marginRight: 20 }} />
-								Aggiungi Al Carrello
-							</Button>
-						)
-					) : (
-						<Button
-							onClick={() => {
-								handleClick(itemsCard);
-							}}
-							variant="contained"
-							style={{ width: 240 }}
-						>
-							SELEZIONA
-						</Button>
-					)}
-				</div>
-			</div>
-		</Card>
+					<CardContentData itemsCard={itemsCard} />
+				</CardContent>
+
+				<CardActionsData
+					itemsCard={itemsCard}
+					setStepSelectOby={setStepSelectOby}
+					stepSelectOby={stepSelectOby}
+				/>
+			</Card>
+		</>
 	);
 };
 

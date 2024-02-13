@@ -21,6 +21,7 @@ import createItemsCard from "../utils/creaItemsCard";
 export default function CreateCard(
 	stepId: number,
 	listinoState: Listino,
+
 	stepSelectOby: {
 		stepId: number;
 		endNavStepId: number;
@@ -28,6 +29,7 @@ export default function CreateCard(
 		codice: string;
 		isClickNext: boolean;
 	},
+
 	setStepSelectOby: React.Dispatch<
 		React.SetStateAction<{
 			stepId: number;

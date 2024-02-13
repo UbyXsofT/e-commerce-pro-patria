@@ -13,10 +13,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { IconButton } from "@mui/material";
-import MailIcon from "@mui/icons-material/Mail";
-
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import myIcons from "src/theme/IconsDefine";
 import Router, { useRouter } from "next/router";
 import CustomPopper from "src/components/utils/CustomPopper";
 import { useDispatch, useSelector } from "react-redux";
@@ -259,7 +256,9 @@ export const ToolBar = ({
 								badgeContent={cartAlertsNum}
 								color="error"
 							>
-								<ShoppingCartIcon />
+								<IconButton sx={{ color: "#dfdfdf" }}>
+									{myIcons.ShoppingCartIcon}
+								</IconButton>
 							</Badge>
 						</IconButton>
 						<CustomPopper

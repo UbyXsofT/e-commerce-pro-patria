@@ -7,6 +7,10 @@ import {
 	MotionPhotosAuto,
 	Place,
 	ToggleOff,
+	ShoppingCart,
+	Notifications,
+	Mail,
+	CheckCircleOutline,
 } from "@mui/icons-material";
 
 const myIcons = {
@@ -18,6 +22,10 @@ const myIcons = {
 	SedeIcon: <Place color="warning" />, //Identifica una sede
 	AreaIcon: <AutoAwesomeMosaic color="error" />, //Identifica un area
 	AbbIcon: <MotionPhotosAuto color="info" />, //Identifica un abbonamento
+	ShoppingCartIcon: <ShoppingCart />,
+	NotificationsIcon: <Notifications />,
+	MailIcon: <Mail />,
+	CheckCircleOutlineIcon: <CheckCircleOutline />,
 };
 
 export default myIcons;

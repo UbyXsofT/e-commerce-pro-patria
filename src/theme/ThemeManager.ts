@@ -17,7 +17,7 @@ const listaTemi = [
 					},
 					background: {
 						default: "#F3F3F3",
-						paper: "#E9E9E9",
+						paper: "#E6E6E6",
 					},
 					text: {
 						primary: "#1A1A1A",
@@ -47,7 +47,7 @@ const listaTemi = [
 					},
 					background: {
 						default: "#202020",
-						paper: "#202020",
+						paper: "#2B2B2B",
 					},
 					text: {
 						primary: "#f1f1f1",

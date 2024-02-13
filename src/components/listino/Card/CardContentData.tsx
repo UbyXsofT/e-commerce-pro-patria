@@ -11,11 +11,11 @@ import DescFullTxt from "./DescFullTxt";
 import { itemsCard } from "src/components/CommonTypesInterfaces";
 import myIcons from "src/theme/IconsDefine";
 
-interface CardHeadTitleProps {
+interface CardContentDataProps {
 	itemsCard: itemsCard;
 }
 
-const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
+const CardContentData = ({ itemsCard }: CardContentDataProps) => {
 	// console.log("@@@ CardContentData ---> itemsCard: ", itemsCard);
 
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -34,11 +34,11 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 	React.useEffect(() => {
 		let cardNote = "n.d.";
 
-		if (itemsCard.tipo === "ABBONAMENTO") {
-			cardNote = `CODICE: ${itemsCard.abbonamento.CODABB} \n DATAINI: ${itemsCard.abbonamento.DATAINI} \n DESABB: : ${itemsCard.abbonamento.DESABB} \n IMPORTO: ${itemsCard.abbonamento.IMPORTO} \n IMPORTOS: ${itemsCard.abbonamento.IMPORTOS} \n NOSOSP: ${itemsCard.abbonamento.NOSOSP} \n PERIODOATT: ${itemsCard.abbonamento.PERIODOATT} \n PROMO: ${itemsCard.abbonamento.PROMO} \n SCELTAF: ${itemsCard.abbonamento.SCELTAF} \n\n\n  note: ${itemsCard.note}`;
-		} else {
-			cardNote = itemsCard.note ? itemsCard.note : "";
-		}
+		// if (itemsCard.tipo === "ABBONAMENTO") {
+		// 	cardNote = `CODICE: ${itemsCard.abbonamento.CODABB} \n DATAINI: ${itemsCard.abbonamento.DATAINI} \n DESABB: : ${itemsCard.abbonamento.DESABB} \n IMPORTO: ${itemsCard.abbonamento.IMPORTO} \n IMPORTOS: ${itemsCard.abbonamento.IMPORTOS} \n NOSOSP: ${itemsCard.abbonamento.NOSOSP} \n PERIODOATT: ${itemsCard.abbonamento.PERIODOATT} \n PROMO: ${itemsCard.abbonamento.PROMO} \n SCELTAF: ${itemsCard.abbonamento.SCELTAF} \n\n\n  note: ${itemsCard.note}`;
+		// } else {
+		cardNote = itemsCard.note ? itemsCard.note : "";
+		//}
 
 		//let cardNote = itemsCard.descrizione;
 		if (cardNote.length > maxLengthSmallDescProd) {
@@ -74,129 +74,11 @@ const CardContentData = ({ itemsCard }: CardHeadTitleProps) => {
 				alignItems: "stretch",
 			}}
 		>
-			{itemsCard.tipo !== "ABBONAMENTO" ? (
-				<>
-					<Typography
-						variant="body2"
-						sx={{ fontWeight: "bold" }}
-					>
-						Informazioni:
-					</Typography>
-					<Divider sx={{ mb: 1 }} />
-				</>
-			) : (
-				<></>
-			)}
-
-			{itemsCard.tipo === "GRUPPO" ? (
-				<>
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>
-							{myIcons.SedeIcon}
-						</IconButton>
-						<Typography variant="body2">
-							SEDI: {itemsCard.numeroSedi}
-						</Typography>
-					</Grid>
-
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>
-							{myIcons.AreaIcon}
-						</IconButton>
-						<Typography variant="body2">
-							AREE: {itemsCard.numeroAree}
-						</Typography>
-					</Grid>
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
-						<Typography variant="body2">
-							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
-						</Typography>
-					</Grid>
-				</>
-			) : itemsCard.tipo === "SEDE" ? (
-				<>
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>
-							{myIcons.AreaIcon}
-						</IconButton>
-						<Typography variant="body2">
-							AREE: {itemsCard.numeroAree}
-						</Typography>
-					</Grid>
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
-						<Typography variant="body2">
-							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
-						</Typography>
-					</Grid>
-				</>
-			) : itemsCard.tipo === "AREA" ? (
-				<>
-					<Grid
-						sx={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							alignItems: "center",
-							flexWrap: "nowrap",
-						}}
-					>
-						<IconButton style={{ width: "40px" }}>{myIcons.AbbIcon}</IconButton>
-						<Typography variant="body2">
-							ABBONAMENTI: {itemsCard.numeroAbbonamenti}
-						</Typography>
-					</Grid>
-				</>
-			) : (
-				<></>
-			)}
-
 			<Typography
 				variant="body2"
 				sx={{ fontWeight: "bold", mt: 2 }}
 			>
-				Descrizione/Note:
+				Note:
 			</Typography>
 			<Divider sx={{ mb: 1 }} />
 			<Typography

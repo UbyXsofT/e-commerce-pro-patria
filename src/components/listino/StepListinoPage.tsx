@@ -15,7 +15,7 @@ import { StoreState } from "src/components/CommonTypesInterfaces";
 import fetchListino from "src/components/utils/fetchListino";
 import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
-import CreateCard from "src/components/listino/card/CreateCard";
+import CreateCard from "src/components/listino/card/createCard";
 
 const StepListinoPage = () => {
 	const springPropsCards = useSpring({
