@@ -12,12 +12,12 @@ import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { AlertMe } from "src/components/layout/alert/AlertMe";
 import ListinoErrorBox from "src/components/listino/utils/ListinoErrorBox";
 import { StoreState } from "src/components/CommonTypesInterfaces";
-import fetchListino from "src/components/utils/fetchListino";
+import fetchListino from "src/components/listino/utils/fetchListino";
 import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
 import CreateCard from "src/components/listino/card/createCard";
 
-const StepListinoPage = () => {
+const ListinoPage = () => {
 	const springPropsCards = useSpring({
 		opacity: 1,
 		from: { opacity: 0 },
@@ -155,4 +155,4 @@ const StepListinoPage = () => {
 	);
 };
 
-export default StepListinoPage;
+export default ListinoPage;

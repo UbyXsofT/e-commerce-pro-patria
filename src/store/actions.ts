@@ -6,8 +6,6 @@ import {
 	StripeKeysData,
 	Abbonamento,
 } from "src/components/CommonTypesInterfaces";
-import { StepListino, StepListinoData } from "./interfaces";
-
 // Azioni
 import { createAction, PayloadAction, createSlice } from "@reduxjs/toolkit";
 
@@ -48,21 +46,3 @@ export const setActualProduct = (actualProduct: ActualProduct) => ({
 	type: "SET_ACTUAL_PRODUCT",
 	payload: actualProduct,
 });
-
-// Azione per aggiungere uno step
-// export const setStepListino =
-// 	createAction<PayloadAction<{ stepListino: StepListino }>>("SET_STEP_LISTINO");
-
-// Azione per aggiungere uno step
-export const setStepListino =
-	createAction<PayloadAction<{ stepListino: StepListinoData | null }>>(
-		"SET_STEP_LISTINO"
-	);
-
-// export const setStepListino = (stepListino: {
-// 	stepListino: StepListino | null;
-// 	error: null | unknown;
-// }) => ({
-// 	type: "SET_STEP_LISTINO",
-// 	payload: stepListino,
-// });

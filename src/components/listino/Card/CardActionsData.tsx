@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import {
+	ActualProduct,
 	itemsCard,
 	ListinoCardProps,
 	StoreState,
@@ -28,21 +29,13 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useDispatch, useSelector } from "react-redux";
+import {
+	addToCart,
+	isInCart,
+	removeFromCart,
+} from "src/components/listino/utils/functionsCart";
+import { Router, useRouter } from "next/router";
 dayjs.extend(isoWeek);
-
-const handleClickConferma = (itemsCard: itemsCard) => {
-	console.log("handleClickConferma");
-	//(tag SCELTAF>0 e FREQUENZAS>0)
-	if (
-		Number(itemsCard.abbonamento.SCELTAF) > 0 &&
-		Number(itemsCard.abbonamento.FREQUENZAS) > 0
-	) {
-		//
-		console.log("VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI");
-	} else {
-		console.log("ANDIAMO AL RIEPILOGO");
-	}
-};
 
 const CardActionsData = ({
 	itemsCard,
@@ -51,9 +44,9 @@ const CardActionsData = ({
 }: ListinoCardProps) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-	const dispatch = useDispatch();
-	const authUser = useSelector((state: StoreState) => state.authUser);
-	const cart = useSelector((state: StoreState) => state.cart);
+
+	const router = useRouter();
+
 	//-- calendario --//
 	const [openCalendario, setOpenCalendario] = React.useState(false);
 	const [selectedValueCalendario, setSelectedValueCalendario] = React.useState(
@@ -73,8 +66,9 @@ const CardActionsData = ({
 	const handleClick = (itemData: itemsCard) => {
 		const step = itemsCard;
 		if (step?.codice !== null) {
+			console.log("step?.codice", step?.codice);
 			let newStepId = (step.stepId += 1);
-
+			console.log("newStepId", newStepId);
 			setStepSelectOby((prevStepSelectOby) => ({
 				...prevStepSelectOby,
 				stepId: newStepId,
@@ -83,6 +77,19 @@ const CardActionsData = ({
 				isClickNext: true,
 			}));
 		}
+	};
+
+	const handleClickConferma = (itemsCard: itemsCard) => {
+		console.log("handleClickConferma");
+		console.log("CHIAMO IL SERVIZIO PER LA CONFERMA");
+
+		//TODO SE ESITO E' POSITIVO PROSEGUO NELLA PAGINA SUCCESSIVA
+		//ATRIMENTI VISUALIZZO IL MESSAGGIO DI ERRORE DI RITORNO DALLA CONFERMA
+
+		router.replace({
+			pathname: "/auth/acquista/conferma",
+			query: { itemsCard: JSON.stringify(itemsCard) },
+		});
 	};
 
 	return (
@@ -224,16 +231,11 @@ const CardActionsData = ({
 													.locale("it")
 													.format("DD-MM-YYYY")
 											: selectedValueCalendario.toString()}
-										{/* 
-                {dayjs(itemsCard?.abbonamento?.DATAINI)
-                  .locale("it")
-                  .format("DD-MM-YYYY")} */}
 									</Typography>
 								</Box>
 								<div
 									style={{
 										display: "flex",
-										// flexDirection: "column",
 									}}
 								>
 									<Button
@@ -249,16 +251,16 @@ const CardActionsData = ({
 										}}
 										variant="contained"
 									>
-										{isMobile ? (
-											<></>
-										) : (
-											<IconButton sx={{ color: "#dfdfdf" }}>
-												{React.cloneElement(myIcons.OrarioAtvIcon, {
-													color: "#dfdfdf",
-												})}
-											</IconButton>
-										)}
-										SCEGLI DATA INIZIO
+										<div style={{ display: "flex", alignItems: "center" }}>
+											{!isMobile && (
+												<IconButton sx={{ color: "#dfdfdf" }}>
+													{React.cloneElement(myIcons.OrarioAtvIcon, {
+														color: "#dfdfdf",
+													})}
+												</IconButton>
+											)}
+											SCEGLI DATA INIZIO
+										</div>
 									</Button>
 									<Box sx={{ mb: "5px", mt: "5px" }} />
 									<Button
@@ -273,16 +275,16 @@ const CardActionsData = ({
 										}}
 										variant="contained"
 									>
-										{isMobile ? (
-											<></>
-										) : (
-											<IconButton sx={{ color: "#dfdfdf" }}>
-												{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
-													color: "#dfdfdf",
-												})}
-											</IconButton>
-										)}
-										CONFERMA
+										<div style={{ display: "flex", alignItems: "center" }}>
+											{!isMobile && (
+												<IconButton sx={{ color: "#dfdfdf" }}>
+													{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+														color: "#dfdfdf",
+													})}
+												</IconButton>
+											)}
+											CONFERMA
+										</div>
 									</Button>
 								</div>
 							</>
@@ -332,38 +334,37 @@ const CardActionsData = ({
 									}}
 									variant="contained"
 								>
-									{isMobile ? (
-										<></>
-									) : (
-										<IconButton sx={{ color: "#dfdfdf" }}>
-											{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
-												color: "#dfdfdf",
-											})}
-										</IconButton>
-									)}
-									CONFERMA
+									<div style={{ display: "flex", alignItems: "center" }}>
+										{!isMobile && (
+											<IconButton sx={{ color: "#dfdfdf" }}>
+												{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+													color: "#dfdfdf",
+												})}
+											</IconButton>
+										)}
+										CONFERMA
+									</div>
 								</Button>
 							</>
 						)
 					) : (
 						//NON E' ABBONAMENTO
+
 						<Button
-							onClick={() => {
-								handleClick(itemsCard);
-							}}
+							onClick={() => handleClick(itemsCard)}
 							variant="contained"
 							style={{ width: "100%" }}
 						>
-							{isMobile ? (
-								<></>
-							) : (
-								<IconButton sx={{ color: "#dfdfdf" }}>
-									{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
-										color: "#dfdfdf",
-									})}
-								</IconButton>
-							)}
-							SELEZIONA
+							<div style={{ display: "flex", alignItems: "center" }}>
+								{!isMobile && (
+									<IconButton sx={{ color: "#dfdfdf" }}>
+										{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+											color: "#dfdfdf",
+										})}
+									</IconButton>
+								)}
+								SELEZIONA
+							</div>
 						</Button>
 					)}
 				</div>

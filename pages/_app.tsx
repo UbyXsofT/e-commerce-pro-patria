@@ -26,7 +26,7 @@ import eCommerceConf from "eCommerceConf.json";
 import { setListino } from "src/store/actions";
 import callNodeService from "./api/callNodeService";
 import { Any } from "react-spring";
-import fetchListino from "src/components/utils/fetchListino";
+import fetchListino from "src/components/listino/utils/fetchListino";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 const MyApp = (props: {

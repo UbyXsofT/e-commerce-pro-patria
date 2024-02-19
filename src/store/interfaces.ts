@@ -40,31 +40,34 @@ export type SetStripeKeys = {
 	payload: StripeKeysData;
 };
 
-// interfaces.ts
-export interface StepListino {
-	stepListino: StepListinoData[]; // Modifica il tipo di stepListino da oggetto a array
+//-- --//
+export interface Attività {
+	tipo: number;
+	codAtt: string;
+	desAtt: string;
 }
 
-export interface StepListinoData {
-	stepId: number;
-	tipo: string;
-	codice: string;
-	descrizione: string;
-	onPrevStep: boolean;
-	onNextStep: boolean;
-	aPromozioni: boolean;
-	aConvenzioni: boolean;
-	aSospensioni: boolean;
-	aSceltaOrario: boolean;
-	numeroSedi: string;
-	numeroAree: string;
-	numeroAbbonamenti: string;
-	abbonamento: Abbonamento;
+export interface Orario {
+	idOrario: number;
+	giorno: string;
+	oraInizio: string;
+	oraFine: string;
+	livello: string;
+	fascia: string;
 }
 
-export type SetStepListino = {
-	type: "SET_STEP_LISTINO";
-	payload: { stepListino: StepListino };
+export interface ListinoAtvOrariData {
+	ATTIVITA: Attività[]; // Modifica il tipo da oggetto a array
+	ORARI: Orario[];
+}
+
+export interface ListinoAtvOrari {
+	attivitaOrariListino: ListinoAtvOrariData;
+}
+
+export type SetListinoAtvOrari = {
+	type: "SET_LISTINO_ATTIVITA_ORARI";
+	payload: { attivitaOrariListino: ListinoAtvOrari };
 };
 
 // ALL type Store Action
@@ -75,7 +78,7 @@ export type StoreActionTypes =
 	| SetCart
 	| SetListino
 	| SetStripeKeys
-	| SetStepListino;
+	| SetListinoAtvOrari;
 
 //// ALL interface
 export interface StoreStateInterfaces {
@@ -87,5 +90,5 @@ export interface StoreStateInterfaces {
 	stripeKeys: StripeKeysData;
 	actualProduct: ActualProduct;
 	listinoCardProps: ListinoCardProps;
-	stepListino: StepListino;
+	listinoAtvOrari: ListinoAtvOrari;
 }

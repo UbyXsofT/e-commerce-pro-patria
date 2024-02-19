@@ -51,7 +51,7 @@ export default function findInfoAbb(item: any, stepId: number) {
 				};
 				// Aggiungere l'oggetto all'oggetto infoData
 				infoData[name] = infoObject;
-				console.log("CASE GRUPPO: infoObject: ", infoObject);
+				//console.log("CASE GRUPPO: infoObject: ", infoObject);
 				return;
 			case 2: //"SEDE"
 				const numero2 = item["AREA"]

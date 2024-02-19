@@ -90,16 +90,16 @@ const Calendario: React.FC<CalendarioProps> = ({
 					variant="contained"
 					style={{ width: "100%", height: "60px" }}
 				>
-					{isMobile ? (
-						<></>
-					) : (
-						<IconButton sx={{ color: "#dfdfdf" }}>
-							{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
-								color: "#dfdfdf",
-							})}
-						</IconButton>
-					)}
-					Conferma
+					<div style={{ display: "flex", alignItems: "center" }}>
+						{!isMobile && (
+							<IconButton sx={{ color: "#dfdfdf" }}>
+								{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
+									color: "#dfdfdf",
+								})}
+							</IconButton>
+						)}
+						Conferma
+					</div>
 				</Button>
 			</DialogActions>
 		</Dialog>

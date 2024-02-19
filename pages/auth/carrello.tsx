@@ -176,11 +176,6 @@ const Carrello = () => {
 				line_items: cart[0].cart.map((item) => {
 					let prezzo = item.prezzoScontato ? item.prezzoScontato : item.prezzo;
 					let importoFix: number;
-
-					// importoFix = importoInCentesimi(
-					// 	numeroSenzaDecimale(prezzo.toString())
-					// );
-					//importoFix = numeroSenzaDecimale(prezzo.toString());
 					importoFix = importoInCentesimi(prezzo);
 					console.log("CHK --- > prezzo : ", prezzo);
 					console.log("CHK --- > importoFix : ", importoFix);
@@ -265,6 +260,7 @@ const Carrello = () => {
 										return (
 											<Paper
 												elevation={1}
+												key={chiaveRandom()}
 												style={{ marginBottom: "1rem" }}
 											>
 												<ListItem key={chiaveRandom()}>
@@ -408,14 +404,6 @@ const Carrello = () => {
 											></span>
 										</Typography>
 									</Stack>
-
-									{/* // <strong>
-										// 	{console.log("Prezzi: ", Prezzi)}
-										// 	{Prezzi.totalePrezzoScontato > 0
-										// 		? renderPrice(Prezzi.totalePrezzoScontato)
-										// 		: renderPrice(Prezzi.totalePrezzo)}{" "}
-										// 	€
-										// </strong> */}
 								</Typography>
 
 								<Button

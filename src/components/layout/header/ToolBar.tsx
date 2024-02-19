@@ -228,7 +228,7 @@ export const ToolBar = ({
 							content="Messaggi e Avvisi"
 						/> */}
 
-						<IconButton
+						{/* <IconButton
 							size="large"
 							aria-label={
 								cartAlertsNum !== 0
@@ -242,15 +242,6 @@ export const ToolBar = ({
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
 							}}
-
-							// onMouseEnter={() => {
-							//   setTipoContesto("carrello");
-							//   handleMouseEnter();
-							// }}
-							// onMouseLeave={() => {
-							//   setTipoContesto("carrello");
-							//   handleMouseLeave();
-							// }}
 						>
 							<Badge
 								badgeContent={cartAlertsNum}
@@ -260,7 +251,55 @@ export const ToolBar = ({
 									{myIcons.ShoppingCartIcon}
 								</IconButton>
 							</Badge>
-						</IconButton>
+						</IconButton> */}
+
+						<div
+							style={{ marginTop: "15px" }}
+							aria-label={
+								cartAlertsNum !== 0
+									? `${cartAlertsNum} elementi nel Carrello`
+									: "Il Carrello è Vuoto"
+							}
+							color="inherit"
+							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
+							onClick={() => Router.push("/auth/carrello")}
+							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
+							onMouseLeave={() => {
+								handlePopperClose(setCartPopper);
+							}}
+						>
+							<Badge
+								badgeContent={cartAlertsNum}
+								color="error"
+							>
+								<IconButton sx={{ color: "#dfdfdf" }}>
+									{myIcons.ShoppingCartIcon}
+								</IconButton>
+							</Badge>
+						</div>
+
+						{/* <Badge
+							badgeContent={cartAlertsNum}
+							color="error"
+						>
+							<IconButton
+								size="large"
+								aria-label={
+									cartAlertsNum !== 0
+										? `${cartAlertsNum} elementi nel Carrello`
+										: "Il Carrello è Vuoto"
+								}
+								color="inherit"
+								onClick={() => Router.push("/auth/carrello")}
+								onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
+								onMouseLeave={() => {
+									handlePopperClose(setCartPopper);
+								}}
+							>
+								{myIcons.ShoppingCartIcon}
+							</IconButton>
+						</Badge> */}
+
 						<CustomPopper
 							isOpen={openCart}
 							anchorEl={cartPopper}

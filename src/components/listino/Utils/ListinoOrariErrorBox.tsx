@@ -1,10 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setListino } from "src/store/actions";
-import { StoreState } from "../../CommonTypesInterfaces";
-import fetchListino from "./fetchListino";
+import { StoreState } from "src/components/CommonTypesInterfaces";
+import fetchListinoOrari from "src/components/listino/utils/fetchListinoOrari";
 
-const ListinoErrorBox = () => {
+const ListinoOrariErrorBox = () => {
 	const dispatch = useDispatch();
 	const listinoState = useSelector((state: StoreState) => state.listino);
 	const authUser = useSelector((state: StoreState) => state.authUser);
@@ -24,12 +24,10 @@ const ListinoErrorBox = () => {
 				variant="contained"
 				onClick={async () => {
 					//console.log("****** CHECK LISTINO: ", listinoState.listino);
-
 					if (!listinoState.listino) {
 						try {
 							// Effettua la richiesta asincrona
-							const data = await fetchListino(authUser?.USERID);
-
+							const data = await fetchListinoOrari(authUser?.USERID);
 							// Aggiorna lo stato Redux utilizzando la tua azione setListino
 							dispatch(setListino({ listino: data.listino, error: null }));
 						} catch (error) {
@@ -50,4 +48,4 @@ const ListinoErrorBox = () => {
 		</Box>
 	);
 };
-export default ListinoErrorBox;
+export default ListinoOrariErrorBox;

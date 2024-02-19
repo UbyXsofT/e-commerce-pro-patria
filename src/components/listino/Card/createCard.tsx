@@ -431,7 +431,6 @@ export default function CreateCard(
 		console.log("<--- E - R - R - O - R - E --->");
 		// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
 		console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
-
 		if (listinoState.listino === null) {
 			aggiornaListino();
 		}

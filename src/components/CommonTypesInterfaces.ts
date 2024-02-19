@@ -307,7 +307,17 @@ export interface obyPostData {
 
 export interface obyPostProdotti {
 	clienteKey: string;
-	IDCliente: string;
+	Cliente: string;
+}
+
+//-	ECommerce_Selezione(Cliente As String, Abbonamento As String, DataIni As String, Importo As String, SceltaA As String, FrequenzaS As String)
+export interface obyPostSelezioneAbb {
+	clienteKey: string;
+	Cliente: string;
+	Abbonamento: string;
+	Importo: string;
+	SceltaA: string;
+	FrequenzaS: string;
 }
 
 export interface itemsCard {
@@ -418,13 +428,29 @@ export interface obyPostDataCart {
 }
 
 export interface CartProdotto {
-	codice: Abbonamento["CODABB"];
-	nome: string;
-	prezzo: number;
-	prezzoScontato: number;
-	immagine: any;
-	info: string;
-	quantity: number; // Aggiunta della proprietà quantity
+	codice: Abbonamento["CODABB"] | null;
+	nome: string | null;
+	prezzo: number | null;
+	prezzoScontato: number | null;
+	immagine: any | null;
+	info: string | null;
+	quantity: number | null;
+}
+
+export interface Activity {
+	CODATT: string | any;
+	TIPO: string;
+	DESATT: string;
+	ORARI: {
+		ORARIO: {
+			IDORARIO: string;
+			GIORNO: string;
+			ORAINIZIO: string;
+			ORAFINE: string;
+			LIVELLO: string;
+			FASCIA?: string | {};
+		}[];
+	};
 }
 
 export interface ActualProduct extends CartProdotto {}

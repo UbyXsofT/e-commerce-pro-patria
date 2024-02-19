@@ -1,10 +1,10 @@
 // pages/auth/acquista/[step].tsx
 import { useRouter } from "next/router";
 import React from "react";
-import StepListinoPage from "src/components/listino/StepListinoPage";
+import ListinoPage from "src/components/listino/ListinoPage";
 
 const prodotti: React.FC = () => {
-	return <StepListinoPage />;
+	return <ListinoPage />;
 };
 
 export default prodotti;
