@@ -3,21 +3,32 @@ import { Paper, Typography } from "@mui/material";
 
 // Summary.tsx
 interface SummaryProps {
-	selectedTimesMap: { [activityCode: string]: string[] };
+	selectedTimesMap: {
+		[activityId: number]: {
+			code: string;
+			description: string;
+			times: string[];
+		};
+	};
 }
 
 const Summary: React.FC<SummaryProps> = ({ selectedTimesMap }) => {
+	// Filtra solo le attività con almeno un orario selezionato
+	const activitiesWithTimes = Object.entries(selectedTimesMap).filter(
+		([_, { times }]) => times && times.length > 0
+	);
+
 	return (
 		<Paper sx={{ padding: "10px" }}>
 			<Typography variant="h6">Riepilogo</Typography>
-			{selectedTimesMap && Object.entries(selectedTimesMap).length > 0 ? (
-				Object.entries(selectedTimesMap).map(
-					([activityCode, selectedTimes], index) => (
+			{activitiesWithTimes.length > 0 ? (
+				activitiesWithTimes.map(
+					([activityId, { code, description, times }], index) => (
 						<div key={index}>
 							<Typography variant="subtitle1">
-								Attività: {activityCode}
+								Attività: {code} - {description}
 							</Typography>
-							{selectedTimes.map((time, timeIndex) => (
+							{times.map((time, timeIndex) => (
 								<Typography key={timeIndex}>{`Orario: ${time}`}</Typography>
 							))}
 						</div>

@@ -213,7 +213,11 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		React.useState<Activity | null>(null);
 
 	const [selectedTimesMap, setSelectedTimesMap] = React.useState<{
-		[activityId: number]: string[];
+		[activityId: number]: {
+			code: string;
+			description: string;
+			times: string[];
+		};
 	}>({});
 
 	const [selectedTimes, setSelectedTimes] = React.useState<string[]>([]);
@@ -222,7 +226,8 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		setSelectedActivity(activity);
 
 		// Se hai già selezioni precedenti per questa attività, caricalo
-		const previousSelections = selectedTimesMap[activity?.CODATT || ""] || [];
+		const previousSelections =
+			selectedTimesMap[activity?.CODATT || ""]?.times || [];
 		setSelectedTimes(previousSelections);
 	};
 
@@ -235,7 +240,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		}
 
 		const isTimeSelected = selectedTimes.includes(time);
-		let updatedTimes;
+		let updatedTimes: string[];
 
 		if (isTimeSelected) {
 			// Se l'orario è già selezionato, lo rimuovi
@@ -249,19 +254,22 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 		// Aggiorna lo stato
 		setSelectedTimes(updatedTimes);
-
 		// Aggiorna anche selectedTimesMap per mantenere coerenza tra i due stati
-		setSelectedTimesMap({
-			...selectedTimesMap,
-			[selectedActivity.CODATT]: updatedTimes,
-		});
+		setSelectedTimesMap((prev: any) => ({
+			...prev,
+			[selectedActivity.CODATT]: {
+				code: selectedActivity.CODATT,
+				description: selectedActivity.DESATT,
+				times: updatedTimes,
+			},
+		}));
 	};
 
 	React.useEffect(() => {
 		// Aggiorna selectedTimes quando selectedActivity cambia
 		console.log("selectedTimesMap:  ", selectedTimesMap);
 		if (selectedActivity) {
-			setSelectedTimes(selectedTimesMap[selectedActivity.CODATT] || []);
+			setSelectedTimes(selectedTimesMap[selectedActivity.CODATT]?.times || []);
 		}
 	}, [selectedActivity, selectedTimesMap]);
 
@@ -269,10 +277,25 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		// Effettua l'operazione di pulizia dell'array di orari
 		console.log("handleClear: ", selectedActivity?.CODATT);
 		setSelectedTimes([]);
-		setSelectedTimesMap({
-			...selectedTimesMap,
-			[selectedActivity?.CODATT || -1]: [],
-		});
+
+		// setSelectedTimesMap({
+		// 	...selectedTimesMap,
+		// 	[selectedActivity?.CODATT || -1]: [],
+		// });
+
+		setSelectedTimesMap(
+			(prevSelectedTimesMap) =>
+				({
+					...prevSelectedTimesMap,
+					[selectedActivity?.CODATT || -1]: [],
+				} as {
+					[activityId: number]: {
+						code: string;
+						description: string;
+						times: string[];
+					};
+				})
+		);
 	};
 
 	const handleConfirm = () => {
@@ -341,6 +364,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 															times={selectedActivity.ORARI.ORARIO}
 															selectedTimes={
 																selectedTimesMap[selectedActivity?.CODATT || ""]
+																	?.times
 															}
 															handleTimeSelection={handleTimeSelection}
 														/>
