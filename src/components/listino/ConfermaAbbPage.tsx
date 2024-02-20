@@ -211,6 +211,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 	const [selectedActivity, setSelectedActivity] =
 		React.useState<Activity | null>(null);
+
 	const [selectedTimesMap, setSelectedTimesMap] = React.useState<{
 		[activityId: number]: string[];
 	}>({});

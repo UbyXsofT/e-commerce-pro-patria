@@ -66,7 +66,7 @@ const TimeList: React.FC<TimeListProps> = ({
 			{times?.map((time) => (
 				<ListItem key={time.IDORARIO}>
 					<Checkbox
-						checked={selectedTimes?.includes(time.IDORARIO)}
+						checked={selectedTimes?.includes(time.IDORARIO) || false}
 						onChange={() => handleTimeSelection(time.IDORARIO)}
 					/>
 					<Typography>{`${time.GIORNO} ${time.ORAINIZIO}-${time.ORAFINE}`}</Typography>
