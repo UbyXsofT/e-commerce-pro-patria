@@ -11,6 +11,9 @@ import {
 	Notifications,
 	Mail,
 	CheckCircleOutline,
+	ArrowBackIosNew,
+	ArrowForwardIos,
+	HighlightOff,
 } from "@mui/icons-material";
 
 const myIcons = {
@@ -26,6 +29,9 @@ const myIcons = {
 	NotificationsIcon: <Notifications />,
 	MailIcon: <Mail />,
 	CheckCircleOutlineIcon: <CheckCircleOutline />,
+	ArrowBackIosNewIcon: <ArrowBackIosNew />,
+	ArrowForwardIosIcon: <ArrowForwardIos />,
+	HighlightOffIcon: <HighlightOff />,
 };
 
 export default myIcons;

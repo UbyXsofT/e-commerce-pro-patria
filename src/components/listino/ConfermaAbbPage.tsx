@@ -27,6 +27,8 @@ import fetchListino from "src/components/listino/utils/fetchListino";
 import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
 import CreateCard from "src/components/listino/card/createCard";
+import myIcons from "src/theme/IconsDefine";
+
 import { addToCart, isInCart, removeFromCart } from "./utils/functionsCart";
 import { useRouter } from "next/router";
 import {
@@ -300,6 +302,29 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 	const handleConfirm = () => {
 		// Implementa la logica per confermare le scelte dell'utente.
+		//const obySendServ: string;
+		// -	“[CS000001][152][CS000012][250] …. “
+		// Praticamente una serie di coppie di dati codice attività e id orario,
+		let dataToSendService = "";
+
+		const activitiesWithTimes = Object.entries(selectedTimesMap).filter(
+			([_, { times }]) => times && times.length > 0
+		);
+
+		if (activitiesWithTimes.length > 0) {
+			activitiesWithTimes.map(
+				([activityId, { code, description, times }], atvIndex) => {
+					console.log("activityId:", activityId);
+					console.log("Attività: ", code + "-" + description);
+					times.map((timeId, timeIndex) => {
+						console.log("Orario: ", timeIndex + "-" + timeId);
+						dataToSendService += `[${activityId}][${timeId}]`;
+					});
+				}
+			);
+		}
+
+		console.log("dataToSendService: ", dataToSendService);
 	};
 
 	const handleCancel = () => {
@@ -378,20 +403,31 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 													<Summary selectedTimesMap={selectedTimesMap} />
 												</Grid>
 											</Grid>
-											<Button
-												onClick={handleConfirm}
-												variant="contained"
-												color="primary"
+
+											<div
+												style={{
+													display: "flex",
+													alignItems: "center",
+													width: "100%",
+													justifyContent: "space-between",
+												}}
 											>
-												Conferma
-											</Button>
-											<Button
-												onClick={handleCancel}
-												variant="contained"
-												color="secondary"
-											>
-												Annulla
-											</Button>
+												<Button
+													color="primary"
+													variant="contained"
+													onClick={handleConfirm}
+												>
+													{myIcons.CheckCircleOutlineIcon} Conferma
+												</Button>
+
+												<Button
+													color="secondary"
+													variant="contained"
+													onClick={handleCancel}
+												>
+													{myIcons.CheckCircleOutlineIcon} Annulla
+												</Button>
+											</div>
 										</>
 									)}
 								</Grid>
