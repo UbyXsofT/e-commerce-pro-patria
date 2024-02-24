@@ -162,6 +162,13 @@ export const ToolBar = ({
 											width: "120px",
 											alignSelf: "center",
 										}}
+										disabled={
+											button.name.toString().includes("Acquista")
+												? cartAlertsNum !== 0
+													? true
+													: false
+												: false
+										}
 										variant={"contained"}
 										color={
 											button.name &&
@@ -261,7 +268,6 @@ export const ToolBar = ({
 									: "Il Carrello è Vuoto"
 							}
 							color="inherit"
-							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
 							onClick={() => Router.push("/auth/carrello")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {

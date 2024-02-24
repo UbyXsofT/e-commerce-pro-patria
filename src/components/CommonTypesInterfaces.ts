@@ -437,19 +437,21 @@ export interface CartProdotto {
 	quantity: number | null;
 }
 
+export interface ORARIO {
+	IDORARIO: string;
+	GIORNO: string;
+	ORAINIZIO: string;
+	ORAFINE: string;
+	LIVELLO: string;
+	FASCIA?: string | {};
+}
+
 export interface Activity {
 	CODATT: string | any;
 	TIPO: string;
 	DESATT: string;
 	ORARI: {
-		ORARIO: {
-			IDORARIO: string;
-			GIORNO: string;
-			ORAINIZIO: string;
-			ORAFINE: string;
-			LIVELLO: string;
-			FASCIA?: string | {};
-		}[];
+		ORARIO: ORARIO[];
 	};
 }
 

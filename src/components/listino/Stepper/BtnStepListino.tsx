@@ -1,7 +1,8 @@
 //eBtnStepStore.tsx
 import { Button, Grid } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+// import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import myIcons from "src/theme/IconsDefine";
 import React from "react";
 import { ListinoCardProps } from "src/components/CommonTypesInterfaces";
 
@@ -73,7 +74,7 @@ export const BtnStepStore = ({
 				}
 				// sx={{ mt: "auto", ml: 1 }}
 			>
-				<ArrowBackIosNewIcon /> Precedente
+				{myIcons.ArrowBackIosNewIcon} Precedente
 			</Button>
 			<Button
 				variant="contained"
@@ -92,7 +93,7 @@ export const BtnStepStore = ({
 				}
 				// sx={{ mt: "auto", ml: 1 }}
 			>
-				Successivo <ArrowForwardIosIcon />
+				Successivo {myIcons.ArrowForwardIosIcon}
 			</Button>
 		</Grid>
 	);

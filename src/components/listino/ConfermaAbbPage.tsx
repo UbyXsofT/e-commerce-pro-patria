@@ -7,6 +7,8 @@ import {
 	Button,
 	Container,
 	Grid,
+	IconButton,
+	Tooltip,
 	Typography,
 	useMediaQuery,
 } from "@mui/material";
@@ -22,6 +24,7 @@ import {
 	itemsCard,
 	ActualProduct,
 	Activity,
+	ORARIO,
 } from "src/components/CommonTypesInterfaces";
 import fetchListino from "src/components/listino/utils/fetchListino";
 import { useSpring } from "react-spring";
@@ -30,28 +33,15 @@ import CreateCard from "src/components/listino/card/createCard";
 import myIcons from "src/theme/IconsDefine";
 
 import { addToCart, isInCart, removeFromCart } from "./utils/functionsCart";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import {
 	ActivitySelector,
 	TimeList,
 } from "src/components/listino/ActivitySelector";
 import Summary from "src/components/listino/Summary";
 import ListinoOrariErrorBox from "./utils/ListinoOrariErrorBox";
-//import { Activity } from '../types'; // Assumi che esista un file types.ts con l'interfaccia Activity
-
-// const activitiesData: Activity[] = [
-// 	{
-// 		id: 1,
-// 		name: "Attività 1",
-// 		times: ["10:00", "12:00", "14:00", "16:00", "18:00"],
-// 	},
-// 	{
-// 		id: 2,
-// 		name: "Attività 2",
-// 		times: ["10:00", "12:00", "14:00", "16:00", "18:00"],
-// 	},
-// 	// ... altre attività ...
-// ];
+import { Info } from "@mui/icons-material";
+import LegendaIcone from "./utils/LegendaIcone";
 
 const activitiesData: Activity[] = [
 	{
@@ -87,7 +77,7 @@ const activitiesData: Activity[] = [
 			ORARIO: [
 				{
 					IDORARIO: "20",
-					GIORNO: "MARTEDI",
+					GIORNO: "LUNEDI",
 					ORAINIZIO: "15:00",
 					ORAFINE: "16:00",
 					LIVELLO: "PRINCIPIANTI",
@@ -95,9 +85,25 @@ const activitiesData: Activity[] = [
 				},
 				{
 					IDORARIO: "22",
-					GIORNO: "VENERDI",
+					GIORNO: "MARTEDI",
 					ORAINIZIO: "17:00",
 					ORAFINE: "18:00",
+					LIVELLO: "PRINCIPIANTI",
+					FASCIA: {},
+				},
+				{
+					IDORARIO: "24",
+					GIORNO: "MERCOLEDI",
+					ORAINIZIO: "19:00",
+					ORAFINE: "20:00",
+					LIVELLO: "PRINCIPIANTI",
+					FASCIA: "BAMBINI",
+				},
+				{
+					IDORARIO: "26",
+					GIORNO: "VENERDI",
+					ORAINIZIO: "21:00",
+					ORAFINE: "22:00",
 					LIVELLO: "PRINCIPIANTI",
 					FASCIA: {},
 				},
@@ -107,10 +113,15 @@ const activitiesData: Activity[] = [
 ];
 
 interface ConfermaAbbPageProps {
-	itemsCard: any; // Tipo dell'oggetto itemsCard
+	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
 }
 
 const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
+	React.useEffect(() => {
+		console.log("ConfermaAbbPage");
+		console.log(itemsCard.note);
+	}, []);
+
 	const [stepSelectOby, setStepSelectOby] = React.useState({
 		stepId: 1,
 		endNavStepId: 5,
@@ -125,6 +136,13 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	const cart = useSelector((state: StoreState) => state.cart);
 	const router = useRouter();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
 	const { showAlert } = useAlertMe();
 
 	const [showCompSceltaAtv, setShowCompSceltaAtv] = React.useState(false);
@@ -139,20 +157,20 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		quantity: null,
 	} as ActualProduct);
 
-	const handleClickBtnCart = (itemsCard: itemsCard) => {
-		console.log("handleClickBtnCart");
-		console.log("@@@@@@@ ---------- >itemsCard: ");
-		console.log(itemsCard);
-		//vado alla pagina carrello
+	// const handleClickBtnCart = (itemsCard: itemsCard) => {
+	// 	console.log("handleClickBtnCart");
+	// 	console.log("@@@@@@@ ---------- >itemsCard: ");
+	// 	console.log(itemsCard);
+	// 	//vado alla pagina carrello
 
-		if (actualProduct?.codice !== null) {
-			//vado alla pagina carrello
-			addToCart(actualProduct, cart, dispatch, authUser);
-			router.replace("/auth/carrello");
-		} else {
-			console.log("@@@ NO actualProduct : ", actualProduct);
-		}
-	};
+	// 	if (actualProduct?.codice !== null) {
+	// 		//vado alla pagina carrello
+	// 		addToCart(actualProduct, cart, dispatch, authUser);
+	// 		router.replace("/auth/carrello");
+	// 	} else {
+	// 		console.log("@@@ NO actualProduct : ", actualProduct);
+	// 	}
+	// };
 
 	// const aggiornaListino = async () => {
 	// 	//if (listinoState.listino === null) {
@@ -175,32 +193,149 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	// 	//}
 	// };
 
-	React.useEffect(() => {
-		console.log("ConfermaAbbPage");
-		console.log(itemsCard);
+	//------------  "  selection times "  -----------------//
+	const [quantiOrarioScelti, setQuantiOrarioScelti] = React.useState(0);
+	const [quanteAttivitaScelte, setQuanteAttivitaScelte] = React.useState(0);
+	const [islimiteOrariSuperato, setIslimiteOrariSuperato] =
+		React.useState(false);
+	const [islimiteAttivitaSuperato, setIslimiteAttivitaSuperato] =
+		React.useState(false);
 
-		try {
-			if (
-				Number(itemsCard.abbonamento.SCELTAF) > 0 &&
-				Number(itemsCard.abbonamento.FREQUENZAS) > 0
-			) {
-				console.log("VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI");
-				setShowCompSceltaAtv(true);
-			} else {
-				setActualProduct({
-					codice: itemsCard.codice,
-					nome: itemsCard.descrizione,
-					prezzo: Number(itemsCard.abbonamento.IMPORTO),
-					prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
-					immagine: [],
-					info: "informazioni",
-					quantity: 1,
-				});
-			}
-		} catch (error) {
-			console.log("ERROREEEEEEEE");
+	const [selectedActivity, setSelectedActivity] =
+		React.useState<Activity | null>(null);
+
+	const [selectedTimesMap, setSelectedTimesMap] = React.useState<{
+		[activityId: number]: { activity: Activity; selectedOrari: string[] };
+	}>({});
+
+	const handleActivitySelection = (activity: Activity | null) => {
+		setSelectedActivity(activity);
+	};
+
+	const handleTimeSelection = (ORARIO: ORARIO) => {
+		let msgErroreLimite = "";
+
+		// console.log("quantiOrarioScelti: ", quantiOrarioScelti);
+		// console.log("quanteAttivitaScelte: ", quanteAttivitaScelte);
+
+		// console.log("FREQUENZAS orari limite: ", itemsCard.abbonamento.FREQUENZAS);
+		// console.log("SCELTAF attività limite: ", itemsCard.abbonamento.SCELTAF);
+
+		if (!selectedActivity) {
+			console.error(
+				"Attività non selezionata. Impossibile selezionare l'orario."
+			);
+			msgErroreLimite =
+				"Attività non selezionata. Impossibile selezionare l'orario.";
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{msgErroreLimite}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			return;
 		}
-	}, []); // useEffect senza dipendenze per eseguire solo all'inizio
+
+		const activityId = selectedActivity.CODATT;
+		const currentSelection = selectedTimesMap[activityId] || {
+			activity: selectedActivity,
+			selectedOrari: [],
+		};
+		const isTimeSelected = currentSelection.selectedOrari.includes(
+			ORARIO.IDORARIO
+		);
+		const updatedOrari = isTimeSelected
+			? currentSelection.selectedOrari.filter(
+					(selectedTime) => selectedTime !== ORARIO.IDORARIO
+			  )
+			: [...currentSelection.selectedOrari, ORARIO.IDORARIO];
+
+		if (islimiteOrariSuperato && !isTimeSelected) {
+			//se il limite è stato superato e sto facendo una selezione
+			msgErroreLimite =
+				"E' stato raggiunto il limite massimo selezionabile degli orari per questo abbonamento";
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{msgErroreLimite}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			return;
+		}
+
+		setSelectedTimesMap((prev) => ({
+			...prev,
+			[activityId]: { activity: selectedActivity, selectedOrari: updatedOrari },
+		}));
+	};
+
+	const handleClear = () => {
+		setSelectedTimesMap((prevSelectedTimesMap) => ({
+			...prevSelectedTimesMap,
+			[selectedActivity?.CODATT || -1]: {
+				activity: selectedActivity || ({} as Activity),
+				selectedOrari: [],
+			},
+		}));
+	};
+
+	const handleConfirm = () => {
+		let dataToSendService = "";
+		console.log("@@@ handleConfirm ");
+
+		const activitiesWithTimes = Object.entries(selectedTimesMap).filter(
+			([_, { selectedOrari }]) => selectedOrari.length > 0
+		);
+		console.log("@@@ selectedTimesMap: ", selectedTimesMap);
+
+		if (activitiesWithTimes.length > 0) {
+			activitiesWithTimes.forEach(
+				([activityId, { activity, selectedOrari }], atvIndex) => {
+					//console.log("activityId:", activityId);
+					//console.log("Attività: ", activity.CODATT + "-" + activity.DESATT);
+					console.log("@@@ selectedOrari: ", selectedOrari);
+					selectedOrari.forEach((timeId, timeIndex) => {
+						//console.log("Orario: ", timeIndex + "-" + timeId);
+						dataToSendService += `[${activityId}][${timeId}]`;
+					});
+				}
+			);
+		}
+		console.log("dataToSendService: ", dataToSendService);
+
+		let noteAttivitaOrari = "";
+		// Filtra solo le attività con almeno un orario selezionato
+		activitiesWithTimes.map(([_, { activity, selectedOrari }]) => {
+			noteAttivitaOrari += `<br /><br /> Attività: <label style="font-weight: bold;" />${activity.DESATT}</label> <br /> Orari: <br />`;
+
+			selectedOrari
+				.map((selectedOrario) =>
+					activity.ORARI.ORARIO.find(
+						(orario) => orario.IDORARIO === selectedOrario
+					)
+				)
+				.filter((orario) => {
+					orario !== undefined;
+					console.log("orario: ", orario);
+					noteAttivitaOrari += `<label style="font-weight: bold;" />-		${orario?.GIORNO} ${orario?.ORAINIZIO}-${orario?.ORAFINE}</label> <br />`;
+				});
+		});
+		noteAttivitaOrari += `<br />`;
+
+		setActualProduct({
+			codice: itemsCard.codice,
+			nome: itemsCard.descrizione,
+			prezzo: Number(itemsCard.abbonamento.IMPORTO),
+			prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
+			immagine: [],
+			info: itemsCard.note + noteAttivitaOrari,
+			quantity: 1,
+		});
+	};
 
 	React.useEffect(() => {
 		if (actualProduct?.codice !== null) {
@@ -211,125 +346,33 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		}
 	}, [actualProduct]); // useEffect dipendente da actualProduct
 
-	const [selectedActivity, setSelectedActivity] =
-		React.useState<Activity | null>(null);
-
-	const [selectedTimesMap, setSelectedTimesMap] = React.useState<{
-		[activityId: number]: {
-			code: string;
-			description: string;
-			times: string[];
-		};
-	}>({});
-
-	const [selectedTimes, setSelectedTimes] = React.useState<string[]>([]);
-
-	const handleActivitySelection = (activity: Activity | null) => {
-		setSelectedActivity(activity);
-
-		// Se hai già selezioni precedenti per questa attività, caricalo
-		const previousSelections =
-			selectedTimesMap[activity?.CODATT || ""]?.times || [];
-		setSelectedTimes(previousSelections);
-	};
-
-	const handleTimeSelection = (time: string) => {
-		if (!selectedActivity) {
-			console.error(
-				"Attività non selezionata. Impossibile selezionare l'orario."
-			);
-			return;
-		}
-
-		const isTimeSelected = selectedTimes.includes(time);
-		let updatedTimes: string[];
-
-		if (isTimeSelected) {
-			// Se l'orario è già selezionato, lo rimuovi
-			updatedTimes = selectedTimes.filter(
-				(selectedTime) => selectedTime !== time
-			);
-		} else {
-			// Altrimenti, lo aggiungi
-			updatedTimes = [...selectedTimes, time];
-		}
-
-		// Aggiorna lo stato
-		setSelectedTimes(updatedTimes);
-		// Aggiorna anche selectedTimesMap per mantenere coerenza tra i due stati
-		setSelectedTimesMap((prev: any) => ({
-			...prev,
-			[selectedActivity.CODATT]: {
-				code: selectedActivity.CODATT,
-				description: selectedActivity.DESATT,
-				times: updatedTimes,
-			},
-		}));
+	const handleCancel = () => {
+		// Implementa la logica per annullare le scelte dell'utente.
+		// torno su acquista cancellando tutte le scelte
+		router.push("/auth/acquista/prodotti");
 	};
 
 	React.useEffect(() => {
-		// Aggiorna selectedTimes quando selectedActivity cambia
-		console.log("selectedTimesMap:  ", selectedTimesMap);
-		if (selectedActivity) {
-			setSelectedTimes(selectedTimesMap[selectedActivity.CODATT]?.times || []);
-		}
-	}, [selectedActivity, selectedTimesMap]);
+		// console.log("quantiOrarioScelti: ", quantiOrarioScelti);
+		// console.log("quanteAttivitaScelte: ", quanteAttivitaScelte);
 
-	const handleClear = () => {
-		// Effettua l'operazione di pulizia dell'array di orari
-		console.log("handleClear: ", selectedActivity?.CODATT);
-		setSelectedTimes([]);
+		// console.log("FREQUENZAS orari limite: ", itemsCard.abbonamento.FREQUENZAS);
+		// console.log("SCELTAF attività limite: ", itemsCard.abbonamento.SCELTAF);
 
-		// setSelectedTimesMap({
-		// 	...selectedTimesMap,
-		// 	[selectedActivity?.CODATT || -1]: [],
-		// });
-
-		setSelectedTimesMap(
-			(prevSelectedTimesMap) =>
-				({
-					...prevSelectedTimesMap,
-					[selectedActivity?.CODATT || -1]: [],
-				} as {
-					[activityId: number]: {
-						code: string;
-						description: string;
-						times: string[];
-					};
-				})
-		);
-	};
-
-	const handleConfirm = () => {
-		// Implementa la logica per confermare le scelte dell'utente.
-		//const obySendServ: string;
-		// -	“[CS000001][152][CS000012][250] …. “
-		// Praticamente una serie di coppie di dati codice attività e id orario,
-		let dataToSendService = "";
-
-		const activitiesWithTimes = Object.entries(selectedTimesMap).filter(
-			([_, { times }]) => times && times.length > 0
-		);
-
-		if (activitiesWithTimes.length > 0) {
-			activitiesWithTimes.map(
-				([activityId, { code, description, times }], atvIndex) => {
-					console.log("activityId:", activityId);
-					console.log("Attività: ", code + "-" + description);
-					times.map((timeId, timeIndex) => {
-						console.log("Orario: ", timeIndex + "-" + timeId);
-						dataToSendService += `[${activityId}][${timeId}]`;
-					});
-				}
-			);
+		if (Number(itemsCard.abbonamento.SCELTAF) <= Number(quanteAttivitaScelte)) {
+			setIslimiteAttivitaSuperato(true);
+		} else {
+			setIslimiteAttivitaSuperato(false);
 		}
 
-		console.log("dataToSendService: ", dataToSendService);
-	};
-
-	const handleCancel = () => {
-		// Implementa la logica per annullare le scelte dell'utente.
-	};
+		if (
+			Number(itemsCard.abbonamento.FREQUENZAS) <= Number(quantiOrarioScelti)
+		) {
+			setIslimiteOrariSuperato(true);
+		} else {
+			setIslimiteOrariSuperato(false);
+		}
+	}, [quantiOrarioScelti, quanteAttivitaScelte]); // useEffect dipendente da actualProduct
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -340,101 +383,228 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 			>
 				<AlertMe />
 
+				<Grid
+					container
+					style={{
+						justifyContent: "space-between",
+						paddingRight: "0px",
+					}}
+				>
+					<Typography
+						variant="h4"
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							flexWrap: "nowrap",
+							alignItems: "center",
+						}}
+					>
+						{React.cloneElement(myIcons.OrarioAtvIcon, {
+							fontSize: "large",
+							style: { marginRight: "20px" },
+						})}
+
+						{eCommerceConf.StepStorePage[5]?.TitoloPage}
+					</Typography>
+
+					<Tooltip
+						title={
+							<span style={{ display: "flex", flexDirection: "column" }}>
+								<Typography
+									textAlign={"center"}
+									variant="subtitle2"
+								>
+									Visualizza legenda icone
+								</Typography>
+							</span>
+						}
+					>
+						<IconButton
+							onClick={() => {
+								openModal();
+							}}
+						>
+							<Info color="info" />
+						</IconButton>
+					</Tooltip>
+					<LegendaIcone
+						isOpen={isModalOpen}
+						onClose={closeModal}
+					/>
+				</Grid>
+
+				<Grid
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						flexWrap: "nowrap",
+						alignItems: "center",
+						justifyContent: "flex-start",
+						minHeight: "50px",
+						marginLeft: "20px",
+					}}
+				>
+					<Tooltip
+						title={
+							<span style={{ display: "flex", flexDirection: "column" }}>
+								<Typography
+									textAlign={"center"}
+									variant="subtitle2"
+								>
+									Identifica un abbonamento
+								</Typography>
+							</span>
+						}
+					>
+						{React.cloneElement(myIcons.AbbIcon, {
+							fontSize: "medium",
+							style: { marginRight: "20px" },
+						})}
+					</Tooltip>
+
+					<Typography
+						variant="h6"
+						style={{ display: "flex", alignItems: "center" }}
+					>
+						{itemsCard?.abbonamento?.DESABB}
+					</Typography>
+
+					<div
+						style={{
+							marginLeft: "20px",
+							display: "flex",
+							alignItems: "center",
+						}}
+					>
+						<Tooltip
+							title={
+								<span
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										//marginLeft: "20px",
+									}}
+								>
+									<Typography
+										textAlign={"center"}
+										variant="subtitle2"
+									>
+										Identifica un orario
+									</Typography>
+								</span>
+							}
+						>
+							{React.cloneElement(myIcons.DataCalendarIcon, {
+								fontSize: "medium",
+								style: {
+									marginRight: "10px",
+									color: theme.palette.warning.main,
+								},
+							})}
+						</Tooltip>
+
+						<Typography
+							variant="subtitle1"
+							style={{ display: "flex", alignItems: "center" }}
+						>
+							{`Data inizio abbonamento: ${itemsCard?.abbonamento?.DATAINI}`}
+						</Typography>
+					</div>
+				</Grid>
+
 				{itemsCard === null ? (
 					<ListinoOrariErrorBox />
 				) : (
 					<>
-						{showCompSceltaAtv === true ? (
-							<Container
+						<Container
+							style={{
+								marginTop: "1em",
+								marginBottom: "3em",
+								height: "auto",
+							}}
+						>
+							<Grid
+								container
 								style={{
-									marginTop: "1em",
-									marginBottom: "3em",
-									height: "auto",
+									display: "flex",
+									width: "100%",
+									flexDirection: "row",
+									justifyContent: "space-around",
+									minHeight: "660px",
 								}}
 							>
-								<Grid
-									container
-									style={{
-										display: "flex",
-										width: "100%",
-										flexDirection: "row",
-										justifyContent: "space-around",
-										minHeight: "660px",
-									}}
-								>
-									{isMobile ? (
-										<>
-											<Typography>
-												CONFERMA PAGE VISUALIZZA SELEZIONA ORARI?
-											</Typography>
-										</>
-									) : (
-										<>
-											<Grid
-												container
-												spacing={2}
-											>
-												<Grid
-													item
-													xs={12}
-													sm={8}
-												>
-													<ActivitySelector
-														activities={activitiesData}
-														handleActivitySelection={handleActivitySelection}
-														handleClear={handleClear} // Passa la funzione di gestione dell'evento clear
-													/>
-													{selectedActivity && (
-														<TimeList
-															times={selectedActivity.ORARI.ORARIO}
-															selectedTimes={
-																selectedTimesMap[selectedActivity?.CODATT || ""]
-																	?.times
-															}
-															handleTimeSelection={handleTimeSelection}
-														/>
-													)}
-												</Grid>
-												<Grid
-													item
-													xs={12}
-													sm={4}
-												>
-													<Summary selectedTimesMap={selectedTimesMap} />
-												</Grid>
-											</Grid>
+								<>
+									<Grid
+										container
+										spacing={2}
+									>
+										<Grid
+											item
+											xs={12}
+											sm={8}
+										>
+											<ActivitySelector
+												activities={activitiesData}
+												handleActivitySelection={handleActivitySelection}
+												handleClear={handleClear} // Passa la funzione di gestione dell'evento clear
+												islimiteAttivitaSuperato={islimiteAttivitaSuperato}
+											/>
+											{selectedActivity && (
+												<TimeList
+													attivitaSelezionata={selectedActivity}
+													orariSelezionati={
+														selectedTimesMap[selectedActivity?.CODATT || ""]
+															?.selectedOrari || []
+													}
+													handleTimeSelection={handleTimeSelection}
+												/>
+											)}
+										</Grid>
+										<Grid
+											item
+											xs={12}
+											sm={4}
+										>
+											<Summary
+												selectedTimesMap={selectedTimesMap}
+												setSelectedTimesMap={setSelectedTimesMap}
+												setQuantiOrarioScelti={setQuantiOrarioScelti}
+												setQuanteAttivitaScelte={setQuanteAttivitaScelte}
+												itemsCard={itemsCard}
+											/>
+										</Grid>
+									</Grid>
 
-											<div
-												style={{
-													display: "flex",
-													alignItems: "center",
-													width: "100%",
-													justifyContent: "space-between",
-												}}
-											>
-												<Button
-													color="primary"
-													variant="contained"
-													onClick={handleConfirm}
-												>
-													{myIcons.CheckCircleOutlineIcon} Conferma
-												</Button>
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											width: "100%",
+											justifyContent: "space-between",
+											height: "min-content",
+										}}
+									>
+										<Button
+											color="secondary"
+											variant="contained"
+											onClick={handleCancel}
+											sx={{ color: "white" }}
+										>
+											{myIcons.HighlightOffIcon} Annulla
+										</Button>
 
-												<Button
-													color="secondary"
-													variant="contained"
-													onClick={handleCancel}
-												>
-													{myIcons.CheckCircleOutlineIcon} Annulla
-												</Button>
-											</div>
-										</>
-									)}
-								</Grid>
-							</Container>
-						) : (
-							<></>
-						)}
+										<Button
+											disabled={quantiOrarioScelti === 0}
+											color="success"
+											variant="contained"
+											onClick={handleConfirm}
+										>
+											{myIcons.CheckCircleOutlineIcon} Conferma
+										</Button>
+									</div>
+								</>
+							</Grid>
+						</Container>
 					</>
 				)}
 			</Layout>

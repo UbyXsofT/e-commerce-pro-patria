@@ -101,10 +101,12 @@ Description
 												<PROMO></PROMO> 0=nessuna offerta, 1=in promozione, 2=in convenzione
 												<IMPORTOS></IMPORTOS> importo scontato, 0 se non c’è sconto
 												<SCELTAF></SCELTAF> 0=abbonamento non prevede scelta attività ad orario, >0 abbonamento con scelta attività ad orario
+												---> SCELTAF SONO IL NUMERO DI ATTIVITà CHE POSSO SCEGLIERE 
 												<NOSOSP></NOSOSP> 0=abbonamento sospendibile, <>0 abbonamento non sospendibile
 												<DATAINI></DATAINI> data proposta come inizio abbonamento
 												<PERIODOATT></PERIODOATT> giorni disponibili per l’attivazione (se =0 vale la dataini)
 												<FREQUENZAS></FREQUENZAS> frequenza settimanale (per scegliere gli orari deve essere >0)
+												---> FREQUENZAS SONO IL NUMERO TOTALE DI ORARI CHE POSSO SCEGLIERE 
 									</ABBONAMENTO>
               </AREA>
 					</SEDE>

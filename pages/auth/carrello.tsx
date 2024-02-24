@@ -44,6 +44,7 @@ import {
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";
+import myIcons from "src/theme/IconsDefine";
 // export const renderPrice = (price: number): string =>
 // 	price?.toString().replace(".", ",");
 
@@ -73,11 +74,11 @@ const Carrello = () => {
 		let totalePrezzo = 0;
 		let totalePrezzoScontato = 0;
 
-		cart.forEach((prodotto) => {
-			totalePrezzo += prodotto.prezzo;
-			totalePrezzoScontato += prodotto.prezzoScontato
-				? prodotto.prezzoScontato
-				: prodotto.prezzo;
+		cart?.forEach((prodotto) => {
+			totalePrezzo += prodotto?.prezzo;
+			totalePrezzoScontato += prodotto?.prezzoScontato
+				? prodotto?.prezzoScontato
+				: prodotto?.prezzo;
 		});
 
 		const totalePrezzoObj: Prezzi = {
@@ -282,11 +283,34 @@ const Carrello = () => {
 															style={{ borderRadius: 5 }}
 														/> */}
 															<Stack spacing={2}>
-																<Box width={"200px"}>
-																	<Typography variant="h6">
+																<Box
+																	sx={{ display: "flex", alignItems: "center" }}
+																	width={"100%"}
+																>
+																	{React.cloneElement(myIcons.AbbIcon, {
+																		fontSize: "medium",
+																		style: { marginRight: "10px" },
+																	})}
+																	<Typography
+																		variant="h5"
+																		sx={{ fontWeight: "bold" }}
+																	>
 																		{prodotto.nome}
 																	</Typography>
 																</Box>
+
+																<div
+																	dangerouslySetInnerHTML={{
+																		__html: prodotto?.info,
+																	}}
+																/>
+																{/* <Typography
+																	variant="body2"
+																	color={"GrayText"}
+																>
+																	{prodotto.info}
+																</Typography> */}
+
 																{prodotto.prezzoScontato ? (
 																	<Stack
 																		direction={"row"}
@@ -360,9 +384,9 @@ const Carrello = () => {
 								spacing={2}
 								justifyContent={"space-between"}
 								style={{
-									display: "grid",
+									display: "flex",
 									justifyContent: "end",
-									marginTop: "50px",
+									alignItems: "center",
 								}}
 							>
 								<Typography variant="h5">

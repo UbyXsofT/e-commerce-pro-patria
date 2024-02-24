@@ -7,21 +7,44 @@ import {
 	Checkbox,
 	Typography,
 } from "@mui/material";
-import { Activity } from "src/components/CommonTypesInterfaces";
+import React from "react";
+import { Activity, ORARIO } from "src/components/CommonTypesInterfaces";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+
 interface ActivitySelectorProps {
 	activities: Activity[];
 	handleActivitySelection: (activity: Activity | null) => void;
 	handleClear: () => void;
+	islimiteAttivitaSuperato: boolean;
 }
 
 const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 	activities,
 	handleActivitySelection,
 	handleClear, // Passa la funzione di gestione dell'evento clear
+	islimiteAttivitaSuperato,
 }) => {
+	const { showAlert } = useAlertMe();
+
+	React.useEffect(() => {
+		if (islimiteAttivitaSuperato) {
+			const msgErroreLimite =
+				"E' stato raggiunto il limite massimo selezionabile delle attività per questo abbonamento";
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{msgErroreLimite}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		}
+	}, [islimiteAttivitaSuperato]);
+
 	return (
 		<Autocomplete
 			options={activities}
+			disabled={islimiteAttivitaSuperato}
 			getOptionLabel={(activity) => activity.DESATT}
 			onChange={(_, value) => handleActivitySelection(value)}
 			onInputChange={(_, value, reason) => {
@@ -42,34 +65,27 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 };
 
 interface TimeListProps {
-	times: {
-		IDORARIO: string;
-		GIORNO: string;
-		ORAINIZIO: string;
-		ORAFINE: string;
-		LIVELLO: string;
-		FASCIA?: string | {};
-	}[];
-	selectedTimes: string[];
-	handleTimeSelection: (timeId: string) => void;
+	attivitaSelezionata: Activity;
+	orariSelezionati: string[];
+	handleTimeSelection: (timeId: ORARIO) => void;
 }
 
 const TimeList: React.FC<TimeListProps> = ({
-	times,
-	selectedTimes,
+	attivitaSelezionata,
+	orariSelezionati,
 	handleTimeSelection,
 }) => {
-	console.log("selectedTimes: ", selectedTimes);
-	console.log("times: ", times);
+	// console.log("orariSelezionati: ", orariSelezionati);
+	// console.log("attivitaSelezionata: ", attivitaSelezionata);
 	return (
 		<List>
-			{times?.map((time) => (
-				<ListItem key={time.IDORARIO}>
+			{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
+				<ListItem key={ORARIO.IDORARIO}>
 					<Checkbox
-						checked={selectedTimes?.includes(time.IDORARIO) || false}
-						onChange={() => handleTimeSelection(time.IDORARIO)}
+						checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
+						onChange={() => handleTimeSelection(ORARIO)}
 					/>
-					<Typography>{`${time.GIORNO} ${time.ORAINIZIO}-${time.ORAFINE}`}</Typography>
+					<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
 				</ListItem>
 			))}
 		</List>

@@ -44,7 +44,6 @@ const CardActionsData = ({
 }: ListinoCardProps) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
 	const router = useRouter();
 
 	//-- calendario --//
@@ -58,7 +57,6 @@ const CardActionsData = ({
 	};
 
 	const handleCloseCalendario = (value: any) => {
-		console.log("@@@ --- handleCloseCalendario", value);
 		setOpenCalendario(false);
 		setSelectedValueCalendario(value);
 	};
@@ -66,9 +64,9 @@ const CardActionsData = ({
 	const handleClick = (itemData: itemsCard) => {
 		const step = itemsCard;
 		if (step?.codice !== null) {
-			console.log("step?.codice", step?.codice);
+			//console.log("step?.codice", step?.codice);
 			let newStepId = (step.stepId += 1);
-			console.log("newStepId", newStepId);
+			//console.log("newStepId", newStepId);
 			setStepSelectOby((prevStepSelectOby) => ({
 				...prevStepSelectOby,
 				stepId: newStepId,
@@ -85,6 +83,16 @@ const CardActionsData = ({
 
 		//TODO SE ESITO E' POSITIVO PROSEGUO NELLA PAGINA SUCCESSIVA
 		//ATRIMENTI VISUALIZZO IL MESSAGGIO DI ERRORE DI RITORNO DALLA CONFERMA
+
+		const items = itemsCard as itemsCard;
+		items.abbonamento.DATAINI =
+			selectedValueCalendario.toString() === "01-01-1970"
+				? dayjs(itemsCard?.abbonamento?.DATAINI)
+						.locale("it")
+						.format("DD-MM-YYYY")
+				: selectedValueCalendario.toString();
+		itemsCard = items;
+		//console.log("@@@ DATA INI itemsCard: ", itemsCard);
 
 		router.replace({
 			pathname: "/auth/acquista/conferma",
@@ -254,7 +262,7 @@ const CardActionsData = ({
 										<div style={{ display: "flex", alignItems: "center" }}>
 											{!isMobile && (
 												<IconButton sx={{ color: "#dfdfdf" }}>
-													{React.cloneElement(myIcons.OrarioAtvIcon, {
+													{React.cloneElement(myIcons.DataCalendarIcon, {
 														color: "#dfdfdf",
 													})}
 												</IconButton>
