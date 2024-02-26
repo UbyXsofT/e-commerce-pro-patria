@@ -31,6 +31,7 @@ import {
 	responseCall,
 	StoreState,
 	CartProdotto,
+	ActualProduct,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
@@ -71,14 +72,12 @@ const Carrello = () => {
 	});
 
 	const calculateTotalePrezzo = (cart: CartProdotto[]): Prezzi => {
-		let totalePrezzo = 0;
-		let totalePrezzoScontato = 0;
+		let totalePrezzo: number = 0;
+		let totalePrezzoScontato: number = 0;
 
-		cart?.forEach((prodotto) => {
-			totalePrezzo += prodotto?.prezzo;
-			totalePrezzoScontato += prodotto?.prezzoScontato
-				? prodotto?.prezzoScontato
-				: prodotto?.prezzo;
+		cart?.forEach((prodotto: CartProdotto) => {
+			totalePrezzo += prodotto?.prezzo ?? 0;
+			totalePrezzoScontato += prodotto?.prezzoScontato ?? prodotto?.prezzo ?? 0;
 		});
 
 		const totalePrezzoObj: Prezzi = {
@@ -175,9 +174,11 @@ const Carrello = () => {
 				emailUser: authUser?.EMAIL,
 				emailCentro: authUser?.EMAILCENTRO,
 				line_items: cart[0].cart.map((item) => {
-					let prezzo = item.prezzoScontato ? item.prezzoScontato : item.prezzo;
+					let prezzo: number | null = item.prezzoScontato
+						? item.prezzoScontato
+						: item.prezzo;
 					let importoFix: number;
-					importoFix = importoInCentesimi(prezzo);
+					importoFix = importoInCentesimi(prezzo as number);
 					console.log("CHK --- > prezzo : ", prezzo);
 					console.log("CHK --- > importoFix : ", importoFix);
 
@@ -301,7 +302,9 @@ const Carrello = () => {
 
 																<div
 																	dangerouslySetInnerHTML={{
-																		__html: prodotto?.info,
+																		__html: prodotto?.info as
+																			| string
+																			| TrustedHTML,
 																	}}
 																/>
 																{/* <Typography

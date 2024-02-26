@@ -29,7 +29,7 @@ const myIcons = {
 	SedeIcon: <Place color="warning" />, //Identifica una sede
 	AreaIcon: <AutoAwesomeMosaic color="error" />, //Identifica un area
 	AbbIcon: <MotionPhotosAuto color="info" />, //Identifica un abbonamento
-	DataCalendarIcon: <EditCalendar />,
+	DataCalendarIcon: <EditCalendar color="warning" />,
 	AttivitaIcon: <Rowing />,
 	ShoppingCartIcon: <ShoppingCart />,
 	NotificationsIcon: <Notifications />,

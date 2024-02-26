@@ -489,7 +489,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 										textAlign={"center"}
 										variant="subtitle2"
 									>
-										Identifica un orario
+										Identifica una data
 									</Typography>
 								</span>
 							}
@@ -507,7 +507,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 							variant="subtitle1"
 							style={{ display: "flex", alignItems: "center" }}
 						>
-							{`Data inizio abbonamento: ${itemsCard?.abbonamento?.DATAINI}`}
+							{`Data inizio: ${itemsCard?.abbonamento?.DATAINI}`}
 						</Typography>
 					</div>
 				</Grid>

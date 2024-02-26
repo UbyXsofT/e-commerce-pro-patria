@@ -31,7 +31,7 @@ const Conferma: React.FC = () => {
 	});
 
 	const [myNoteProduct, setMyNoteProduct] = useState<string>(
-		`<label style="font-weight: bold;" />Abbonamento attivo dal: ${itemsCard?.abbonamento?.DATAINI}</label><br />Note: ${itemsCard?.abbonamento?.NOTEABB}`
+		`<label style="font-weight: bold;" />Inizia il: ${itemsCard?.abbonamento?.DATAINI}</label><br />Note: ${itemsCard?.abbonamento?.NOTEABB}`
 	);
 
 	useEffect(() => {

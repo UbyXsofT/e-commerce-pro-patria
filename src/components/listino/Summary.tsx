@@ -1,5 +1,12 @@
 // components/Summary.tsx
-import { Button, Divider, Paper, Typography, useTheme } from "@mui/material";
+import {
+	Button,
+	Divider,
+	Paper,
+	Tooltip,
+	Typography,
+	useTheme,
+} from "@mui/material";
 import React from "react";
 import { Activity, itemsCard } from "src/components/CommonTypesInterfaces";
 import myIcons from "src/theme/IconsDefine";
@@ -111,7 +118,16 @@ const Summary: React.FC<SummaryProps> = ({
 						alignItems: "center",
 					}}
 				>
-					{myIcons.SummarizeIcon}
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							color: theme.palette.error.main,
+						}}
+					>
+						{myIcons.SummarizeIcon}
+					</div>
+
 					<Typography
 						variant="h6"
 						sx={{ ml: 1 }}
@@ -137,12 +153,26 @@ const Summary: React.FC<SummaryProps> = ({
 									: theme.palette.error.main,
 						}}
 					>
-						{React.cloneElement(myIcons.AttivitaIcon, {
-							fontSize: "medium",
-							style: {
-								color: theme.palette.grey[800],
-							},
-						})}
+						<Tooltip
+							title={
+								<span style={{ display: "flex", flexDirection: "column" }}>
+									<Typography
+										textAlign={"center"}
+										variant="subtitle2"
+									>
+										Identifica attività
+									</Typography>
+								</span>
+							}
+						>
+							{React.cloneElement(myIcons.AttivitaIcon, {
+								fontSize: "medium",
+								style: {
+									color: theme.palette.grey[800],
+								},
+							})}
+						</Tooltip>
+
 						<Typography
 							variant="h6"
 							sx={{ ml: 0, mr: 2 }}
@@ -150,6 +180,7 @@ const Summary: React.FC<SummaryProps> = ({
 							{dispAtvRim}
 						</Typography>
 					</div>
+
 					<div
 						style={{
 							display: "flex",
@@ -160,12 +191,25 @@ const Summary: React.FC<SummaryProps> = ({
 									: theme.palette.error.main,
 						}}
 					>
-						{React.cloneElement(myIcons.OrarioAtvIcon, {
-							fontSize: "medium",
-							style: {
-								color: theme.palette.grey[800],
-							},
-						})}
+						<Tooltip
+							title={
+								<span style={{ display: "flex", flexDirection: "column" }}>
+									<Typography
+										textAlign={"center"}
+										variant="subtitle2"
+									>
+										Identifica Orari
+									</Typography>
+								</span>
+							}
+						>
+							{React.cloneElement(myIcons.OrarioAtvIcon, {
+								fontSize: "medium",
+								style: {
+									color: theme.palette.grey[800],
+								},
+							})}
+						</Tooltip>
 						<Typography
 							variant="h6"
 							sx={{ ml: 0 }}
