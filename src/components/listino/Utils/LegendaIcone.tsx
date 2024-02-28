@@ -233,6 +233,31 @@ const LegendaIcone = ({ isOpen, onClose }: LegendaIconeProps) => {
 									Identifica un abbonamento
 								</Typography>
 							</Grid>
+
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>{myIcons.AttivitaIcon}</IconButton>
+								<Typography variant="body2">Identifica una attività</Typography>
+							</Grid>
+							<Grid
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "flex-start",
+									alignItems: "center",
+									flexWrap: "nowrap",
+								}}
+							>
+								<IconButton>{myIcons.DataCalendarIcon}</IconButton>
+								<Typography variant="body2">Identifica una data</Typography>
+							</Grid>
 						</Grid>
 					</Paper>
 				</Box>

@@ -10,6 +10,7 @@ import {
 	BottomNavigation,
 	BottomNavigationAction,
 	Box,
+	Button,
 	useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -23,7 +24,7 @@ import { UserDrawerContentDx } from "src/components/layout/drawer/drawerDx/UserD
 import { CarrelloDrawerContentDx } from "src/components/layout/drawer/drawerDx/CarrelloDrawerContentDx";
 import CookieConsent from "src/components/cookie/CookieConsent";
 import DrawerSx from "./drawer/drawerSx/DrawerSx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../CommonTypesInterfaces";
 import Head from "next/head";
 import eCommerceConf from "eCommerceConf.json";
@@ -45,10 +46,14 @@ const Layout = ({
 	ogImage,
 	url,
 }: LayoutProps) => {
-	// website Url
-	const pageUrl = "https://tommysgest.com/";
-	// quando condividi questa pagina su facebook vedrai questa immagine
-	const ogImg = "/public/images/banner-social.png";
+	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
+	const dispatch = useDispatch();
+	const cartLength = useSelector(
+		(state: StoreState) => state.cart[0]?.cart.length ?? 0
+	);
+	React.useEffect(() => {
+		setCartAlertsNum(cartLength);
+	}, [dispatch, cartLength]);
 
 	const [drawerDxOpen, setDrawerDxOpen] = React.useState(false);
 	const [tipoContesto, setTipoContesto] = React.useState("utente"); //carrello
@@ -82,9 +87,6 @@ const Layout = ({
 			}
 		});
 	}, []);
-
-	// TODO: Fix Breakpoint Definition
-	// TODO: Fix Desktop Navigation Coloring
 
 	return (
 		<>
@@ -189,22 +191,85 @@ const Layout = ({
 									position: "fixed",
 									bottom: 0,
 									marginLeft: -24,
+									backgroundColor: theme.palette.primary.main,
 								}}
 								showLabels
 								value={bottomNavSelected}
 							>
-								{navigationPoints.map((button, idx) => (
-									<BottomNavigationAction
-										label={button.name}
-										key={idx}
-										onClick={() => {
-											if (router.pathname !== button.link) {
-												setBottomNavSelected(idx);
-												router.push(button.link);
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+										minHeight: "60px",
+									}}
+									gap={1}
+								>
+									{navigationPoints.map((button, idx) => (
+										<Button
+											sx={{
+												height: "fit-content",
+												Maxwidth: "fit-content",
+												width: "120px",
+												alignSelf: "center",
+											}}
+											disabled={
+												button.name.toString().includes("Acquista")
+													? cartAlertsNum !== 0
+														? true
+														: false
+													: false
 											}
-										}}
-									/>
-								))}
+											variant={"contained"}
+											color={
+												button.name &&
+												router.pathname
+													.toLowerCase()
+													.includes(button.name.toLowerCase())
+													? "success"
+													: "primary"
+											}
+											onClick={() => {
+												router.pathname === button.link
+													? {}
+													: router.push(button.link);
+											}}
+											key={idx}
+										>
+											{button.name}
+										</Button>
+
+										// <BottomNavigationAction
+										// 	label={button.name}
+										// 	key={idx}
+										// 	onClick={() => {
+										// 		if (router.pathname !== button.link) {
+										// 			setBottomNavSelected(idx);
+										// 			router.push(button.link);
+										// 		}
+										// 	}}
+										// 	disabled={
+										// 		button.name.toString().includes("Acquista")
+										// 			? cartAlertsNum !== 0
+										// 				? true
+										// 				: false
+										// 			: false
+										// 	}
+										// 	sx={{
+										// 		height: "fit-content",
+										// 		Maxwidth: "fit-content",
+										// 		width: "120px",
+										// 		alignSelf: "center",
+										// 		backgroundColor:
+										// 			button.name &&
+										// 			router.pathname
+										// 				.toLowerCase()
+										// 				.includes(button.name.toLowerCase())
+										// 				? theme.palette.success.main
+										// 				: theme.palette.primary.main,
+										// 	}}
+										// />
+									))}
+								</Box>
 							</BottomNavigation>
 						) : (
 							<></>

@@ -8,7 +8,14 @@ import Typography from "@mui/material/Typography";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import renderPrice from "src/components/utils/renderPrice";
-import { Box, Button, Divider, IconButton, useMediaQuery } from "@mui/material";
+import {
+	Box,
+	Button,
+	Divider,
+	IconButton,
+	Paper,
+	useMediaQuery,
+} from "@mui/material";
 import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
 import {
 	StoreState,
@@ -45,22 +52,32 @@ const ListinoCard = ({
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+	const [isHovered, setIsHovered] = React.useState(false);
+
 	return (
-		<>
+		<Paper
+			elevation={isHovered ? 6 : 1} // Imposta l'elevation a 5 quando il mouse è sopra la Card, altrimenti 1
+			// sx={{
+			// 	minHeight: "120px",
+			// 	backgroundColor: (theme) =>
+			// 		theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
+			// }}
+		>
 			<Card
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
 				sx={{
 					maxWidth: isMobile ? "290px" : "350px",
 					width: isMobile ? "290px" : "350px",
 					marginTop: "25px",
 					marginBottom: "25px",
 					height: "auto",
-					//cursor: "pointer", // Aggiungi questa riga per cambiare il cursore quando il componente è cliccabile
+					cursor: "pointer", // Cambia il cursore quando il componente è cliccabile
 				}}
-				//onClick={() => callProductPage(product.codice)}
 			>
 				<CardHeader
 					sx={{
-						minheight: "70px",
+						minHeight: "70px",
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "space-between",
@@ -68,21 +85,15 @@ const ListinoCard = ({
 						padding: "16px",
 					}}
 					title={<CardHeadTitle itemsCard={itemsCard} />}
-				></CardHeader>
-
-				{/* {itemsCard.tipo !== "GRUPPO" ? ( // NON E' UN GRUPPO */}
+				/>
 				<CardContent
 					sx={{
 						marginTop: "-10px",
-						minHeight: "120px",
-						backgroundColor: (theme) =>
-							theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
 						display: "flex",
 						flexDirection: "column",
 						flexWrap: "nowrap",
 						alignItems: "flex-start",
 						justifyContent: "space-between",
-						// margin: "10px",
 					}}
 				>
 					<CardContentData itemsCard={itemsCard} />
@@ -94,7 +105,7 @@ const ListinoCard = ({
 					stepSelectOby={stepSelectOby}
 				/>
 			</Card>
-		</>
+		</Paper>
 	);
 };
 

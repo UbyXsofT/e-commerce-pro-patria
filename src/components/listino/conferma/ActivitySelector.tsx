@@ -37,9 +37,15 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 					</h3>
 				</React.Fragment>
 			);
-			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			showAlert("filled", "warning", "ATTENZIONE!", textAlert, true);
 		}
 	}, [islimiteAttivitaSuperato]);
+
+	const customClearButton = (
+		<div onClick={() => console.log("Custom clear button clicked")}>
+			Personalizzato
+		</div>
+	);
 
 	return (
 		<Autocomplete
@@ -53,6 +59,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 					handleClear();
 				}
 			}}
+			clearText="cancella gli orari di questa attività"
 			renderInput={(params) => (
 				<TextField
 					{...params}

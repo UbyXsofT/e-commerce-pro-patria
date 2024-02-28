@@ -6,7 +6,10 @@ import { setAuthUser } from "src/store/actions";
 //----------
 import {
 	Button,
+	Grid,
 	IconButton,
+	LinearProgress,
+	linearProgressClasses,
 	Link,
 	List,
 	ListItem,
@@ -58,6 +61,71 @@ const Carrello = () => {
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const user = cart.at(0);
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
+
+	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(true);
+
+	const [progress, setProgress] = React.useState(0);
+	const [buffer, setBuffer] = React.useState(10);
+	const [isTimerActive, setIsTimerActive] = React.useState(true);
+
+	const progressRef = React.useRef(() => {});
+
+	React.useEffect(() => {
+		progressRef.current = () => {
+			if (progress > 100) {
+				setProgress(0);
+				setBuffer(10);
+			} else {
+				const diff = Math.random() * 10;
+				const diff2 = Math.random() * 10;
+				setProgress(progress + diff);
+				setBuffer(progress + diff + diff2);
+			}
+		};
+	}, [progress]);
+
+	React.useEffect(() => {
+		let timer: any;
+
+		const startTimer = () => {
+			timer = setInterval(() => {
+				progressRef.current();
+			}, 500);
+		};
+
+		startTimer(); // Avvia il timer quando il componente viene montato
+
+		// Dopo 5 secondi, ferma il timer
+		const timeout = setTimeout(() => {
+			clearInterval(timer);
+			setIsTimerActive(false);
+		}, eCommerceConf.TimerAttesaDispCarrello);
+
+		return () => {
+			clearTimeout(timeout);
+			clearInterval(timer);
+		};
+	}, [isTimerActive]);
+
+	React.useEffect(() => {
+		// Quando isTimerActive cambia, ferma l'animazione
+		console.log("cambia isTimerActive: ", isTimerActive);
+		if (!isTimerActive) {
+			console.log("IF: ", isTimerActive);
+			setProgress(100);
+			setBuffer(100);
+			setIsCheckInCorsoDisp(false);
+		}
+	}, [isTimerActive]);
+
+	const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+		height: 10,
+		borderRadius: 0,
+		[`&.${linearProgressClasses.barColorSecondary}`]: {},
+		[`& .${linearProgressClasses.bar}`]: {
+			borderRadius: 0,
+		},
+	}));
 
 	type Prezzi = {
 		//toShow: boolean;
@@ -179,6 +247,7 @@ const Carrello = () => {
 						: item.prezzo;
 					let importoFix: number;
 					importoFix = importoInCentesimi(prezzo as number);
+					//importoFix = 100;
 					console.log("CHK --- > prezzo : ", prezzo);
 					console.log("CHK --- > importoFix : ", importoFix);
 
@@ -223,7 +292,15 @@ const Carrello = () => {
 				description="This is a E-Commerce carrello page, using React.js Next.js and Material-UI. Powered by Byteware srl."
 			>
 				<AlertMe />
-				<Container sx={{ marginBottom: "100px" }}>
+				{/* <Container sx={{ marginBottom: "100px" }}> */}
+				<Grid
+					container
+					style={{
+						display: "block",
+						marginBottom: "5rem",
+						minHeight: "32rem",
+					}}
+				>
 					{isCartEmpty ? (
 						<Box
 							textAlign={"center"}
@@ -251,6 +328,39 @@ const Carrello = () => {
 								</Link>
 							</Typography>
 						</Box>
+					) : isCheckInCorsoDisp ? (
+						<>
+							<Paper
+								elevation={5}
+								sx={{
+									backgroundColor:
+										theme.palette.mode === "light" ? "white" : "black",
+								}}
+							>
+								<Box
+									textAlign={"center"}
+									marginTop={"1rem"}
+								>
+									<Typography
+										sx={{
+											padding: "10px",
+											fontWeight: 200,
+											fontSize: "medium",
+										}}
+										gutterBottom
+									>
+										<strong>{eCommerceConf.MsgChkAttesaDispCarrello}</strong>
+									</Typography>
+
+									<BorderLinearProgress
+										variant="buffer"
+										value={progress}
+										valueBuffer={buffer}
+										// color="secondary"
+									/>
+								</Box>
+							</Paper>
+						</>
 					) : (
 						<>
 							<Typography variant="h4">
@@ -272,17 +382,6 @@ const Carrello = () => {
 															spacing={2}
 															direction={isMobile ? "column" : "row"}
 														>
-															{/* <Image
-															src={
-																prodotto.immagine
-																	? prodotto.immagine
-																	: "/images/LogoQ.png"
-															}
-															alt={prodotto.nome}
-															width={125}
-															height={125}
-															style={{ borderRadius: 5 }}
-														/> */}
 															<Stack spacing={2}>
 																<Box
 																	sx={{ display: "flex", alignItems: "center" }}
@@ -307,55 +406,6 @@ const Carrello = () => {
 																			| TrustedHTML,
 																	}}
 																/>
-																{/* <Typography
-																	variant="body2"
-																	color={"GrayText"}
-																>
-																	{prodotto.info}
-																</Typography> */}
-
-																{prodotto.prezzoScontato ? (
-																	<Stack
-																		direction={"row"}
-																		spacing={2}
-																	>
-																		<Typography
-																			variant="h6"
-																			textAlign={"center"}
-																			color={"green"}
-																		>
-																			{renderPrice(prodotto.prezzoScontato)}€
-																		</Typography>
-																		<Typography
-																			variant="h6"
-																			textAlign={"center"}
-																			color={"grey"}
-																			style={{
-																				position: "relative",
-																			}}
-																		>
-																			{renderPrice(prodotto.prezzo)}€
-																			<span
-																				style={{
-																					position: "absolute",
-																					top: "50%",
-																					left: "50%",
-																					transform:
-																						"translate(-50%, -50%) rotate(-20deg)",
-																					background: "red",
-																					width: "100%",
-																					height: "2px",
-																				}}
-																			></span>
-																		</Typography>
-																	</Stack>
-																) : (
-																	<Typography variant="h6">
-																		<strong>
-																			{renderPrice(prodotto.prezzo)}€
-																		</strong>
-																	</Typography>
-																)}
 															</Stack>
 														</Stack>
 													</ListItemText>
@@ -392,46 +442,34 @@ const Carrello = () => {
 									alignItems: "center",
 								}}
 							>
-								<Typography variant="h5">
-									{`Totale: `}
+								<div>
+									<Typography
+										variant="h5"
+										sx={{ fontWeight: "800" }}
+									>{`Totale: `}</Typography>
 
-									<Stack
-										display={"inline-flex"}
-										direction={"row"}
-										spacing={2}
-									>
+									{Prezzi.totalePrezzoScontato ? (
 										<Typography
 											variant="h5"
 											textAlign={"center"}
-											color={"green"}
+											style={{
+												position: "relative",
+											}}
 										>
-											<strong>
-												{renderPrice(Prezzi.totalePrezzoScontato)}€
-											</strong>
+											{renderPrice(Prezzi.totalePrezzoScontato)}€
 										</Typography>
+									) : (
 										<Typography
 											variant="h5"
 											textAlign={"center"}
-											color={"grey"}
 											style={{
 												position: "relative",
 											}}
 										>
 											{renderPrice(Prezzi.totalePrezzo)}€
-											<span
-												style={{
-													position: "absolute",
-													top: "50%",
-													left: "50%",
-													transform: "translate(-50%, -50%) rotate(-20deg)",
-													background: "red",
-													width: "100%",
-													height: "2px",
-												}}
-											></span>
 										</Typography>
-									</Stack>
-								</Typography>
+									)}
+								</div>
 
 								<Button
 									variant="contained"
@@ -442,7 +480,8 @@ const Carrello = () => {
 							</Stack>
 						</>
 					)}
-				</Container>
+				</Grid>
+				{/* </Container> */}
 			</Layout>
 		</ThemeProvider>
 	);

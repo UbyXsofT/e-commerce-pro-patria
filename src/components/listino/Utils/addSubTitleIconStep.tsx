@@ -35,6 +35,13 @@ export default function addSubTitleIconStep(
 				marginRight: "5px",
 				marginLeft: "20px",
 				display: "flex",
+				cursor: "pointer",
+			}}
+			onClick={() => {
+				setStepSelectOby((prevStepSelectOby) => ({
+					...prevStepSelectOby,
+					stepId: stepSelectOby.stepId !== null ? stepId : 1,
+				}));
 			}}
 		>
 			<Tooltip
@@ -49,24 +56,17 @@ export default function addSubTitleIconStep(
 					</span>
 				}
 			>
-				<IconButton
-					onClick={() => {
-						setStepSelectOby((prevStepSelectOby) => ({
-							...prevStepSelectOby,
-							stepId: stepSelectOby.stepId !== null ? stepId : 1,
-						}));
-					}}
-				>
-					{icona}
-				</IconButton>
-			</Tooltip>
+				<div style={{ display: "flex" }}>
+					<IconButton>{icona}</IconButton>
 
-			<Typography
-				variant="subtitle1"
-				style={{ display: "flex", alignItems: "center" }}
-			>
-				{percorsoDesc}
-			</Typography>
+					<Typography
+						variant="subtitle1"
+						style={{ display: "flex", alignItems: "center" }}
+					>
+						{percorsoDesc}
+					</Typography>
+				</div>
+			</Tooltip>
 		</div>,
 	]);
 

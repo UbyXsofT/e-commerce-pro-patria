@@ -37,8 +37,8 @@ import { Router, useRouter } from "next/router";
 import {
 	ActivitySelector,
 	TimeList,
-} from "src/components/listino/ActivitySelector";
-import Summary from "src/components/listino/Summary";
+} from "src/components/listino/conferma/ActivitySelector";
+import Summary from "src/components/listino/conferma/Summary";
 import ListinoOrariErrorBox from "./utils/ListinoOrariErrorBox";
 import { Info } from "@mui/icons-material";
 import LegendaIcone from "./utils/LegendaIcone";
@@ -234,7 +234,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 					</h3>
 				</React.Fragment>
 			);
-			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			showAlert("filled", "warning", "ATTENZIONE!", textAlert, true);
 			return;
 		}
 
@@ -263,7 +263,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 					</h3>
 				</React.Fragment>
 			);
-			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			showAlert("filled", "warning", "ATTENZIONE!", textAlert, true);
 			return;
 		}
 
@@ -359,7 +359,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		// console.log("FREQUENZAS orari limite: ", itemsCard.abbonamento.FREQUENZAS);
 		// console.log("SCELTAF attività limite: ", itemsCard.abbonamento.SCELTAF);
 
-		if (Number(itemsCard.abbonamento.SCELTAF) <= Number(quanteAttivitaScelte)) {
+		if (Number(itemsCard.abbonamento.SCELTAF) < Number(quanteAttivitaScelte)) {
 			setIslimiteAttivitaSuperato(true);
 		} else {
 			setIslimiteAttivitaSuperato(false);

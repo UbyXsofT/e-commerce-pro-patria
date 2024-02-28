@@ -103,7 +103,7 @@ const Summary: React.FC<SummaryProps> = ({
 	return (
 		<Paper
 			elevation={0}
-			sx={{ padding: "10px" }}
+			sx={{ padding: "10px", minWidth: "min-content" }}
 		>
 			<div
 				style={{
@@ -160,7 +160,7 @@ const Summary: React.FC<SummaryProps> = ({
 										textAlign={"center"}
 										variant="subtitle2"
 									>
-										Identifica attività
+										Attività da scegliere
 									</Typography>
 								</span>
 							}
@@ -198,7 +198,7 @@ const Summary: React.FC<SummaryProps> = ({
 										textAlign={"center"}
 										variant="subtitle2"
 									>
-										Identifica Orari
+										Numero frequenze consentite
 									</Typography>
 								</span>
 							}
@@ -206,7 +206,7 @@ const Summary: React.FC<SummaryProps> = ({
 							{React.cloneElement(myIcons.OrarioAtvIcon, {
 								fontSize: "medium",
 								style: {
-									color: theme.palette.grey[800],
+									color: theme.palette.info.main,
 								},
 							})}
 						</Tooltip>

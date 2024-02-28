@@ -72,7 +72,6 @@ export const ToolBar = ({
 	const [userPopper, setUserPopper] = React.useState<null | HTMLElement>(null);
 
 	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
-	//TODO provo gli allert
 	const dispatch = useDispatch();
 	const cartLength = useSelector(
 		(state: StoreState) => state.cart[0]?.cart.length ?? 0
@@ -181,7 +180,7 @@ export const ToolBar = ({
 										onClick={() => {
 											router.pathname === button.link
 												? {}
-												: Router.push(button.link);
+												: router.push(button.link);
 										}}
 										key={idx}
 									>
