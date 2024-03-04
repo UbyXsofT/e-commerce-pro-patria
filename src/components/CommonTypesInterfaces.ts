@@ -446,7 +446,20 @@ export interface ORARIO {
 	FASCIA?: string | {};
 }
 
+export interface ORARI {
+	ORARIO: ORARIO;
+}
+
 export interface Activity {
+	CODATT: string | any;
+	TIPO: string;
+	DESATT: string;
+	// ORARI: {
+	// 	ORARIO: ORARIO[];
+	// };
+}
+
+export interface ActivitySelected {
 	CODATT: string | any;
 	TIPO: string;
 	DESATT: string;

@@ -25,6 +25,8 @@ import {
 	ActualProduct,
 	Activity,
 	ORARIO,
+	ORARI,
+	ActivitySelected,
 } from "src/components/CommonTypesInterfaces";
 import fetchListino from "src/components/listino/utils/fetchListino";
 import { useSpring } from "react-spring";
@@ -48,69 +50,34 @@ const activitiesData: Activity[] = [
 		CODATT: "CS000012",
 		TIPO: "2",
 		DESATT: "SPINNING",
-		ORARI: {
-			ORARIO: [
-				{
-					IDORARIO: "10",
-					GIORNO: "LUNEDI",
-					ORAINIZIO: "09:00",
-					ORAFINE: "10:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: "BAMBINI",
-				},
-				{
-					IDORARIO: "12",
-					GIORNO: "MERCOLEDI",
-					ORAINIZIO: "11:00",
-					ORAFINE: "12:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: {},
-				},
-			],
-		},
 	},
 	{
 		CODATT: "CS000015",
 		TIPO: "2",
 		DESATT: "KARATE",
-		ORARI: {
-			ORARIO: [
-				{
-					IDORARIO: "20",
-					GIORNO: "LUNEDI",
-					ORAINIZIO: "15:00",
-					ORAFINE: "16:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: "BAMBINI",
-				},
-				{
-					IDORARIO: "22",
-					GIORNO: "MARTEDI",
-					ORAINIZIO: "17:00",
-					ORAFINE: "18:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: {},
-				},
-				{
-					IDORARIO: "24",
-					GIORNO: "MERCOLEDI",
-					ORAINIZIO: "19:00",
-					ORAFINE: "20:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: "BAMBINI",
-				},
-				{
-					IDORARIO: "26",
-					GIORNO: "VENERDI",
-					ORAINIZIO: "21:00",
-					ORAFINE: "22:00",
-					LIVELLO: "PRINCIPIANTI",
-					FASCIA: {},
-				},
-			],
-		},
 	},
 ];
+
+const orariData: any = {
+	ORARIO: [
+		{
+			IDORARIO: "10",
+			GIORNO: "LUNEDI",
+			ORAINIZIO: "09:00",
+			ORAFINE: "10:00",
+			LIVELLO: "PRINCIPIANTI",
+			FASCIA: "BAMBINI",
+		},
+		{
+			IDORARIO: "12",
+			GIORNO: "MERCOLEDI",
+			ORAINIZIO: "11:00",
+			ORAFINE: "12:00",
+			LIVELLO: "PRINCIPIANTI",
+			FASCIA: {},
+		},
+	],
+};
 
 interface ConfermaAbbPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -202,14 +169,50 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		React.useState(false);
 
 	const [selectedActivity, setSelectedActivity] =
-		React.useState<Activity | null>(null);
+		React.useState<ActivitySelected | null>(null);
 
 	const [selectedTimesMap, setSelectedTimesMap] = React.useState<{
-		[activityId: number]: { activity: Activity; selectedOrari: string[] };
+		[activityId: number]: {
+			activity: ActivitySelected;
+			selectedOrari: string[];
+		};
 	}>({});
 
-	const handleActivitySelection = (activity: Activity | null) => {
-		setSelectedActivity(activity);
+	// //selezione della attività
+	// const handleActivitySelection = (activity: Activity | null) => {
+	// 	console.log("handleActivitySelection: ", activity);
+
+	// 	setSelectedActivity(activity);
+	// };
+
+	const fetchOrariFromBackend = async (activityCode: any) => {
+		console.log("fetchOrariFromBackend: ", activityCode);
+		return orariData;
+	};
+
+	const handleActivitySelection = async (activity: Activity | null) => {
+		if (activity) {
+			try {
+				// Effettua la chiamata al servizio di backend per ottenere gli orari
+				const orariResponse = await fetchOrariFromBackend(activity.CODATT);
+				const orariData = await orariResponse; //.json();
+
+				// Aggiorna l'attività con gli orari ottenuti
+				const updatedActivity = {
+					...activity,
+					ORARI: orariData, // Assumi che la risposta contenga i dati degli orari nel formato desiderato
+				};
+
+				console.error("updatedActivity:", updatedActivity);
+				// Imposta l'attività selezionata con gli orari
+				setSelectedActivity(updatedActivity);
+			} catch (error) {
+				console.error("Errore durante il recupero degli orari:", error);
+			}
+		} else {
+			// Gestisci il caso in cui nessuna attività sia selezionata
+			setSelectedActivity(null);
+		}
 	};
 
 	const handleTimeSelection = (ORARIO: ORARIO) => {
@@ -276,8 +279,9 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	const handleClear = () => {
 		setSelectedTimesMap((prevSelectedTimesMap) => ({
 			...prevSelectedTimesMap,
+
 			[selectedActivity?.CODATT || -1]: {
-				activity: selectedActivity || ({} as Activity),
+				activity: selectedActivity || ({} as ActivitySelected),
 				selectedOrari: [],
 			},
 		}));
@@ -314,8 +318,8 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 			selectedOrari
 				.map((selectedOrario) =>
-					activity.ORARI.ORARIO.find(
-						(orario) => orario.IDORARIO === selectedOrario
+					activity?.ORARI?.ORARIO.find(
+						(orario: any) => orario.IDORARIO === selectedOrario
 					)
 				)
 				.filter((orario) => {

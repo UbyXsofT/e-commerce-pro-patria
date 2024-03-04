@@ -34,20 +34,36 @@
           "ORARIO": [
             {
               "IDORARIO": "20",
-              "GIORNO": "MARTEDI",
+              "GIORNO": "LUNEDI",
               "ORAINIZIO": "15:00",
               "ORAFINE": "16:00",
               "LIVELLO": "PRINCIPIANTI",
-              "FASCIA": "BAMBINI"
+              "FASCIA": "BAMBINI",
             },
             {
               "IDORARIO": "22",
-              "GIORNO": "VENERDI",
+              "GIORNO": "MARTEDI",
               "ORAINIZIO": "17:00",
               "ORAFINE": "18:00",
               "LIVELLO": "PRINCIPIANTI",
-              "FASCIA": {}
-            }
+              "FASCIA": {},
+            },
+            {
+              "IDORARIO": "24",
+              "GIORNO": "MERCOLEDI",
+              "ORAINIZIO": "19:00",
+              "ORAFINE": "20:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": "BAMBINI",
+            },
+            {
+              "IDORARIO": "26",
+              "GIORNO": "VENERDI",
+              "ORAINIZIO": "21:00",
+              "ORAFINE": "22:00",
+              "LIVELLO": "PRINCIPIANTI",
+              "FASCIA": {},
+            },
           ]
         }
       }
@@ -56,3 +72,104 @@
     "ERRMSG": {}
   }
 }
+// const orariData: any[] = [
+// 	{
+// 		IDORARIO: "20",
+// 		GIORNO: "LUNEDI",
+// 		ORAINIZIO: "15:00",
+// 		ORAFINE: "16:00",
+// 		LIVELLO: "PRINCIPIANTI",
+// 		FASCIA: "BAMBINI",
+// 	},
+// 	{
+// 		IDORARIO: "22",
+// 		GIORNO: "MARTEDI",
+// 		ORAINIZIO: "17:00",
+// 		ORAFINE: "18:00",
+// 		LIVELLO: "PRINCIPIANTI",
+// 		FASCIA: {},
+// 	},
+// 	{
+// 		IDORARIO: "24",
+// 		GIORNO: "MERCOLEDI",
+// 		ORAINIZIO: "19:00",
+// 		ORAFINE: "20:00",
+// 		LIVELLO: "PRINCIPIANTI",
+// 		FASCIA: "BAMBINI",
+// 	},
+// 	{
+// 		IDORARIO: "26",
+// 		GIORNO: "VENERDI",
+// 		ORAINIZIO: "21:00",
+// 		ORAFINE: "22:00",
+// 		LIVELLO: "PRINCIPIANTI",
+// 		FASCIA: {},
+// 	},
+// ];
+//ok
+// const activitiesData: Activity[] = [
+// 	{
+// 		CODATT: "CS000012",
+// 		TIPO: "2",
+// 		DESATT: "SPINNING",
+// 	},
+// 	{
+// 		CODATT: "CS000015",
+// 		TIPO: "2",
+// 		DESATT: "KARATE",
+// 	},
+// ];
+// const orariData: any[] = {
+// 	ORARIO: [
+// 		{
+// 			IDORARIO: "10",
+// 			GIORNO: "LUNEDI",
+// 			ORAINIZIO: "09:00",
+// 			ORAFINE: "10:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: "BAMBINI",
+// 		},
+// 		{
+// 			IDORARIO: "12",
+// 			GIORNO: "MERCOLEDI",
+// 			ORAINIZIO: "11:00",
+// 			ORAFINE: "12:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: {},
+// 		},
+// 	],
+// };
+// const activitiesData: Activity[] = [
+// 	{
+// 		CODATT: "CS000012",
+// 		TIPO: "2",
+// 		DESATT: "SPINNING",
+// 		ORARI: { ORARIO: [] },
+// 	},
+// 	{
+// 		CODATT: "CS000015",
+// 		TIPO: "2",
+// 		DESATT: "KARATE",
+// 		ORARI: { ORARIO: [] },
+// 	},
+// ];
+// const orariData: any[] = {
+// 	ORARIO: [
+// 		{
+// 			IDORARIO: "10",
+// 			GIORNO: "LUNEDI",
+// 			ORAINIZIO: "09:00",
+// 			ORAFINE: "10:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: "BAMBINI",
+// 		},
+// 		{
+// 			IDORARIO: "12",
+// 			GIORNO: "MERCOLEDI",
+// 			ORAINIZIO: "11:00",
+// 			ORAFINE: "12:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: {},
+// 		},
+// 	],
+// };

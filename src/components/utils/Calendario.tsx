@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import isoWeek from "dayjs/plugin/isoWeek";
 import {
+	Box,
 	Button,
 	Dialog,
 	DialogActions,
@@ -88,15 +89,16 @@ const Calendario: React.FC<CalendarioProps> = ({
 						handleConfirm();
 					}}
 					variant="contained"
-					style={{ width: "100%", height: "60px" }}
+					style={{ width: "100%" }}
 				>
-					<div style={{ display: "flex", alignItems: "center" }}>
+					{/* <div style={{ display: "flex", alignItems: "center" }}> */}
+					<div>
 						{!isMobile && (
-							<IconButton sx={{ color: "#dfdfdf" }}>
+							<Box sx={{ color: "#dfdfdf" }}>
 								{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
 									color: "#dfdfdf",
 								})}
-							</IconButton>
+							</Box>
 						)}
 						Conferma
 					</div>

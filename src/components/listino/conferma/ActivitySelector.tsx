@@ -8,7 +8,11 @@ import {
 	Typography,
 } from "@mui/material";
 import React from "react";
-import { Activity, ORARIO } from "src/components/CommonTypesInterfaces";
+import {
+	Activity,
+	ActivitySelected,
+	ORARIO,
+} from "src/components/CommonTypesInterfaces";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 
 interface ActivitySelectorProps {
@@ -72,7 +76,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 };
 
 interface TimeListProps {
-	attivitaSelezionata: Activity;
+	attivitaSelezionata: ActivitySelected;
 	orariSelezionati: string[];
 	handleTimeSelection: (timeId: ORARIO) => void;
 }
@@ -83,7 +87,7 @@ const TimeList: React.FC<TimeListProps> = ({
 	handleTimeSelection,
 }) => {
 	// console.log("orariSelezionati: ", orariSelezionati);
-	// console.log("attivitaSelezionata: ", attivitaSelezionata);
+	console.log("attivitaSelezionata: ", attivitaSelezionata);
 	return (
 		<List>
 			{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (

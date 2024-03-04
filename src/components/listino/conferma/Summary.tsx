@@ -8,17 +8,27 @@ import {
 	useTheme,
 } from "@mui/material";
 import React from "react";
-import { Activity, itemsCard } from "src/components/CommonTypesInterfaces";
+import {
+	Activity,
+	ActivitySelected,
+	itemsCard,
+} from "src/components/CommonTypesInterfaces";
 import myIcons from "src/theme/IconsDefine";
 
 // Summary.tsx
 interface SummaryProps {
 	selectedTimesMap: {
-		[activityId: number]: { activity: Activity; selectedOrari: string[] };
+		[activityId: number]: {
+			activity: ActivitySelected;
+			selectedOrari: string[];
+		};
 	};
 	setSelectedTimesMap: React.Dispatch<
 		React.SetStateAction<{
-			[activityId: number]: { activity: Activity; selectedOrari: string[] };
+			[activityId: number]: {
+				activity: ActivitySelected;
+				selectedOrari: string[];
+			};
 		}>
 	>;
 
