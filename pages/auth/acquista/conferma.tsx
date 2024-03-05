@@ -53,7 +53,7 @@ const Conferma: React.FC = () => {
 		} catch (error) {
 			console.log("ERROREEEEEEEE");
 		}
-	}, [itemsCard.note]);
+	}, [itemsCard?.note]);
 
 	useEffect(() => {
 		if (actualProduct?.codice !== null && !visualizzaComp) {

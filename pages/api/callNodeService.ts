@@ -12,6 +12,8 @@ import {
 	StripeKeysData,
 	obyPostDataCart,
 	NewUserData,
+	obyPostAttivita,
+	obyPostOrari,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -38,7 +40,9 @@ export default async function callNodeService(
 		| "prodotti"
 		| "authUserCheck"
 		| "save-user-data"
-		| "cambio-password",
+		| "cambio-password"
+		| "lista-attivita"
+		| "lista-orari",
 	obyPostData:
 		| tokenlessAccess
 		| tokenfulAccess
@@ -47,7 +51,9 @@ export default async function callNodeService(
 		| StripeKeysData
 		| obyPostProdotti
 		| obyPostDataCart
-		| NewUserData,
+		| NewUserData
+		| obyPostAttivita
+		| obyPostOrari,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

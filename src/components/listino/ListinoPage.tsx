@@ -1,7 +1,7 @@
 import React from "react";
 //REDUX-STORE
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setListino } from "src/store/actions";
+import { setListino, setLoading } from "src/store/actions";
 //*-----*//
 import { Container, Grid, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -47,12 +47,14 @@ const ListinoPage = () => {
 
 	const aggiornaListino = async () => {
 		//if (listinoState.listino === null) {
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 		try {
 			// Effettua la richiesta asincrona
-			const data = fetchListino(authUser?.USERID);
+			const data = await fetchListino(authUser?.USERID);
 			console.log("****** 2) DATA: ", data);
 			// Aggiorna lo stato Redux utilizzando la tua azione setListino
-			dispatch(setListino({ listino: (await data).listino, error: null }));
+			dispatch(setListino({ listino: data.listino, error: null }));
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		} catch (error) {
 			// Gestisci eventuali errori durante la richiesta
 			console.error("Errore durante il fetch del listino:", error);
@@ -62,6 +64,7 @@ const ListinoPage = () => {
 					error: error || "Errore sconosciuto",
 				})
 			);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		}
 		//}
 	};

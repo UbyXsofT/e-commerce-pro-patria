@@ -1,10 +1,12 @@
 import {
 	Abbonamento,
+	Activity,
 	ActualProduct,
 	AuthUser,
 	Cart,
 	Listino,
 	ListinoCardProps,
+	ORARIO,
 	StripeKeysData,
 	UserData,
 } from "src/components/CommonTypesInterfaces";
@@ -41,24 +43,24 @@ export type SetStripeKeys = {
 };
 
 //-- --//
-export interface Attività {
-	tipo: number;
-	codAtt: string;
-	desAtt: string;
-}
+// export interface Attività {
+// 	tipo: number;
+// 	codAtt: string;
+// 	desAtt: string;
+// }
 
-export interface Orario {
-	idOrario: number;
-	giorno: string;
-	oraInizio: string;
-	oraFine: string;
-	livello: string;
-	fascia: string;
-}
+// export interface Orario {
+// 	idOrario: number;
+// 	giorno: string;
+// 	oraInizio: string;
+// 	oraFine: string;
+// 	livello: string;
+// 	fascia: string;
+// }
 
 export interface ListinoAtvOrariData {
-	ATTIVITA: Attività[]; // Modifica il tipo da oggetto a array
-	ORARI: Orario[];
+	ATTIVITA: Activity[]; // Modifica il tipo da oggetto a array
+	ORARI: ORARIO[];
 }
 
 export interface ListinoAtvOrari {

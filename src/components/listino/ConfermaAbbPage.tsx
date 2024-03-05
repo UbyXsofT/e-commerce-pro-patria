@@ -1,7 +1,7 @@
 import React from "react";
 //REDUX-STORE
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setListino } from "src/store/actions";
+import { setListino, setLoading } from "src/store/actions";
 //*-----*//
 import {
 	Button,
@@ -27,36 +27,37 @@ import {
 	ORARIO,
 	ORARI,
 	ActivitySelected,
+	obyPostAttivita,
 } from "src/components/CommonTypesInterfaces";
-import fetchListino from "src/components/listino/utils/fetchListino";
-import { useSpring } from "react-spring";
-import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
-import CreateCard from "src/components/listino/card/createCard";
 import myIcons from "src/theme/IconsDefine";
 
-import { addToCart, isInCart, removeFromCart } from "./utils/functionsCart";
+import {
+	addToCart,
+	isInCart,
+	removeFromCart,
+} from "src/components/listino/utils/functionsCart";
 import { Router, useRouter } from "next/router";
 import {
 	ActivitySelector,
 	TimeList,
 } from "src/components/listino/conferma/ActivitySelector";
 import Summary from "src/components/listino/conferma/Summary";
-import ListinoOrariErrorBox from "./utils/ListinoOrariErrorBox";
 import { Info } from "@mui/icons-material";
-import LegendaIcone from "./utils/LegendaIcone";
+import LegendaIcone from "src/components/listino/utils/LegendaIcone";
+import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttivita";
 
-const activitiesData: Activity[] = [
-	{
-		CODATT: "CS000012",
-		TIPO: "2",
-		DESATT: "SPINNING",
-	},
-	{
-		CODATT: "CS000015",
-		TIPO: "2",
-		DESATT: "KARATE",
-	},
-];
+// const activitiesData: Activity[] = [
+// 	{
+// 		CODATT: "CS000012",
+// 		TIPO: "2",
+// 		DESATT: "SPINNING",
+// 	},
+// 	{
+// 		CODATT: "CS000015",
+// 		TIPO: "2",
+// 		DESATT: "KARATE",
+// 	},
+// ];
 
 const orariData: any = {
 	ORARIO: [
@@ -84,19 +85,7 @@ interface ConfermaAbbPageProps {
 }
 
 const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
-	React.useEffect(() => {
-		console.log("ConfermaAbbPage");
-		console.log(itemsCard.note);
-	}, []);
-
-	const [stepSelectOby, setStepSelectOby] = React.useState({
-		stepId: 1,
-		endNavStepId: 5,
-		endStep: 1,
-		codice: "0",
-		isClickNext: true,
-	});
-
+	const [activitiesData, setActivitiesData] = React.useState<Activity[]>([]);
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const authUser = useSelector((state: StoreState) => state.authUser);
@@ -112,8 +101,6 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	};
 	const { showAlert } = useAlertMe();
 
-	const [showCompSceltaAtv, setShowCompSceltaAtv] = React.useState(false);
-
 	const [actualProduct, setActualProduct] = React.useState({
 		codice: null,
 		nome: null,
@@ -123,42 +110,6 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		info: null,
 		quantity: null,
 	} as ActualProduct);
-
-	// const handleClickBtnCart = (itemsCard: itemsCard) => {
-	// 	console.log("handleClickBtnCart");
-	// 	console.log("@@@@@@@ ---------- >itemsCard: ");
-	// 	console.log(itemsCard);
-	// 	//vado alla pagina carrello
-
-	// 	if (actualProduct?.codice !== null) {
-	// 		//vado alla pagina carrello
-	// 		addToCart(actualProduct, cart, dispatch, authUser);
-	// 		router.replace("/auth/carrello");
-	// 	} else {
-	// 		console.log("@@@ NO actualProduct : ", actualProduct);
-	// 	}
-	// };
-
-	// const aggiornaListino = async () => {
-	// 	//if (listinoState.listino === null) {
-	// 	try {
-	// 		// Effettua la richiesta asincrona
-	// 		const data = fetchListino(authUser?.USERID);
-	// 		console.log("****** 2) DATA: ", data);
-	// 		// Aggiorna lo stato Redux utilizzando la tua azione setListino
-	// 		dispatch(setListino({ listino: (await data).listino, error: null }));
-	// 	} catch (error) {
-	// 		// Gestisci eventuali errori durante la richiesta
-	// 		console.error("Errore durante il fetch del listino:", error);
-	// 		dispatch(
-	// 			setListino({
-	// 				listino: null,
-	// 				error: error || "Errore sconosciuto",
-	// 			})
-	// 		);
-	// 	}
-	// 	//}
-	// };
 
 	//------------  "  selection times "  -----------------//
 	const [quantiOrarioScelti, setQuantiOrarioScelti] = React.useState(0);
@@ -178,17 +129,63 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		};
 	}>({});
 
-	// //selezione della attività
-	// const handleActivitySelection = (activity: Activity | null) => {
-	// 	console.log("handleActivitySelection: ", activity);
+	const fetchListaAttivitaFromBackend = async (
+		CodeAbb: string,
+		Cliente: string
+	) => {
+		//Cliente, CodeAbb,
+		console.log(
+			"fetchAttivitaFromBackend CodeAbb: ",
+			CodeAbb,
+			" Cliente: ",
+			Cliente
+		);
+		const clienteKey = eCommerceConf.ClienteKey;
+		const IDCentro = eCommerceConf.IdCentro.toString();
+		try {
+			const data = await fetchListinoAttivita({
+				Cliente,
+				CodeAbb,
+				clienteKey,
+				IDCentro,
+			} as obyPostAttivita);
 
-	// 	setSelectedActivity(activity);
-	// };
+			console.log("****** 1) DATA fetchListinoAttivita: ", data);
+
+			const listaAttivita = data.listaAttivita || [];
+			setActivitiesData(listaAttivita as Activity[]);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+		} catch (error) {
+			console.error(error);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+		}
+	};
 
 	const fetchOrariFromBackend = async (activityCode: any) => {
 		console.log("fetchOrariFromBackend: ", activityCode);
 		return orariData;
 	};
+
+	React.useEffect(() => {
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		console.log("ConfermaAbbPage");
+		console.log(itemsCard);
+		if (authUser && itemsCard) {
+			fetchListaAttivitaFromBackend(
+				itemsCard.codice,
+				authUser.USERID.toString()
+			);
+		}
+		dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	}, []);
+
+	const [stepSelectOby, setStepSelectOby] = React.useState({
+		stepId: 1,
+		endNavStepId: 5,
+		endStep: 1,
+		codice: "0",
+		isClickNext: true,
+	});
 
 	const handleActivitySelection = async (activity: Activity | null) => {
 		if (activity) {
@@ -357,12 +354,6 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	};
 
 	React.useEffect(() => {
-		// console.log("quantiOrarioScelti: ", quantiOrarioScelti);
-		// console.log("quanteAttivitaScelte: ", quanteAttivitaScelte);
-
-		// console.log("FREQUENZAS orari limite: ", itemsCard.abbonamento.FREQUENZAS);
-		// console.log("SCELTAF attività limite: ", itemsCard.abbonamento.SCELTAF);
-
 		if (Number(itemsCard.abbonamento.SCELTAF) < Number(quanteAttivitaScelte)) {
 			setIslimiteAttivitaSuperato(true);
 		} else {
@@ -440,10 +431,11 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 				<Grid
 					style={{
 						display: "flex",
-						flexDirection: "row",
-						flexWrap: "nowrap",
-						alignItems: "center",
-						justifyContent: "flex-start",
+						flexDirection: "column",
+						flexFlow: "row",
+						flexWrap: "wrap",
+						alignItems: "flex-start",
+						// justifyContent: "flex-start",
 						minHeight: "50px",
 						marginLeft: "20px",
 					}}
@@ -517,7 +509,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 				</Grid>
 
 				{itemsCard === null ? (
-					<ListinoOrariErrorBox />
+					<ListinoErrorBox />
 				) : (
 					<>
 						<Container
