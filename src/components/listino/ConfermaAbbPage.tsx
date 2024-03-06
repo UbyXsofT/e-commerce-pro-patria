@@ -28,6 +28,7 @@ import {
 	ORARI,
 	ActivitySelected,
 	obyPostAttivita,
+	obyPostOrari,
 } from "src/components/CommonTypesInterfaces";
 import myIcons from "src/theme/IconsDefine";
 
@@ -45,6 +46,8 @@ import Summary from "src/components/listino/conferma/Summary";
 import { Info } from "@mui/icons-material";
 import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttivita";
+import fetchListinoOrari from "./utils/fetchListinoOrari";
+import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
 
 // const activitiesData: Activity[] = [
 // 	{
@@ -59,26 +62,26 @@ import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttiv
 // 	},
 // ];
 
-const orariData: any = {
-	ORARIO: [
-		{
-			IDORARIO: "10",
-			GIORNO: "LUNEDI",
-			ORAINIZIO: "09:00",
-			ORAFINE: "10:00",
-			LIVELLO: "PRINCIPIANTI",
-			FASCIA: "BAMBINI",
-		},
-		{
-			IDORARIO: "12",
-			GIORNO: "MERCOLEDI",
-			ORAINIZIO: "11:00",
-			ORAFINE: "12:00",
-			LIVELLO: "PRINCIPIANTI",
-			FASCIA: {},
-		},
-	],
-};
+// const orariData: any = {
+// 	ORARIO: [
+// 		{
+// 			IDORARIO: "10",
+// 			GIORNO: "LUNEDI",
+// 			ORAINIZIO: "09:00",
+// 			ORAFINE: "10:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: "BAMBINI",
+// 		},
+// 		{
+// 			IDORARIO: "12",
+// 			GIORNO: "MERCOLEDI",
+// 			ORAINIZIO: "11:00",
+// 			ORAFINE: "12:00",
+// 			LIVELLO: "PRINCIPIANTI",
+// 			FASCIA: {},
+// 		},
+// 	],
+// };
 
 interface ConfermaAbbPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -163,7 +166,29 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 	const fetchOrariFromBackend = async (activityCode: any) => {
 		console.log("fetchOrariFromBackend: ", activityCode);
-		return orariData;
+
+		const clienteKey = eCommerceConf.ClienteKey;
+		const IDCentro = eCommerceConf.IdCentro.toString();
+		let Cliente = "";
+		if (authUser && itemsCard) {
+			Cliente = authUser.USERID.toString();
+		}
+
+		try {
+			const data = await fetchListinoOrari({
+				Cliente: Cliente,
+				clienteKey,
+				IDCentro,
+			} as obyPostOrari);
+
+			console.log("****** 1) DATA fetchOrariFromBackend: ", data);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			return data.listaAtvOrari || [];
+		} catch (error) {
+			console.error(error);
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			return [];
+		}
 	};
 
 	React.useEffect(() => {
@@ -190,19 +215,43 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	const handleActivitySelection = async (activity: Activity | null) => {
 		if (activity) {
 			try {
-				// Effettua la chiamata al servizio di backend per ottenere gli orari
-				const orariResponse = await fetchOrariFromBackend(activity.CODATT);
-				const orariData = await orariResponse; //.json();
+				// Effettua la chiamata al servizio di backend per ottenere gli orari (prima verifico in local storage)
 
-				// Aggiorna l'attività con gli orari ottenuti
-				const updatedActivity = {
-					...activity,
-					ORARI: orariData, // Assumi che la risposta contenga i dati degli orari nel formato desiderato
-				};
+				// Recuperare i dati dell'attività i suoi orari da sessionStorage
+				const storedData = sessionStorage.getItem(
+					"attivitaData-" + activity.CODATT
+				);
+				const parsedData = storedData ? JSON.parse(storedData) : null;
+				let orariResponse: any = null;
 
-				console.error("updatedActivity:", updatedActivity);
-				// Imposta l'attività selezionata con gli orari
-				setSelectedActivity(updatedActivity);
+				if (parsedData === null) {
+					console.log(
+						"@@@ ORARI NON PRESENTI IN LOCAL STORAGE - EFFETTUO CHIAMATA API"
+					);
+					//effettuo la chiamata API
+					orariResponse = await fetchOrariFromBackend(activity.CODATT);
+					// Salvare i dati in sessionStorage
+					sessionStorage.setItem(
+						"attivitaData-" + activity.CODATT,
+						JSON.stringify(orariResponse)
+					);
+				} else {
+					console.log("@@@ ORARI PRESENTI IN LOCAL STORAGE - RECUPERO I DATI");
+					//recupero i dati orario dal sessionStorage
+					orariResponse = parsedData;
+				}
+
+				if (orariResponse) {
+					const updatedActivity = {
+						...activity,
+						ORARI: orariResponse, // Assumi che la risposta contenga i dati degli orari nel formato desiderato
+					};
+
+					//console.error("updatedActivity:", updatedActivity);
+
+					// Imposta l'attività selezionata con gli orari
+					setSelectedActivity(updatedActivity);
+				}
 			} catch (error) {
 				console.error("Errore durante il recupero degli orari:", error);
 			}

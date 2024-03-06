@@ -459,7 +459,7 @@ export interface ORARIO {
 }
 
 export interface ORARI {
-	ORARIO: ORARIO;
+	ORARIO: ORARIO | null[];
 }
 
 export interface Activity {

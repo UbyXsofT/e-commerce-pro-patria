@@ -54,7 +54,7 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 	return (
 		<Autocomplete
 			options={activities}
-			disabled={islimiteAttivitaSuperato}
+			//disabled={islimiteAttivitaSuperato}
 			getOptionLabel={(activity) => activity.DESATT}
 			onChange={(_, value) => handleActivitySelection(value)}
 			onInputChange={(_, value, reason) => {

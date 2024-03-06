@@ -60,7 +60,7 @@ export type SetStripeKeys = {
 
 export interface ListinoAtvOrariData {
 	ATTIVITA: Activity[]; // Modifica il tipo da oggetto a array
-	ORARI: ORARIO[];
+	ORARI: ORARIO[] | null[];
 }
 
 export interface ListinoAtvOrari {

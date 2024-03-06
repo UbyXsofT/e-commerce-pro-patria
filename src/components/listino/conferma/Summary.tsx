@@ -187,7 +187,7 @@ const Summary: React.FC<SummaryProps> = ({
 							variant="h6"
 							sx={{ ml: 0, mr: 2 }}
 						>
-							{dispAtvRim}
+							{dispAtvRim < 0 ? 0 : dispAtvRim}
 						</Typography>
 					</div>
 
