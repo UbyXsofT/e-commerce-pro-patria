@@ -11,18 +11,31 @@ import callNodeService from "pages/api/callNodeService";
 
 // Inside your fetchListinoAttivita function, you can simplify the return statement
 const fetchListinoAttivita = async ({
-	Cliente,
-	CodeAbb,
 	clienteKey,
 	IDCentro,
+	Cliente,
+	Abbonamento,
+	DataIni,
+	Importo,
+	SceltaA,
+	FrequenzaS,
 }: obyPostAttivita): Promise<{
 	listaAttivita: Activity | null;
 	error: null | unknown;
 }> => {
 	try {
 		const respCall: responseCall = await callNodeService(
-			"lista-attivita",
-			{ clienteKey, IDCentro, Cliente, CodeAbb },
+			"ecommerce-lista-attivita",
+			{
+				clienteKey,
+				IDCentro,
+				Cliente,
+				Abbonamento,
+				DataIni,
+				Importo,
+				SceltaA,
+				FrequenzaS,
+			},
 			null
 		);
 

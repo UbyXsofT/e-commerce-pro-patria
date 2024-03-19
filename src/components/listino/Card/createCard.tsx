@@ -6,10 +6,11 @@ import {
 	Abbonamento,
 	Listino,
 	itemsCard,
+	StoreState,
 } from "src/components/CommonTypesInterfaces";
 import BtnStepStore from "../stepper/BtnStepListino";
 import { isAbbonamento, isArea, isGruppo, isSede } from "../utils/checkTipo";
-import findInfoAbb from "../utils/findInfoAbb";
+//import findInfoAbb from "../utils/findInfoAbb";
 import trovaCodice from "../utils/trovaCodice";
 import trovaCodiceNextOby from "../utils/trovaCodiceNextOby";
 import ListinoCard from "./ListinoCard";
@@ -17,6 +18,11 @@ import chiaveRandom from "src/components/utils/chiaveRandom";
 import addSubTitleIconStep from "../utils/addSubTitleIconStep";
 import myIcons from "src/theme/IconsDefine";
 import createItemsCard from "../utils/creaItemsCard";
+import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import router from "next/router";
+import eCommerceConf from "eCommerceConf.json";
+import { setLoading } from "src/store/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CreateCard(
 	stepId: number,
@@ -56,6 +62,13 @@ export default function CreateCard(
 	let sedeDesiderataTrovata = false;
 	let areaDesiderataTrovata = false;
 
+	// const [isFetchingData, setIsFetchingData] = React.useState(
+	// 	useSelector((state: StoreState) => state.loading)
+	// );
+	// React.useEffect(() => {
+	// 	isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	// }, [isFetchingData]);
+
 	//console.log("@@@ --> CreateCard stepId: ", stepId);
 	// Aggiungi un nuovo passo con uno stepId univoco
 	if (
@@ -75,7 +88,7 @@ export default function CreateCard(
 						//spread operator per recuperare tutti i valori precedenti
 						endStep: 1,
 					}));
-					const infoAbb = findInfoAbb(gruppo, stepId);
+					//const infoAbb = findInfoAbb(gruppo, stepId);
 					//console.log("@@@ --> infoAbb: ", infoAbb);
 					if (isGruppo(gruppo)) {
 						const itemsCard = createItemsCard(
@@ -97,7 +110,7 @@ export default function CreateCard(
 							</div>
 						);
 
-						//console.log("@@@ IS GRUPPO: ", gruppo);
+						// console.log("@@@ CREATE CARD IS GRUPPO: ", gruppo);
 					}
 					return;
 
@@ -157,7 +170,7 @@ export default function CreateCard(
 							sediDelGruppo.forEach((sede: Sede) => {
 								// Ora 'sede' è un oggetto del tipo Sede
 								//console.log("@@@ SEDE EACH: ", sede);
-								const infoAbb = findInfoAbb(sede, stepId);
+								//const infoAbb = findInfoAbb(sede, stepId);
 								//console.log("@@@ --> infoAbb: ", infoAbb);
 
 								if (isSede(sede)) {
@@ -261,7 +274,7 @@ export default function CreateCard(
 							areeDellaSede?.forEach((area: Area) => {
 								// Ora 'area' è un oggetto del tipo area
 								//console.log("@@@ area EACH: ", area);
-								const infoAbb = findInfoAbb(area, stepId);
+								//const infoAbb = findInfoAbb(area, stepId);
 								//console.log("@@@ --> infoAbb: ", infoAbb);
 
 								if (isArea(area)) {
@@ -431,8 +444,15 @@ export default function CreateCard(
 		console.log("<--- E - R - R - O - R - E --->");
 		// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
 		console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
-		if (listinoState.listino === null) {
-			aggiornaListino();
+
+		if (listinoState.listino === null || listinoState.listino === undefined) {
+			try {
+				aggiornaListino();
+			} catch (error) {
+				router.push(
+					`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati dal servizio del centro fitness. Se il problema persiste si prega di cottattare il proprio centro fitness. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
+				);
+			}
 		}
 	}
 

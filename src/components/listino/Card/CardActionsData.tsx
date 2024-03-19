@@ -251,7 +251,6 @@ const CardActionsData = ({
 											width: "100%",
 											backgroundColor: theme.palette.warning.main,
 											marginRight: "5px",
-											height: "60px",
 										}}
 										onClick={() => {
 											handleClickOpenCalendario();
@@ -259,14 +258,14 @@ const CardActionsData = ({
 										}}
 										variant="contained"
 									>
-										<div style={{ display: "flex", alignItems: "center" }}>
-											{!isMobile && (
-												<IconButton sx={{ color: "#dfdfdf" }}>
+										<div>
+											{/* {!isMobile && (
+												<Box sx={{ color: "#dfdfdf" }}>
 													{React.cloneElement(myIcons.DataCalendarIcon, {
 														color: "#dfdfdf",
 													})}
-												</IconButton>
-											)}
+												</Box>
+											)} */}
 											SCEGLI DATA INIZIO
 										</div>
 									</Button>
@@ -275,7 +274,6 @@ const CardActionsData = ({
 										style={{
 											width: "100%",
 											backgroundColor: theme.palette.primary.main,
-											height: "60px",
 										}}
 										onClick={() => {
 											handleClickConferma(itemsCard);
@@ -283,13 +281,13 @@ const CardActionsData = ({
 										}}
 										variant="contained"
 									>
-										<div style={{ display: "flex", alignItems: "center" }}>
+										<div>
 											{!isMobile && (
-												<IconButton sx={{ color: "#dfdfdf" }}>
+												<Box sx={{ color: "#dfdfdf" }}>
 													{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
 														color: "#dfdfdf",
 													})}
-												</IconButton>
+												</Box>
 											)}
 											CONFERMA
 										</div>
@@ -323,18 +321,41 @@ const CardActionsData = ({
 									<Typography
 										variant="body1"
 										textAlign={"center"}
-										color={(theme) => theme.palette.warning.main}
+										color={(theme) => theme.palette.success.main}
 									>
 										{dayjs(itemsCard.abbonamento.DATAINI)
 											.locale("it")
 											.format("DD-MM-YYYY")}
 									</Typography>
+									{itemsCard?.abbonamento?.DATAFIN !== undefined ? (
+										<>
+											<Typography
+												variant="subtitle1"
+												textAlign={"center"}
+												color={(theme) =>
+													theme.palette.mode === "light" ? "#323232" : "#dfdfdf"
+												}
+											>
+												Data fine abbonamento:
+											</Typography>
+											<Typography
+												variant="body1"
+												textAlign={"center"}
+												color={(theme) => theme.palette.warning.main}
+											>
+												{dayjs(itemsCard.abbonamento.DATAFIN)
+													.locale("it")
+													.format("DD-MM-YYYY")}
+											</Typography>
+										</>
+									) : (
+										<></>
+									)}
 								</Box>
 								<Button
 									style={{
 										width: "100%",
 										backgroundColor: theme.palette.primary.main,
-										height: "60px",
 									}}
 									onClick={() => {
 										//handleClickBtnCart(itemsCard);
@@ -342,13 +363,13 @@ const CardActionsData = ({
 									}}
 									variant="contained"
 								>
-									<div style={{ display: "flex", alignItems: "center" }}>
+									<div>
 										{!isMobile && (
-											<IconButton sx={{ color: "#dfdfdf" }}>
+											<Box sx={{ color: "#dfdfdf" }}>
 												{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
 													color: "#dfdfdf",
 												})}
-											</IconButton>
+											</Box>
 										)}
 										CONFERMA
 									</div>
@@ -363,13 +384,13 @@ const CardActionsData = ({
 							variant="contained"
 							style={{ width: "100%" }}
 						>
-							<div style={{ display: "flex", alignItems: "center" }}>
+							<div>
 								{!isMobile && (
-									<IconButton sx={{ color: "#dfdfdf" }}>
+									<Box sx={{ color: "#dfdfdf" }}>
 										{React.cloneElement(myIcons.CheckCircleOutlineIcon, {
 											color: "#dfdfdf",
 										})}
-									</IconButton>
+									</Box>
 								)}
 								SELEZIONA
 							</div>

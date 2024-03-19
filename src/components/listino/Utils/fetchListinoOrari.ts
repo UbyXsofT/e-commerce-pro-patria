@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import eCommerceConf from "eCommerceConf.json";
 import {
 	responseCall,
-	obyPostSelezioneAbb,
-	StoreState,
-	Listino,
+	obyPostOrari,
 } from "src/components/CommonTypesInterfaces";
 
 import { ListinoAtvOrari } from "src/store/interfaces";
@@ -15,46 +13,31 @@ import callNodeService from "pages/api/callNodeService";
 
 const fetchListinoOrari = async ({
 	Cliente,
-	Abbonamento,
-	Importo,
-	SceltaA,
-	FrequenzaS,
-}: obyPostSelezioneAbb): Promise<{
-	listAtvOrari: ListinoAtvOrari | null;
+	clienteKey,
+	CodeAtv,
+}: obyPostOrari): Promise<{
+	listaAtvOrari: ListinoAtvOrari | null;
 	error: null | unknown;
 }> => {
-	const obyPostSelezioneAbb: obyPostSelezioneAbb = {
-		clienteKey: eCommerceConf.ClienteKey,
-		Cliente: Cliente,
-		Abbonamento: Abbonamento,
-		Importo: Importo,
-		SceltaA: SceltaA,
-		FrequenzaS: FrequenzaS,
-	};
+	// const respCall = await fetch("/data/dataorari.json");
 
 	try {
-		// const respCall: responseCall = await callNodeService(
-		// 	"prodotti",
-		// 	obyPostProdotti,
-		// 	null
-		// );
+		const respCall: responseCall = await callNodeService(
+			"ecommerce-lista-orari",
+			{ clienteKey, Cliente, CodeAtv },
+			null
+		);
 
-		const respCall = await fetch("/data/dataorari.json");
+		const listOrariResponse = respCall.messageCli.message?.ORARI || null;
+		console.log("fetchListinoOrari  listOrariResponse: ", listOrariResponse);
 
-		// Verifica che la richiesta sia stata eseguita correttamente (status 200)
-		if (!respCall.ok) {
-			throw new Error(`Errore durante la richiesta: ${respCall.statusText}`);
-		}
+		//const orarioArray = listOrariResponse?.ORARIO || null;
+		//console.log("fetchListinoOrari  orarioArray: ", orarioArray);
 
-		const listinoOrariResponse = await respCall.json();
-
-		const listinoOrariArray = listinoOrariResponse || null;
-		console.log("fetchListinoOrari Array: ", listinoOrariArray);
-
-		return { listAtvOrari: listinoOrariArray.SELATTIVITA, error: null };
-	} catch (error: unknown) {
+		return { listaAtvOrari: listOrariResponse, error: null };
+	} catch (error) {
 		console.log(error);
-		return { listAtvOrari: null, error: error };
+		return { listaAtvOrari: null, error };
 	}
 };
 

@@ -14,6 +14,7 @@ import {
 	Divider,
 	IconButton,
 	Paper,
+	Skeleton,
 	useMediaQuery,
 } from "@mui/material";
 import CardHeadTitle from "src/components/listino/card/CardHeadTitle";
@@ -41,6 +42,8 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { Dialog, DialogTitle } from "@mui/material";
+import { setLoading } from "src/store/actions";
+import chiaveRandom from "src/components/utils/chiaveRandom";
 
 //dayjs.extend(isoWeek);
 
@@ -51,62 +54,80 @@ const ListinoCard = ({
 }: ListinoCardProps) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
 	const [isHovered, setIsHovered] = React.useState(false);
+	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+
+	const [isFetchingData, setIsFetchingData] = React.useState(
+		useSelector((state: StoreState) => state.loading)
+	);
+	// React.useEffect(() => {
+	// 	isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	// }, [isFetchingData]);
 
 	return (
 		<Paper
 			elevation={isHovered ? 6 : 1} // Imposta l'elevation a 5 quando il mouse è sopra la Card, altrimenti 1
-			// sx={{
-			// 	minHeight: "120px",
-			// 	backgroundColor: (theme) =>
-			// 		theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
-			// }}
 		>
-			<Card
-				onMouseEnter={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
-				sx={{
-					maxWidth: isMobile ? "290px" : "350px",
-					width: isMobile ? "290px" : "350px",
-					marginTop: "25px",
-					marginBottom: "25px",
-					height: "auto",
-					cursor: "pointer", // Cambia il cursore quando il componente è cliccabile
-				}}
-			>
-				<CardHeader
+			{isFetchingData ? (
+				<Skeleton
+					key={chiaveRandom()} // Assicurati di avere chiavi univoche per ogni Skeleton
+					variant="rounded"
 					sx={{
-						minHeight: "70px",
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "space-between",
-						alignItems: "stretch",
-						padding: "16px",
+						width: isMobile ? "290px" : "350px",
+						marginTop: "25px",
+						marginBottom: "25px",
+						height: "350px",
 					}}
-					title={<CardHeadTitle itemsCard={itemsCard} />}
 				/>
-				<CardContent
+			) : (
+				<Card
+					onMouseEnter={() => setIsHovered(true)}
+					onMouseLeave={() => setIsHovered(false)}
 					sx={{
-						marginTop: "-10px",
-						display: "flex",
-						flexDirection: "column",
-						flexWrap: "nowrap",
-						alignItems: "flex-start",
-						justifyContent: "space-between",
+						maxWidth: isMobile ? "290px" : "350px",
+						width: isMobile ? "290px" : "350px",
+						marginTop: "25px",
+						marginBottom: "25px",
+						height: "auto",
+						cursor: "pointer", // Cambia il cursore quando il componente è cliccabile
 					}}
 				>
-					<CardContentData itemsCard={itemsCard} />
-				</CardContent>
+					<CardHeader
+						sx={{
+							minHeight: "70px",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-between",
+							alignItems: "stretch",
+							padding: "16px",
+						}}
+						title={<CardHeadTitle itemsCard={itemsCard} />}
+					/>
+					<CardContent
+						sx={{
+							marginTop: "-10px",
+							display: "flex",
+							flexDirection: "column",
+							flexWrap: "nowrap",
+							alignItems: "flex-start",
+							justifyContent: "space-between",
+						}}
+					>
+						<CardContentData itemsCard={itemsCard} />
+					</CardContent>
 
-				<CardActionsData
-					itemsCard={itemsCard}
-					setStepSelectOby={setStepSelectOby}
-					stepSelectOby={stepSelectOby}
-				/>
-			</Card>
+					<CardActionsData
+						itemsCard={itemsCard}
+						setStepSelectOby={setStepSelectOby}
+						stepSelectOby={stepSelectOby}
+					/>
+				</Card>
+			)}
 		</Paper>
 	);
 };
 
 export default ListinoCard;
+function dispatch(arg0: any) {
+	throw new Error("Function not implemented.");
+}

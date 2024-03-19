@@ -8,20 +8,22 @@ interface CardHeadTitleProps {
 }
 
 const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
-	//console.log("@@@ CardHeadTitle ---> itemsCard: ", itemsCard);
+	console.log("@@@ CardHeadTitle ---> itemsCard: ", itemsCard);
 	return (
 		<div>
 			<div style={{ display: "flex", alignItems: "center" }}>
 				{itemsCard.tipo === "GRUPPO" &&
-					React.cloneElement(myIcons.GruppoIcon, { fontSize: "large" })}
+					React.cloneElement(myIcons.GruppoIcon, { fontSize: "medium" })}
 				{itemsCard.tipo === "SEDE" &&
-					React.cloneElement(myIcons.SedeIcon, { fontSize: "large" })}
+					React.cloneElement(myIcons.SedeIcon, { fontSize: "medium" })}
 				{itemsCard.tipo === "AREA" &&
-					React.cloneElement(myIcons.AreaIcon, { fontSize: "large" })}
+					React.cloneElement(myIcons.AreaIcon, { fontSize: "medium" })}
 				{itemsCard.tipo === "ABBONAMENTO" &&
-					React.cloneElement(myIcons.AbbIcon, { fontSize: "large" })}
+					React.cloneElement(myIcons.AbbIcon, { fontSize: "medium" })}
 
-				<div style={{ marginLeft: "8px" }}>{itemsCard?.descrizione}</div>
+				<div style={{ marginLeft: "8px", fontSize: "large" }}>
+					{itemsCard?.descrizione}
+				</div>
 			</div>
 
 			<Divider />

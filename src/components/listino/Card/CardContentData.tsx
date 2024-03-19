@@ -76,7 +76,8 @@ const CardContentData = ({ itemsCard }: CardContentDataProps) => {
 		>
 			<Typography
 				variant="body2"
-				sx={{ fontWeight: "bold", mt: 2 }}
+				sx={{ fontWeight: "bold" }}
+				// sx={{ fontWeight: "bold", mt: 2 }}
 			>
 				Note:
 			</Typography>

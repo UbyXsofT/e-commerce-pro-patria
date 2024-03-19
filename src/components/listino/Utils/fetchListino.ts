@@ -17,29 +17,31 @@ const fetchListino = async (
 }> => {
 	const obyPostProdotti: obyPostProdotti = {
 		clienteKey: eCommerceConf.ClienteKey,
-		IDCliente: IDCliente ?? "",
+		Cliente: IDCliente ?? "",
 	};
 
 	try {
-		// const respCall: responseCall = await callNodeService(
-		// 	"prodotti",
-		// 	obyPostProdotti,
-		// 	null
-		// );
+		const respCall: responseCall = await callNodeService(
+			"ecommerce-listino-prodotti",
+			obyPostProdotti,
+			null
+		);
 
-		const respCall = await fetch("/data/data.json");
+		//const respCall = await fetch("/data/data.json");
 
 		// Verifica che la richiesta sia stata eseguita correttamente (status 200)
-		if (!respCall.ok) {
-			throw new Error(`Errore durante la richiesta: ${respCall.statusText}`);
-		}
+		// if (!respCall.ok) {
+		// 	throw new Error(`Errore durante la richiesta: ${respCall.statusText}`);
+		// }
+		// const listinoResponse = await respCall.json();
 
-		const listinoResponse = await respCall.json();
+		const listinoResponse =
+			(await respCall.messageCli.message?.prodotti) || null;
 
-		const listinoArray = listinoResponse || null;
+		const listinoArray = listinoResponse.LISTINO || null;
 		console.log("fetchListino Array: ", listinoArray);
 
-		return { listino: listinoArray.LISTINO, error: null };
+		return { listino: listinoArray, error: null };
 	} catch (error: unknown) {
 		console.log(error);
 		return { listino: null, error: error };

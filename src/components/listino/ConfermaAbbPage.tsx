@@ -132,35 +132,51 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		};
 	}>({});
 
+	const [isFetchingData, setIsFetchingData] = React.useState(
+		useSelector((state: StoreState) => state.loading)
+	);
+	React.useEffect(() => {
+		isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	}, [isFetchingData]);
+
 	const fetchListaAttivitaFromBackend = async (
-		CodeAbb: string,
+		itemsCard: itemsCard,
 		Cliente: string
 	) => {
 		//Cliente, CodeAbb,
 		console.log(
-			"fetchAttivitaFromBackend CodeAbb: ",
-			CodeAbb,
+			"fetchAttivitaFromBackend itemsCard: ",
+			itemsCard,
 			" Cliente: ",
 			Cliente
 		);
 		const clienteKey = eCommerceConf.ClienteKey;
 		const IDCentro = eCommerceConf.IdCentro.toString();
+		const Abbonamento = itemsCard.abbonamento.CODABB;
+		const DataIni = itemsCard.abbonamento.DATAINI;
+		const Importo = itemsCard.abbonamento.IMPORTO;
+		const SceltaA = itemsCard.abbonamento.SCELTAF;
+		const FrequenzaS = itemsCard.abbonamento.FREQUENZAS;
 		try {
 			const data = await fetchListinoAttivita({
-				Cliente,
-				CodeAbb,
 				clienteKey,
 				IDCentro,
+				Cliente,
+				Abbonamento,
+				DataIni,
+				Importo,
+				SceltaA,
+				FrequenzaS,
 			} as obyPostAttivita);
 
 			console.log("****** 1) DATA fetchListinoAttivita: ", data);
 
 			const listaAttivita = data.listaAttivita || [];
 			setActivitiesData(listaAttivita as Activity[]);
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 		} catch (error) {
 			console.error(error);
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 		}
 	};
 
@@ -182,26 +198,23 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 			} as obyPostOrari);
 
 			console.log("****** 1) DATA fetchOrariFromBackend: ", data);
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 			return data.listaAtvOrari || [];
 		} catch (error) {
 			console.error(error);
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 			return [];
 		}
 	};
 
 	React.useEffect(() => {
-		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
 		console.log("ConfermaAbbPage");
 		console.log(itemsCard);
 		if (authUser && itemsCard) {
-			fetchListaAttivitaFromBackend(
-				itemsCard.codice,
-				authUser.USERID.toString()
-			);
+			fetchListaAttivitaFromBackend(itemsCard, authUser.USERID.toString());
 		}
-		dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+		setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 	}, []);
 
 	const [stepSelectOby, setStepSelectOby] = React.useState({

@@ -37,12 +37,12 @@ export default async function callNodeService(
 		| "recupero-credenziali"
 		| "stripe/get-stripe-key"
 		| "stripe/checkout-session"
-		| "prodotti"
+		| "ecommerce-listino-prodotti"
 		| "authUserCheck"
 		| "save-user-data"
 		| "cambio-password"
-		| "lista-attivita"
-		| "lista-orari",
+		| "ecommerce-lista-attivita"
+		| "ecommerce-lista-orari",
 	obyPostData:
 		| tokenlessAccess
 		| tokenfulAccess

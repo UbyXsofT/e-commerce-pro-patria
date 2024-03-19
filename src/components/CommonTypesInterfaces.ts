@@ -314,7 +314,11 @@ export interface obyPostAttivita {
 	clienteKey: string;
 	Cliente: string;
 	IDCentro: string;
-	CodeAbb: string;
+	Abbonamento: string;
+	DataIni: string;
+	Importo: string;
+	SceltaA: string;
+	FrequenzaS: string;
 }
 export interface obyPostOrari {
 	clienteKey: string;
@@ -323,14 +327,14 @@ export interface obyPostOrari {
 	CodeAtv: string;
 }
 //-	ECommerce_Selezione(Cliente As String, Abbonamento As String, DataIni As String, Importo As String, SceltaA As String, FrequenzaS As String)
-export interface obyPostSelezioneAbb {
-	clienteKey: string;
-	Cliente: string;
-	Abbonamento: string;
-	Importo: string;
-	SceltaA: string;
-	FrequenzaS: string;
-}
+// export interface obyPostSelezioneAbb {
+// 	clienteKey: string;
+// 	Cliente: string;
+// 	Abbonamento: string;
+// 	Importo: string;
+// 	SceltaA: string;
+// 	FrequenzaS: string;
+// }
 
 export interface itemsCard {
 	stepId: number;
@@ -362,6 +366,8 @@ export interface Abbonamento {
 	DATAINI: string;
 	PERIODOATT: string;
 	FREQUENZAS: string;
+	CODPROMO: string;
+	DATAFIN: string;
 }
 
 export interface Area {

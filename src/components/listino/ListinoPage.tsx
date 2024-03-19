@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setListino, setLoading } from "src/store/actions";
 //*-----*//
-import { Container, Grid, useMediaQuery } from "@mui/material";
+import { Container, Grid, Skeleton, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import Layout from "src/components/layout/Layout";
@@ -16,6 +16,7 @@ import fetchListino from "src/components/listino/utils/fetchListino";
 import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
 import CreateCard from "src/components/listino/card/createCard";
+import router from "next/router";
 
 const ListinoPage = () => {
 	const springPropsCards = useSpring({
@@ -45,16 +46,31 @@ const ListinoPage = () => {
 		[] as JSX.Element[]
 	);
 
+	const [isFetchingData, setIsFetchingData] = React.useState(
+		useSelector((state: StoreState) => state.loading)
+	);
+	React.useEffect(() => {
+		isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	}, [isFetchingData]);
+
 	const aggiornaListino = async () => {
 		//if (listinoState.listino === null) {
-		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
 		try {
 			// Effettua la richiesta asincrona
 			const data = await fetchListino(authUser?.USERID);
 			console.log("****** 2) DATA: ", data);
 			// Aggiorna lo stato Redux utilizzando la tua azione setListino
-			dispatch(setListino({ listino: data.listino, error: null }));
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			if (data.listino === null) {
+				setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+				router.push(
+					`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati necessari. Se il problema persiste si prega di cottattare il proprio centro fitness.. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
+				);
+			} else {
+				dispatch(setListino({ listino: data.listino, error: null }));
+			}
+
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 		} catch (error) {
 			// Gestisci eventuali errori durante la richiesta
 			console.error("Errore durante il fetch del listino:", error);
@@ -64,7 +80,7 @@ const ListinoPage = () => {
 					error: error || "Errore sconosciuto",
 				})
 			);
-			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 		}
 		//}
 	};
@@ -93,7 +109,7 @@ const ListinoPage = () => {
 		if (stepSelectOby.stepId === 1) {
 			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
 			setStoryStep_SubTitleComp([]);
-			console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
+			console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
 			if (listinoState.listino === null) {
 				aggiornaListino();
 			}
