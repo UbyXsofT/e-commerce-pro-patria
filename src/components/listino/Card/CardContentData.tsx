@@ -7,7 +7,8 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import FormatString from "src/components/utils/FormatString";
-import DescFullTxt from "./DescFullTxt";
+// import DescFullTxt from "./DescFullTxt";
+import DescFullTxt from "src/components/listino/card/DescFullTxt";
 import { itemsCard } from "src/components/CommonTypesInterfaces";
 import myIcons from "src/theme/IconsDefine";
 

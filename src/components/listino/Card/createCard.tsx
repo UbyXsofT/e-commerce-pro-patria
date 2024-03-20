@@ -8,16 +8,17 @@ import {
 	itemsCard,
 	StoreState,
 } from "src/components/CommonTypesInterfaces";
-import BtnStepStore from "../stepper/BtnStepListino";
-import { isAbbonamento, isArea, isGruppo, isSede } from "../utils/checkTipo";
-//import findInfoAbb from "../utils/findInfoAbb";
-import trovaCodice from "../utils/trovaCodice";
-import trovaCodiceNextOby from "../utils/trovaCodiceNextOby";
+// import BtnStepStore from "../stepper/BtnStepListino";
+import BtnStepStore from "src/components/listino/stepper/BtnStepListino";
+// import { isAbbonamento, isArea, isGruppo, isSede } from "../utils/checkTipo";
+import { isAbbonamento, isArea, isGruppo, isSede } from "src/components/listino/utils/checkTipo";
+import trovaCodice from "src/components/listino/utils/trovaCodice";
+import trovaCodiceNextOby from "src/components/listino/utils/trovaCodiceNextOby";
 import ListinoCard from "./ListinoCard";
 import chiaveRandom from "src/components/utils/chiaveRandom";
-import addSubTitleIconStep from "../utils/addSubTitleIconStep";
+import addSubTitleIconStep from "src/components/listino/utils/addSubTitleIconStep";
 import myIcons from "src/theme/IconsDefine";
-import createItemsCard from "../utils/creaItemsCard";
+import createItemsCard from "src/components/listino/utils/creaItemsCard";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import router from "next/router";
 import eCommerceConf from "eCommerceConf.json";
