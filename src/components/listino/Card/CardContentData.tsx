@@ -73,6 +73,7 @@ const CardContentData = ({ itemsCard }: CardContentDataProps) => {
 				flexDirection: "column",
 				justifyContent: "space-between",
 				alignItems: "stretch",
+				minHeight: "70px",
 			}}
 		>
 			<Typography
@@ -84,7 +85,7 @@ const CardContentData = ({ itemsCard }: CardContentDataProps) => {
 			</Typography>
 			<Divider sx={{ mb: 1 }} />
 			<Typography
-				variant="caption"
+				variant="body1"
 				color="text.secondary"
 				sx={{ whiteSpace: "pre-line", overflow: "hidden" }}
 			>

@@ -15,7 +15,7 @@ export default function createItemsCard(
 
 	try {
 		const infoAbb = findInfoAbb(itemsTipo, stepId);
-		console.log("infoAbb: ", infoAbb);
+		//console.log("infoAbb: ", infoAbb);
 		switch (tipo) {
 			case "GRUPPO":
 				itemsCard = {

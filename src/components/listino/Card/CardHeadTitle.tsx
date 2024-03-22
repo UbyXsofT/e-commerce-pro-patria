@@ -8,7 +8,7 @@ interface CardHeadTitleProps {
 }
 
 const CardHeadTitle = ({ itemsCard }: CardHeadTitleProps) => {
-	console.log("@@@ CardHeadTitle ---> itemsCard: ", itemsCard);
+	//console.log("@@@ CardHeadTitle ---> itemsCard: ", itemsCard);
 	return (
 		<div>
 			<div style={{ display: "flex", alignItems: "center" }}>

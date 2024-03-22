@@ -30,7 +30,7 @@ export default function findInfoAbb(item: any, stepId: number) {
 		all_InfoRequest.forEach((richiesta: RequestItem) => {
 			//console.log("item: ", item);
 			const { name, tipo, valore, stepId } = richiesta;
-			console.log("richiesta: ", richiesta);
+			//console.log("richiesta: ", richiesta);
 
 			let entityType = "NESSUNO";
 			let inItemArray: any[] = [];

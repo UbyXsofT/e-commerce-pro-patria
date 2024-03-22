@@ -1,0 +1,182 @@
+{
+   "LISTINO": {
+      "GRUPPO": [
+         {
+            "CODGRUPPO": "1",
+            "DESGRUPPO": "A-SEDI ESTERNE",
+            "NOTEGRUPPO": "attivtià in sedi dislocate nel territorio",
+            "SEDE": [
+               {
+                  "IDSEDE": "20011",
+                  "DESCSEDE": "MUGELLO",
+                  "NOTESEDE": "NOTE",
+                  "AREA": [
+                     {
+                        "CODAREA": "300",
+                        "DESAREA": "GENERICA",
+                        "NOTEAREA": "",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB000075",
+                              "DESABB": "MUGELLO-KATATE 1V",
+                              "NOTEABB": "",
+                              "IMPORTO": "240.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "1",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           }
+                        ]
+                     },
+                     {
+                        "CODAREA": "301ABBBABY",
+                        "DESAREA": "ABBONAMENTI BABY",
+                        "NOTEAREA": "",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB000073",
+                              "DESABB": "MUGELLO-BABY GYM 1V",
+                              "NOTEABB": "",
+                              "IMPORTO": "240.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "1",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           },
+                           {
+                              "CODABB": "AB000074",
+                              "DESABB": "MUGELLO-BABY GYM 2V",
+                              "NOTEABB": "",
+                              "IMPORTO": "360.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "2",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           }
+                        ]
+                     },
+                     {
+                        "CODAREA": "302ABBGAF",
+                        "DESAREA": "ABBONAMENTI GAF",
+                        "NOTEAREA": "",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB000070",
+                              "DESABB": "MUGELLO-GAF 1V",
+                              "NOTEABB": "",
+                              "IMPORTO": "240.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "1",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "1",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           },
+                           {
+                              "CODABB": "AB000071",
+                              "DESABB": "MUGELLO-GAF 2V",
+                              "NOTEABB": "",
+                              "IMPORTO": "360.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "2",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "2",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           },
+                           {
+                              "CODABB": "AB000072",
+                              "DESABB": "MUGELLO-GAF 3V",
+                              "NOTEABB": "",
+                              "IMPORTO": "420.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "3",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "3",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2024-05-31"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         },
+         {
+            "CODGRUPPO": "3",
+            "DESGRUPPO": "B-CAMPI ESTIVI",
+            "NOTEGRUPPO": "",
+            "SEDE": [
+               {
+                  "IDSEDE": "2010",
+                  "DESCSEDE": "GENERICA",
+                  "NOTESEDE": "",
+                  "AREA": [
+                     {
+                        "CODAREA": "303ADULTI",
+                        "DESAREA": "ADULTI",
+                        "NOTEAREA": "",
+                        "ABBONAMENTO": [
+                           {
+                              "CODABB": "AB000131",
+                              "DESABB": "01-CAMPUS",
+                              "NOTEABB": "",
+                              "IMPORTO": "100.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "0",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "0",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2023-09-01"
+                           },
+                           {
+                              "CODABB": "AB000132",
+                              "DESABB": "02-CAMPUS",
+                              "NOTEABB": "",
+                              "IMPORTO": "100.00",
+                              "PROMO": "0",
+                              "CODPROMO": "''",
+                              "IMPORTOS": "0.00",
+                              "SCELTAF": "0",
+                              "NOSOSP": "0",
+                              "PERIODOATT": "0",
+                              "FREQUENZAS": "0",
+                              "DATAINI": "2024-03-20",
+                              "DATAFIN": "2023-09-08"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+}

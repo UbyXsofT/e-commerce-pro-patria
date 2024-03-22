@@ -63,6 +63,9 @@ const CardActionsData = ({
 
 	const handleClick = (itemData: itemsCard) => {
 		const step = itemsCard;
+
+		console.log("---- >>  STEP: ", step);
+
 		if (step?.codice !== null) {
 			//console.log("step?.codice", step?.codice);
 			let newStepId = (step.stepId += 1);
@@ -202,6 +205,7 @@ const CardActionsData = ({
 				<div
 					style={{
 						marginBottom: "10px",
+						marginTop: "20px",
 					}}
 				>
 					{itemsCard?.tipo === "ABBONAMENTO" ? (
@@ -211,13 +215,14 @@ const CardActionsData = ({
 									sx={{
 										display: "flex",
 										flexDirection: "column",
-										marginBottom: "20px",
+
 										height: "70px",
 										// backgroundColor: (theme) =>
 										// 	theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
 										flexWrap: "nowrap",
 										justifyContent: "center",
 										alignItems: "center",
+										marginBottom: "40px",
 									}}
 								>
 									<Typography
@@ -232,7 +237,7 @@ const CardActionsData = ({
 									<Typography
 										variant="body1"
 										textAlign={"center"}
-										color={(theme) => theme.palette.warning.main}
+										color={(theme) => theme.palette.success.main}
 									>
 										{selectedValueCalendario.toString() === "01-01-1970"
 											? dayjs(itemsCard?.abbonamento?.DATAINI)
@@ -240,6 +245,31 @@ const CardActionsData = ({
 													.format("DD-MM-YYYY")
 											: selectedValueCalendario.toString()}
 									</Typography>
+
+									{itemsCard?.abbonamento?.DATAFIN !== undefined ? (
+										<>
+											<Typography
+												variant="subtitle1"
+												textAlign={"center"}
+												color={(theme) =>
+													theme.palette.mode === "light" ? "#323232" : "#dfdfdf"
+												}
+											>
+												Data fine abbonamento:
+											</Typography>
+											<Typography
+												variant="body1"
+												textAlign={"center"}
+												color={(theme) => theme.palette.warning.main}
+											>
+												{dayjs(itemsCard.abbonamento.DATAFIN)
+													.locale("it")
+													.format("DD-MM-YYYY")}
+											</Typography>
+										</>
+									) : (
+										<></>
+									)}
 								</Box>
 								<div
 									style={{
@@ -300,13 +330,11 @@ const CardActionsData = ({
 									sx={{
 										display: "flex",
 										flexDirection: "column",
-										marginBottom: "20px",
 										height: "70px",
-										// backgroundColor: (theme) =>
-										// 	theme.palette.mode === "light" ? "#dfdfdf" : "#323232",
 										flexWrap: "nowrap",
 										justifyContent: "center",
 										alignItems: "center",
+										marginBottom: "40px",
 									}}
 								>
 									<Typography

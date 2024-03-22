@@ -11,8 +11,12 @@ import {
 // import BtnStepStore from "../stepper/BtnStepListino";
 import BtnStepStore from "src/components/listino/stepper/BtnStepListino";
 // import { isAbbonamento, isArea, isGruppo, isSede } from "../utils/checkTipo";
-import { isAbbonamento, isArea, isGruppo, isSede } from "src/components/listino/utils/checkTipo";
-import trovaCodice from "src/components/listino/utils/trovaCodice";
+import {
+	isAbbonamento,
+	isArea,
+	isGruppo,
+	isSede,
+} from "src/components/listino/utils/checkTipo";
 import trovaCodiceNextOby from "src/components/listino/utils/trovaCodiceNextOby";
 import ListinoCard from "./ListinoCard";
 import chiaveRandom from "src/components/utils/chiaveRandom";
@@ -80,7 +84,21 @@ export default function CreateCard(
 		listinoState?.listino["GRUPPO"]?.forEach((gruppo) => {
 			idCount += 1;
 			//console.log("@@@ --> idCount: ", idCount);
+			let codiceDaCercare = "";
 
+			// Recuperare i dati dell'attività e i suoi orari da sessionStorage
+			const storedData = sessionStorage.getItem("STEP");
+			const parsedData = storedData ? JSON.parse(storedData) : [];
+			console.log("---- >> STEP parsedData: ", parsedData);
+			// Verificare se lo stepId è già presente nell'array
+			const existingStepIndex = parsedData.findIndex(
+				(item: any) => item.stepId === stepId
+			);
+
+			if (existingStepIndex !== -1) {
+				// Se lo stepId è già presente, utilizzo il codice dell'oggetto corrispondente
+				codiceDaCercare = parsedData[existingStepIndex].stepCodice;
+			}
 			switch (stepId) {
 				case 1: //"GRUPPO"
 					//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
@@ -89,8 +107,7 @@ export default function CreateCard(
 						//spread operator per recuperare tutti i valori precedenti
 						endStep: 1,
 					}));
-					//const infoAbb = findInfoAbb(gruppo, stepId);
-					//console.log("@@@ --> infoAbb: ", infoAbb);
+
 					if (isGruppo(gruppo)) {
 						const itemsCard = createItemsCard(
 							"GRUPPO",
@@ -116,30 +133,35 @@ export default function CreateCard(
 					return;
 
 				case 2: //"SEDE"
-					//console.log("SEDE stepSelectOby : ", stepSelectOby);
-					//console.log("listinoState.listino[GRUPPO]: ",listinoState.listino["GRUPPO"]);
+					console.log("@@@@>>>>STEP2 --- SEDE stepSelectOby : ", stepSelectOby);
+					console.log(
+						"listinoState.listino[GRUPPO]: ",
+						listinoState.listino["GRUPPO"]
+					);
 					//console.log("gruppo: ", gruppo);
 
 					//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI O CODAREA OPPURE IDSEDE OPPURE CODGRUPPO
 					if (!gruppoDesideratoTrovato) {
-						let codiceDaCercare = stepSelectOby.codice;
-						let chkCodeSede = trovaCodice(
-							listinoState.listino,
+						//let codiceDaCercare = stepSelectOby.codice;
+
+						console.log(
+							"@@@@>>>>STEP2 --- codiceDaCercare  <<<@@@@",
 							codiceDaCercare
 						);
-						//console.log(
-						//	"@@@@>>>> chkCodeSede  <<<@@@@",
-						//	chkCodeSede[0].GRUPPO
-						//);
+
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
-							chkCodeSede[0].GRUPPO,
-							["CODGRUPPO"]
+							codiceDaCercare,
+							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
-						//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+
+						console.log("@@@@>>>>STEP2 --- PERCORSO  <<<@@@@", percorso);
 						const sediDelGruppo = percorso?.SEDE;
-						//console.log("@@@@>>>> sediDelGruppo  <<<@@@@", sediDelGruppo);
+						console.log(
+							"@@@@>>>>STEP2 --- sediDelGruppo  <<<@@@@",
+							sediDelGruppo
+						);
 
 						if (
 							stepSelectOby.isClickNext === true &&
@@ -227,22 +249,25 @@ export default function CreateCard(
 					//PER OTTENERE LE AREE HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI HO IDSEDE OPPURE CODGRUPPO
 					if (!sedeDesiderataTrovata) {
-						let codiceDaCercare = stepSelectOby.codice; //codice della AREA desiderata
-						let chkCodeSede = trovaCodice(
-							listinoState.listino,
+						// let codiceDaCercare = stepSelectOby.codice; //codice della AREA desiderata
+						console.log(
+							"@@@@>>>>STEP3 --- codiceDaCercare  <<<@@@@",
 							codiceDaCercare
 						);
-						//console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[1].SEDE);
+
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
-							chkCodeSede[1].SEDE,
-							["IDSEDE"]
+							codiceDaCercare,
+							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
-						//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+						console.log("@@@@>>>>STEP3 ---  PERCORSO  <<<@@@@", percorso);
 
 						// Cerca il GRUPPO che contiene l'AREA desiderata
 						const areeDellaSede = percorso?.AREA;
-						//console.log("@@@@>>>> areeDellaSede  <<<@@@@", areeDellaSede);
+						console.log(
+							"@@@@>>>>STEP3 --- areeDellaSede  <<<@@@@",
+							areeDellaSede
+						);
 
 						if (
 							stepSelectOby.isClickNext === true &&
@@ -341,24 +366,25 @@ export default function CreateCard(
 					//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI O CODAREA OPPURE IDSEDE OPPURE CODGRUPPO
 					if (!areaDesiderataTrovata) {
-						let codiceDaCercare = stepSelectOby.codice; //codice della AREA desiderata
-						let chkCodeSede = trovaCodice(
-							listinoState.listino,
+						//let codiceDaCercare = stepSelectOby.codice; //codice della AREA desiderata
+						console.log(
+							"@@@@>>>>STEP4 --- codiceDaCercare  <<<@@@@",
 							codiceDaCercare
 						);
-						//console.log("@@@@>>>> chkCodeSede  <<<@@@@", chkCodeSede[2].AREA);
+
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
-							chkCodeSede[2].AREA,
-							["CODAREA"]
+							codiceDaCercare,
+							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
-						//console.log("@@@@>>>> PERCORSO  <<<@@@@", percorso);
+
+						console.log("@@@@>>>>STEP4 --- PERCORSO  <<<@@@@", percorso);
 						const abbonamentiDellArea = percorso?.ABBONAMENTO;
-						// console.log(
-						// 	"@@@@>>>> abbonamentiDellArea  <<<@@@@",
-						// 	abbonamentiDellArea,
-						// 	storyStep_SubTitleComp.length
-						// );
+						console.log(
+							"@@@@>>>>STEP4 --- abbonamentiDellArea  <<<@@@@",
+							abbonamentiDellArea,
+							storyStep_SubTitleComp.length
+						);
 
 						if (
 							stepSelectOby.isClickNext === true &&

@@ -85,7 +85,58 @@ const ListinoPage = () => {
 		//}
 	};
 
+	const aggiornaDatiStepInSessionStorage = (step: any) => {
+		///////////// ----------------
+		// Recuperare i dati dell'attività e i suoi orari da sessionStorage
+		const storedData = sessionStorage.getItem("STEP");
+		const parsedData = storedData ? JSON.parse(storedData) : [];
+
+		console.log("---- >> STEP parsedData LUNGHEZZA: ", parsedData.length);
+		console.log("---- >> STEP parsedData: ", parsedData);
+		if (Number(step.stepId) <= Number(parsedData.length)) {
+			console.log("*********** STO TORNANDO INDIETROOOO");
+			return;
+		}
+
+		// Verificare se lo stepId è già presente nell'array
+		const existingStepIndex = parsedData.findIndex(
+			(item: any) => item.stepId === step.stepId
+		);
+
+		if (existingStepIndex !== -1) {
+			// Se lo stepId è già presente, aggiornare l'oggetto corrispondente
+			parsedData[existingStepIndex] = {
+				stepId: step.stepId,
+				stepCodice: step.codice,
+			};
+		} else {
+			// Altrimenti, inserire il nuovo Step nell'array
+			parsedData.push({
+				stepId: step.stepId,
+				stepCodice: step.codice,
+			});
+		}
+
+		console.log("---- >> STEP parsedData after update: ", parsedData);
+
+		// Salvare i dati aggiornati in sessionStorage
+		sessionStorage.setItem("STEP", JSON.stringify(parsedData));
+		///////////// ----------------
+	};
+
+	const resettaDatiStepInSessionStorage = () => {
+		///////////// ----------------
+		// Salvare i dati aggiornati in sessionStorage
+		sessionStorage.setItem("STEP", JSON.stringify([]));
+		///////////// ----------------
+	};
+
 	React.useEffect(() => {
+		console.log("******* CAMBIO STEP SELECT OBY ***********");
+		console.log("@@@@@@ stepSelectOby: ", stepSelectOby);
+
+		aggiornaDatiStepInSessionStorage(stepSelectOby);
+
 		if (stepSelectOby.stepId < stepSelectOby.endNavStepId) {
 			CreateCard(
 				stepSelectOby.stepId,
@@ -100,6 +151,7 @@ const ListinoPage = () => {
 				springPropsCards
 			);
 		} else {
+			console.log("*********** STO TORNANDO INDIETROOOO");
 			setStepSelectOby((prev) => ({
 				...prev,
 				stepId: prev.stepId - 1,
@@ -107,6 +159,7 @@ const ListinoPage = () => {
 		}
 
 		if (stepSelectOby.stepId === 1) {
+			resettaDatiStepInSessionStorage();
 			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
 			setStoryStep_SubTitleComp([]);
 			console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
