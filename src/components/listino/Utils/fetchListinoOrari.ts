@@ -14,17 +14,17 @@ import callNodeService from "pages/api/callNodeService";
 const fetchListinoOrari = async ({
 	Cliente,
 	clienteKey,
-	CodeAtv,
+	IDCentro,
+	Attivita,
 }: obyPostOrari): Promise<{
 	listaAtvOrari: ListinoAtvOrari | null;
 	error: null | unknown;
 }> => {
 	// const respCall = await fetch("/data/dataorari.json");
-
 	try {
 		const respCall: responseCall = await callNodeService(
 			"ecommerce-lista-orari",
-			{ clienteKey, Cliente, CodeAtv },
+			{ Cliente, clienteKey, IDCentro, Attivita },
 			null
 		);
 

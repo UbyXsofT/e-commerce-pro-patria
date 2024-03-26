@@ -64,7 +64,8 @@ export interface ListinoAtvOrariData {
 }
 
 export interface ListinoAtvOrari {
-	attivitaOrariListino: ListinoAtvOrariData;
+	//attivitaOrariListino: ListinoAtvOrariData;
+	ORARIO: ORARIO[] | null[];
 }
 
 export type SetListinoAtvOrari = {

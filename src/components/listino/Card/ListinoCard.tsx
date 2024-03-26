@@ -68,7 +68,7 @@ const ListinoCard = ({
 		<Paper
 			elevation={isHovered ? 6 : 1} // Imposta l'elevation a 5 quando il mouse è sopra la Card, altrimenti 1
 		>
-			{isFetchingData ? (
+			{isFetchingData === true ? (
 				<Skeleton
 					key={chiaveRandom()} // Assicurati di avere chiavi univoche per ogni Skeleton
 					variant="rounded"

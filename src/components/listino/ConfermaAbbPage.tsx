@@ -48,6 +48,7 @@ import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttivita";
 import fetchListinoOrari from "./utils/fetchListinoOrari";
 import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
+import { array } from "prop-types";
 
 // const activitiesData: Activity[] = [
 // 	{
@@ -171,7 +172,19 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 			console.log("****** 1) DATA fetchListinoAttivita: ", data);
 
-			const listaAttivita = data.listaAttivita || [];
+			let ChkArrayData = [];
+			// Verifica se listaAttivita è un array o un oggetto
+			if (Array.isArray(data.listaAttivita)) {
+				// Se è un array, puoi passarlo direttamente al componente Autocomplete
+				ChkArrayData = data.listaAttivita;
+				// Usa options con il componente Autocomplete
+			} else {
+				// Se è un oggetto, trasformalo in un array con un unico elemento
+				ChkArrayData = [data.listaAttivita];
+				// Usa options con il componente Autocomplete
+			}
+
+			const listaAttivita = ChkArrayData || [];
 			setActivitiesData(listaAttivita as Activity[]);
 			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 		} catch (error) {
@@ -181,7 +194,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	};
 
 	const fetchOrariFromBackend = async (activityCode: any) => {
-		console.log("fetchOrariFromBackend: ", activityCode);
+		console.log("fetchOrariFromBackend activityCode: ", activityCode);
 
 		const clienteKey = eCommerceConf.ClienteKey;
 		const IDCentro = eCommerceConf.IdCentro.toString();
@@ -189,15 +202,34 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 		if (authUser && itemsCard) {
 			Cliente = authUser.USERID.toString();
 		}
+		const Attivita = activityCode.toString();
 
 		try {
 			const data = await fetchListinoOrari({
-				Cliente: Cliente,
+				Cliente,
 				clienteKey,
 				IDCentro,
+				Attivita,
 			} as obyPostOrari);
 
-			console.log("****** 1) DATA fetchOrariFromBackend: ", data);
+			console.log(
+				"****** 1) DATA fetchOrariFromBackend data.listaAtvOrari: ",
+				data.listaAtvOrari
+			);
+
+			// Verifica se ORARIO è un oggetto anziché un array
+			if (!Array.isArray(data.listaAtvOrari?.ORARIO)) {
+				// Se è un oggetto, trasformalo in un array con un unico elemento
+				const orarioArray: ORARIO[] = [
+					data?.listaAtvOrari?.ORARIO as any,
+				] as any;
+				// Sovrascrivi ORARIO con l'array appena creato
+				if (data.listaAtvOrari !== null) {
+					data.listaAtvOrari.ORARIO = orarioArray;
+				}
+			}
+			// Adesso data.listaAtvOrari.ORARIO è sempre un array, puoi utilizzarlo senza problemi
+
 			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
 			return data.listaAtvOrari || [];
 		} catch (error) {
