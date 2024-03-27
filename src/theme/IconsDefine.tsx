@@ -18,6 +18,7 @@ import {
 	Rowing,
 	Schedule,
 	Alarm,
+	ErrorOutline,
 } from "@mui/icons-material";
 
 const myIcons = {
@@ -39,7 +40,7 @@ const myIcons = {
 	ArrowForwardIosIcon: <ArrowForwardIos />,
 	HighlightOffIcon: <HighlightOff />,
 	SummarizeIcon: <Summarize />,
-
+	ErrorOutlineIcon: <ErrorOutline />,
 	ScheduleIcon: <Schedule />,
 };
 

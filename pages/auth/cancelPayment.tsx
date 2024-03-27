@@ -2,25 +2,8 @@ import React from "react";
 import { useRouter } from "next/router";
 //REDUX-STORE
 import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
-import { setLoading } from "src/store/actions";
 //*-----*//
-import {
-	Container,
-	Grid,
-	Typography,
-	TextField,
-	Button,
-	Checkbox,
-	FormControlLabel,
-	FormControl,
-	FormHelperText,
-	Link,
-	Fade,
-	AppBar,
-	Toolbar,
-	Collapse,
-	Box,
-} from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import Layout from "src/components/layout/Layout";
@@ -38,7 +21,7 @@ import {
 	responseCall,
 } from "src/components/CommonTypesInterfaces";
 
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 const cancelPayment = () => {
 	const { showAlert } = useAlertMe();
@@ -54,19 +37,23 @@ const cancelPayment = () => {
 			>
 				<AlertMe />
 
-				<Box sx={{
-					display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-							// justifyContent: "center",
-							height: "100vh",
-							paddingTop: 4
-				}}>
-					<ErrorOutlineIcon sx={{
-						fontSize: 100,
-						color: theme.palette.error.main,
-						marginBottom: 3
-					}} />
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						// justifyContent: "center",
+						height: "100vh",
+						paddingTop: 4,
+					}}
+				>
+					<ErrorOutlineIcon
+						sx={{
+							fontSize: 100,
+							color: theme.palette.error.main,
+							marginBottom: 3,
+						}}
+					/>
 					<Typography
 						variant="h4"
 						align="center"
@@ -77,11 +64,11 @@ const cancelPayment = () => {
 						variant="body1"
 						align="center"
 					>
-						Il pagamento è stato annullato dall'utente o si è verificato un errore.
-        				Si prega di riprovare o contattare il supporto per ulteriore assistenza.
+						Il pagamento è stato annullato dall'utente o si è verificato un
+						errore. Si prega di riprovare o contattare il supporto per ulteriore
+						assistenza.
 					</Typography>
 				</Box>
-				
 			</Layout>
 		</ThemeProvider>
 	);

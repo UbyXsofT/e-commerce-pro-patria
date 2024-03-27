@@ -31,8 +31,8 @@
 		"src/components/theme/theme.tsx",
 		"src/menu/CreateMenu.tsx",
 		"pages/_app.sx",
-		"pages/api/checkout_sessions/SetStripeKeysHelper.js",
-		"src/components/ErrorBoundary.js"
+		"ErrorBoundary.tsx",
+		"pages/api/checkout_sessions/SetStripeKeysHelper.js"
 	],
 	"exclude": ["node_modules"]
 }

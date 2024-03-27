@@ -56,6 +56,7 @@ const Home = ({ setLoading }: HomeProps) => {
 	const router = useRouter();
 	const theme = useTheme();
 	const authUser = useSelector((state: StoreState) => state.authUser);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout

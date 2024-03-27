@@ -21,7 +21,7 @@ import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
 import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
-import ErrorBoundary from "src/components/ErrorBoundary";
+import ErrorBoundary from "ErrorBoundary";
 
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
@@ -60,14 +60,6 @@ const MyApp = (props: {
 		}
 	}, []);
 
-	// const toggleThemeMode = (newThemeMode) => {
-	//   if (typeof window !== "undefined" && window.localStorage) {
-	//     localStorage.setItem("themeMode", newThemeMode);
-	//     setThemeMode(newThemeMode);
-	//     setAutoMode(localStorage.getItem("autoMode"));
-	//   }
-	// };
-
 	const appTheme = React.useMemo(() => {
 		return {
 			...(themeMode === "dark" ? darkTheme : lightTheme),
@@ -103,28 +95,6 @@ const MyApp = (props: {
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				}
-
-				// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
-				// console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
-
-				// if (listinoState.listino === null) {
-				// 	try {
-				// 		// Effettua la richiesta asincrona
-				// 		const data = await fetchListino(authUser?.USERID, 0);
-				// 		console.log("****** 2) DATA: ", data);
-				// 		// Aggiorna lo stato Redux utilizzando la tua azione setListino
-				// 		dispatch(setListino({ listino: data.listino, error: null }));
-				// 	} catch (error) {
-				// 		// Gestisci eventuali errori durante la richiesta
-				// 		console.error("Errore durante il fetch del listino:", error);
-				// 		dispatch(
-				// 			setListino({
-				// 				listino: null,
-				// 				error: error || "Errore sconosciuto",
-				// 			})
-				// 		);
-				// 	}
-				// }
 			}
 		};
 
@@ -133,39 +103,39 @@ const MyApp = (props: {
 
 	return (
 		<>
-			<ErrorBoundary>
-				<NetworkStatusProvider>
-					<CacheProvider value={emotionCache}>
-						<ThemeProvider theme={appTheme}>
-							<SettingsProvider>
-								<AlertMeProvider>
-									<Head>
-										<meta
-											name="viewport"
-											content="initial-scale=1, width=device-width"
-										/>
-									</Head>
-									<CustomThemeProvider
-										themeMode={themeMode}
-										setThemeMode={setThemeMode}
-										autoMode={autoMode}
-										setAutoMode={setAutoMode}
-									>
-										{autoMode === "true" ? (
-											<ThemeColorListener setThemeMode={setThemeMode} />
-										) : (
-											<></>
-										)}
-										<CssBaseline />
-										{isLoading ? <LoadingOverlay /> : <></>}
+			<NetworkStatusProvider>
+				<CacheProvider value={emotionCache}>
+					<ThemeProvider theme={appTheme}>
+						<SettingsProvider>
+							<AlertMeProvider>
+								<Head>
+									<meta
+										name="viewport"
+										content="initial-scale=1, width=device-width"
+									/>
+								</Head>
+								<CustomThemeProvider
+									themeMode={themeMode}
+									setThemeMode={setThemeMode}
+									autoMode={autoMode}
+									setAutoMode={setAutoMode}
+								>
+									{autoMode === "true" ? (
+										<ThemeColorListener setThemeMode={setThemeMode} />
+									) : (
+										<></>
+									)}
+									<CssBaseline />
+									{isLoading ? <LoadingOverlay /> : <></>}
+									<ErrorBoundary>
 										<Component {...pageProps} />
-									</CustomThemeProvider>
-								</AlertMeProvider>
-							</SettingsProvider>
-						</ThemeProvider>
-					</CacheProvider>
-				</NetworkStatusProvider>
-			</ErrorBoundary>
+									</ErrorBoundary>
+								</CustomThemeProvider>
+							</AlertMeProvider>
+						</SettingsProvider>
+					</ThemeProvider>
+				</CacheProvider>
+			</NetworkStatusProvider>
 		</>
 	);
 };
