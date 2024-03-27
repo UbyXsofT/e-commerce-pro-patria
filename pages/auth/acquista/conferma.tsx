@@ -36,7 +36,9 @@ const Conferma: React.FC = () => {
 
 	useEffect(() => {
 		console.log("ConfermaAbbPage");
-		itemsCard.note = myNoteProduct;
+		if (!myNoteProduct) {
+			itemsCard.note = myNoteProduct;
+		}
 	}, [myNoteProduct]);
 
 	useEffect(() => {

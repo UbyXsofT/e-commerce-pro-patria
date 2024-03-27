@@ -310,6 +310,13 @@ export interface obyPostProdotti {
 	Cliente: string;
 }
 
+export interface obyPostErrore {
+	clienteKey: string;
+	IDCliente: string;
+	IDCentro: string;
+	Errore: string;
+}
+
 export interface obyPostAttivita {
 	clienteKey: string;
 	Cliente: string;

@@ -14,6 +14,7 @@ import {
 	NewUserData,
 	obyPostAttivita,
 	obyPostOrari,
+	obyPostErrore,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -42,7 +43,8 @@ export default async function callNodeService(
 		| "save-user-data"
 		| "cambio-password"
 		| "ecommerce-lista-attivita"
-		| "ecommerce-lista-orari",
+		| "ecommerce-lista-orari"
+		| "rec-error",
 	obyPostData:
 		| tokenlessAccess
 		| tokenfulAccess
@@ -53,7 +55,8 @@ export default async function callNodeService(
 		| obyPostDataCart
 		| NewUserData
 		| obyPostAttivita
-		| obyPostOrari,
+		| obyPostOrari
+		| obyPostErrore,
 	token: null
 ): Promise<responseCall> {
 	console.log("@@@ callNodeService ...");

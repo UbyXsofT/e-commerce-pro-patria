@@ -62,7 +62,7 @@ const Carrello = () => {
 	const user = cart.at(0);
 	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 
-	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(true);
+	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
 
 	const [progress, setProgress] = React.useState(0);
 	const [buffer, setBuffer] = React.useState(10);
@@ -161,6 +161,13 @@ const Carrello = () => {
 		let user = cart.at(0);
 		if (!user) {
 			return;
+		}
+
+		//info contiene gli Orari
+		if (user?.cart[0]?.info?.includes("Orari")) {
+			setIsCheckInCorsoDisp(true);
+		} else {
+			setIsCheckInCorsoDisp(false);
 		}
 
 		setPrezzi(calculateTotalePrezzo(user.cart));
