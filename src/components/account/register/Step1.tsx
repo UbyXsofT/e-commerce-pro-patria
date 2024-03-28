@@ -187,7 +187,7 @@ const Step1 = ({
 	return (
 		<Container
 			component="main"
-			maxWidth="md"
+			// maxWidth="md"
 		>
 			<Box
 				sx={{
