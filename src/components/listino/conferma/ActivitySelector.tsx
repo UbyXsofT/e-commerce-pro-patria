@@ -45,11 +45,11 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 		}
 	}, [islimiteAttivitaSuperato]);
 
-	const customClearButton = (
-		<div onClick={() => console.log("Custom clear button clicked")}>
-			Personalizzato
-		</div>
-	);
+	// const customClearButton = (
+	// 	<div onClick={() => console.log("Custom clear button clicked")}>
+	// 		Personalizzato
+	// 	</div>
+	// );
 
 	return (
 		<Autocomplete
@@ -86,20 +86,59 @@ const TimeList: React.FC<TimeListProps> = ({
 	orariSelezionati,
 	handleTimeSelection,
 }) => {
-	// console.log("orariSelezionati: ", orariSelezionati);
+	console.log("orariSelezionati: ", orariSelezionati);
 	console.log("attivitaSelezionata: ", attivitaSelezionata);
 	return (
-		<List>
-			{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
-				<ListItem key={ORARIO.IDORARIO}>
-					<Checkbox
-						checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
-						onChange={() => handleTimeSelection(ORARIO)}
-					/>
-					<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
-				</ListItem>
-			))}
-		</List>
+		// <List>
+		// 	{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
+		// 		<ListItem key={ORARIO.IDORARIO}>
+		// 			<Checkbox
+		// 				checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
+		// 				onChange={() => handleTimeSelection(ORARIO)}
+		// 			/>
+		// 			<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
+		// 		</ListItem>
+		// 	))}
+		// </List>
+		<table>
+			<thead>
+				<tr>
+					<th>Giorno/Orario</th>
+					<th>Livello</th>
+					<th>Fascia d'età</th>
+				</tr>
+			</thead>
+			<tbody>
+				{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
+					<tr key={ORARIO.IDORARIO}>
+						<td>
+							<ListItem>
+								<Checkbox
+									checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
+									onChange={() => handleTimeSelection(ORARIO)}
+								/>
+								<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
+							</ListItem>
+						</td>
+						{/* Aggiungi le informazioni dai tag desiderati nelle Colonne 2 e 3 */}
+						<td>
+							<ListItem>
+								<Typography>{`${
+									ORARIO.LIVELLO ? ORARIO.LIVELLO : "n.i."
+								}`}</Typography>
+							</ListItem>
+						</td>
+						<td>
+							<ListItem>
+								<Typography>{`${
+									ORARIO.FASCIA ? ORARIO.FASCIA : "n.i."
+								}`}</Typography>
+							</ListItem>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
 	);
 };
 

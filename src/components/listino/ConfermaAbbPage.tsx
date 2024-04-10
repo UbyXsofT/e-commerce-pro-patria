@@ -416,7 +416,13 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 				.filter((orario) => {
 					orario !== undefined;
 					console.log("orario: ", orario);
-					noteAttivitaOrari += `<label style="font-weight: bold;" />-		${orario?.GIORNO} ${orario?.ORAINIZIO}-${orario?.ORAFINE}</label> <br />`;
+					noteAttivitaOrari += `<label style="font-weight: bold;" />-		${
+						orario?.GIORNO
+					} ${orario?.ORAINIZIO}-${
+						orario?.ORAFINE
+					}</label> <label style="font-weight: lighter;" /> / ${
+						orario?.LIVELLO ? orario?.LIVELLO : "n.i."
+					} / ${orario?.FASCIA ? orario?.FASCIA : "n.i."}</label> <br />`;
 				});
 		});
 		noteAttivitaOrari += `<br />`;

@@ -48,54 +48,56 @@ export const BtnStepStore = ({
 	}, [stepSelectOby.stepId]);
 
 	return (
-		<Grid
-			container
-			// spacing={3}
-			style={{
-				display: "flex",
-				flexFlow: "row",
-				justifyContent: "space-between",
-				alignItems: "center",
-				marginTop: "20px",
-				marginBottom: "20px",
-			}}
-		>
-			<Button
-				variant="contained"
-				disabled={isPreviousButtonDisabled}
-				onClick={() =>
-					stepSelectOby.stepId !== null
-						? setStepSelectOby((prevStepSelectOby) => ({
-								...prevStepSelectOby,
-								stepId: prevStepSelectOby.stepId - 1,
-								isClickNext: false,
-						  }))
-						: 1
-				}
-				// sx={{ mt: "auto", ml: 1 }}
+		<>
+			<Grid
+				container
+				// spacing={3}
+				style={{
+					display: "flex",
+					flexFlow: "row",
+					justifyContent: "space-between",
+					alignItems: "center",
+					marginTop: "20px",
+					marginBottom: "20px",
+				}}
 			>
-				{myIcons.ArrowBackIosNewIcon} Precedente
-			</Button>
-			<Button
-				variant="contained"
-				disabled={isNextButtonDisabled}
-				onClick={() =>
-					stepSelectOby.stepId !== null
-						? setStepSelectOby((prevStepSelectOby) => ({
-								...prevStepSelectOby,
-								stepId:
-									typeof prevStepSelectOby.stepId === "string"
-										? parseInt(prevStepSelectOby.stepId, 10) + 1
-										: prevStepSelectOby.stepId + 1,
-								isClickNext: true,
-						  }))
-						: 1
-				}
-				// sx={{ mt: "auto", ml: 1 }}
-			>
-				Successivo {myIcons.ArrowForwardIosIcon}
-			</Button>
-		</Grid>
+				<Button
+					variant="contained"
+					disabled={isPreviousButtonDisabled}
+					onClick={() =>
+						stepSelectOby.stepId !== null
+							? setStepSelectOby((prevStepSelectOby) => ({
+									...prevStepSelectOby,
+									stepId: prevStepSelectOby.stepId - 1,
+									isClickNext: false,
+							  }))
+							: 1
+					}
+					// sx={{ mt: "auto", ml: 1 }}
+				>
+					{myIcons.ArrowBackIosNewIcon} Precedente
+				</Button>
+				<Button
+					variant="contained"
+					disabled={isNextButtonDisabled}
+					onClick={() =>
+						stepSelectOby.stepId !== null
+							? setStepSelectOby((prevStepSelectOby) => ({
+									...prevStepSelectOby,
+									stepId:
+										typeof prevStepSelectOby.stepId === "string"
+											? parseInt(prevStepSelectOby.stepId, 10) + 1
+											: prevStepSelectOby.stepId + 1,
+									isClickNext: true,
+							  }))
+							: 1
+					}
+					// sx={{ mt: "auto", ml: 1 }}
+				>
+					Successivo {myIcons.ArrowForwardIosIcon}
+				</Button>
+			</Grid>
+		</>
 	);
 };
 

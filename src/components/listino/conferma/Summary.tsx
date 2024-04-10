@@ -245,7 +245,11 @@ const Summary: React.FC<SummaryProps> = ({
 										key={timeIndex}
 										variant="body2"
 										sx={{ marginLeft: 2 }}
-									>{`${orario?.GIORNO} ${orario?.ORAINIZIO}-${orario?.ORAFINE}`}</Typography>
+									>{`${orario?.GIORNO} ${orario?.ORAINIZIO}-${
+										orario?.ORAFINE
+									} / ${orario?.LIVELLO ? orario?.LIVELLO : "n.i."} / ${
+										orario?.FASCIA ? orario?.FASCIA : "n.i."
+									}`}</Typography>
 								))}
 							</div>
 						)

@@ -64,65 +64,63 @@ const ListinoCard = ({
 	// 	isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 	// }, [isFetchingData]);
 
-	return (
+	return isFetchingData === true ? (
+		<Skeleton
+			key={chiaveRandom()} // Assicurati di avere chiavi univoche per ogni Skeleton
+			variant="rounded"
+			sx={{
+				width: isMobile ? "290px" : "350px",
+				marginTop: "25px",
+				marginBottom: "25px",
+				height: "350px",
+			}}
+		/>
+	) : (
 		<Paper
 			elevation={isHovered ? 6 : 1} // Imposta l'elevation a 5 quando il mouse è sopra la Card, altrimenti 1
 		>
-			{isFetchingData === true ? (
-				<Skeleton
-					key={chiaveRandom()} // Assicurati di avere chiavi univoche per ogni Skeleton
-					variant="rounded"
+			<Card
+				onMouseEnter={() => setIsHovered(true)}
+				onMouseLeave={() => setIsHovered(false)}
+				sx={{
+					maxWidth: isMobile ? "290px" : "350px",
+					width: isMobile ? "290px" : "350px",
+					marginTop: "25px",
+					marginBottom: "25px",
+					height: "auto",
+					cursor: "pointer", // Cambia il cursore quando il componente è cliccabile
+				}}
+			>
+				<CardHeader
 					sx={{
-						width: isMobile ? "290px" : "350px",
-						marginTop: "25px",
-						marginBottom: "25px",
-						height: "350px",
+						minHeight: "70px",
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "space-between",
+						alignItems: "stretch",
+						padding: "16px",
 					}}
+					title={<CardHeadTitle itemsCard={itemsCard} />}
 				/>
-			) : (
-				<Card
-					onMouseEnter={() => setIsHovered(true)}
-					onMouseLeave={() => setIsHovered(false)}
+				<CardContent
 					sx={{
-						maxWidth: isMobile ? "290px" : "350px",
-						width: isMobile ? "290px" : "350px",
-						marginTop: "25px",
-						marginBottom: "25px",
-						height: "auto",
-						cursor: "pointer", // Cambia il cursore quando il componente è cliccabile
+						marginTop: "-10px",
+						display: "flex",
+						flexDirection: "column",
+						flexWrap: "nowrap",
+						alignItems: "flex-start",
+						justifyContent: "space-between",
 					}}
 				>
-					<CardHeader
-						sx={{
-							minHeight: "70px",
-							display: "flex",
-							flexDirection: "column",
-							justifyContent: "space-between",
-							alignItems: "stretch",
-							padding: "16px",
-						}}
-						title={<CardHeadTitle itemsCard={itemsCard} />}
-					/>
-					<CardContent
-						sx={{
-							marginTop: "-10px",
-							display: "flex",
-							flexDirection: "column",
-							flexWrap: "nowrap",
-							alignItems: "flex-start",
-							justifyContent: "space-between",
-						}}
-					>
-						<CardContentData itemsCard={itemsCard} />
-					</CardContent>
+					<CardContentData itemsCard={itemsCard} />
+				</CardContent>
 
-					<CardActionsData
-						itemsCard={itemsCard}
-						setStepSelectOby={setStepSelectOby}
-						stepSelectOby={stepSelectOby}
-					/>
-				</Card>
-			)}
+				<CardActionsData
+					itemsCard={itemsCard}
+					setStepSelectOby={setStepSelectOby}
+					stepSelectOby={stepSelectOby}
+				/>
+			</Card>
 		</Paper>
 	);
 };

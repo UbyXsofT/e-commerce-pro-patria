@@ -164,7 +164,11 @@ const ListinoPage = () => {
 			setStoryStep_SubTitleComp([]);
 			console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
 			if (listinoState.listino === null) {
-				aggiornaListino();
+				router.push(`/auth/acquista/prodotti`);
+				//aggiornaListino();
+			} else {
+				setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+				// router.push(`/auth/home`);
 			}
 		}
 	}, [stepSelectOby.stepId, listinoState.listino]);
@@ -206,17 +210,21 @@ const ListinoPage = () => {
 									minHeight: "660px",
 								}}
 							>
-								{isMobile ? (
-									<>
-										{btnStep}
-										{cardComponent}
-										{btnStep}
-									</>
+								{cardComponent && cardComponent.length !== 0 ? (
+									isMobile ? (
+										<>
+											{btnStep}
+											{cardComponent}
+											{btnStep}
+										</>
+									) : (
+										<>
+											{cardComponent}
+											{btnStep}
+										</>
+									)
 								) : (
-									<>
-										{cardComponent}
-										{btnStep}
-									</>
+									<></>
 								)}
 							</Grid>
 						</Container>

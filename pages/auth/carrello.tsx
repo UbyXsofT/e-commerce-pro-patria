@@ -162,7 +162,6 @@ const Carrello = () => {
 		if (!user) {
 			return;
 		}
-
 		//info contiene gli Orari
 		if (user?.cart[0]?.info?.includes("Orari")) {
 			setIsCheckInCorsoDisp(true);
@@ -172,6 +171,18 @@ const Carrello = () => {
 
 		setPrezzi(calculateTotalePrezzo(user.cart));
 	}, [cart]);
+
+	const callCheckDispRegistraInDB = () => {
+		console.log("****************** callCheckDispRegistraInDB");
+		// clienteKey:BytewareDemoBeta
+		// Cliente:CLABKM5
+		// Abbonamento:AB001
+		// DataIni:2023-01-01
+		// Importo:1.00
+		// Frequenze:[CS000001][152][CS000012][250]
+		// Promo:
+		// Codice_Promo:
+	};
 
 	const handleCheckOut = () => {
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
