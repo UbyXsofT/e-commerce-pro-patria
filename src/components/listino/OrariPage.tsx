@@ -50,45 +50,11 @@ import fetchListinoOrari from "./utils/fetchListinoOrari";
 import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
 import { array } from "prop-types";
 
-// const activitiesData: Activity[] = [
-// 	{
-// 		CODATT: "CS000012",
-// 		TIPO: "2",
-// 		DESATT: "SPINNING",
-// 	},
-// 	{
-// 		CODATT: "CS000015",
-// 		TIPO: "2",
-// 		DESATT: "KARATE",
-// 	},
-// ];
-
-// const orariData: any = {
-// 	ORARIO: [
-// 		{
-// 			IDORARIO: "10",
-// 			GIORNO: "LUNEDI",
-// 			ORAINIZIO: "09:00",
-// 			ORAFINE: "10:00",
-// 			LIVELLO: "PRINCIPIANTI",
-// 			FASCIA: "BAMBINI",
-// 		},
-// 		{
-// 			IDORARIO: "12",
-// 			GIORNO: "MERCOLEDI",
-// 			ORAINIZIO: "11:00",
-// 			ORAFINE: "12:00",
-// 			LIVELLO: "PRINCIPIANTI",
-// 			FASCIA: {},
-// 		},
-// 	],
-// };
-
-interface ConfermaAbbPageProps {
+interface OrariPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
 }
 
-const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
+const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 	const [activitiesData, setActivitiesData] = React.useState<Activity[]>([]);
 	const theme = useTheme();
 	const dispatch = useDispatch();
@@ -241,7 +207,7 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 	React.useEffect(() => {
 		setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
-		console.log("ConfermaAbbPage");
+		console.log("OrariPage");
 		console.log(itemsCard);
 		if (authUser && itemsCard) {
 			fetchListaAttivitaFromBackend(itemsCard, authUser.USERID.toString());
@@ -440,8 +406,8 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 
 	React.useEffect(() => {
 		if (actualProduct?.codice !== null) {
-			addToCart(actualProduct, cart, dispatch, authUser);
-			router.replace("/auth/carrello");
+			//addToCart(actualProduct, cart, dispatch, authUser);
+			router.replace("/auth/acquista/riepilogo");
 		} else {
 			console.log("@@@ NO actualProduct : ", actualProduct);
 		}
@@ -708,4 +674,4 @@ const ConfermaAbbPage: React.FC<ConfermaAbbPageProps> = ({ itemsCard }) => {
 	);
 };
 
-export default ConfermaAbbPage;
+export default OrariPage;

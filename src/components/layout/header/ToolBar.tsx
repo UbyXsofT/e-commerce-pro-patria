@@ -243,7 +243,7 @@ export const ToolBar = ({
 							}
 							color="inherit"
 							//onClick={() => handleButtonClick("carrello")} // Chiamata corretta alla funzione
-							onClick={() => Router.push("/auth/carrello")}
+							onClick={() => Router.push("/auth/acquista/carrello")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
@@ -267,7 +267,7 @@ export const ToolBar = ({
 									: "Il Carrello è Vuoto"
 							}
 							color="inherit"
-							onClick={() => Router.push("/auth/carrello")}
+							onClick={() => Router.push("/auth/acquista/carrello")}
 							onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 							onMouseLeave={() => {
 								handlePopperClose(setCartPopper);
@@ -295,7 +295,7 @@ export const ToolBar = ({
 										: "Il Carrello è Vuoto"
 								}
 								color="inherit"
-								onClick={() => Router.push("/auth/carrello")}
+								onClick={() => Router.push("/auth/acquista/carrello")}
 								onMouseEnter={(e) => handlePopperOpen(e, setCartPopper)}
 								onMouseLeave={() => {
 									handlePopperClose(setCartPopper);

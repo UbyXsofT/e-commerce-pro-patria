@@ -182,6 +182,14 @@ const Carrello = () => {
 		// Frequenze:[CS000001][152][CS000012][250]
 		// Promo:
 		// Codice_Promo:
+
+		// codice: null, //abbonamento
+		// nome: null, //descrizione
+		// prezzo: null, //
+		// prezzoScontato: null,
+		// immagine: null,
+		// info: null,
+		// quantity: null,
 	};
 
 	const handleCheckOut = () => {

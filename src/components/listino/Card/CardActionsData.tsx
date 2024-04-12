@@ -98,7 +98,7 @@ const CardActionsData = ({
 		//console.log("@@@ DATA INI itemsCard: ", itemsCard);
 
 		router.replace({
-			pathname: "/auth/acquista/conferma",
+			pathname: "/auth/acquista/orari",
 			query: { itemsCard: JSON.stringify(itemsCard) },
 		});
 	};

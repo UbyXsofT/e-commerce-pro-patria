@@ -6,10 +6,10 @@ import {
 	itemsCard,
 	StoreState,
 } from "src/components/CommonTypesInterfaces";
-import ConfermaAbbPage from "src/components/listino/ConfermaAbbPage";
+import OrariPage from "src/components/listino/OrariPage";
 import { addToCart } from "src/components/listino/utils/functionsCart";
 
-const Conferma: React.FC = () => {
+const Orari: React.FC = () => {
 	const router = useRouter();
 	const itemsCard: itemsCard = router.query.itemsCard
 		? JSON.parse(router.query.itemsCard as string)
@@ -35,7 +35,7 @@ const Conferma: React.FC = () => {
 	);
 
 	useEffect(() => {
-		console.log("ConfermaAbbPage");
+		console.log("OrariPage");
 		if (!myNoteProduct) {
 			itemsCard.note = myNoteProduct;
 		}
@@ -67,17 +67,17 @@ const Conferma: React.FC = () => {
 				setVisualizzaComp(true);
 			} else {
 				setVisualizzaComp(false);
-				addToCart(actualProduct, cart, dispatch, authUser);
-				router.replace("/auth/carrello");
+				//addToCart(actualProduct, cart, dispatch, authUser);
+				router.replace("/auth/acquista/riepilogo");
 			}
 		}
 	}, [actualProduct, visualizzaComp]);
 
 	return visualizzaComp && actualProduct?.codice !== null ? (
-		<ConfermaAbbPage itemsCard={{ ...itemsCard, note: myNoteProduct }} />
+		<OrariPage itemsCard={{ ...itemsCard, note: myNoteProduct }} />
 	) : (
 		<></>
 	);
 };
 
-export default Conferma;
+export default Orari;

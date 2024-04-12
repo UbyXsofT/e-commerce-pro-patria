@@ -94,6 +94,8 @@ const MyApp = (props: {
 	
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
+				} else {
+					return;
 				}
 			}
 		};
