@@ -327,6 +327,18 @@ export interface obyPostAttivita {
 	SceltaA: string;
 	FrequenzaS: string;
 }
+
+export interface obyPostRegistraAcquisto {
+	clienteKey: string | null;
+	Cliente: string | null;
+	Abbonamento: string | null;
+	DataIni: string | null;
+	Importo: string | null;
+	Frequenze: string | null;
+	Promo: string | null;
+	Codice_Promo: string | null;
+}
+
 export interface obyPostOrari {
 	clienteKey: string;
 	Cliente: string;
@@ -359,6 +371,7 @@ export interface itemsCard {
 	numeroAbbonamenti: string;
 	abbonamento: Abbonamento;
 	note: string; // Proprietà opzionale
+	noteHtml: string; // Proprietà opzionale
 }
 
 export interface Abbonamento {
@@ -439,10 +452,6 @@ export interface CartUser {
 	cart: CartProdotto[];
 }
 
-// export interface CartProdotto extends Prodotto {
-// 	configuration: { initialDate: Dayjs } | null;
-// }
-
 export interface obyPostDataCart {
 	line_items: CartProdotto[];
 	userId: string;
@@ -452,7 +461,7 @@ export interface obyPostDataCart {
 	cancel_url: string;
 }
 
-export interface CartProdotto {
+export interface CartProdotto extends ProdottoInTommys {
 	codice: Abbonamento["CODABB"] | null;
 	nome: string | null;
 	prezzo: number | null;
@@ -461,6 +470,34 @@ export interface CartProdotto {
 	info: string | null;
 	quantity: number | null;
 }
+
+export interface ProdottoInTommys {
+	Tommys_infoHtml: string | null;
+	Tommys_Cliente: string | null;
+	Tommys_Abbonamento: string | null;
+	Tommys_DataIni: string | null;
+	Tommys_Importo: string | null;
+	Tommys_Frequenze: string | null;
+	Tommys_Promo: string | null;
+	Tommys_Codice_Promo: string | null;
+}
+
+// clienteKey:BytewareDemoBeta
+// Cliente:CLABKM5
+// Abbonamento:AB001
+// DataIni:2023-01-01
+// Importo:1.00
+// Frequenze:[CS000001][152][CS000012][250]
+// Promo:
+// Codice_Promo:
+
+// codice: null, //abbonamento
+// nome: null, //descrizione
+// prezzo: null, //
+// prezzoScontato: null,
+// immagine: null,
+// info: null,
+// quantity: null,
 
 export interface ORARIO {
 	IDORARIO: string;

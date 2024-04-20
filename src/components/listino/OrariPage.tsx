@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //REDUX-STORE
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setListino, setLoading } from "src/store/actions";
@@ -6,8 +6,10 @@ import { setListino, setLoading } from "src/store/actions";
 import {
 	Button,
 	Container,
+	Divider,
 	Grid,
 	IconButton,
+	Paper,
 	Tooltip,
 	Typography,
 	useMediaQuery,
@@ -34,6 +36,7 @@ import myIcons from "src/theme/IconsDefine";
 
 import {
 	addToCart,
+	clearCart,
 	isInCart,
 	removeFromCart,
 } from "src/components/listino/utils/functionsCart";
@@ -49,6 +52,7 @@ import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttiv
 import fetchListinoOrari from "./utils/fetchListinoOrari";
 import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
 import { array } from "prop-types";
+import chiaveRandom from "../utils/chiaveRandom";
 
 interface OrariPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -79,6 +83,14 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 		immagine: null,
 		info: null,
 		quantity: null,
+		Tommys_infoHtml: null,
+		Tommys_Cliente: null,
+		Tommys_Abbonamento: null,
+		Tommys_DataIni: null,
+		Tommys_Importo: null,
+		Tommys_Frequenze: null,
+		Tommys_Promo: null,
+		Tommys_Codice_Promo: null,
 	} as ActualProduct);
 
 	//------------  "  selection times "  -----------------//
@@ -368,10 +380,13 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 		}
 		console.log("dataToSendService: ", dataToSendService);
 
-		let noteAttivitaOrari = "";
+		let infoAttivitaOrariHtml = "";
+		let infoAttivitaOrariString = "";
 		// Filtra solo le attività con almeno un orario selezionato
 		activitiesWithTimes.map(([_, { activity, selectedOrari }]) => {
-			noteAttivitaOrari += `<br /><br /> Attività: <label style="font-weight: bold;" />${activity.DESATT}</label> <br /> Orari: <br />`;
+			infoAttivitaOrariHtml += `<br /><br /> Attività: <label style="font-weight: bold;" />${activity.DESATT}</label> <br /> Orari: <br />`;
+
+			infoAttivitaOrariString += `Attività: ${activity.DESATT} <|> Orari: `;
 
 			selectedOrari
 				.map((selectedOrario) =>
@@ -382,16 +397,26 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 				.filter((orario) => {
 					orario !== undefined;
 					console.log("orario: ", orario);
-					noteAttivitaOrari += `<label style="font-weight: bold;" />-		${
+
+					infoAttivitaOrariHtml += `<label style="font-weight: bold;" />-		${
 						orario?.GIORNO
 					} ${orario?.ORAINIZIO}-${
 						orario?.ORAFINE
 					}</label> <label style="font-weight: lighter;" /> / ${
 						orario?.LIVELLO ? orario?.LIVELLO : "n.i."
 					} / ${orario?.FASCIA ? orario?.FASCIA : "n.i."}</label> <br />`;
+
+					infoAttivitaOrariString += `- ${orario?.GIORNO} ${
+						orario?.ORAINIZIO
+					}-${orario?.ORAFINE} / ${
+						orario?.LIVELLO ? orario?.LIVELLO : "n.i."
+					} / ${orario?.FASCIA ? orario?.FASCIA : "n.i."}\n\n`;
 				});
 		});
-		noteAttivitaOrari += `<br />`;
+		infoAttivitaOrariHtml += `<br />`;
+
+		let infoString = itemsCard.note + infoAttivitaOrariString;
+		let infoHtml = itemsCard.noteHtml + infoAttivitaOrariHtml;
 
 		setActualProduct({
 			codice: itemsCard.codice,
@@ -399,14 +424,26 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 			prezzo: Number(itemsCard.abbonamento.IMPORTO),
 			prezzoScontato: Number(itemsCard.abbonamento.IMPORTOS),
 			immagine: [],
-			info: itemsCard.note + noteAttivitaOrari,
+			info: infoString ?? "",
 			quantity: 1,
+			Tommys_infoHtml: infoHtml ?? "",
+			Tommys_Cliente: authUser?.USERID ?? null,
+			Tommys_Abbonamento: itemsCard.abbonamento.CODABB,
+			Tommys_DataIni: itemsCard.abbonamento.DATAINI,
+			Tommys_Importo:
+				Number(itemsCard.abbonamento.PROMO) > 0
+					? itemsCard.abbonamento.IMPORTOS
+					: itemsCard.abbonamento.IMPORTO,
+			Tommys_Frequenze: dataToSendService ?? "",
+			Tommys_Promo: itemsCard.abbonamento.PROMO,
+			Tommys_Codice_Promo: itemsCard.abbonamento.CODPROMO,
 		});
 	};
 
 	React.useEffect(() => {
 		if (actualProduct?.codice !== null) {
-			//addToCart(actualProduct, cart, dispatch, authUser);
+			const newCart = clearCart(cart, dispatch);
+			addToCart(actualProduct, newCart, dispatch, authUser);
 			router.replace("/auth/acquista/riepilogo");
 		} else {
 			console.log("@@@ NO actualProduct : ", actualProduct);
@@ -593,6 +630,7 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 									flexDirection: "row",
 									justifyContent: "space-around",
 									minHeight: "660px",
+									// backgroundColor: "greenyellow",
 								}}
 							>
 								<>
@@ -604,6 +642,7 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 											item
 											xs={12}
 											sm={8}
+											// sx={{ backgroundColor: "black" }}
 										>
 											<ActivitySelector
 												activities={activitiesData}
@@ -626,6 +665,7 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 											item
 											xs={12}
 											sm={4}
+											// sx={{ backgroundColor: "aliceblue" }}
 										>
 											<Summary
 												selectedTimesMap={selectedTimesMap}
@@ -644,6 +684,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 											width: "100%",
 											justifyContent: "space-between",
 											height: "min-content",
+											paddingTop: "30px",
+											borderTop: "gray 1px solid",
 										}}
 									>
 										<Button
@@ -652,7 +694,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 											onClick={handleCancel}
 											sx={{ color: "white" }}
 										>
-											{myIcons.HighlightOffIcon} Annulla
+											{myIcons.HighlightOffIcon}
+											<span style={{ marginLeft: "8px" }}>Annulla</span>
 										</Button>
 
 										<Button
@@ -660,8 +703,10 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 											color="success"
 											variant="contained"
 											onClick={handleConfirm}
+											sx={{ color: "white" }}
 										>
-											{myIcons.CheckCircleOutlineIcon} Conferma
+											{myIcons.CheckCircleOutlineIcon}
+											<span style={{ marginLeft: "8px" }}>Conferma</span>
 										</Button>
 									</div>
 								</>

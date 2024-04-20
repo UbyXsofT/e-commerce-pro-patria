@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
-import { setLoading } from "src/store/actions";
+import { setCart, setLoading } from "src/store/actions";
 import { setAuthUser } from "src/store/actions";
 
 //----------
 import {
 	Button,
+	Divider,
 	Grid,
 	IconButton,
 	LinearProgress,
@@ -35,10 +36,11 @@ import {
 	StoreState,
 	CartProdotto,
 	ActualProduct,
+	obyPostRegistraAcquisto,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
-import { DeleteRounded } from "@mui/icons-material";
+import { DeleteRounded, Info } from "@mui/icons-material";
 import {
 	numeroSenzaDecimale,
 	removeFromCart,
@@ -49,6 +51,8 @@ import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";
 import myIcons from "src/theme/IconsDefine";
+import LegendaIcone from "src/components/listino/utils/LegendaIcone";
+import router from "next/router";
 // export const renderPrice = (price: number): string =>
 // 	price?.toString().replace(".", ",");
 
@@ -60,13 +64,13 @@ const Carrello = () => {
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const user = cart.at(0);
-	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
+	//const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 
 	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
 
 	const [progress, setProgress] = React.useState(0);
 	const [buffer, setBuffer] = React.useState(10);
-	const [isTimerActive, setIsTimerActive] = React.useState(true);
+	const [isTimerActive, setIsTimerActive] = React.useState(false);
 
 	const progressRef = React.useRef(() => {});
 
@@ -85,36 +89,30 @@ const Carrello = () => {
 	}, [progress]);
 
 	React.useEffect(() => {
+		// Quando isTimerActive cambia, ferma l'animazione
+
 		let timer: any;
 
-		const startTimer = () => {
-			timer = setInterval(() => {
-				progressRef.current();
-			}, 500);
-		};
-
-		startTimer(); // Avvia il timer quando il componente viene montato
-
-		// Dopo 5 secondi, ferma il timer
-		const timeout = setTimeout(() => {
-			clearInterval(timer);
-			setIsTimerActive(false);
-		}, eCommerceConf.TimerAttesaDispCarrello);
-
-		return () => {
-			clearTimeout(timeout);
-			clearInterval(timer);
-		};
-	}, [isTimerActive]);
-
-	React.useEffect(() => {
-		// Quando isTimerActive cambia, ferma l'animazione
-		console.log("cambia isTimerActive: ", isTimerActive);
 		if (!isTimerActive) {
-			console.log("IF: ", isTimerActive);
+			//false
 			setProgress(100);
 			setBuffer(100);
 			setIsCheckInCorsoDisp(false);
+		} else {
+			//setIsCheckInCorsoDisp(true);
+			const startTimer = () => {
+				timer = setInterval(() => {
+					progressRef.current();
+				}, 500);
+			};
+			startTimer(); // Avvia il timer quando il componente viene montato
+
+			const timeout = setTimeout(() => {
+				clearInterval(timer);
+				clearTimeout(timeout);
+				setIsCheckInCorsoDisp(false);
+				setIsTimerActive(false);
+			}, eCommerceConf.TimerAttesaDispCarrello);
 		}
 	}, [isTimerActive]);
 
@@ -163,17 +161,71 @@ const Carrello = () => {
 			return;
 		}
 		//info contiene gli Orari
-		if (user?.cart[0]?.info?.includes("Orari")) {
-			setIsCheckInCorsoDisp(true);
-		} else {
-			setIsCheckInCorsoDisp(false);
-		}
+		// if (user?.cart[0]?.info?.includes("Orari")) {
+		// 	setIsCheckInCorsoDisp(true);
+		// } else {
+		// 	setIsCheckInCorsoDisp(false);
+		// }
 
 		setPrezzi(calculateTotalePrezzo(user.cart));
 	}, [cart]);
 
-	const callCheckDispRegistraInDB = () => {
+	const callCheckDispRegistraInDB = (prodotto: ActualProduct) => {
 		console.log("****************** callCheckDispRegistraInDB");
+		const fetchData = async () => {
+			setIsTimerActive(true);
+			const handleSuccess = (msg_Resp: any) => {
+				//success data
+				console.log("****************** handleSuccess msg_Resp: ", msg_Resp);
+				if (msg_Resp.successCli === true) {
+					if (isTimerActive === false) {
+						router.push("/auth/acquista/carrello");
+					}
+				}
+			};
+			const handleError = (error: any) => {
+				console.log("****************** handleError");
+				//ERROR data
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{error}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				setIsTimerActive(false);
+				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+			};
+
+			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+
+			let conv_prod = prodotto.Tommys_Importo?.replace(".", ",") ?? null;
+
+			const obyPostRegistraAcquisto: obyPostRegistraAcquisto = {
+				clienteKey: eCommerceConf.ClienteKey,
+				Cliente: prodotto.Tommys_Cliente,
+				Abbonamento: prodotto.Tommys_Abbonamento,
+				DataIni: prodotto.Tommys_DataIni,
+				Importo: conv_prod,
+				Frequenze: prodotto.Tommys_Frequenze,
+				Promo: prodotto.Tommys_Promo,
+				Codice_Promo: prodotto.Tommys_Codice_Promo,
+			};
+
+			try {
+				const respCall: responseCall = await callNodeService(
+					"ecommerce-registra-impegno-acquisto",
+					obyPostRegistraAcquisto,
+					null
+				);
+				handleSuccess(respCall);
+			} catch (error) {
+				handleError(error);
+			} finally {
+				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			}
+		};
+		fetchData();
 		// clienteKey:BytewareDemoBeta
 		// Cliente:CLABKM5
 		// Abbonamento:AB001
@@ -192,123 +244,24 @@ const Carrello = () => {
 		// quantity: null,
 	};
 
-	const handleCheckOut = () => {
-		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
 
-		const CreateCheckOutSession = async () => {
-			const handleSuccess = (msg_Resp: any) => {
-				console.log(
-					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
-					msg_Resp
-				);
-				const msg_error_session = `Ops! Siamo spiacenti, ma al momento riscontriamo un problema
-				nella creazione della sessione di pagamento tramite Stripe.
-
-				Ti invitiamo a riprovare tra qualche istante. Se il problema
-				persiste, per favore, contatta il nostro servizio di
-				assistenza. 
-				
-				Ci scusiamo per l'inconveniente e faremo del
-				nostro meglio per risolvere la situazione al più presto.`;
-				try {
-					if (msg_Resp.successCli) {
-						window.location.href = msg_Resp.messageCli.url;
-					} else {
-						//ERROR data
-						console.log("error msg_Resp.successCli.url");
-						//ERROR data
-						const textAlert = (
-							<React.Fragment>
-								<h3>
-									<strong>{msg_error_session}</strong>
-								</h3>
-							</React.Fragment>
-						);
-						showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-					}
-				} catch (error) {
-					//ERROR data
-					console.log("error CreateCheckOutSession: ", error);
-					const textAlert = (
-						<React.Fragment>
-							<h3>
-								<strong> {msg_error_session}</strong>
-							</h3>
-						</React.Fragment>
-					);
-					showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-				}
-				//success data
-			};
-			const handleError = (error: any) => {
-				//ERROR data
-				const textAlert = (
-					<React.Fragment>
-						<h3>
-							<strong>{error}</strong>
-						</h3>
-					</React.Fragment>
-				);
-				showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
-			};
-
-			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
-			// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
-			const protocol = window.location.protocol ?? "https:";
-			const domain = window.location.hostname;
-			const port = window.location.port;
-
-			console.log(`Protocollo: ${protocol}`);
-			console.log(`Dominio: ${domain}`);
-			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-
-			const obyPostDataCart = {
-				clienteKey: eCommerceConf.ClienteKey,
-				userId: authUser?.USERID,
-				emailUser: authUser?.EMAIL,
-				emailCentro: authUser?.EMAILCENTRO,
-				line_items: cart[0].cart.map((item) => {
-					let prezzo: number | null = item.prezzoScontato
-						? item.prezzoScontato
-						: item.prezzo;
-					let importoFix: number;
-					importoFix = importoInCentesimi(prezzo as number);
-					//importoFix = 100;
-					console.log("CHK --- > prezzo : ", prezzo);
-					console.log("CHK --- > importoFix : ", importoFix);
-
-					return {
-						id: item.codice,
-						nome: item.nome,
-						prezzo: importoFix,
-						immagine: item.immagine,
-						info: item.info,
-						quantity: 1,
-					};
-				}),
-
-				currency: "eur",
-				mode: "payment",
-				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
-				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
-			};
-
-			console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
-			//return;
-			try {
-				const respCall: responseCall = await callNodeService(
-					"stripe/checkout-session",
-					obyPostDataCart,
-					null
-				);
-				handleSuccess(respCall);
-			} catch (error) {
-				handleError(error);
-			} finally {
-				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-			}
-		};
-		CreateCheckOutSession();
+	const handleCancel = (prodotto: any) => {
+		// Implementa la logica per annullare le scelte dell'utente.
+		// torno su acquista cancellando tutte le scelte
+		removeFromCart(prodotto, cart, dispatch);
+		router.push("/auth/acquista/prodotti");
+	};
+	const handleConfirm = (prodotto: any) => {
+		callCheckDispRegistraInDB(prodotto);
+		console.log(prodotto);
+		//alert("gestire conferma");
 	};
 
 	return (
@@ -319,85 +272,103 @@ const Carrello = () => {
 			>
 				<AlertMe />
 				{/* <Container sx={{ marginBottom: "100px" }}> */}
-				<Grid
-					container
-					style={{
-						display: "block",
-						marginBottom: "5rem",
-						minHeight: "32rem",
-					}}
-				>
-					{isCartEmpty ? (
-						<Box
-							textAlign={"center"}
-							marginTop={12}
+				{isCheckInCorsoDisp ? (
+					<>
+						<Paper
+							elevation={5}
+							sx={{
+								backgroundColor:
+									theme.palette.mode === "light" ? "white" : "black",
+							}}
 						>
-							<Typography
-								variant="h4"
-								gutterBottom
+							<Box
+								textAlign={"center"}
+								marginTop={"1rem"}
 							>
-								<strong>Il Carrello è vuoto</strong>
-							</Typography>
-							<Typography variant="h5">
-								Per Aggiungere Prodotti visita la sezione{" "}
-								<Link
-									onClick={() => Router.push("/auth/acquista/prodotti")}
+								<Typography
 									sx={{
-										mt: 2,
-										textAlign: "center",
-										cursor: "pointer",
-										color: (theme) =>
-											theme.palette.mode === "light" ? "black" : "white",
+										padding: "10px",
+										fontWeight: 200,
+										fontSize: "medium",
 									}}
+									gutterBottom
 								>
-									Acquista
-								</Link>
-							</Typography>
-						</Box>
-					) : isCheckInCorsoDisp ? (
+									<strong>{eCommerceConf.MsgChkAttesaDispCarrello}</strong>
+								</Typography>
+
+								<BorderLinearProgress
+									variant="buffer"
+									value={progress}
+									valueBuffer={buffer}
+									// color="secondary"
+								/>
+							</Box>
+						</Paper>
+					</>
+				) : (
+					<Grid
+						container
+						style={{
+							display: "block",
+							marginBottom: "5rem",
+							minHeight: "32rem",
+						}}
+					>
 						<>
-							<Paper
-								elevation={5}
-								sx={{
-									backgroundColor:
-										theme.palette.mode === "light" ? "white" : "black",
+							<Grid
+								container
+								style={{
+									justifyContent: "space-between",
+									paddingRight: "0px",
 								}}
 							>
-								<Box
-									textAlign={"center"}
-									marginTop={"1rem"}
+								<Typography
+									variant="h4"
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										flexWrap: "nowrap",
+										alignItems: "center",
+									}}
 								>
-									<Typography
-										sx={{
-											padding: "10px",
-											fontWeight: 200,
-											fontSize: "medium",
-										}}
-										gutterBottom
-									>
-										<strong>{eCommerceConf.MsgChkAttesaDispCarrello}</strong>
-									</Typography>
+									{React.cloneElement(myIcons.SummarizeIcon, {
+										fontSize: "large",
+										style: { marginRight: "20px", color: "red" },
+									})}
+									Riepilogo scelte
+								</Typography>
 
-									<BorderLinearProgress
-										variant="buffer"
-										value={progress}
-										valueBuffer={buffer}
-										// color="secondary"
-									/>
-								</Box>
-							</Paper>
-						</>
-					) : (
-						<>
-							<Typography variant="h4">
-								<strong>Il tuo carrello</strong>
-							</Typography>
+								<Tooltip
+									title={
+										<span style={{ display: "flex", flexDirection: "column" }}>
+											<Typography
+												textAlign={"center"}
+												variant="subtitle2"
+											>
+												Visualizza legenda icone
+											</Typography>
+										</span>
+									}
+								>
+									<IconButton
+										onClick={() => {
+											openModal();
+										}}
+									>
+										<Info color="info" />
+									</IconButton>
+								</Tooltip>
+								<LegendaIcone
+									isOpen={isModalOpen}
+									onClose={closeModal}
+								/>
+							</Grid>
 							<List>
 								{user ? (
-									user.cart.map((prodotto) => {
+									user.cart.map((prodotto: ActualProduct) => {
 										return (
 											<Paper
-												elevation={1}
+												elevation={0}
 												key={chiaveRandom()}
 												style={{ marginBottom: "1rem" }}
 											>
@@ -427,7 +398,7 @@ const Carrello = () => {
 
 																<div
 																	dangerouslySetInnerHTML={{
-																		__html: prodotto?.info as
+																		__html: prodotto?.Tommys_infoHtml as
 																			| string
 																			| TrustedHTML,
 																	}}
@@ -436,20 +407,96 @@ const Carrello = () => {
 														</Stack>
 													</ListItemText>
 
-													<IconButton
-														edge="end"
-														aria-label="delete"
-														sx={{
-															marginRight: "auto",
-															color: theme.palette.error.main,
-														}}
-														onClick={() =>
-															removeFromCart(prodotto, cart, dispatch)
-														}
-													>
-														<DeleteRounded />
-													</IconButton>
+													{/* <IconButton
+													edge="end"
+													aria-label="delete"
+													sx={{
+														marginRight: "auto",
+														color: theme.palette.error.main,
+													}}
+													onClick={() =>
+														removeFromCart(prodotto, cart, dispatch)
+													}
+												>
+													<DeleteRounded />
+												</IconButton> */}
 												</ListItem>
+
+												<Grid
+													style={{
+														display: "flex",
+														justifyContent: "flex-end",
+														padding: "10px",
+														marginRight: "20px",
+													}}
+												>
+													<Typography
+														variant="h5"
+														sx={{ fontWeight: "500", marginRight: "10px" }}
+													>{`Prezzo: `}</Typography>
+
+													{Prezzi.totalePrezzoScontato ? (
+														<Typography
+															variant="h5"
+															textAlign={"center"}
+															style={{
+																position: "relative",
+															}}
+														>
+															{renderPrice(Prezzi.totalePrezzoScontato)}€
+														</Typography>
+													) : (
+														<Typography
+															variant="h5"
+															textAlign={"center"}
+															style={{
+																position: "relative",
+															}}
+														>
+															{renderPrice(Prezzi.totalePrezzo)}€
+														</Typography>
+													)}
+												</Grid>
+												<Divider sx={{ mb: "1rem", mt: "1rem" }} />
+												<div
+													style={{
+														display: "flex",
+														alignItems: "center",
+														width: "100%",
+														justifyContent: "space-between",
+														height: "min-content",
+														padding: "20px",
+													}}
+												>
+													<Button
+														color="secondary"
+														variant="contained"
+														onClick={() => {
+															handleCancel(prodotto);
+														}}
+														sx={{ color: "white" }}
+													>
+														{myIcons.HighlightOffIcon}
+														<span style={{ marginLeft: "8px" }}>
+															Annulla scelte
+														</span>
+													</Button>
+
+													<Button
+														//disabled={quantiOrarioScelti === 0}
+														color="success"
+														variant="contained"
+														onClick={() => {
+															handleConfirm(prodotto);
+														}}
+														sx={{ color: "white" }}
+													>
+														{myIcons.CheckCircleOutlineIcon}
+														<span style={{ marginLeft: "8px" }}>
+															AGGIUNGI AL CARRELLO
+														</span>
+													</Button>
+												</div>
 											</Paper>
 										);
 									})
@@ -457,56 +504,10 @@ const Carrello = () => {
 									<></>
 								)}
 							</List>
-
-							<Stack
-								direction={"row"}
-								spacing={2}
-								justifyContent={"space-between"}
-								style={{
-									display: "flex",
-									justifyContent: "end",
-									alignItems: "center",
-								}}
-							>
-								<div>
-									<Typography
-										variant="h5"
-										sx={{ fontWeight: "800" }}
-									>{`Totale: `}</Typography>
-
-									{Prezzi.totalePrezzoScontato ? (
-										<Typography
-											variant="h5"
-											textAlign={"center"}
-											style={{
-												position: "relative",
-											}}
-										>
-											{renderPrice(Prezzi.totalePrezzoScontato)}€
-										</Typography>
-									) : (
-										<Typography
-											variant="h5"
-											textAlign={"center"}
-											style={{
-												position: "relative",
-											}}
-										>
-											{renderPrice(Prezzi.totalePrezzo)}€
-										</Typography>
-									)}
-								</div>
-
-								<Button
-									variant="contained"
-									onClick={() => handleCheckOut()}
-								>
-									CHECKOUT
-								</Button>
-							</Stack>
 						</>
-					)}
-				</Grid>
+					</Grid>
+				)}
+
 				{/* </Container> */}
 			</Layout>
 		</ThemeProvider>

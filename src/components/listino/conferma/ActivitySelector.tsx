@@ -6,6 +6,8 @@ import {
 	ListItem,
 	Checkbox,
 	Typography,
+	useMediaQuery,
+	useTheme,
 } from "@mui/material";
 import React from "react";
 import {
@@ -50,20 +52,26 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 	// 		Personalizzato
 	// 	</div>
 	// );
-
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	return (
 		<Autocomplete
+			sx={{
+				maxWidth: "98%",
+				marginBottom: "20px",
+				"& .MuiAutocomplete-inputRoot, & .MuiAutocomplete-option": {
+					fontSize: isMobile ? "small !important" : "normal",
+				},
+			}}
 			options={activities}
-			//disabled={islimiteAttivitaSuperato}
 			getOptionLabel={(activity) => activity.DESATT}
 			onChange={(_, value) => handleActivitySelection(value)}
 			onInputChange={(_, value, reason) => {
 				if (reason === "clear") {
-					// Se la barra di ricerca viene cancellata, chiama la funzione di gestione clear
 					handleClear();
 				}
 			}}
-			clearText="cancella gli orari di questa attività"
+			clearText="Cancella gli orari di questa attività"
 			renderInput={(params) => (
 				<TextField
 					{...params}
@@ -88,57 +96,65 @@ const TimeList: React.FC<TimeListProps> = ({
 }) => {
 	console.log("orariSelezionati: ", orariSelezionati);
 	console.log("attivitaSelezionata: ", attivitaSelezionata);
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	return (
-		// <List>
-		// 	{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
-		// 		<ListItem key={ORARIO.IDORARIO}>
-		// 			<Checkbox
-		// 				checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
-		// 				onChange={() => handleTimeSelection(ORARIO)}
-		// 			/>
-		// 			<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
-		// 		</ListItem>
-		// 	))}
-		// </List>
-		<table>
-			<thead>
-				<tr>
-					<th>Giorno/Orario</th>
-					<th>Livello</th>
-					<th>Fascia d'età</th>
-				</tr>
-			</thead>
-			<tbody>
-				{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
-					<tr key={ORARIO.IDORARIO}>
-						<td>
-							<ListItem>
-								<Checkbox
-									checked={orariSelezionati?.includes(ORARIO.IDORARIO) || false}
-									onChange={() => handleTimeSelection(ORARIO)}
-								/>
-								<Typography>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
-							</ListItem>
-						</td>
-						{/* Aggiungi le informazioni dai tag desiderati nelle Colonne 2 e 3 */}
-						<td>
-							<ListItem>
-								<Typography>{`${
-									ORARIO.LIVELLO ? ORARIO.LIVELLO : "n.i."
-								}`}</Typography>
-							</ListItem>
-						</td>
-						<td>
-							<ListItem>
-								<Typography>{`${
-									ORARIO.FASCIA ? ORARIO.FASCIA : "n.i."
-								}`}</Typography>
-							</ListItem>
-						</td>
+		<div style={{ overflowX: "auto" }}>
+			<table style={{ width: "100%" }}>
+				<thead>
+					<tr>
+						<th
+							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
+						>
+							Giorno/Orario
+						</th>
+						<th
+							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
+						>
+							Livello
+						</th>
+						<th
+							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
+						>
+							Fascia d'età
+						</th>
 					</tr>
-				))}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
+						<tr key={ORARIO.IDORARIO}>
+							<td style={{ width: "33%" }}>
+								<ListItem>
+									<Checkbox
+										checked={
+											orariSelezionati?.includes(ORARIO.IDORARIO) || false
+										}
+										onChange={() => handleTimeSelection(ORARIO)}
+									/>
+									<Typography
+										style={{ fontSize: isMobile ? "small" : "normal" }}
+									>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
+								</ListItem>
+							</td>
+							<td style={{ width: "33%" }}>
+								<ListItem>
+									<Typography
+										style={{ fontSize: isMobile ? "small" : "normal" }}
+									>{`${ORARIO.LIVELLO ? ORARIO.LIVELLO : "n.i."}`}</Typography>
+								</ListItem>
+							</td>
+							<td style={{ width: "33%" }}>
+								<ListItem>
+									<Typography
+										style={{ fontSize: isMobile ? "small" : "normal" }}
+									>{`${ORARIO.FASCIA ? ORARIO.FASCIA : "n.i."}`}</Typography>
+								</ListItem>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
 	);
 };
 

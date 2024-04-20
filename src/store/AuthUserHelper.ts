@@ -76,6 +76,7 @@ const AuthUserHelper = async (
 								console.log("Aggiorna Redux AuthUser:", error);
 								return {
 									result: false,
+									route: "/account/login",
 									error: error as string,
 									response: null,
 								};
@@ -106,6 +107,7 @@ const AuthUserHelper = async (
 					console.error("Errore nella chiamata:", error);
 					return {
 						result: false,
+						route: "/account/login",
 						error: error as string,
 						response: null,
 					};

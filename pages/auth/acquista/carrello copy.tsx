@@ -64,68 +64,68 @@ const Carrello = () => {
 
 	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
 
-	// const [progress, setProgress] = React.useState(0);
-	// const [buffer, setBuffer] = React.useState(10);
-	// const [isTimerActive, setIsTimerActive] = React.useState(true);
+	const [progress, setProgress] = React.useState(0);
+	const [buffer, setBuffer] = React.useState(10);
+	const [isTimerActive, setIsTimerActive] = React.useState(true);
 
-	// const progressRef = React.useRef(() => {});
+	const progressRef = React.useRef(() => {});
 
-	// React.useEffect(() => {
-	// 	progressRef.current = () => {
-	// 		if (progress > 100) {
-	// 			setProgress(0);
-	// 			setBuffer(10);
-	// 		} else {
-	// 			const diff = Math.random() * 10;
-	// 			const diff2 = Math.random() * 10;
-	// 			setProgress(progress + diff);
-	// 			setBuffer(progress + diff + diff2);
-	// 		}
-	// 	};
-	// }, [progress]);
+	React.useEffect(() => {
+		progressRef.current = () => {
+			if (progress > 100) {
+				setProgress(0);
+				setBuffer(10);
+			} else {
+				const diff = Math.random() * 10;
+				const diff2 = Math.random() * 10;
+				setProgress(progress + diff);
+				setBuffer(progress + diff + diff2);
+			}
+		};
+	}, [progress]);
 
-	// React.useEffect(() => {
-	// 	let timer: any;
+	React.useEffect(() => {
+		let timer: any;
 
-	// 	const startTimer = () => {
-	// 		timer = setInterval(() => {
-	// 			progressRef.current();
-	// 		}, 500);
-	// 	};
+		const startTimer = () => {
+			timer = setInterval(() => {
+				progressRef.current();
+			}, 500);
+		};
 
-	// 	startTimer(); // Avvia il timer quando il componente viene montato
+		startTimer(); // Avvia il timer quando il componente viene montato
 
-	// 	// Dopo 5 secondi, ferma il timer
-	// 	const timeout = setTimeout(() => {
-	// 		clearInterval(timer);
-	// 		setIsTimerActive(false);
-	// 	}, eCommerceConf.TimerAttesaDispCarrello);
+		// Dopo 5 secondi, ferma il timer
+		const timeout = setTimeout(() => {
+			clearInterval(timer);
+			setIsTimerActive(false);
+		}, eCommerceConf.TimerAttesaDispCarrello);
 
-	// 	return () => {
-	// 		clearTimeout(timeout);
-	// 		clearInterval(timer);
-	// 	};
-	// }, [isTimerActive]);
+		return () => {
+			clearTimeout(timeout);
+			clearInterval(timer);
+		};
+	}, [isTimerActive]);
 
-	// React.useEffect(() => {
-	// 	// Quando isTimerActive cambia, ferma l'animazione
-	// 	console.log("cambia isTimerActive: ", isTimerActive);
-	// 	if (!isTimerActive) {
-	// 		console.log("IF: ", isTimerActive);
-	// 		setProgress(100);
-	// 		setBuffer(100);
-	// 		setIsCheckInCorsoDisp(false);
-	// 	}
-	// }, [isTimerActive]);
+	React.useEffect(() => {
+		// Quando isTimerActive cambia, ferma l'animazione
+		console.log("cambia isTimerActive: ", isTimerActive);
+		if (!isTimerActive) {
+			console.log("IF: ", isTimerActive);
+			setProgress(100);
+			setBuffer(100);
+			setIsCheckInCorsoDisp(false);
+		}
+	}, [isTimerActive]);
 
-	// const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-	// 	height: 10,
-	// 	borderRadius: 0,
-	// 	[`&.${linearProgressClasses.barColorSecondary}`]: {},
-	// 	[`& .${linearProgressClasses.bar}`]: {
-	// 		borderRadius: 0,
-	// 	},
-	// }));
+	const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+		height: 10,
+		borderRadius: 0,
+		[`&.${linearProgressClasses.barColorSecondary}`]: {},
+		[`& .${linearProgressClasses.bar}`]: {
+			borderRadius: 0,
+		},
+	}));
 
 	type Prezzi = {
 		//toShow: boolean;
@@ -354,6 +354,39 @@ const Carrello = () => {
 								</Link>
 							</Typography>
 						</Box>
+					) : isCheckInCorsoDisp ? (
+						<>
+							<Paper
+								elevation={5}
+								sx={{
+									backgroundColor:
+										theme.palette.mode === "light" ? "white" : "black",
+								}}
+							>
+								<Box
+									textAlign={"center"}
+									marginTop={"1rem"}
+								>
+									<Typography
+										sx={{
+											padding: "10px",
+											fontWeight: 200,
+											fontSize: "medium",
+										}}
+										gutterBottom
+									>
+										<strong>{eCommerceConf.MsgChkAttesaDispCarrello}</strong>
+									</Typography>
+
+									<BorderLinearProgress
+										variant="buffer"
+										value={progress}
+										valueBuffer={buffer}
+										// color="secondary"
+									/>
+								</Box>
+							</Paper>
+						</>
 					) : (
 						<>
 							<Typography variant="h4">

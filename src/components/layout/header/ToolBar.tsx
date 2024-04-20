@@ -73,8 +73,15 @@ export const ToolBar = ({
 
 	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
 	const dispatch = useDispatch();
+
+	// const cartLength = useSelector(
+	// 	(state: StoreState) => state.cart[0]?.cart.length ?? 0
+	// );
+
+	//uby cambio il recupero degli oggetti del carrello non più dal settagio redux cart,
+	//ma dal carrello passato da tommys
 	const cartLength = useSelector(
-		(state: StoreState) => state.cart[0]?.cart.length ?? 0
+		(state: StoreState) => Number(state.authUser?.CARRELLO) ?? 0
 	);
 	React.useEffect(() => {
 		setCartAlertsNum(cartLength);
@@ -161,13 +168,13 @@ export const ToolBar = ({
 											width: "120px",
 											alignSelf: "center",
 										}}
-										disabled={
-											button.name.toString().includes("Acquista")
-												? cartAlertsNum !== 0
-													? true
-													: false
-												: false
-										}
+										// disabled={
+										// 	button.name.toString().includes("Acquista")
+										// 		? cartAlertsNum !== 0
+										// 			? true
+										// 			: false
+										// 		: false
+										// }
 										variant={"contained"}
 										color={
 											button.name &&
@@ -274,7 +281,7 @@ export const ToolBar = ({
 							}}
 						>
 							<Badge
-								badgeContent={cartAlertsNum}
+								badgeContent={cartAlertsNum ?? 0}
 								color="error"
 							>
 								<IconButton sx={{ color: "#dfdfdf" }}>

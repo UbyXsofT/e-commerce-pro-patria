@@ -16,13 +16,16 @@ import { wrapper } from "src/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import BlockPage from "./blockPage";
-import { StoreState } from "src/components/CommonTypesInterfaces";
+import { AuthUser, StoreState } from "src/components/CommonTypesInterfaces";
 import AuthEcommerceHelper from "src/store/AuthEcommerceHelper";
 import AuthUserHelper from "src/store/AuthUserHelper";
 import { SettingsProvider } from "src/components/layout/SettingsContext";
 import { NetworkStatusProvider } from "src/components/utils/network/NetworkStatusProvider";
 import ErrorBoundary from "ErrorBoundary";
-
+import callNodeService from "./api/callNodeService";
+import CookieManager from "src/components/cookie/CookieManager";
+import eCommerceConf from "eCommerceConf.json";
+import { setAuthUser } from "src/store/actions";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 const MyApp = (props: {
@@ -102,6 +105,112 @@ const MyApp = (props: {
 
 		checkAuthentication();
 	}, [requiresAuth, authEcommerce, authUser, listinoState.listino]);
+
+	interface AuthUserHelperReturn {
+		result: boolean;
+		route?: string;
+		error?: string;
+		response: AuthUser | null;
+	}
+
+	useEffect(() => {
+		const handleRouteChange = (url: string) => {
+			// Esegui le azioni desiderate ogni volta che cambia la pagina
+			console.log("@@@@@ --- XXXX --- Nuova pagina:", url);
+
+			if (authEcommerce === true) {
+				const accessToken = CookieManager.getCookie("accessToken");
+				const refreshToken = CookieManager.getCookie("refreshToken");
+
+				if (accessToken || refreshToken) {
+					console.log(
+						"FORZO L'AGGIORNAMENTO DEL CARRELLO RICHIAMANDO IL LOGIN"
+					);
+					const fetchData = async (): Promise<AuthUserHelperReturn> => {
+						//setVisLoader(true);
+						const obyPostData = {
+							clienteKey: eCommerceConf.ClienteKey,
+							userName: null,
+							password: null,
+							ricordami: null,
+							accessToken: accessToken,
+							refreshToken: refreshToken,
+						};
+
+						try {
+							const respCall = await callNodeService(
+								"login",
+								obyPostData,
+								null
+							);
+							console.log("respCall: ", respCall);
+							const msg_Resp = respCall.messageCli.message;
+
+							if (respCall.successCli) {
+								if (msg_Resp && msg_Resp.respWCF) {
+									//****** UTENTE
+									// Aggiorna lo stato dell'OGGETTO utente
+									try {
+										console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+										dispatch(setAuthUser(msg_Resp.respWCF));
+										return {
+											result: true,
+											response: msg_Resp.respWCF,
+										};
+									} catch (error) {
+										console.log("Aggiorna Redux AuthUser:", error);
+										return {
+											result: false,
+											error: error as string,
+											response: null,
+										};
+									}
+								} else {
+									console.log("msg_Resp: ", msg_Resp);
+									return {
+										result: false,
+										response: null,
+									};
+								}
+							} else {
+								console.log("CLI Failed");
+
+								return {
+									result: false,
+									response: null,
+								};
+							}
+						} catch (error) {
+							//setVisLoader(false);
+							console.error("Errore nella chiamata:", error);
+							return {
+								result: false,
+								error: error as string,
+								response: null,
+							};
+						}
+					};
+					fetchData();
+				}
+			}
+		};
+
+		// Sottoscrivi la funzione handleRouteChange agli eventi di navigazione
+		const handleRouteChangeComplete = () => {
+			handleRouteChange(router.pathname);
+		};
+
+		// Aggiorna lo stato quando il valore di router.pathname cambia
+		handleRouteChange(router.pathname);
+
+		// Pulisci l'evento quando il componente viene smontato
+		router.events.on("routeChangeComplete", handleRouteChangeComplete);
+
+		// Pulisci l'evento quando il componente viene smontato
+		return () => {
+			router.events.off("routeChangeComplete", handleRouteChangeComplete);
+		};
+	}, [router.pathname]); // Aggiorna solo quando il valore di router.pathname cambia
 
 	return (
 		<>

@@ -101,3 +101,15 @@ export const isInCart = (
 		return false;
 	}
 };
+
+export const clearCart = (cart: Cart, dispatch: Dispatch): Cart => {
+	const user = cart.at(0);
+	console.log("clearCart");
+	if (user) {
+		console.log("@@@ - OK: clearCart");
+		dispatch(setCart([{ userId: user.userId, cart: [] }]));
+		return [{ userId: user.userId, cart: [] }];
+	} else {
+		return [{ userId: "null", cart: [] }];
+	}
+};
