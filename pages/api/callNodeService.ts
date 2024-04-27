@@ -16,6 +16,7 @@ import {
 	obyPostOrari,
 	obyPostErrore,
 	obyPostRegistraAcquisto,
+	obyPostUpDateCart,
 } from "src/components/CommonTypesInterfaces";
 
 async function isNodeServiceReachable() {
@@ -46,6 +47,7 @@ export default async function callNodeService(
 		| "ecommerce-lista-attivita"
 		| "ecommerce-lista-orari"
 		| "ecommerce-registra-impegno-acquisto"
+		| "ecommerce-visualizza-carrello-vendite"
 		| "rec-error",
 	obyPostData:
 		| tokenlessAccess
@@ -58,7 +60,7 @@ export default async function callNodeService(
 		| NewUserData
 		| obyPostAttivita
 		| obyPostOrari
-		| obyPostRegistraAcquisto
+		| obyPostUpDateCart
 		| obyPostErrore,
 	token: null
 ): Promise<responseCall> {

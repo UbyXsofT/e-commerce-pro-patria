@@ -8,10 +8,8 @@ import {
 	createSlice,
 	PayloadAction,
 } from "@reduxjs/toolkit";
-
+import eCommerceConf from "eCommerceConf.json";
 import { createWrapper } from "next-redux-wrapper";
-import { StoreAction } from "src/components/CommonTypesInterfaces";
-import { ListinoAtvOrari, ListinoAtvOrariData } from "./interfaces";
 
 // Definisci i riduttori per gestire gli stati
 const loadingReducer = (state = false, action: AnyAction) => {
@@ -44,6 +42,15 @@ const authUserReducer = (state = null, action: AnyAction) => {
 const setCartReducer = (state = [], action: AnyAction) => {
 	switch (action.type) {
 		case "SET_CART":
+			return action.payload;
+		default:
+			return state;
+	}
+};
+
+const setCartTommysReducer = (state = [], action: AnyAction) => {
+	switch (action.type) {
+		case "SET_CART_TOMMYS":
 			return action.payload;
 		default:
 			return state;
@@ -111,13 +118,14 @@ const makeStore = () =>
 			authEcommerce: authEcommerceReducer,
 			authUser: authUserReducer,
 			cart: setCartReducer,
+			cartTommys: setCartTommysReducer,
 			listino: setListinoReducer,
 			stripeKeys: setStripeKeysReducer,
 			actualProduct: setActualProductReducer,
 			listinoAtvOrari: setAttivitaOrariListino,
 			// Altri riduttori...
 		},
-		devTools: true, // Abilita Redux DevTools
+		devTools: eCommerceConf.ModalitaSviluppo, // Abilita Redux DevTools
 	});
 
 // Crea il wrapper per Next.js utilizzando createWrapper

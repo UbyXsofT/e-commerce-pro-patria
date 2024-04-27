@@ -5,7 +5,14 @@ import { setAuthUser } from "src/store/actions";
 
 //----------
 import {
+	Backdrop,
 	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Divider,
 	Grid,
 	IconButton,
 	LinearProgress,
@@ -15,6 +22,7 @@ import {
 	ListItem,
 	ListItemText,
 	Paper,
+	Popover,
 	Tooltip,
 	Typography,
 	useMediaQuery,
@@ -35,22 +43,85 @@ import {
 	StoreState,
 	CartProdotto,
 	ActualProduct,
+	CartTommys,
+	TommysOggettiCarrello,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
-import { DeleteRounded } from "@mui/icons-material";
 import {
 	numeroSenzaDecimale,
 	removeFromCart,
 	importoInCentesimi,
+	useUpdateCartTommys,
+	removeFromCartTommys,
 } from "src/components/listino/utils/functionsCart";
 // import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
 import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";
 import myIcons from "src/theme/IconsDefine";
+import LegendaIcone from "src/components/listino/utils/LegendaIcone";
+import { Info } from "@mui/icons-material";
 // export const renderPrice = (price: number): string =>
 // 	price?.toString().replace(".", ",");
+
+const AlertDeleteProduct = ({ open, onClose, product, onDelete }: any) => {
+	return (
+		<Dialog
+			open={open}
+			onClose={onClose}
+			aria-labelledby="alert-dialog-title"
+			aria-describedby="alert-dialog-description"
+			BackdropComponent={Backdrop}
+			BackdropProps={{
+				style: { opacity: 0.5 }, // Imposta l'opacità del background al 50%
+			}}
+		>
+			<Box sx={{ backgroundColor: "red", color: "white" }}>
+				<DialogTitle id="alert-dialog-title">
+					{myIcons.InfoRoundedIcon}
+					<span
+						style={{ marginLeft: "8px", marginTop: "-5px", marginRight: "8px" }}
+					>
+						ATTENZIONE!
+					</span>
+					<p>Si desidera eliminare questo abbonamento?</p>
+				</DialogTitle>
+
+				<DialogContent>
+					<DialogContentText
+						sx={{ backgroundColor: "red", color: "white" }}
+						id="alert-dialog-description"
+					>
+						{`${product?.DESC}
+						Importo: ${product?.IMPORTO}€`}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						color="info"
+						variant="contained"
+						sx={{ color: "white", width: "100% !important" }}
+						onClick={onClose}
+					>
+						<span style={{ marginLeft: "8px" }}>ANNULLA</span>
+					</Button>
+					<Button
+						color="error"
+						variant="contained"
+						sx={{ color: "white", width: "100% !important" }}
+						onClick={() => {
+							onDelete(product?.CODICE ?? "nessuno");
+							onClose();
+						}}
+					>
+						<span style={{ marginLeft: "8px" }}>ELIMINA</span>
+					</Button>
+				</DialogActions>
+			</Box>
+		</Dialog>
+	);
+};
 
 const Carrello = () => {
 	const { showAlert } = useAlertMe();
@@ -59,137 +130,68 @@ const Carrello = () => {
 	const cart = useSelector((state: StoreState) => state.cart);
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const authUser = useSelector((state: StoreState) => state.authUser);
-	const user = cart.at(0);
-	const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
+	//const user = cart.at(0);
 
-	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
-
-	// const [progress, setProgress] = React.useState(0);
-	// const [buffer, setBuffer] = React.useState(10);
-	// const [isTimerActive, setIsTimerActive] = React.useState(true);
-
-	// const progressRef = React.useRef(() => {});
-
-	// React.useEffect(() => {
-	// 	progressRef.current = () => {
-	// 		if (progress > 100) {
-	// 			setProgress(0);
-	// 			setBuffer(10);
-	// 		} else {
-	// 			const diff = Math.random() * 10;
-	// 			const diff2 = Math.random() * 10;
-	// 			setProgress(progress + diff);
-	// 			setBuffer(progress + diff + diff2);
-	// 		}
-	// 	};
-	// }, [progress]);
-
-	// React.useEffect(() => {
-	// 	let timer: any;
-
-	// 	const startTimer = () => {
-	// 		timer = setInterval(() => {
-	// 			progressRef.current();
-	// 		}, 500);
-	// 	};
-
-	// 	startTimer(); // Avvia il timer quando il componente viene montato
-
-	// 	// Dopo 5 secondi, ferma il timer
-	// 	const timeout = setTimeout(() => {
-	// 		clearInterval(timer);
-	// 		setIsTimerActive(false);
-	// 	}, eCommerceConf.TimerAttesaDispCarrello);
-
-	// 	return () => {
-	// 		clearTimeout(timeout);
-	// 		clearInterval(timer);
-	// 	};
-	// }, [isTimerActive]);
-
-	// React.useEffect(() => {
-	// 	// Quando isTimerActive cambia, ferma l'animazione
-	// 	console.log("cambia isTimerActive: ", isTimerActive);
-	// 	if (!isTimerActive) {
-	// 		console.log("IF: ", isTimerActive);
-	// 		setProgress(100);
-	// 		setBuffer(100);
-	// 		setIsCheckInCorsoDisp(false);
-	// 	}
-	// }, [isTimerActive]);
-
-	// const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-	// 	height: 10,
-	// 	borderRadius: 0,
-	// 	[`&.${linearProgressClasses.barColorSecondary}`]: {},
-	// 	[`& .${linearProgressClasses.bar}`]: {
-	// 		borderRadius: 0,
-	// 	},
-	// }));
-
-	type Prezzi = {
-		//toShow: boolean;
-		totalePrezzo: number;
-		totalePrezzoScontato: number;
-	};
-
-	const [Prezzi, setPrezzi] = useState<Prezzi>({
-		//toShow: true,
-		totalePrezzo: 0,
-		totalePrezzoScontato: 0,
-	});
-
-	const calculateTotalePrezzo = (cart: CartProdotto[]): Prezzi => {
-		let totalePrezzo: number = 0;
-		let totalePrezzoScontato: number = 0;
-
-		cart?.forEach((prodotto: CartProdotto) => {
-			totalePrezzo += prodotto?.prezzo ?? 0;
-			totalePrezzoScontato += prodotto?.prezzoScontato ?? prodotto?.prezzo ?? 0;
-		});
-
-		const totalePrezzoObj: Prezzi = {
-			//toShow: totalePrezzo !== totalePrezzoScontato ? true : false,
-			totalePrezzo: Number(totalePrezzo.toFixed(2)),
-			totalePrezzoScontato: Number(totalePrezzoScontato.toFixed(2)),
-		};
-
-		return totalePrezzoObj;
-	};
+	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
+	//const isCartEmpty =	cartTommys?.TommysCart_OGGETTO?.length === 0 ? true : false;
+	const [isCartEmpty, setIsCartEmpty] = useState(true);
+	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
 
 	useEffect(() => {
-		let user = cart.at(0);
-		if (!user) {
-			return;
-		}
-		//info contiene gli Orari
-		if (user?.cart[0]?.info?.includes("Orari")) {
-			setIsCheckInCorsoDisp(true);
+		useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
+		setPrezzo(calculateTotalePrezzo);
+		console.log("prezzo: ", prezzo);
+	}, [cartTommys]);
+
+	const [prezzo, setPrezzo] = useState(0);
+	const calculateTotalePrezzo = () => {
+		let totalePrezzo = 0;
+		if (
+			cartTommys?.TommysCart_OGGETTO &&
+			cartTommys?.TommysCart_OGGETTO.length > 0
+		) {
+			setIsCartEmpty(false);
+			cartTommys?.TommysCart_OGGETTO.forEach((prodotto) => {
+				// Rimuovi le virgole dai valori degli importi e convertili in numeri float
+				const importoSenzaVirgola = prodotto?.IMPORTO?.replace(",", ".") ?? "0";
+				//console.log("importoSenzaVirgola: ", importoSenzaVirgola);
+				const importoFloat = parseFloat(importoSenzaVirgola) || 0;
+				//console.log("importoFloat: ", importoFloat);
+				// Aggiungi il valore dell'importo alla somma totale
+				totalePrezzo += importoFloat;
+			});
 		} else {
-			setIsCheckInCorsoDisp(false);
+			setIsCartEmpty(true);
 		}
 
-		setPrezzi(calculateTotalePrezzo(user.cart));
-	}, [cart]);
+		console.log("totalePrezzo: ", totalePrezzo);
+		// Restituisci la somma totale con due decimali
+		return parseFloat(totalePrezzo.toFixed(2));
+	};
 
-	const callCheckDispRegistraInDB = () => {
-		console.log("****************** callCheckDispRegistraInDB");
-		// clienteKey:BytewareDemoBeta
-		// Cliente:CLABKM5
-		// Abbonamento:AB001
-		// DataIni:2023-01-01
-		// Importo:1.00
-		// Frequenze:[CS000001][152][CS000012][250]
-		// Promo:
-		// Codice_Promo:
+	// // const [showAllertMe, setShowAllertMe] = React.useState(false);
+	const handleDeleteConferma = (codiceDel: string) => {
+		console.log("codiceDel: ", codiceDel);
+		removeFromCartTommys(codiceDel, cartTommys, dispatch);
+		//setShowAllertMe(false);
+	};
 
-		// codice: null, //abbonamento
-		// nome: null, //descrizione
-		// prezzo: null, //
-		// prezzoScontato: null,
-		// immagine: null,
-		// info: null,
-		// quantity: null,
+	const [selectedProduct, setSelectedProduct] = useState(null);
+
+	const handleOpenDeleteDialog = (product: TommysOggettiCarrello | any) => {
+		setSelectedProduct(product);
+	};
+
+	const handleCloseDeleteDialog = () => {
+		setSelectedProduct(null);
+	};
+
+	const [isModalOpen, setIsModalOpen] = React.useState(false);
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
+	const closeModal = () => {
+		setIsModalOpen(false);
 	};
 
 	const handleCheckOut = () => {
@@ -319,6 +321,7 @@ const Carrello = () => {
 			>
 				<AlertMe />
 				{/* <Container sx={{ marginBottom: "100px" }}> */}
+
 				<Grid
 					container
 					style={{
@@ -356,70 +359,161 @@ const Carrello = () => {
 						</Box>
 					) : (
 						<>
-							<Typography variant="h4">
-								<strong>Il tuo carrello</strong>
-							</Typography>
-							<List>
-								{user ? (
-									user.cart.map((prodotto) => {
-										return (
-											<Paper
-												elevation={1}
-												key={chiaveRandom()}
-												style={{ marginBottom: "1rem" }}
-											>
-												<ListItem key={chiaveRandom()}>
-													<ListItemText>
-														<Stack
-															alignItems={"center"}
-															spacing={2}
-															direction={isMobile ? "column" : "row"}
-														>
-															<Stack spacing={2}>
-																<Box
-																	sx={{ display: "flex", alignItems: "center" }}
-																	width={"100%"}
-																>
-																	{React.cloneElement(myIcons.AbbIcon, {
-																		fontSize: "medium",
-																		style: { marginRight: "10px" },
-																	})}
-																	<Typography
-																		variant="h5"
-																		sx={{ fontWeight: "bold" }}
-																	>
-																		{prodotto.nome}
-																	</Typography>
-																</Box>
+							<Grid
+								container
+								style={{
+									justifyContent: "space-between",
+									paddingRight: "0px",
+								}}
+							>
+								<Typography
+									variant="h4"
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										flexWrap: "nowrap",
+										alignItems: "center",
+									}}
+								>
+									{React.cloneElement(myIcons.ShoppingCartIcon, {
+										fontSize: "large",
+										style: { marginRight: "20px", color: "red" },
+									})}
+									Il tuo Carrello
+								</Typography>
 
-																<div
+								<Tooltip
+									title={
+										<span style={{ display: "flex", flexDirection: "column" }}>
+											<Typography
+												textAlign={"center"}
+												variant="subtitle2"
+											>
+												Visualizza legenda icone
+											</Typography>
+										</span>
+									}
+								>
+									<IconButton
+										onClick={() => {
+											openModal();
+										}}
+									>
+										<Info color="info" />
+									</IconButton>
+								</Tooltip>
+								<LegendaIcone
+									isOpen={isModalOpen}
+									onClose={closeModal}
+								/>
+							</Grid>
+							{selectedProduct && (
+								<AlertDeleteProduct
+									open={true}
+									onClose={handleCloseDeleteDialog}
+									product={selectedProduct}
+									onDelete={handleDeleteConferma}
+								/>
+							)}
+
+							<List>
+								{/* {cartTommys ? (
+									cartTommys.TommysCart_OGGETTO.map( */}
+
+								{cartTommys && cartTommys.TommysCart_OGGETTO ? (
+									cartTommys.TommysCart_OGGETTO.map(
+										(prodotto: TommysOggettiCarrello | any) => {
+											return (
+												<Paper
+													elevation={1}
+													key={chiaveRandom()}
+													style={{ marginBottom: "1rem" }}
+												>
+													<ListItem
+														sx={{ display: isMobile ? "block" : "flex" }}
+														key={chiaveRandom()}
+													>
+														<ListItemText>
+															<Stack
+																alignItems={"center"}
+																spacing={2}
+																direction={isMobile ? "column" : "row"}
+															>
+																<Stack spacing={2}>
+																	<Box
+																		sx={{
+																			display: "flex",
+																			alignItems: "center",
+																		}}
+																		width={"100%"}
+																	>
+																		{React.cloneElement(myIcons.AbbIcon, {
+																			fontSize: "medium",
+																			style: { marginRight: "10px" },
+																		})}
+																		<Typography
+																			variant="body1"
+																			style={{ fontWeight: "normal" }}
+																		>
+																			{prodotto?.DESC}
+																		</Typography>
+																	</Box>
+
+																	{/* <div
 																	dangerouslySetInnerHTML={{
-																		__html: prodotto?.info as
+																		__html: prodotto?.Tommys_infoHtml as
 																			| string
 																			| TrustedHTML,
 																	}}
-																/>
+																/> */}
+																</Stack>
 															</Stack>
-														</Stack>
-													</ListItemText>
+														</ListItemText>
+														<Typography
+															variant="h5"
+															textAlign={"right"}
+															style={{
+																position: "relative",
+																marginLeft: "50px",
+															}}
+														>
+															{prodotto?.IMPORTO}€
+														</Typography>
 
-													<IconButton
-														edge="end"
-														aria-label="delete"
-														sx={{
-															marginRight: "auto",
-															color: theme.palette.error.main,
-														}}
-														onClick={() =>
-															removeFromCart(prodotto, cart, dispatch)
-														}
-													>
-														<DeleteRounded />
-													</IconButton>
-												</ListItem>
-											</Paper>
-										);
-									})
+														<Tooltip
+															title={
+																<span
+																	style={{
+																		display: "flex",
+																		flexDirection: "column",
+																	}}
+																>
+																	<Typography
+																		textAlign="center"
+																		variant="subtitle2"
+																	>
+																		Elimina
+																	</Typography>
+																</span>
+															}
+														>
+															<IconButton
+																sx={{
+																	marginRight: "auto",
+																	color: theme.palette.error.main,
+																}}
+																onClick={() => handleOpenDeleteDialog(prodotto)}
+															>
+																{React.cloneElement(myIcons.DeleteRoundedIcon, {
+																	fontSize: "medium",
+																})}
+															</IconButton>
+														</Tooltip>
+													</ListItem>
+												</Paper>
+											);
+										}
+									)
 								) : (
 									<></>
 								)}
@@ -441,7 +535,7 @@ const Carrello = () => {
 										sx={{ fontWeight: "800" }}
 									>{`Totale: `}</Typography>
 
-									{Prezzi.totalePrezzoScontato ? (
+									{/* {prezzo.totalePrezzoScontato ? (
 										<Typography
 											variant="h5"
 											textAlign={"center"}
@@ -449,19 +543,19 @@ const Carrello = () => {
 												position: "relative",
 											}}
 										>
-											{renderPrice(Prezzi.totalePrezzoScontato)}€
+											{renderPrice(prezzo.totalePrezzoScontato)}€
 										</Typography>
-									) : (
-										<Typography
-											variant="h5"
-											textAlign={"center"}
-											style={{
-												position: "relative",
-											}}
-										>
-											{renderPrice(Prezzi.totalePrezzo)}€
-										</Typography>
-									)}
+									) : ( */}
+									<Typography
+										variant="h5"
+										textAlign={"center"}
+										style={{
+											position: "relative",
+										}}
+									>
+										{renderPrice(prezzo)}€
+									</Typography>
+									{/* )} */}
 								</div>
 
 								<Button

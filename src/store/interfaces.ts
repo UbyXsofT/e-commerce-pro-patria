@@ -9,6 +9,7 @@ import {
 	ORARIO,
 	StripeKeysData,
 	UserData,
+	CartTommys,
 } from "src/components/CommonTypesInterfaces";
 
 //------------------------------//
@@ -30,6 +31,11 @@ export type SetAuthUser = {
 export type SetCart = {
 	type: "SET_CART";
 	payload: Cart;
+};
+
+export type SetCartTommys = {
+	type: "SET_CART_TOMMYS";
+	payload: CartTommys;
 };
 
 export type SetListino = {
@@ -79,6 +85,7 @@ export type StoreActionTypes =
 	| SetAuthEcommerce
 	| SetAuthUser
 	| SetCart
+	| SetCartTommys
 	| SetListino
 	| SetStripeKeys
 	| SetListinoAtvOrari;
@@ -94,4 +101,5 @@ export interface StoreStateInterfaces {
 	actualProduct: ActualProduct;
 	listinoCardProps: ListinoCardProps;
 	listinoAtvOrari: ListinoAtvOrari;
+	cartTommys: CartTommys;
 }

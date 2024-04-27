@@ -45,6 +45,7 @@ import {
 	numeroSenzaDecimale,
 	removeFromCart,
 	importoInCentesimi,
+	useUpdateCartTommys,
 } from "src/components/listino/utils/functionsCart";
 // import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
 import Router from "next/router";
@@ -64,7 +65,9 @@ const Carrello = () => {
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const user = cart.at(0);
+	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
 	//const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
+	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
 
 	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
 
@@ -160,13 +163,6 @@ const Carrello = () => {
 		if (!user) {
 			return;
 		}
-		//info contiene gli Orari
-		// if (user?.cart[0]?.info?.includes("Orari")) {
-		// 	setIsCheckInCorsoDisp(true);
-		// } else {
-		// 	setIsCheckInCorsoDisp(false);
-		// }
-
 		setPrezzi(calculateTotalePrezzo(user.cart));
 	}, [cart]);
 
@@ -222,26 +218,14 @@ const Carrello = () => {
 			} catch (error) {
 				handleError(error);
 			} finally {
+				if (authEcommerce === true) {
+					sessionStorage.setItem("isUpdated", "false");
+					useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
+				}
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
 		};
 		fetchData();
-		// clienteKey:BytewareDemoBeta
-		// Cliente:CLABKM5
-		// Abbonamento:AB001
-		// DataIni:2023-01-01
-		// Importo:1.00
-		// Frequenze:[CS000001][152][CS000012][250]
-		// Promo:
-		// Codice_Promo:
-
-		// codice: null, //abbonamento
-		// nome: null, //descrizione
-		// prezzo: null, //
-		// prezzoScontato: null,
-		// immagine: null,
-		// info: null,
-		// quantity: null,
 	};
 
 	const [isModalOpen, setIsModalOpen] = React.useState(false);

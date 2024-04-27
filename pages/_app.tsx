@@ -26,6 +26,10 @@ import callNodeService from "./api/callNodeService";
 import CookieManager from "src/components/cookie/CookieManager";
 import eCommerceConf from "eCommerceConf.json";
 import { setAuthUser } from "src/store/actions";
+import {
+	updateIsUpdated,
+	useUpdateCartTommys,
+} from "src/components/listino/utils/functionsCart";
 // pages/_app.tsx
 const clientSideEmotionCache = createEmotionCache();
 const MyApp = (props: {
@@ -40,6 +44,7 @@ const MyApp = (props: {
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const listinoState = useSelector((state: StoreState) => state.listino);
 	const dispatch = useDispatch();
+	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
 
 	const requiresAuth = router.pathname.startsWith("/auth");
 
@@ -98,6 +103,8 @@ const MyApp = (props: {
 						Ti ringraziamo per la comprensione e la collaborazione.&redirectTo=/`
 					);
 				} else {
+					updateIsUpdated("false");
+					useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
 					return;
 				}
 			}
@@ -106,93 +113,20 @@ const MyApp = (props: {
 		checkAuthentication();
 	}, [requiresAuth, authEcommerce, authUser, listinoState.listino]);
 
-	interface AuthUserHelperReturn {
-		result: boolean;
-		route?: string;
-		error?: string;
-		response: AuthUser | null;
-	}
+	// interface AuthUserHelperReturn {
+	// 	result: boolean;
+	// 	route?: string;
+	// 	error?: string;
+	// 	response: AuthUser | null;
+	// }
 
 	useEffect(() => {
 		const handleRouteChange = (url: string) => {
-			// Esegui le azioni desiderate ogni volta che cambia la pagina
+			// 	// Esegui le azioni desiderate ogni volta che cambia la pagina
 			console.log("@@@@@ --- XXXX --- Nuova pagina:", url);
-
-			if (authEcommerce === true) {
-				const accessToken = CookieManager.getCookie("accessToken");
-				const refreshToken = CookieManager.getCookie("refreshToken");
-
-				if (accessToken || refreshToken) {
-					console.log(
-						"FORZO L'AGGIORNAMENTO DEL CARRELLO RICHIAMANDO IL LOGIN"
-					);
-					const fetchData = async (): Promise<AuthUserHelperReturn> => {
-						//setVisLoader(true);
-						const obyPostData = {
-							clienteKey: eCommerceConf.ClienteKey,
-							userName: null,
-							password: null,
-							ricordami: null,
-							accessToken: accessToken,
-							refreshToken: refreshToken,
-						};
-
-						try {
-							const respCall = await callNodeService(
-								"login",
-								obyPostData,
-								null
-							);
-							console.log("respCall: ", respCall);
-							const msg_Resp = respCall.messageCli.message;
-
-							if (respCall.successCli) {
-								if (msg_Resp && msg_Resp.respWCF) {
-									//****** UTENTE
-									// Aggiorna lo stato dell'OGGETTO utente
-									try {
-										console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
-										dispatch(setAuthUser(msg_Resp.respWCF));
-										return {
-											result: true,
-											response: msg_Resp.respWCF,
-										};
-									} catch (error) {
-										console.log("Aggiorna Redux AuthUser:", error);
-										return {
-											result: false,
-											error: error as string,
-											response: null,
-										};
-									}
-								} else {
-									console.log("msg_Resp: ", msg_Resp);
-									return {
-										result: false,
-										response: null,
-									};
-								}
-							} else {
-								console.log("CLI Failed");
-
-								return {
-									result: false,
-									response: null,
-								};
-							}
-						} catch (error) {
-							//setVisLoader(false);
-							console.error("Errore nella chiamata:", error);
-							return {
-								result: false,
-								error: error as string,
-								response: null,
-							};
-						}
-					};
-					fetchData();
-				}
-			}
+			// if (authEcommerce === true) {
+			// 	useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
+			// }
 		};
 
 		// Sottoscrivi la funzione handleRouteChange agli eventi di navigazione

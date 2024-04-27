@@ -71,7 +71,7 @@ export const ToolBar = ({
 	const [cartPopper, setCartPopper] = React.useState<null | HTMLElement>(null);
 	const [userPopper, setUserPopper] = React.useState<null | HTMLElement>(null);
 
-	const [cartAlertsNum, setCartAlertsNum] = React.useState(0);
+	const [cartAlertsNum, setCartAlertsNum] = React.useState("0");
 	const dispatch = useDispatch();
 
 	// const cartLength = useSelector(
@@ -80,11 +80,21 @@ export const ToolBar = ({
 
 	//uby cambio il recupero degli oggetti del carrello non più dal settagio redux cart,
 	//ma dal carrello passato da tommys
-	const cartLength = useSelector(
-		(state: StoreState) => Number(state.authUser?.CARRELLO) ?? 0
+	// const cartLength = useSelector(
+	// 	(state: StoreState) => Number(state.authUser?.CARRELLO) ?? 0
+	// );
+
+	const cartLength = useSelector((state: StoreState) =>
+		state.cartTommys &&
+		state.cartTommys.TommysCart_OGGETTO &&
+		Array.isArray(state.cartTommys?.TommysCart_OGGETTO)
+			? state.cartTommys.TommysCart_OGGETTO.length
+			: 0
 	);
+
 	React.useEffect(() => {
-		setCartAlertsNum(cartLength);
+		setCartAlertsNum(cartLength.toString());
+		// console.log("cartLength: ", cartLength);
 	}, [dispatch, cartLength]);
 
 	const router = useRouter();
@@ -269,7 +279,7 @@ export const ToolBar = ({
 						<div
 							style={{ marginTop: "15px" }}
 							aria-label={
-								cartAlertsNum !== 0
+								cartAlertsNum !== "0"
 									? `${cartAlertsNum} elementi nel Carrello`
 									: "Il Carrello è Vuoto"
 							}

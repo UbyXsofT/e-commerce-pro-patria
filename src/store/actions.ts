@@ -5,6 +5,7 @@ import {
 	ActualProduct,
 	StripeKeysData,
 	Abbonamento,
+	CartTommys,
 } from "src/components/CommonTypesInterfaces";
 // Azioni
 import { createAction, PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -28,6 +29,11 @@ export const setAuthUser = (userData: any) => ({
 export const setCart = (cart: Cart) => ({
 	type: "SET_CART",
 	payload: cart,
+});
+
+export const SetCartTommys = (cartTommys: CartTommys) => ({
+	type: "SET_CART_TOMMYS",
+	payload: cartTommys,
 });
 
 export const setListino = (listino: {

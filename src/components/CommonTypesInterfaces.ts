@@ -339,6 +339,10 @@ export interface obyPostRegistraAcquisto {
 	Codice_Promo: string | null;
 }
 
+export interface obyPostUpDateCart {
+	clienteKey: string | null;
+	Cliente: string | null;
+}
 export interface obyPostOrari {
 	clienteKey: string;
 	Cliente: string;
@@ -482,22 +486,21 @@ export interface ProdottoInTommys {
 	Tommys_Codice_Promo: string | null;
 }
 
-// clienteKey:BytewareDemoBeta
-// Cliente:CLABKM5
-// Abbonamento:AB001
-// DataIni:2023-01-01
-// Importo:1.00
-// Frequenze:[CS000001][152][CS000012][250]
-// Promo:
-// Codice_Promo:
+export type CartTommys = CarrelloInTommys;
+export interface CarrelloInTommys {
+	TommysCart_OGGETTO: TommysOggettiCarrello[] | null[];
+	TommysCart_EASYP: string | null;
+	TommysCart_MONEYC: string | null;
+}
 
-// codice: null, //abbonamento
-// nome: null, //descrizione
-// prezzo: null, //
-// prezzoScontato: null,
-// immagine: null,
-// info: null,
-// quantity: null,
+export interface TommysOggettiCarrello {
+	TIPO: string | null;
+	ID: string | null;
+	CODICE: string | null;
+	DESC: string | null;
+	IMPORTO: string | null;
+	FLAGCANC: string | null;
+}
 
 export interface ORARIO {
 	IDORARIO: string;
