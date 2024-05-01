@@ -324,34 +324,33 @@ const Carrello = () => {
 				userId: authUser?.USERID,
 				emailUser: authUser?.EMAIL,
 				emailCentro: authUser?.EMAILCENTRO,
-				line_items: cart[0].cart.map((item) => {
-					let prezzo: number | null = item.prezzoScontato
-						? item.prezzoScontato
-						: item.prezzo;
+				line_items: cartTommys?.TommysCart_OGGETTO.map((prodotto: any) => {
+					const importoSenzaVirgola =
+						prodotto?.IMPORTO?.replace(",", ".") ?? "0";
+					let prezzo: number | null = Number(importoSenzaVirgola);
 					let importoFix: number;
 					importoFix = importoInCentesimi(prezzo as number);
 					//importoFix = 100;
 					console.log("CHK --- > prezzo : ", prezzo);
 					console.log("CHK --- > importoFix : ", importoFix);
-
 					return {
-						id: item.codice,
-						nome: item.nome,
+						id: `${prodotto.ID}-${prodotto.CODICE}`,
+						nome: prodotto.DESC,
 						prezzo: importoFix,
-						immagine: item.immagine,
-						info: item.info,
+						immagine: [],
+						info: "prodotto.info",
 						quantity: 1,
 					};
 				}),
 
 				currency: "eur",
 				mode: "payment",
-				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
-				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
+				success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment`,
+				cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment`,
 			};
 
 			console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
-			//return;
+
 			try {
 				const respCall: responseCall = await callNodeService(
 					"stripe/checkout-session",
@@ -365,7 +364,13 @@ const Carrello = () => {
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
 		};
-		CreateCheckOutSession();
+
+		if (
+			cartTommys?.TommysCart_OGGETTO &&
+			cartTommys?.TommysCart_OGGETTO.length > 0
+		) {
+			CreateCheckOutSession();
+		}
 	};
 
 	return (
