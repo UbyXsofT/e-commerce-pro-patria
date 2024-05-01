@@ -66,6 +66,7 @@ import { Info } from "@mui/icons-material";
 // 	price?.toString().replace(".", ",");
 
 const AlertDeleteProduct = ({ open, onClose, product, onDelete }: any) => {
+	const theme = useTheme();
 	return (
 		<Dialog
 			open={open}
@@ -77,24 +78,28 @@ const AlertDeleteProduct = ({ open, onClose, product, onDelete }: any) => {
 				style: { opacity: 0.5 }, // Imposta l'opacità del background al 50%
 			}}
 		>
-			<Box sx={{ backgroundColor: "red", color: "white" }}>
+			{/* <Box sx={{ backgroundColor: theme.palette.warning.main, color: "white" }}> */}
+			<Box>
 				<DialogTitle id="alert-dialog-title">
-					{myIcons.InfoRoundedIcon}
-					<span
-						style={{ marginLeft: "8px", marginTop: "-5px", marginRight: "8px" }}
-					>
+					{React.cloneElement(myIcons.InfoRoundedIcon, {
+						fontSize: "medium",
+						style: { marginRight: "5px", color: "red" },
+					})}
+					<span>
 						ATTENZIONE!
+						<br />
+						Si desidera eliminare questo abbonamento?
 					</span>
-					<p>Si desidera eliminare questo abbonamento?</p>
 				</DialogTitle>
 
 				<DialogContent>
-					<DialogContentText
-						sx={{ backgroundColor: "red", color: "white" }}
-						id="alert-dialog-description"
-					>
-						{`${product?.DESC}
-						Importo: ${product?.IMPORTO}€`}
+					<DialogContentText>
+						<span>
+							{product?.DESC}
+							<br />
+							<br />
+							{`Importo: ${product?.IMPORTO} €`}
+						</span>
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -134,46 +139,96 @@ const Carrello = () => {
 
 	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
 	//const isCartEmpty =	cartTommys?.TommysCart_OGGETTO?.length === 0 ? true : false;
-	const [isCartEmpty, setIsCartEmpty] = useState(true);
+
 	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
+	const [isCheckLoading, setIsCheckLoading] = React.useState(true);
+	const [isCartEmpty, setIsCartEmpty] = useState(false);
 
 	useEffect(() => {
-		useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
-		setPrezzo(calculateTotalePrezzo);
-		console.log("prezzo: ", prezzo);
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		setIsCartEmpty(false);
+
+		const aggiornaCarrello = async () => {
+			await useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
+			if (
+				cartTommys?.TommysCart_OGGETTO &&
+				cartTommys?.TommysCart_OGGETTO.length > 0
+			) {
+				const calcPrezzo = await calculateTotalePrezzo();
+				setPrezzo(calcPrezzo);
+			} else {
+				setIsCartEmpty(true);
+			}
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+			setIsCheckLoading(false);
+		};
+		aggiornaCarrello();
 	}, [cartTommys]);
 
 	const [prezzo, setPrezzo] = useState(0);
-	const calculateTotalePrezzo = () => {
+	const calculateTotalePrezzo = async () => {
 		let totalePrezzo = 0;
-		if (
-			cartTommys?.TommysCart_OGGETTO &&
-			cartTommys?.TommysCart_OGGETTO.length > 0
-		) {
-			setIsCartEmpty(false);
-			cartTommys?.TommysCart_OGGETTO.forEach((prodotto) => {
-				// Rimuovi le virgole dai valori degli importi e convertili in numeri float
-				const importoSenzaVirgola = prodotto?.IMPORTO?.replace(",", ".") ?? "0";
-				//console.log("importoSenzaVirgola: ", importoSenzaVirgola);
-				const importoFloat = parseFloat(importoSenzaVirgola) || 0;
-				//console.log("importoFloat: ", importoFloat);
-				// Aggiungi il valore dell'importo alla somma totale
-				totalePrezzo += importoFloat;
-			});
-		} else {
-			setIsCartEmpty(true);
-		}
 
-		console.log("totalePrezzo: ", totalePrezzo);
+		cartTommys?.TommysCart_OGGETTO.forEach((prodotto) => {
+			// Rimuovi le virgole dai valori degli importi e convertili in numeri float
+			const importoSenzaVirgola = prodotto?.IMPORTO?.replace(",", ".") ?? "0";
+			//console.log("importoSenzaVirgola: ", importoSenzaVirgola);
+			const importoFloat = parseFloat(importoSenzaVirgola) || 0;
+			//console.log("importoFloat: ", importoFloat);
+			// Aggiungi il valore dell'importo alla somma totale
+			totalePrezzo += importoFloat;
+		});
+
 		// Restituisci la somma totale con due decimali
 		return parseFloat(totalePrezzo.toFixed(2));
 	};
 
 	// // const [showAllertMe, setShowAllertMe] = React.useState(false);
-	const handleDeleteConferma = (codiceDel: string) => {
+	const handleDeleteConferma = async (codiceDel: string) => {
 		console.log("codiceDel: ", codiceDel);
-		removeFromCartTommys(codiceDel, cartTommys, dispatch);
-		//setShowAllertMe(false);
+
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		const resp = await removeFromCartTommys(
+			codiceDel,
+			cartTommys,
+			authUser,
+			dispatch
+		);
+		dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+		if (resp.eliminazioneEsito === true) {
+			// Eliminazione riuscita
+			if (resp.invioEmailEsito === true) {
+				// Eliminazione riuscita, e invio email riuscito
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>Eliminazione avvenuta correttamente!</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "success", "Informazione!", textAlert, true);
+			} else {
+				//invio email errore
+				const textAlert = (
+					<React.Fragment>
+						<h3>
+							<strong>{resp.errorMessage}</strong>
+						</h3>
+					</React.Fragment>
+				);
+				showAlert("filled", "error", "Informazione!", textAlert, true);
+			}
+		} else {
+			// Eliminazione fallita, puoi gestire l'errore o visualizzare un messaggio all'utente
+			const textAlert = (
+				<React.Fragment>
+					<h3>
+						<strong>{resp.errorMessage}</strong>
+					</h3>
+				</React.Fragment>
+			);
+			showAlert("filled", "error", "ATTENZIONE!", textAlert, true);
+		}
 	};
 
 	const [selectedProduct, setSelectedProduct] = useState(null);
@@ -330,7 +385,57 @@ const Carrello = () => {
 						minHeight: "32rem",
 					}}
 				>
-					{isCartEmpty ? (
+					<Grid
+						container
+						style={{
+							justifyContent: "space-between",
+							paddingRight: "0px",
+						}}
+					>
+						<Typography
+							variant="h4"
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								flexWrap: "nowrap",
+								alignItems: "center",
+							}}
+						>
+							{React.cloneElement(myIcons.ShoppingCartIcon, {
+								fontSize: "large",
+								style: { marginRight: "20px", color: "red" },
+							})}
+							Il tuo Carrello
+						</Typography>
+
+						<Tooltip
+							title={
+								<span style={{ display: "flex", flexDirection: "column" }}>
+									<Typography
+										textAlign={"center"}
+										variant="subtitle2"
+									>
+										Visualizza legenda icone
+									</Typography>
+								</span>
+							}
+						>
+							<IconButton
+								onClick={() => {
+									openModal();
+								}}
+							>
+								<Info color="info" />
+							</IconButton>
+						</Tooltip>
+						<LegendaIcone
+							isOpen={isModalOpen}
+							onClose={closeModal}
+						/>
+					</Grid>
+					{isCheckLoading ? (
+						<></>
+					) : isCartEmpty === true ? (
 						<Box
 							textAlign={"center"}
 							marginTop={12}
@@ -359,54 +464,6 @@ const Carrello = () => {
 						</Box>
 					) : (
 						<>
-							<Grid
-								container
-								style={{
-									justifyContent: "space-between",
-									paddingRight: "0px",
-								}}
-							>
-								<Typography
-									variant="h4"
-									style={{
-										display: "flex",
-										flexDirection: "row",
-										flexWrap: "nowrap",
-										alignItems: "center",
-									}}
-								>
-									{React.cloneElement(myIcons.ShoppingCartIcon, {
-										fontSize: "large",
-										style: { marginRight: "20px", color: "red" },
-									})}
-									Il tuo Carrello
-								</Typography>
-
-								<Tooltip
-									title={
-										<span style={{ display: "flex", flexDirection: "column" }}>
-											<Typography
-												textAlign={"center"}
-												variant="subtitle2"
-											>
-												Visualizza legenda icone
-											</Typography>
-										</span>
-									}
-								>
-									<IconButton
-										onClick={() => {
-											openModal();
-										}}
-									>
-										<Info color="info" />
-									</IconButton>
-								</Tooltip>
-								<LegendaIcone
-									isOpen={isModalOpen}
-									onClose={closeModal}
-								/>
-							</Grid>
 							{selectedProduct && (
 								<AlertDeleteProduct
 									open={true}

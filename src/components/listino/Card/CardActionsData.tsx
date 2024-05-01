@@ -29,11 +29,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useDispatch, useSelector } from "react-redux";
-import {
-	addToCart,
-	isInCart,
-	removeFromCart,
-} from "src/components/listino/utils/functionsCart";
+
 import { Router, useRouter } from "next/router";
 dayjs.extend(isoWeek);
 
@@ -139,10 +135,10 @@ const CardActionsData = ({
 						>
 							<Typography
 								variant="h5"
-								textAlign={"center"}
-								color={"grey"}
 								style={{
 									position: "relative",
+									color: "gray",
+									textAlign: "center",
 								}}
 							>
 								{itemsCard.tipo === "ABBONAMENTO"

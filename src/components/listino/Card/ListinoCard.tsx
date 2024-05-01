@@ -26,11 +26,7 @@ import {
 } from "src/components/CommonTypesInterfaces";
 import CardContentData from "src/components/listino/card/CardContentData";
 import CardActionsData from "src/components/listino/card/CardActionsData";
-import {
-	addToCart,
-	isInCart,
-	removeFromCart,
-} from "src/components/listino/utils/functionsCart";
+
 import myIcons from "src/theme/IconsDefine";
 import { color } from "@mui/system";
 import Calendario from "src/components/utils/Calendario";
@@ -56,17 +52,25 @@ const ListinoCard = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const [isHovered, setIsHovered] = React.useState(false);
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const isLoadingRedux = useSelector((state: StoreState) => state.loading);
+	const [isLoading, setIsLoading] = React.useState(isLoadingRedux);
 
-	const [isFetchingData, setIsFetchingData] = React.useState(
-		useSelector((state: StoreState) => state.loading)
-	);
-	// React.useEffect(() => {
-	// 	isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
-	// }, [isFetchingData]);
+	React.useEffect(() => {
+		const intervalId = setInterval(() => {
+			setIsLoading((prevLoading) => {
+				if (prevLoading !== isLoadingRedux) {
+					return isLoadingRedux;
+				}
+				return prevLoading;
+			});
+		}, 1000);
 
-	return isFetchingData === true ? (
+		return () => clearInterval(intervalId);
+	}, [isLoadingRedux]);
+
+	return isLoading ? (
 		<Skeleton
-			key={chiaveRandom()} // Assicurati di avere chiavi univoche per ogni Skeleton
+			key={chiaveRandom()}
 			variant="rounded"
 			sx={{
 				width: isMobile ? "290px" : "350px",

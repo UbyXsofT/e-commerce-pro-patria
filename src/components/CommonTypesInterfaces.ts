@@ -53,7 +53,7 @@ export interface PasswordSafety {
 export type Length = "" | "| Password Troppo Lunga" | "| Password Troppo Corta";
 export type LettereNumeri = "" | "| No Numeri" | "| No Lettere";
 export type MaiuscoloMinuscolo = "" | "| No Minuscoli" | "| No Maiuscoli";
-export type CaratteriSpeciali = "";
+export type CaratteriSpeciali = string | null;
 
 export type Cookie = "accessToken" | "refreshToken" | "username";
 
@@ -500,6 +500,35 @@ export interface TommysOggettiCarrello {
 	DESC: string | null;
 	IMPORTO: string | null;
 	FLAGCANC: string | null;
+}
+
+export interface obyPostDataDeleteInCart {
+	clienteKey: string | null;
+	Cliente: string | undefined;
+	Tipo: string | null;
+	ID: string | null;
+	Codice: string | null;
+}
+
+export interface obyPostDataEmailCancella {
+	clienteKey: string | null;
+	Piattaforma: string | null;
+	emailCentro: string | null;
+	emailCliente: string | null;
+	emailLista: string | null;
+	orario: string | null;
+	data: string | null;
+	istruttore: string | null;
+	corso: string | null;
+	sala: string | null;
+	lezioneId: string | null;
+	clienteId: string | null;
+	nomeCliente: string | null;
+	flagEmail: string | null;
+	clienteIdLISTA: string | null;
+	nomeClienteLista: string | null;
+	Is_Canc_Acquisto: string | null;
+	desc_Acquisto: string | null;
 }
 
 export interface ORARIO {

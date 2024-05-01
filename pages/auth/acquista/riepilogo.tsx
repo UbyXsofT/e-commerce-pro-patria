@@ -48,7 +48,6 @@ import {
 	useUpdateCartTommys,
 } from "src/components/listino/utils/functionsCart";
 // import { getPrice, getPrices } from "../../src/components/inutilizzati/store";
-import Router from "next/router";
 import chiaveRandom from "src/components/utils/chiaveRandom";
 import renderPrice from "src/components/utils/renderPrice";
 import myIcons from "src/theme/IconsDefine";
@@ -66,9 +65,7 @@ const Carrello = () => {
 	const authUser = useSelector((state: StoreState) => state.authUser);
 	const user = cart.at(0);
 	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
-	//const isCartEmpty = user ? user.cart.length === 0 : true ? true : false;
 	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
-
 	const [isCheckInCorsoDisp, setIsCheckInCorsoDisp] = React.useState(false);
 
 	const [progress, setProgress] = React.useState(0);
@@ -102,7 +99,7 @@ const Carrello = () => {
 			setBuffer(100);
 			setIsCheckInCorsoDisp(false);
 		} else {
-			//setIsCheckInCorsoDisp(true);
+			setIsCheckInCorsoDisp(true);
 			const startTimer = () => {
 				timer = setInterval(() => {
 					progressRef.current();
