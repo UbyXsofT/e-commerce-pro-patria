@@ -44,23 +44,16 @@ const successPayment = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
-	
-	// const useStyles = styled(Icon)(({ theme }) => {
-	// 	root: {
-	// 		display: "flex",
-	// 		flexDirection: "column",
-	// 		alignItems: "center",
-	// 		justifyContent: "center",
-	// 		height: "100vh",
-	// 	},
-	// 	icon: {
-	// 		fontSize: 100,
-	// 		color: theme.palette.success.main,
-	// 	},
-	// });
+	const router = useRouter();
+	const idSessione = router.query.SessionID
+		? (router.query.SessionID as string)
+		: null;
 
-	
-
+	React.useEffect(() => {
+		if (idSessione !== null) {
+			console.log("idSessione PRESENTE: ", idSessione);
+		}
+	}, [idSessione]);
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
@@ -70,19 +63,23 @@ const successPayment = () => {
 			>
 				<AlertMe />
 
-				<Box sx={{
-					display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-							// justifyContent: "center",
-							height: "100vh",
-							paddingTop: 4
-				}}>
-					<CheckCircleOutlineIcon sx={{
-						fontSize: 100,
-						color: theme.palette.success.main,
-						marginBottom: 3
-					}} />
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						// justifyContent: "center",
+						height: "100vh",
+						paddingTop: 4,
+					}}
+				>
+					<CheckCircleOutlineIcon
+						sx={{
+							fontSize: 100,
+							color: theme.palette.success.main,
+							marginBottom: 3,
+						}}
+					/>
 					<Typography
 						variant="h4"
 						align="center"
@@ -96,7 +93,6 @@ const successPayment = () => {
 						Grazie per il tuo acquisto. Riceverai una conferma via email.
 					</Typography>
 				</Box>
-
 			</Layout>
 		</ThemeProvider>
 	);

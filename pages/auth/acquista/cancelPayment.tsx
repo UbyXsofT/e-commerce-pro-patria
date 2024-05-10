@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 //REDUX-STORE
 import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
 //*-----*//
@@ -21,12 +21,46 @@ import {
 	responseCall,
 } from "src/components/CommonTypesInterfaces";
 
+import { setGetSessionIdTommys } from "src/components/listino/utils/functionsCart";
+
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 const cancelPayment = () => {
 	const { showAlert } = useAlertMe();
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
+	const router = useRouter();
+	const idSessione = router.query.SessionID
+		? (router.query.SessionID as string)
+		: null;
+
+	React.useEffect(() => {
+		if (idSessione !== null) {
+			console.log("idSessione PRESENTE: ", idSessione);
+
+			const registraCancellaSessionePagamento = async () => {
+				try {
+					let esitoFetch = await setGetSessionIdTommys("1", "clienteID", ""); // Attendiamo che setGetSessionIdTommys() sia completato prima di proseguire
+
+					if (esitoFetch === true) {
+						console.log(
+							"@@@ fetch registraCancellaSessionePagamento POSITIVO!"
+						);
+					} else {
+						// mostro errore
+						console.log("@@@ fetch registraCancellaSessionePagamento FALLITO!");
+					}
+				} catch (error) {
+					console.log(
+						"Errore nell'esecuzione di registraCancellaSessionePagamento:",
+						error
+					);
+				}
+			};
+
+			registraCancellaSessionePagamento();
+		}
+	}, [idSessione]);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -64,9 +98,11 @@ const cancelPayment = () => {
 						variant="body1"
 						align="center"
 					>
-						Il pagamento è stato annullato dall'utente o si è verificato un
-						errore. Si prega di riprovare o contattare il supporto per ulteriore
-						assistenza.
+						{`Il pagamento è stato annullato dall'utente o si è verificato un errore.`}
+						<br />
+						{`Si prega di riprovare o contattare il supporto tecnico per ulteriore assistenza.`}
+						<br />
+						{`È importante prendere nota e comunicare questo numero di sessione di pagamento: ${idSessione}`}
 					</Typography>
 				</Box>
 			</Layout>

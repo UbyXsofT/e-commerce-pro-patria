@@ -43,7 +43,7 @@
 	"MsgChkAgainConvEcommerce": "Ti invitiamo a effettuare un nuovo tentativo di verifica e convalida del tuo centro fitness. È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Se il problema persiste, si prega di contattare il vostro centro fitness. Grazie per la tua comprensione!",
 	"MsgErrGenerico": "È possibile che si sia verificato un errore temporaneo. Per favore, clicca qui per procedere. Grazie per la tua comprensione!",
 	"MsgChkAttesaDispCarrello": "ATTENDI, STIAMO VERIFICANDO L’EFFETTIVA DISPONIBILITA’ DELL’ATTIVITA’ PER I GIORNI ED ORARI INDICATI",
-	"TimerAttesaDispCarrello": 5000,
+	"TimerAttesaDispCarrello": 10000,
 	"oggetto_Mail": "TOMMYS E-Commerce",
 	"StepStorePage": {
 		"1": {

@@ -14,6 +14,7 @@ import {
 	CarrelloInTommys,
 	obyPostDataDeleteInCart,
 	obyPostDataEmailCancella,
+	Date,
 } from "src/components/CommonTypesInterfaces";
 import { setCart } from "src/store/actions";
 import { SetCartTommys } from "src/store/actions";
@@ -26,6 +27,7 @@ import { array } from "prop-types";
 import router from "next/router";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
 import { ImportContacts } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 let eliminazioneEsito: boolean = true; // Imposta l'esito predefinito su true
 let invioEmailEsito: boolean = true; // Imposta l'esito predefinito su true
@@ -293,9 +295,14 @@ const inviaEmailCancellazione = async (
 	emailCliente: string,
 	emailCentro: string,
 	flagEmail: string,
-	authUser: AuthUser
+	authUser: AuthUser,
+	ProdottoInTommys: TommysOggettiCarrello
 ) => {
 	let esitoFetch: boolean | undefined = undefined; // Imposta il tipo della variabile
+	const currentDate: Date = dayjs();
+	const Today_formattedDate = currentDate.locale("it").format("DD-MM-YYYY");
+	console.log(Today_formattedDate);
+
 	const fetchData = async () => {
 		try {
 			const obyPostData: obyPostDataEmailCancella = {
@@ -305,7 +312,7 @@ const inviaEmailCancellazione = async (
 				emailCliente: emailCliente,
 				emailLista: "",
 				orario: "",
-				data: "",
+				data: Today_formattedDate,
 				istruttore: "",
 				corso: "",
 				sala: "",
@@ -316,7 +323,7 @@ const inviaEmailCancellazione = async (
 				clienteIdLISTA: "",
 				nomeClienteLista: "",
 				Is_Canc_Acquisto: "true",
-				desc_Acquisto: "",
+				desc_Acquisto: ProdottoInTommys.DESC,
 			};
 
 			const respCall = await callNodeService(
@@ -329,16 +336,9 @@ const inviaEmailCancellazione = async (
 			const msg_Resp = respCall.messageCli.message;
 
 			if (respCall.successCli) {
-				if (msg_Resp && msg_Resp.MAIL) {
-					const obyResp = msg_Resp.MAIL;
-					console.log("obyResp invio-mail-cancellazione:", obyResp);
-					if (Number(obyResp.ESITO) === 1) {
-						console.log("@ INVIO EMAIL TUTTO OK");
-						esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
-					} else {
-						console.log("@ INVIO EMAIL CON ESITO NEGATIVO");
-						esitoFetch = false; // Imposta l'esito su false se l'operazione ha avuto esito negativo
-					}
+				if (msg_Resp) {
+					console.log("msg_Resp invio-mail-cancellazione:", msg_Resp);
+					esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
 				} else {
 					console.log("msg_Resp INVIO EMAIL: ", msg_Resp);
 					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
@@ -442,7 +442,8 @@ const eliminaObyCartTommys = async (
 				emailCliente,
 				emailCentro,
 				flagEmail,
-				authUser
+				authUser,
+				ProdottoInTommys
 			);
 
 			if (respInvioMail === false) {
@@ -452,11 +453,9 @@ const eliminaObyCartTommys = async (
 					"Si è verificato un errore durante l'invio dell'email contenente l'avviso di cancellazione al suo centro fitness. La preghiamo di contattare il supporto clienti del suo centro fitness per risolvere questo problema.";
 			} else {
 				// Mostra errore
-				eliminazioneEsito = false;
-				invioEmailEsito = false;
-				errorMessage =
-					"Si è verificato un errore durante l'eliminazione dell'oggetto dal carrello. Se il problema persiste, la preghiamo di contattare il supporto clienti del suo centro fitness.";
-				console.log("@@@ fetch FALLITO!");
+				eliminazioneEsito = true;
+				invioEmailEsito = true;
+				console.log("@@@ fetch RIUSCITO MAIL!");
 			}
 		} else {
 			eliminazioneEsito = false;
@@ -545,54 +544,69 @@ export const removeFromCartTommys = async (
 	return { eliminazioneEsito, invioEmailEsito, errorMessage };
 };
 
-// export const removeFromCartTommys = async (
-// 	prodottoCodice: string | null | undefined,
-// 	cartTommys: CartTommys,
-// 	authUser: AuthUser | null,
-// 	dispatch: Dispatch
-// ): Promise<void> => {
-// 	console.log("removeFromCart");
-// 	sessionStorage.setItem("isUpdated", "false");
-// 	let filteredCart: TommysOggettiCarrello[] = [];
-// 	const eliminazioniPromises: Promise<void>[] = []; // Array di promesse per le eliminazioni
+export const setGetSessionIdTommys = async (
+	op: string,
+	clienteId: string,
+	ID_Sessione: string
+) => {
+	let esitoFetch: boolean | undefined = undefined; // Imposta il tipo della variabile
 
-// 	if (cartTommys && cartTommys.TommysCart_OGGETTO) {
-// 		for (const inCartProdotto of cartTommys.TommysCart_OGGETTO) {
-// 			if (inCartProdotto?.CODICE !== prodottoCodice) {
-// 				filteredCart.push(inCartProdotto as TommysOggettiCarrello);
-// 			} else {
-// 				// Aggiungi la promessa di eliminazione all'array delle promesse
-// 				eliminazioniPromises.push(
-// 					eliminaObyCartTommys(
-// 						inCartProdotto as TommysOggettiCarrello,
-// 						authUser as AuthUser
-// 					)
-// 				);
-// 			}
-// 		}
-// 	} else {
-// 		return;
-// 	}
+	const fetchData = async () => {
+		try {
+			const obyPostData = {
+				clienteKey: eCommerceConf.ClienteKey,
+				op: op,
+				clienteId: clienteId,
+				ID_Sessione: ID_Sessione,
+			};
 
-// 	try {
-// 		// Attendiamo che tutte le promesse di eliminazione vengano risolte
-// 		await Promise.all(eliminazioniPromises);
-// 		console.log("TUTTE LE PROMESSE DI ELIMINAZIONE SONO STATE SODDISFATTE!");
-// 	} catch (error) {
-// 		// Gestisci eventuali errori nell'eliminazione dei prodotti
-// 		console.error("Errore durante l'eliminazione dei prodotti:", error);
-// 		// Potresti voler gestire il fallimento dell'eliminazione in qualche modo qui
-// 	}
+			const respCall = await callNodeService(
+				"ecommerce-registra-pagamento",
+				obyPostData,
+				null
+			);
 
-// 	// Una volta che tutte le eliminazioni sono state completate con successo,
-// 	// aggiorna la pagina del carrello con i prodotti rimanenti
-// 	dispatch(
-// 		SetCartTommys({
-// 			TommysCart_OGGETTO: filteredCart,
-// 			TommysCart_EASYP: null,
-// 			TommysCart_MONEYC: null,
-// 		})
-// 	);
+			console.log("respCall: ", respCall);
+			const msg_Resp = respCall.messageCli.message;
 
-// 	router.push("/auth/acquista/carrello");
-// };
+			if (respCall.successCli) {
+				if (msg_Resp) {
+					console.log("msg_Resp ecommerce-registra-pagamento:", msg_Resp);
+					esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
+				} else {
+					console.log("msg_Resp ecommerce-registra-pagamento: ", msg_Resp);
+					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
+				}
+			} else {
+				console.log("CLI Failed ecommerce-registra-pagamento");
+				esitoFetch = false; // Imposta l'esito su false se la chiamata API ha fallito
+			}
+			return { esitoFetch };
+		} catch (error) {
+			console.error(
+				"Errore nella chiamata ecommerce-registra-pagamento:",
+				error
+			);
+			esitoFetch = false; // Imposta l'esito su false se si è verificato un errore durante la chiamata
+			return { esitoFetch };
+		}
+	};
+
+	try {
+		await fetchData(); // Attendiamo che fetchData() sia completato prima di proseguire
+		if (esitoFetch === true) {
+			console.log("@@@ fetch ecommerce-registra-pagamento POSITIVO!");
+			return true;
+		} else {
+			// mostro errore
+			console.log("@@@ fetch ecommerce-registra-pagamento FALLITO!");
+			return false;
+		}
+	} catch (error) {
+		console.log(
+			"Errore nell'esecuzione di fetchData ecommerce-registra-pagamento:",
+			error
+		);
+		return false;
+	}
+};

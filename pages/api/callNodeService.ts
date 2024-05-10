@@ -51,6 +51,7 @@ export default async function callNodeService(
 		| "ecommerce-registra-impegno-acquisto"
 		| "ecommerce-visualizza-carrello-vendite"
 		| "ecommerce-carrello-vendite-elimina"
+		| "ecommerce-registra-pagamento"
 		| "invio-mail-cancellazione"
 		| "rec-error",
 	obyPostData:
