@@ -502,6 +502,13 @@ export interface TommysOggettiCarrello {
 	FLAGCANC: string | null;
 }
 
+export interface obyPostIdSessioneData {
+	clienteKey: string;
+	op: string;
+	Cliente: string;
+	ID_Sessione: string;
+}
+
 export interface obyPostDataDeleteInCart {
 	clienteKey: string | null;
 	Cliente: string | undefined;

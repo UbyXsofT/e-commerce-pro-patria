@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 //REDUX-STORE
-import { useDispatch } from "react-redux"; // Importa useDispatch dal react-redux
+import { useDispatch, useSelector } from "react-redux"; // Importa useDispatch dal react-redux
 import { setLoading } from "src/store/actions";
 //*-----*//
 import {
@@ -21,6 +21,7 @@ import {
 	Collapse,
 	Box,
 	Icon,
+	useMediaQuery,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
@@ -34,7 +35,9 @@ import { AlertMe } from "src/components/layout/alert/AlertMe";
 import callNodeService from "pages/api/callNodeService";
 import {
 	obyPostData,
+	obyPostIdSessioneData,
 	responseCall,
+	StoreState,
 } from "src/components/CommonTypesInterfaces";
 
 // Importa i moduli necessari
@@ -45,15 +48,78 @@ const successPayment = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 	const router = useRouter();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const authUser = useSelector((state: StoreState) => state.authUser);
+
 	const idSessione = router.query.SessionID
 		? (router.query.SessionID as string)
 		: null;
 
+	const [msgShow, setMsgShow] = React.useState("");
+	const [isRegisterIdTrue, setIsRegisterIdTrue] = React.useState(false);
 	React.useEffect(() => {
-		if (idSessione !== null) {
-			console.log("idSessione PRESENTE: ", idSessione);
+		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
+		if (idSessione !== null && isRegisterIdTrue === false) {
+			const saveAndCloseSessionID = async () => {
+				const handleError = (error: any) => {
+					setMsgShow(error);
+				};
+
+				const setIdSessioneData: obyPostIdSessioneData = {
+					clienteKey: eCommerceConf.ClienteKey,
+					op: "2",
+					Cliente: authUser?.USERID ?? "",
+					ID_Sessione: idSessione,
+				};
+
+				try {
+					const respCall_IdSessione: responseCall = await callNodeService(
+						"ecommerce-registra-pagamento",
+						setIdSessioneData,
+						null
+					);
+					console.log(
+						"respCall_IdSessione: ",
+						respCall_IdSessione.messageCli.message
+					);
+					if (respCall_IdSessione.successCli) {
+						setMsgShow(
+							"Grazie per il tuo acquisto. Riceverai una conferma via email."
+						);
+					} else {
+						handleError(
+							"Non siamo riusciti a memorizzare lo stato del tuo pagamento nel sistema del tuo centro fitness. Ti invitiamo a contattare il tuo centro fitness per assistenza, comunicando questo codice di sessione di riferimento: " +
+								idSessione
+						);
+					}
+				} catch (error) {
+					console.log("respCall: ", error);
+					handleError(
+						"Non siamo riusciti a memorizzare lo stato del tuo pagamento nel sistema del tuo centro fitness. Ti invitiamo a contattare il tuo centro fitness per assistenza, comunicando questo codice di sessione di riferimento: " +
+							idSessione
+					);
+				} finally {
+					setIsRegisterIdTrue(true);
+					dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+				}
+			};
+
+			if (authUser?.USERID && isRegisterIdTrue === false) {
+				console.log(
+					"@@@@@ --- REGISTRAZIONE PAGAMENTO ID-SESSIONE: ",
+					idSessione
+				);
+				saveAndCloseSessionID();
+				setIsRegisterIdTrue(true); // Imposta il flag per indicare che la registrazione è avvenuta
+			}
+		} else if (idSessione !== null && isRegisterIdTrue === true) {
+			setMsgShow("");
+		} else {
+			setMsgShow("Codice sessione assente.");
+			dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 		}
-	}, [idSessione]);
+	}, [idSessione, isRegisterIdTrue, authUser]);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Layout
@@ -90,7 +156,7 @@ const successPayment = () => {
 						variant="body1"
 						align="center"
 					>
-						Grazie per il tuo acquisto. Riceverai una conferma via email.
+						{msgShow}
 					</Typography>
 				</Box>
 			</Layout>

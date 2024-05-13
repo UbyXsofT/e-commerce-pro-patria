@@ -15,6 +15,7 @@ import {
 	obyPostDataDeleteInCart,
 	obyPostDataEmailCancella,
 	Date,
+	obyPostIdSessioneData,
 } from "src/components/CommonTypesInterfaces";
 import { setCart } from "src/store/actions";
 import { SetCartTommys } from "src/store/actions";
@@ -544,69 +545,69 @@ export const removeFromCartTommys = async (
 	return { eliminazioneEsito, invioEmailEsito, errorMessage };
 };
 
-export const setGetSessionIdTommys = async (
-	op: string,
-	clienteId: string,
-	ID_Sessione: string
-) => {
-	let esitoFetch: boolean | undefined = undefined; // Imposta il tipo della variabile
+// export const setGetSessionIdTommys = async (
+// 	_op: string,
+// 	_clienteId: string,
+// 	_ID_Sessione: string
+// ) => {
+// 	let esitoFetch: boolean | undefined = undefined; // Imposta il tipo della variabile
 
-	const fetchData = async () => {
-		try {
-			const obyPostData = {
-				clienteKey: eCommerceConf.ClienteKey,
-				op: op,
-				clienteId: clienteId,
-				ID_Sessione: ID_Sessione,
-			};
+// 	const fetchData = async () => {
+// 		try {
+// 			const obyPostData: obyPostIdSessioneData = {
+// 				clienteKey: eCommerceConf.ClienteKey,
+// 				op: _op,
+// 				Cliente: _clienteId,
+// 				ID_Sessione: _ID_Sessione,
+// 			};
 
-			const respCall = await callNodeService(
-				"ecommerce-registra-pagamento",
-				obyPostData,
-				null
-			);
+// 			const respCall = await callNodeService(
+// 				"ecommerce-registra-pagamento",
+// 				obyPostData,
+// 				null
+// 			);
 
-			console.log("respCall: ", respCall);
-			const msg_Resp = respCall.messageCli.message;
+// 			console.log("respCall: ", respCall);
+// 			const msg_Resp = respCall.messageCli.message;
 
-			if (respCall.successCli) {
-				if (msg_Resp) {
-					console.log("msg_Resp ecommerce-registra-pagamento:", msg_Resp);
-					esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
-				} else {
-					console.log("msg_Resp ecommerce-registra-pagamento: ", msg_Resp);
-					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
-				}
-			} else {
-				console.log("CLI Failed ecommerce-registra-pagamento");
-				esitoFetch = false; // Imposta l'esito su false se la chiamata API ha fallito
-			}
-			return { esitoFetch };
-		} catch (error) {
-			console.error(
-				"Errore nella chiamata ecommerce-registra-pagamento:",
-				error
-			);
-			esitoFetch = false; // Imposta l'esito su false se si è verificato un errore durante la chiamata
-			return { esitoFetch };
-		}
-	};
+// 			if (respCall.successCli) {
+// 				if (msg_Resp) {
+// 					console.log("msg_Resp ecommerce-registra-pagamento:", msg_Resp);
+// 					esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
+// 				} else {
+// 					console.log("msg_Resp ecommerce-registra-pagamento: ", msg_Resp);
+// 					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
+// 				}
+// 			} else {
+// 				console.log("CLI Failed ecommerce-registra-pagamento");
+// 				esitoFetch = false; // Imposta l'esito su false se la chiamata API ha fallito
+// 			}
+// 			return { esitoFetch };
+// 		} catch (error) {
+// 			console.error(
+// 				"Errore nella chiamata ecommerce-registra-pagamento:",
+// 				error
+// 			);
+// 			esitoFetch = false; // Imposta l'esito su false se si è verificato un errore durante la chiamata
+// 			return { esitoFetch };
+// 		}
+// 	};
 
-	try {
-		await fetchData(); // Attendiamo che fetchData() sia completato prima di proseguire
-		if (esitoFetch === true) {
-			console.log("@@@ fetch ecommerce-registra-pagamento POSITIVO!");
-			return true;
-		} else {
-			// mostro errore
-			console.log("@@@ fetch ecommerce-registra-pagamento FALLITO!");
-			return false;
-		}
-	} catch (error) {
-		console.log(
-			"Errore nell'esecuzione di fetchData ecommerce-registra-pagamento:",
-			error
-		);
-		return false;
-	}
-};
+// 	try {
+// 		await fetchData(); // Attendiamo che fetchData() sia completato prima di proseguire
+// 		if (esitoFetch === true) {
+// 			console.log("@@@ fetch ecommerce-registra-pagamento POSITIVO!");
+// 			return true;
+// 		} else {
+// 			// mostro errore
+// 			console.log("@@@ fetch ecommerce-registra-pagamento FALLITO!");
+// 			return false;
+// 		}
+// 	} catch (error) {
+// 		console.log(
+// 			"Errore nell'esecuzione di fetchData ecommerce-registra-pagamento:",
+// 			error
+// 		);
+// 		return false;
+// 	}
+// };

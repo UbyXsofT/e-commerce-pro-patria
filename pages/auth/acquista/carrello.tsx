@@ -45,6 +45,7 @@ import {
 	ActualProduct,
 	CartTommys,
 	TommysOggettiCarrello,
+	obyPostIdSessioneData,
 } from "src/components/CommonTypesInterfaces";
 import callNodeService from "pages/api/callNodeService";
 import { Box, Container, Stack } from "@mui/system";
@@ -310,56 +311,101 @@ const Carrello = () => {
 			};
 
 			dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
-			// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
-			const protocol = window.location.protocol ?? "https:";
-			const domain = window.location.hostname;
-			const port = window.location.port;
 
-			console.log(`Protocollo: ${protocol}`);
-			console.log(`Dominio: ${domain}`);
-			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-
-			const obyPostDataCart = {
+			const getIdSessioneData: obyPostIdSessioneData = {
 				clienteKey: eCommerceConf.ClienteKey,
-				userId: authUser?.USERID,
-				emailUser: authUser?.EMAIL,
-				emailCentro: authUser?.EMAILCENTRO,
-				line_items: cartTommys?.TommysCart_OGGETTO.map((prodotto: any) => {
-					const importoSenzaVirgola =
-						prodotto?.IMPORTO?.replace(",", ".") ?? "0";
-					let prezzo: number | null = Number(importoSenzaVirgola);
-					let importoFix: number;
-					importoFix = importoInCentesimi(prezzo as number);
-					//importoFix = 100;
-					console.log("CHK --- > prezzo : ", prezzo);
-					console.log("CHK --- > importoFix : ", importoFix);
-					return {
-						id: `${prodotto.ID}-${prodotto.CODICE}`,
-						nome: prodotto.DESC,
-						prezzo: importoFix,
-						immagine: [],
-						info: "prodotto.info",
-						quantity: 1,
-					};
-				}),
-
-				currency: "eur",
-				mode: "payment",
-				success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment`,
-				cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment`,
+				op: "1",
+				Cliente: authUser?.USERID ?? "",
+				ID_Sessione: "",
 			};
 
-			console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
-
 			try {
-				const respCall: responseCall = await callNodeService(
-					"stripe/checkout-session",
-					obyPostDataCart,
+				const respCall_IdSessione: responseCall = await callNodeService(
+					"ecommerce-registra-pagamento",
+					getIdSessioneData,
 					null
 				);
-				handleSuccess(respCall);
+				console.log(
+					"respCall_IdSessione: ",
+					respCall_IdSessione.messageCli.message.SESSIONE
+				);
+				if (respCall_IdSessione.successCli) {
+					if (respCall_IdSessione.messageCli.message) {
+						const idSessione = respCall_IdSessione.messageCli.message.SESSIONE;
+
+						if (idSessione !== "") {
+							//provo a creare la sessione in stripe
+							// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
+							const protocol = window.location.protocol ?? "https:";
+							const domain = window.location.hostname;
+							const port = window.location.port;
+
+							console.log(`Protocollo: ${protocol}`);
+							console.log(`Dominio: ${domain}`);
+							console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
+
+							const obyPostDataCart = {
+								clienteKey: eCommerceConf.ClienteKey,
+								userId: authUser?.USERID,
+								emailUser: authUser?.EMAIL,
+								emailCentro: authUser?.EMAILCENTRO,
+								line_items: cartTommys?.TommysCart_OGGETTO.map(
+									(prodotto: any) => {
+										const importoSenzaVirgola =
+											prodotto?.IMPORTO?.replace(",", ".") ?? "0";
+										let prezzo: number | null = Number(importoSenzaVirgola);
+										let importoFix: number;
+										importoFix = importoInCentesimi(prezzo as number);
+										//importoFix = 100;
+										console.log("CHK --- > prezzo : ", prezzo);
+										console.log("CHK --- > importoFix : ", importoFix);
+										return {
+											id: `${prodotto.ID}-${prodotto.CODICE}`,
+											nome: prodotto.DESC,
+											prezzo: importoFix,
+											immagine: [],
+											info: "prodotto.info",
+											quantity: 1,
+										};
+									}
+								),
+
+								currency: "eur",
+								mode: "payment",
+								success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment?SessionID=${idSessione}`,
+								cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment?SessionID=${idSessione}`,
+							};
+
+							console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
+							try {
+								const respCall: responseCall = await callNodeService(
+									"stripe/checkout-session",
+									obyPostDataCart,
+									null
+								);
+								handleSuccess(respCall);
+							} catch (error) {
+								handleError(error);
+							} finally {
+								dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+							}
+						}
+					} else {
+						handleError(
+							"Non abbiamo ricevuto l'ID sessione dal sistema di Tommys. Impossibile creare la sessione di pagamento. Ti invitiamo a riprovare più tardi o a contattare il tuo centro fitness per assistenza."
+						);
+					}
+				} else {
+					handleError(
+						"Non abbiamo ricevuto l'ID sessione dal sistema di Tommys. Impossibile creare la sessione di pagamento. Ti invitiamo a riprovare più tardi o a contattare il tuo centro fitness per assistenza."
+					);
+				}
 			} catch (error) {
-				handleError(error);
+				console.log("respCall: ", error);
+				handleError(
+					"Non abbiamo ricevuto l'ID sessione dal sistema di Tommys. Impossibile creare la sessione di pagamento. Ti invitiamo a riprovare più tardi o a contattare il tuo centro fitness per assistenza. Errore: " +
+						error
+				);
 			} finally {
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 			}
