@@ -27,14 +27,6 @@ const fetchListino = async (
 			null
 		);
 
-		//const respCall = await fetch("/data/data.json");
-
-		// Verifica che la richiesta sia stata eseguita correttamente (status 200)
-		// if (!respCall.ok) {
-		// 	throw new Error(`Errore durante la richiesta: ${respCall.statusText}`);
-		// }
-		// const listinoResponse = await respCall.json();
-
 		const listinoResponse =
 			(await respCall.messageCli.message?.prodotti) || null;
 
