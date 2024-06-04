@@ -98,64 +98,90 @@ const TimeList: React.FC<TimeListProps> = ({
 	console.log("attivitaSelezionata: ", attivitaSelezionata);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-	return (
-		<div style={{ overflowX: "auto" }}>
-			<table style={{ width: "100%" }}>
-				<thead>
-					<tr>
-						<th
-							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
-						>
-							Giorno/Orario
-						</th>
-						<th
-							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
-						>
-							Livello
-						</th>
-						<th
-							style={{ width: "33%", fontSize: isMobile ? "small" : "normal" }}
-						>
-							Fascia d'età
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
-						<tr key={ORARIO.IDORARIO}>
-							<td style={{ width: "33%" }}>
-								<ListItem>
-									<Checkbox
-										checked={
-											orariSelezionati?.includes(ORARIO.IDORARIO) || false
-										}
-										onChange={() => handleTimeSelection(ORARIO)}
-									/>
-									<Typography
-										style={{ fontSize: isMobile ? "small" : "normal" }}
-									>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
-								</ListItem>
-							</td>
-							<td style={{ width: "33%" }}>
-								<ListItem>
-									<Typography
-										style={{ fontSize: isMobile ? "small" : "normal" }}
-									>{`${ORARIO.LIVELLO ? ORARIO.LIVELLO : "n.i."}`}</Typography>
-								</ListItem>
-							</td>
-							<td style={{ width: "33%" }}>
-								<ListItem>
-									<Typography
-										style={{ fontSize: isMobile ? "small" : "normal" }}
-									>{`${ORARIO.FASCIA ? ORARIO.FASCIA : "n.i."}`}</Typography>
-								</ListItem>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
+
+	{
+		if (orariSelezionati.length > 0) {
+			return (
+				<div style={{ overflowX: "auto" }}>
+					<table style={{ width: "100%" }}>
+						<thead>
+							<tr>
+								<th
+									style={{
+										width: "33%",
+										fontSize: isMobile ? "small" : "normal",
+									}}
+								>
+									Giorno/Orario
+								</th>
+								<th
+									style={{
+										width: "33%",
+										fontSize: isMobile ? "small" : "normal",
+									}}
+								>
+									Livello
+								</th>
+								<th
+									style={{
+										width: "33%",
+										fontSize: isMobile ? "small" : "normal",
+									}}
+								>
+									Fascia d'età
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{attivitaSelezionata.ORARI.ORARIO?.map((ORARIO: ORARIO) => (
+								<tr key={ORARIO.IDORARIO}>
+									<td style={{ width: "33%" }}>
+										<ListItem>
+											<Checkbox
+												checked={
+													orariSelezionati?.includes(ORARIO.IDORARIO) || false
+												}
+												onChange={() => handleTimeSelection(ORARIO)}
+											/>
+											<Typography
+												style={{ fontSize: isMobile ? "small" : "normal" }}
+											>{`${ORARIO.GIORNO} ${ORARIO.ORAINIZIO}-${ORARIO.ORAFINE}`}</Typography>
+										</ListItem>
+									</td>
+									<td style={{ width: "33%" }}>
+										<ListItem>
+											<Typography
+												style={{ fontSize: isMobile ? "small" : "normal" }}
+											>{`${
+												ORARIO.LIVELLO ? ORARIO.LIVELLO : "n.i."
+											}`}</Typography>
+										</ListItem>
+									</td>
+									<td style={{ width: "33%" }}>
+										<ListItem>
+											<Typography
+												style={{ fontSize: isMobile ? "small" : "normal" }}
+											>{`${
+												ORARIO.FASCIA ? ORARIO.FASCIA : "n.i."
+											}`}</Typography>
+										</ListItem>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			);
+		} else {
+			return (
+				<div style={{ overflowX: "auto" }}>
+					<Typography
+						style={{ fontSize: isMobile ? "small" : "normal" }}
+					>{`NESSUN ORARIO DISPONIBILE`}</Typography>
+				</div>
+			);
+		}
+	}
 };
 
 export { ActivitySelector, TimeList };

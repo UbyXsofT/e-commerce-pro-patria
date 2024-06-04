@@ -242,7 +242,8 @@ const CardActionsData = ({
 											: selectedValueCalendario.toString()}
 									</Typography>
 
-									{itemsCard?.abbonamento?.DATAFIN !== undefined ? (
+									{itemsCard?.abbonamento?.DATAFIN !== undefined &&
+									itemsCard?.abbonamento?.DATAFIN !== "" ? (
 										<>
 											<Typography
 												variant="subtitle1"
@@ -351,7 +352,8 @@ const CardActionsData = ({
 											.locale("it")
 											.format("DD-MM-YYYY")}
 									</Typography>
-									{itemsCard?.abbonamento?.DATAFIN !== undefined ? (
+									{itemsCard?.abbonamento?.DATAFIN !== undefined &&
+									itemsCard?.abbonamento?.DATAFIN !== "" ? (
 										<>
 											<Typography
 												variant="subtitle1"

@@ -331,68 +331,73 @@ const Carrello = () => {
 				);
 				if (respCall_IdSessione.successCli) {
 					if (respCall_IdSessione.messageCli.message) {
-						const idSessione = respCall_IdSessione.messageCli.message.SESSIONE;
+						if (respCall_IdSessione.messageCli.message.ESITO === "0") {
+							handleError(respCall_IdSessione.messageCli.message.ERRMSG);
+						} else {
+							const idSessione =
+								respCall_IdSessione.messageCli.message.SESSIONE;
 
-						if (idSessione !== "") {
-							//provo a creare la sessione in stripe
-							// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
-							const protocol = window.location.protocol ?? "https:";
-							const domain = window.location.hostname;
-							const port = window.location.port;
+							if (idSessione !== "") {
+								//provo a creare la sessione in stripe
+								// Ottieni il protocollo, il dominio e la porta dalla finestra del browser
+								const protocol = window.location.protocol ?? "https:";
+								const domain = window.location.hostname;
+								const port = window.location.port;
 
-							console.log(`Protocollo: ${protocol}`);
-							console.log(`Dominio: ${domain}`);
-							console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-							const infoToSendToStripe: any = [];
+								console.log(`Protocollo: ${protocol}`);
+								console.log(`Dominio: ${domain}`);
+								console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
+								const infoToSendToStripe: any = [];
 
-							const obyPostDataCart = {
-								line_items: cartTommys?.TommysCart_OGGETTO.map(
-									(prodotto: any) => {
-										const importoSenzaVirgola =
-											prodotto?.IMPORTO?.replace(",", ".") ?? "0";
-										let prezzo: number | null = Number(importoSenzaVirgola);
-										let importoFix: number;
-										importoFix = importoInCentesimi(prezzo as number);
-										//importoFix = 100;
-										console.log("CHK --- > prezzo : ", prezzo);
-										console.log("CHK --- > importoFix : ", importoFix);
-										infoToSendToStripe.push({
-											idSessioneTommys: idSessione ?? "NO ID SESSIONE",
-											descProd: prodotto?.DESC ?? "NO DESC",
-											prezzo: prodotto?.IMPORTO ?? "0",
-										});
-										return {
-											id: `${prodotto.ID}-${prodotto.CODICE}`,
-											nome: prodotto.DESC,
-											prezzo: importoFix,
-											immagine: [],
-											quantity: 1,
-										};
-									}
-								),
-								clienteKey: eCommerceConf.ClienteKey,
-								userId: authUser?.USERID,
-								emailUser: authUser?.EMAIL,
-								emailCentro: authUser?.EMAILCENTRO,
-								dettaglioProdotti: infoToSendToStripe,
-								currency: "eur",
-								mode: "payment",
-								success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment?SessionID=${idSessione}`,
-								cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment?SessionID=${idSessione}`,
-							};
+								const obyPostDataCart = {
+									line_items: cartTommys?.TommysCart_OGGETTO.map(
+										(prodotto: any) => {
+											const importoSenzaVirgola =
+												prodotto?.IMPORTO?.replace(",", ".") ?? "0";
+											let prezzo: number | null = Number(importoSenzaVirgola);
+											let importoFix: number;
+											importoFix = importoInCentesimi(prezzo as number);
+											//importoFix = 100;
+											console.log("CHK --- > prezzo : ", prezzo);
+											console.log("CHK --- > importoFix : ", importoFix);
+											infoToSendToStripe.push({
+												idSessioneTommys: idSessione ?? "NO ID SESSIONE",
+												descProd: prodotto?.DESC ?? "NO DESC",
+												prezzo: prodotto?.IMPORTO ?? "0",
+											});
+											return {
+												id: `${prodotto.ID}-${prodotto.CODICE}`,
+												nome: prodotto.DESC,
+												prezzo: importoFix,
+												immagine: [],
+												quantity: 1,
+											};
+										}
+									),
+									clienteKey: eCommerceConf.ClienteKey,
+									userId: authUser?.USERID,
+									emailUser: authUser?.EMAIL,
+									emailCentro: authUser?.EMAILCENTRO,
+									dettaglioProdotti: infoToSendToStripe,
+									currency: "eur",
+									mode: "payment",
+									success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment?SessionID=${idSessione}`,
+									cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment?SessionID=${idSessione}`,
+								};
 
-							console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
-							try {
-								const respCall: responseCall = await callNodeService(
-									"stripe/checkout-session",
-									obyPostDataCart,
-									null
-								);
-								handleSuccess(respCall);
-							} catch (error) {
-								handleError(error);
-							} finally {
-								dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+								console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
+								try {
+									const respCall: responseCall = await callNodeService(
+										"stripe/checkout-session",
+										obyPostDataCart,
+										null
+									);
+									handleSuccess(respCall);
+								} catch (error) {
+									handleError(error);
+								} finally {
+									dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+								}
 							}
 						}
 					} else {
