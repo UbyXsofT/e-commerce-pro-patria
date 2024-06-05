@@ -98,9 +98,12 @@ const TimeList: React.FC<TimeListProps> = ({
 	console.log("attivitaSelezionata: ", attivitaSelezionata);
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+	console.log(
+		"attivitaSelezionata.ORARI.ORARIO[0]: ",
+		attivitaSelezionata.ORARI.ORARIO[0]
+	);
 	{
-		if (orariSelezionati.length > 0) {
+		if (attivitaSelezionata.ORARI.ORARIO[0] !== undefined) {
 			return (
 				<div style={{ overflowX: "auto" }}>
 					<table style={{ width: "100%" }}>
