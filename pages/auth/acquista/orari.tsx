@@ -83,13 +83,20 @@ const Orari: React.FC = () => {
 
 	useEffect(() => {
 		if (actualProduct?.codice !== null && !visualizzaComp) {
+			console.log("SCELTAF: ", itemsCard?.abbonamento?.SCELTAF);
+			console.log("FREQUENZAS: ", Number(itemsCard?.abbonamento?.FREQUENZAS));
 			if (
 				Number(itemsCard?.abbonamento?.SCELTAF) > 0 &&
 				Number(itemsCard?.abbonamento?.FREQUENZAS) > 0
 			) {
-				console.log("VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI");
+				console.log(
+					"SCELTAF è FREQUENZAS hanno un valore > 0  @@@ VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI"
+				);
 				setVisualizzaComp(true);
 			} else {
+				console.log(
+					"SCELTAF e/o FREQUENZAS hanno un valore < 0  @@@ VADO DIRETTAMENTE AL RIEPILOGO"
+				);
 				setVisualizzaComp(false);
 				const newCart = clearCart(cart, dispatch);
 				addToCart(actualProduct, newCart, dispatch, authUser);
