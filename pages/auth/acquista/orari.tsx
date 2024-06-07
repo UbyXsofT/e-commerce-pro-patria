@@ -95,7 +95,7 @@ const Orari: React.FC = () => {
 				setVisualizzaComp(true);
 			} else {
 				console.log(
-					"SCELTAF e/o FREQUENZAS hanno un valore < 0  @@@ VADO DIRETTAMENTE AL RIEPILOGO"
+					"SCELTAF e/o FREQUENZAS hanno un valore <= 0  @@@ VADO DIRETTAMENTE AL RIEPILOGO"
 				);
 				setVisualizzaComp(false);
 				const newCart = clearCart(cart, dispatch);
