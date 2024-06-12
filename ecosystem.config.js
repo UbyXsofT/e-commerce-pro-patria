@@ -1,12 +1,12 @@
 module.exports = {
 	apps: [
 		{
-			name: "ecommerce-byteware",
+			name: "ecommerce-propatria",
 			script: "node_modules/next/dist/bin/next",
 			args: "start",
 			env: {
 				NODE_ENV: "production",
-				PORT: 3000,
+				PORT: 3001,
 				HTTPS: true,
 			},
 		},

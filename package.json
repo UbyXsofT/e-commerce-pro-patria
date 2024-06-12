@@ -1,5 +1,5 @@
 {
-	"name": "ecommerce-front",
+	"name": "ecommerce-front-propatria",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
@@ -49,8 +49,7 @@
 		"react-window": "^1.8.9",
 		"redux": "^4.2.1",
 		"sass": "^1.68.0",
-		"sharp": "^0.32.5",
-		"unlighthouse": "^0.10.0"
+		"sharp": "^0.32.5"
 	},
 	"devDependencies": {
 		"@types/crypto-js": "^4.1.2",
