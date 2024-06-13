@@ -42,7 +42,7 @@ const Summary: React.FC<SummaryProps> = ({
 	setQuanteAttivitaScelte,
 	itemsCard,
 }) => {
-	//console.log("SUMMARY selectedTimesMap: ", selectedTimesMap);
+
 	const theme = useTheme();
 	const handleCancel = () => {
 		setSelectedTimesMap({});
@@ -56,7 +56,7 @@ const Summary: React.FC<SummaryProps> = ({
 		([_, { selectedOrari }]) => selectedOrari.length > 0
 	);
 
-	//console.log("activitiesWithTimes: ", activitiesWithTimes);
+	
 
 	// Filtra solo le attività con almeno un orario selezionato
 	const activitiesWithObyTimes = activitiesWithTimes.map(
@@ -76,15 +76,13 @@ const Summary: React.FC<SummaryProps> = ({
 		}
 	);
 
-	//console.log("activitiesWithObyTimes: ", activitiesWithObyTimes);
-
 	React.useEffect(() => {
 		setDispAtvRim(Number(itemsCard?.abbonamento?.SCELTAF));
 		setDispTimesRim(Number(itemsCard?.abbonamento?.FREQUENZAS));
 	}, []);
 
 	React.useEffect(() => {
-		//console.log("USE EFFECT");
+	
 		// Calcola la lunghezza totale di tutti gli array 'orariCorrispondenti'
 		const totalSelectedTimes = activitiesWithObyTimes?.reduce((acc, item) => {
 			return (
@@ -100,13 +98,7 @@ const Summary: React.FC<SummaryProps> = ({
 		);
 		setQuantiOrarioScelti(totalSelectedTimes);
 		setQuanteAttivitaScelte(activitiesWithTimes.length);
-		// console.log("dispAtvRim: ", dispAtvRim);
-		// console.log("dispTimesRim: ", dispTimesRim);
-		// console.log("Numero totale di orari selezionati: ", totalSelectedTimes);
-		// console.log(
-		// 	"Numero totale di attività con orari selezionati: ",
-		// 	activitiesWithTimes.length
-		// );
+	
 	}, [activitiesWithObyTimes, selectedTimesMap]);
 
 	return (

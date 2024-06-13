@@ -59,7 +59,9 @@ const ListinoPage = () => {
 		try {
 			// Effettua la richiesta asincrona
 			const data = await fetchListino(authUser?.USERID);
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("****** 2) DATA: ", data);
+			}
 			// Aggiorna lo stato Redux utilizzando la tua azione setListino
 			if (data.listino === null) {
 				setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
@@ -90,11 +92,14 @@ const ListinoPage = () => {
 		// Recuperare i dati dell'attività e i suoi orari da sessionStorage
 		const storedData = sessionStorage.getItem("STEP");
 		const parsedData = storedData ? JSON.parse(storedData) : [];
-
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("---- >> STEP parsedData LUNGHEZZA: ", parsedData.length);
 		console.log("---- >> STEP parsedData: ", parsedData);
+		}
 		if (Number(step.stepId) <= Number(parsedData.length)) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("*********** STO TORNANDO INDIETROOOO");
+			}
 			return;
 		}
 
@@ -117,8 +122,9 @@ const ListinoPage = () => {
 			});
 		}
 
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("---- >> STEP parsedData after update: ", parsedData);
-
+		}
 		// Salvare i dati aggiornati in sessionStorage
 		sessionStorage.setItem("STEP", JSON.stringify(parsedData));
 		///////////// ----------------
@@ -132,9 +138,10 @@ const ListinoPage = () => {
 	};
 
 	React.useEffect(() => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("******* CAMBIO STEP SELECT OBY ***********");
 		console.log("@@@@@@ stepSelectOby: ", stepSelectOby);
-
+		}
 		aggiornaDatiStepInSessionStorage(stepSelectOby);
 
 		if (stepSelectOby.stepId < stepSelectOby.endNavStepId) {
@@ -151,7 +158,9 @@ const ListinoPage = () => {
 				springPropsCards
 			);
 		} else {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("*********** STO TORNANDO INDIETROOOO");
+			}
 			setStepSelectOby((prev) => ({
 				...prev,
 				stepId: prev.stepId - 1,
@@ -162,7 +171,9 @@ const ListinoPage = () => {
 			resettaDatiStepInSessionStorage();
 			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
 			setStoryStep_SubTitleComp([]);
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
+			}
 			if (listinoState.listino === null) {
 				router.push(`/auth/acquista/prodotti`);
 				//aggiornaListino();

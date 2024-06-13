@@ -78,10 +78,12 @@ const successPayment = () => {
 						setIdSessioneData,
 						null
 					);
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log(
 						"respCall_IdSessione: ",
 						respCall_IdSessione.messageCli.message
 					);
+				}
 					if (respCall_IdSessione.successCli) {
 						setMsgShow(
 							"Grazie per il tuo acquisto. Riceverai una conferma via email."
@@ -93,7 +95,9 @@ const successPayment = () => {
 						);
 					}
 				} catch (error) {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall: ", error);
+					}
 					handleError(
 						"Non siamo riusciti a memorizzare lo stato del tuo pagamento nel sistema del tuo centro fitness. Ti invitiamo a contattare il tuo centro fitness per assistenza, comunicando questo codice di sessione di riferimento: " +
 							idSessione
@@ -105,10 +109,12 @@ const successPayment = () => {
 			};
 
 			if (authUser?.USERID && isRegisterIdTrue === false) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"@@@@@ --- REGISTRAZIONE PAGAMENTO ID-SESSIONE: ",
 					idSessione
 				);
+			}
 				saveAndCloseSessionID();
 				setIsRegisterIdTrue(true); // Imposta il flag per indicare che la registrazione è avvenuta
 			}

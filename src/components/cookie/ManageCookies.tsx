@@ -47,18 +47,6 @@ const ManageCookies = ({
 }: ManageCookiesType) => {
 	const theme = useTheme();
 
-	// Rendi visibile il loading impostando setLoading su true
-	// React.useEffect(() => {
-	//   setLoading(true);
-	//   // Effettua le operazioni di caricamento, se necessario
-	//   // Qui puoi fare richieste API, ottenere i dati, ecc.
-	//   // Quando hai completato il caricamento, imposta isLoading su false:
-	//   setTimeout(() => {
-	//     console.log("Esempio ritardo nel caricare i dati di secondi");
-	//     setLoading(false);
-	//   }, 3000);
-	// }, []);
-
 	const handleTheme = () => {
 		setCheckedTheme(!checkedTheme);
 	};

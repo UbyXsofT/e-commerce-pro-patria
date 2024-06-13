@@ -71,8 +71,9 @@ export default async function callNodeService(
 		| obyPostErrore,
 	token: null
 ): Promise<responseCall> {
+	if (eCommerceConf.ModalitaSviluppo === true){
 	console.log("@@@ callNodeService ...");
-
+	}
 	// Controllo se il servizio Node.js è raggiungibile
 	if (!(await isNodeServiceReachable())) {
 		return {
@@ -101,13 +102,15 @@ export default async function callNodeService(
 			headers: headersData,
 			data: postData,
 		};
-
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("callNodeService EndPoint config: ", config);
-
+		}
 		return axios
 			.request(config)
 			.then((response) => {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log("callNodeService then ok: ", response.data);
+				}
 				if (response.status === 200) {
 					return { successCli: true, messageCli: response.data };
 				} else {
@@ -115,7 +118,9 @@ export default async function callNodeService(
 				}
 			})
 			.catch((error) => {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(error);
+				}
 				return {
 					successCli: false,
 					messageCli: error.response?.data?.message

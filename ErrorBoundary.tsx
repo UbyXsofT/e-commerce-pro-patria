@@ -61,7 +61,9 @@ const ComponenteFunzione = () => {
 
 //questo è ok
 const fetchData = async (error: Error, errorInfo: ErrorInfo) => {
+	if (eCommerceConf.ModalitaSviluppo === true){
 	console.log("fetchData ERR", "START");
+	}
 	//const user = useSelector((state: StoreState) => state.authUser);
 
 	const errorInfoSend = errorInfo?.componentStack
@@ -83,11 +85,17 @@ const fetchData = async (error: Error, errorInfo: ErrorInfo) => {
 			obyPostErrore,
 			null
 		);
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("handleSuccess", respCall);
+		}
 	} catch (error) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("handleError", error);
+		}
 	} finally {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("handleFinally", "FINE");
+		}
 	}
 };
 

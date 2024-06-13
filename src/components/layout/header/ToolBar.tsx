@@ -94,7 +94,6 @@ export const ToolBar = ({
 
 	React.useEffect(() => {
 		setCartAlertsNum(cartLength.toString());
-		// console.log("cartLength: ", cartLength);
 	}, [dispatch, cartLength]);
 
 	const router = useRouter();

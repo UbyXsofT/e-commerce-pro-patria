@@ -51,7 +51,9 @@ const BlockPage = () => {
 		try {
 			logOutUser(dispatch);
 		} catch (error) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("logoutSuccess error: ", error);
+			}
 		}
 	}, []);
 

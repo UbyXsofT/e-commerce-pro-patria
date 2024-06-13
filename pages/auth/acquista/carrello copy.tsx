@@ -109,9 +109,13 @@ const Carrello = () => {
 
 	React.useEffect(() => {
 		// Quando isTimerActive cambia, ferma l'animazione
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("cambia isTimerActive: ", isTimerActive);
+		}
 		if (!isTimerActive) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("IF: ", isTimerActive);
+			}
 			setProgress(100);
 			setBuffer(100);
 			setIsCheckInCorsoDisp(false);
@@ -172,35 +176,17 @@ const Carrello = () => {
 		setPrezzi(calculateTotalePrezzo(user.cart));
 	}, [cart]);
 
-	const callCheckDispRegistraInDB = () => {
-		console.log("****************** callCheckDispRegistraInDB");
-		// clienteKey:BytewareDemoBeta
-		// Cliente:CLABKM5
-		// Abbonamento:AB001
-		// DataIni:2023-01-01
-		// Importo:1.00
-		// Frequenze:[CS000001][152][CS000012][250]
-		// Promo:
-		// Codice_Promo:
-
-		// codice: null, //abbonamento
-		// nome: null, //descrizione
-		// prezzo: null, //
-		// prezzoScontato: null,
-		// immagine: null,
-		// info: null,
-		// quantity: null,
-	};
-
 	const handleCheckOut = () => {
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 
 		const CreateCheckOutSession = async () => {
 			const handleSuccess = (msg_Resp: any) => {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
 					msg_Resp
 				);
+			}
 				const msg_error_session = `Ops! Siamo spiacenti, ma al momento riscontriamo un problema
 				nella creazione della sessione di pagamento tramite Stripe.
 
@@ -215,7 +201,9 @@ const Carrello = () => {
 						window.location.href = msg_Resp.messageCli.url;
 					} else {
 						//ERROR data
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("error msg_Resp.successCli.url");
+						}
 						//ERROR data
 						const textAlert = (
 							<React.Fragment>
@@ -228,7 +216,9 @@ const Carrello = () => {
 					}
 				} catch (error) {
 					//ERROR data
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("error CreateCheckOutSession: ", error);
+					}
 					const textAlert = (
 						<React.Fragment>
 							<h3>
@@ -258,10 +248,11 @@ const Carrello = () => {
 			const domain = window.location.hostname;
 			const port = window.location.port;
 
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log(`Protocollo: ${protocol}`);
 			console.log(`Dominio: ${domain}`);
 			console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-
+			}
 			const obyPostDataCart = {
 				clienteKey: eCommerceConf.ClienteKey,
 				userId: authUser?.USERID,
@@ -274,9 +265,10 @@ const Carrello = () => {
 					let importoFix: number;
 					importoFix = importoInCentesimi(prezzo as number);
 					//importoFix = 100;
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("CHK --- > prezzo : ", prezzo);
 					console.log("CHK --- > importoFix : ", importoFix);
-
+					}
 					return {
 						id: item.codice,
 						nome: item.nome,
@@ -292,8 +284,9 @@ const Carrello = () => {
 				success_url: `${protocol}//${domain}:${port}/auth/successPayment`,
 				cancel_url: `${protocol}//${domain}:${port}/auth/cancelPayment`,
 			};
-
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
+			}
 			//return;
 			try {
 				const respCall: responseCall = await callNodeService(

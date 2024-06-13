@@ -56,7 +56,6 @@ const Calendario: React.FC<CalendarioProps> = ({
 			const formattedDate = dayjs(selectedDate)
 				.locale("it")
 				.format("DD-MM-YYYY");
-			console.log("@@@ --- handleConfirm", handleConfirm);
 			setSelectedDate(null);
 			handleClose(formattedDate);
 		}

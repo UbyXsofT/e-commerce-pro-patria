@@ -29,8 +29,10 @@ import dayjs from "dayjs";
 import "dayjs/locale/it";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Router, useRouter } from "next/router";
+import eCommerceConf from "eCommerceConf.json"
+
+
 dayjs.extend(isoWeek);
 
 const CardActionsData = ({
@@ -59,13 +61,11 @@ const CardActionsData = ({
 
 	const handleClick = (itemData: itemsCard) => {
 		const step = itemsCard;
-
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("---- >>  STEP: ", step);
-
+		}
 		if (step?.codice !== null) {
-			//console.log("step?.codice", step?.codice);
 			let newStepId = (step.stepId += 1);
-			//console.log("newStepId", newStepId);
 			setStepSelectOby((prevStepSelectOby) => ({
 				...prevStepSelectOby,
 				stepId: newStepId,
@@ -77,9 +77,10 @@ const CardActionsData = ({
 	};
 
 	const handleClickConferma = (itemsCard: itemsCard) => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("handleClickConferma");
 		console.log("CHIAMO IL SERVIZIO PER LA CONFERMA");
-
+		}
 		//TODO SE ESITO E' POSITIVO PROSEGUO NELLA PAGINA SUCCESSIVA
 		//ATRIMENTI VISUALIZZO IL MESSAGGIO DI ERRORE DI RITORNO DALLA CONFERMA
 
@@ -91,8 +92,6 @@ const CardActionsData = ({
 						.format("DD-MM-YYYY")
 				: selectedValueCalendario.toString();
 		itemsCard = items;
-		//console.log("@@@ DATA INI itemsCard: ", itemsCard);
-
 		router.replace({
 			pathname: "/auth/acquista/orari",
 			query: { itemsCard: JSON.stringify(itemsCard) },

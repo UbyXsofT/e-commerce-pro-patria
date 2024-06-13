@@ -74,9 +74,13 @@ const Login = () => {
 		const handleLogout = () => {
 			try {
 				logOutUser(dispatch);
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log("logoutSuccess");
+				}
 			} catch (error) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log("logoutSuccess error: ", error);
+				}
 			}
 		};
 
@@ -87,10 +91,11 @@ const Login = () => {
 				(windowHeight - (mainHeight ? mainHeight : 0)) / 2;
 			setPaddingTop(calculatedPaddingTop);
 		};
-
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log(
 			"@@@@@@@@@ _LOGIN---- >> AuthEcommerceHelper ??? provo a commentarlo"
 		);
+	}
 		AuthEcommerceHelper(dispatch);
 		//SetStripeKeysHelper(dispatch);
 		//TODO #DA VERIFICARE PER BENE
@@ -106,7 +111,9 @@ const Login = () => {
 	const { showAlert } = useAlertMe();
 	const handleLogin = async (captchaValue: string | null) => {
 		const handleCaptchaError = async () => {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("Si prega di completare il reCAPTCHA.");
+			}
 			const textAlert = (
 				<React.Fragment>
 					<h3>
@@ -135,11 +142,15 @@ const Login = () => {
 					//****** UTENTE
 					// Aggiorna lo stato dell'OGGETTO utente
 					try {
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+						}
 						dispatch(setAuthUser(msg_Resp.respWCF));
 						Router.push("/auth/home");
 					} catch (error) {
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("Aggiorna Redux AuthUser:", error);
+						}
 					}
 				};
 

@@ -64,7 +64,9 @@ const setListinoReducer = (
 ) => {
 	switch (action.type) {
 		case "SET_LISTINO":
-			console.log("Payload received:", action.payload);
+			if (eCommerceConf.ModalitaSviluppo === true){	
+		console.log("Payload received:", action.payload);
+			}
 			return {
 				...state,
 				listino:
@@ -103,7 +105,9 @@ const setAttivitaOrariListino = (
 	switch (action.type) {
 		case "SET_LISTINO_ATTIVITA_ORARI": {
 			const newStep = action.payload.listinoAtvOrari;
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("@@@ >>>> SET_LISTINO_ATTIVITA_ORARI --- newStep: ", newStep);
+			}
 		}
 		default:
 			return state;

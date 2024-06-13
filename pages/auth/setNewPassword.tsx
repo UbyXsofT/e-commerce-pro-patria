@@ -61,8 +61,9 @@ const setNewPassword = () => {
 
 			const msg_Resp = respCall.messageCli.message;
 			if (respCall.successCli) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(msg_Resp);
-
+				}
 				if (msg_Resp) {
 					handleSuccess(msg_Resp);
 				} else {

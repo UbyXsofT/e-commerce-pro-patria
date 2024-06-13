@@ -26,7 +26,6 @@ export function Footer({ contentRef }: FooterProps) {
 	const [bottomMobile, setBottomMobile] = React.useState(isMobile ? 40 : 0);
 
 	const handleResize = React.useCallback(() => {
-		//console.log("@@@ --- useCallback ******** handleResize");
 		const windowHeight = window.innerHeight;
 		const header = document.getElementById("header");
 		const footerElement = document.getElementById("footer");
@@ -69,7 +68,6 @@ export function Footer({ contentRef }: FooterProps) {
 	}, [handleResize, contentRef]);
 
 	React.useEffect(() => {
-		//console.log("isFooterFixed:", isFooterFixed);
 	}, [isFooterFixed]);
 
 	function throttle<T extends (...args: any[]) => void>(func: T, wait: number) {

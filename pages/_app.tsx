@@ -80,10 +80,12 @@ const MyApp = (props: {
 
 	useEffect(() => {
 		const checkAuthentication = async () => {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log(
 				"@@@@@@@@@ _APP ---- >> checkAuthentication requiresAuth: ",
 				requiresAuth
 			);
+		}
 			if (requiresAuth) {
 				let newAuthEcommerce = authEcommerce;
 				let newAuthUser = authUser;
@@ -123,7 +125,9 @@ const MyApp = (props: {
 	useEffect(() => {
 		const handleRouteChange = (url: string) => {
 			// 	// Esegui le azioni desiderate ogni volta che cambia la pagina
-			console.log("@@@@@ --- XXXX --- Nuova pagina:", url);
+			if (eCommerceConf.ModalitaSviluppo === true){
+				console.log("@@@@@ --- XXXX --- Nuova pagina:", url);
+			}
 			// if (authEcommerce === true) {
 			// 	useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
 			// }

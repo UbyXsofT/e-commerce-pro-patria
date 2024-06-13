@@ -51,12 +51,15 @@ const Index = () => {
 
 	React.useEffect(() => {
 		const updateEcommerceAuth = async () => {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("@@@@@@@@@ ---- >> Index updateEcommerceAuth");
+			}
 			// 0. Chiama la funzione SetStripeKeysHelper(dispatch) asincrona per ottenere le informazioni su stripe.
 			const authConfStripe = (await SetStripeKeysHelper(dispatch)).isGetKeys;
 			setIsAuthStripe(authConfStripe);
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("authConfStripe: ", authConfStripe);
-
+			}
 			// 1. Chiama la funzione AuthEcommerceHelper(dispatch) asincrona per ottenere le informazioni sull'autenticazione dell'e-commerce.
 			const authEcommerce = (await AuthEcommerceHelper(dispatch)).result;
 

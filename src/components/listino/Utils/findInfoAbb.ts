@@ -28,9 +28,9 @@ export default function findInfoAbb(item: any, stepId: number) {
 
 	try {
 		all_InfoRequest.forEach((richiesta: RequestItem) => {
-			//console.log("item: ", item);
+			
 			const { name, tipo, valore, stepId } = richiesta;
-			//console.log("richiesta: ", richiesta);
+			
 
 			let entityType = "NESSUNO";
 			let inItemArray: any[] = [];
@@ -67,19 +67,6 @@ export default function findInfoAbb(item: any, stepId: number) {
 					};
 					// Aggiungere l'oggetto all'oggetto infoData
 					infoData[name] = infoObject;
-
-					// // Aggiungere informazioni
-					// const infoObject = {
-					// 	name: name,
-					// 	item: item,
-					// 	tipo: tipo,
-					// 	numero: count,
-					// 	...totals,
-					// };
-					// // Aggiungere l'oggetto all'oggetto infoData
-					// infoData[name] = infoObject;
-
-					// console.log("CASE GRUPPO: infoObject: ", infoObject);
 					return;
 				case 2: //"SEDE"
 					entityType = "SEDE";
@@ -107,31 +94,6 @@ export default function findInfoAbb(item: any, stepId: number) {
 					};
 					// Aggiungere l'oggetto all'oggetto infoData
 					infoData[name] = infoObject2;
-
-					// const numero2 = item["AREA"]
-					// 	.map((area: any) =>
-					// 		area.ABBONAMENTO.filter(
-					// 			(abb: any) =>
-					// 				//tipo === "SCELTAF" ? abb[tipo] !== valore : abb[tipo] === valore
-					// 				abb[tipo] === valore
-					// 		)
-					// 	)
-					// 	.flat().length;
-
-					// //console.log("RICHIESTA NUM ABBONAMENTI --> CASE NUMERO2: ", numero2);
-					// const totals2 = getTotals(item["AREA"], "SEDE");
-
-					// // Aggiungere informazioni
-					// const infoObject2 = {
-					// 	name: name,
-					// 	item: item,
-					// 	tipo: tipo,
-					// 	numero: numero2,
-					// 	...totals2,
-					// };
-
-					// // Aggiungere l'oggetto all'oggetto infoData
-					// infoData[name] = infoObject2;
 					return;
 				case 3: //"AREA"
 					entityType = "AREA";
@@ -157,38 +119,18 @@ export default function findInfoAbb(item: any, stepId: number) {
 					};
 					// Aggiungere l'oggetto all'oggetto infoData
 					infoData[name] = infoObject3;
-
-					// const numero3 = item["ABBONAMENTO"]
-					// 	.filter(
-					// 		(abb: any) =>
-					// 			//tipo === "SCELTAF" ? abb[tipo] !== valore : abb[tipo] === valore
-					// 			abb[tipo] === valore
-					// 	)
-					// 	.flat().length;
-
-					// //console.log("RICHIESTA NUM ABBONAMENTI --> CASE numero3: ", numero3);
-					// const totals3 = getTotals(item["ABBONAMENTO"], "AREA");
-
-					// // Aggiungere informazioni
-					// const infoObject3 = {
-					// 	name: name,
-					// 	item: item,
-					// 	tipo: tipo,
-					// 	numero: numero3,
-					// 	...totals3,
-					// };
-
-					// // Aggiungere l'oggetto all'oggetto infoData
-					// infoData[name] = infoObject3;
 					return;
 				case 4: //ABBONAMENTO
 					return;
 			}
-
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("@@@ infoData[name]", infoData[name]);
+			}
 		}); //FOREACH
 	} catch (error) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("@@@@@@ ---> error: ", error);
+		}
 		router.push(
 			`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati necessari. Se il problema persiste si prega di cottattare il proprio centro fitness.. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
 		);

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setListino } from "src/store/actions";
 import { StoreState } from "../../CommonTypesInterfaces";
 import fetchListino from "./fetchListino";
+import eCommerceConf from "eCommerceConf.json"
 
 const ListinoErrorBox = () => {
 	const dispatch = useDispatch();
@@ -23,8 +24,9 @@ const ListinoErrorBox = () => {
 			<Button
 				variant="contained"
 				onClick={async () => {
-					//console.log("****** CHECK LISTINO: ", listinoState.listino);
-
+					if (eCommerceConf.ModalitaSviluppo === true){
+					console.log("****** CHECK LISTINO: ", listinoState.listino);
+					}
 					if (!listinoState.listino) {
 						try {
 							// Effettua la richiesta asincrona

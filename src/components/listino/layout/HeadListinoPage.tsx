@@ -123,8 +123,7 @@ const HeadListinoPage = ({
 					}}
 				>
 					{storyStep_SubTitleComp.map((element: any, index: any) => {
-						//console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
-						// console.log("index: ", index);
+						
 						return <React.Fragment key={index}>{element}</React.Fragment>;
 					})}
 				</Grid>
@@ -140,8 +139,6 @@ const HeadListinoPage = ({
 					}}
 				>
 					{storyStep_SubTitleComp.map((element: any, index: any) => {
-						//console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^ element: ", element);
-						// console.log("index: ", index);
 						return <React.Fragment key={index}>{element}</React.Fragment>;
 					})}
 				</Grid>

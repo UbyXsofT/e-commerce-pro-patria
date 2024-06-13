@@ -76,8 +76,9 @@ const resetPassword = () => {
 
 			const msg_Resp = respCall.messageCli.message;
 			if (respCall.successCli) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(msg_Resp);
-
+				}
 				if (msg_Resp && msg_Resp.respWCF) {
 					handleSuccess(msg_Resp.respWCF.message);
 				} else {

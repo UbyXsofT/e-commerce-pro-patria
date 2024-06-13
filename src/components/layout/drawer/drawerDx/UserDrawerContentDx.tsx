@@ -19,9 +19,12 @@ import { useSelector } from "react-redux";
 import { setStripeKeys } from "src/store/actions";
 import Router from "next/router";
 import AvatarName from "src/components/account/AvatarName";
+import eCommerceConf from "eCommerceConf.json"
 
 const handleDrawerItemClick = (menuItem: MenuItem) => {
+	if (eCommerceConf.ModalitaSviluppo === true){
 	console.log("handleDrawerItemClick : ", menuItem);
+	}
 };
 
 type UserDrawerContentDxType = {

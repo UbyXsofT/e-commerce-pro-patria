@@ -173,9 +173,7 @@ const Carrello = () => {
 		cartTommys?.TommysCart_OGGETTO.forEach((prodotto) => {
 			// Rimuovi le virgole dai valori degli importi e convertili in numeri float
 			const importoSenzaVirgola = prodotto?.IMPORTO?.replace(",", ".") ?? "0";
-			//console.log("importoSenzaVirgola: ", importoSenzaVirgola);
 			const importoFloat = parseFloat(importoSenzaVirgola) || 0;
-			//console.log("importoFloat: ", importoFloat);
 			// Aggiungi il valore dell'importo alla somma totale
 			totalePrezzo += importoFloat;
 		});
@@ -186,8 +184,9 @@ const Carrello = () => {
 
 	// // const [showAllertMe, setShowAllertMe] = React.useState(false);
 	const handleDeleteConferma = async (codiceDel: string) => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("codiceDel: ", codiceDel);
-
+		}
 		dispatch(setLoading(true)); // Utilizza dispatch per inviare l'azione di setLoading
 		const resp = await removeFromCartTommys(
 			codiceDel,
@@ -255,10 +254,12 @@ const Carrello = () => {
 
 		const CreateCheckOutSession = async () => {
 			const handleSuccess = (msg_Resp: any) => {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"@@@ CreateCheckOutSession @@@@ ----- > handleSuccess: ",
 					msg_Resp
 				);
+			}
 				const msg_error_session = `Ops! Siamo spiacenti, ma al momento riscontriamo un problema
 				nella creazione della sessione di pagamento tramite Stripe.
 
@@ -273,7 +274,9 @@ const Carrello = () => {
 						window.location.href = msg_Resp.messageCli.url;
 					} else {
 						//ERROR data
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("error msg_Resp.successCli.url");
+						}
 						//ERROR data
 						const textAlert = (
 							<React.Fragment>
@@ -286,7 +289,9 @@ const Carrello = () => {
 					}
 				} catch (error) {
 					//ERROR data
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("error CreateCheckOutSession: ", error);
+					}
 					const textAlert = (
 						<React.Fragment>
 							<h3>
@@ -325,10 +330,12 @@ const Carrello = () => {
 					getIdSessioneData,
 					null
 				);
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"respCall_IdSessione: ",
 					respCall_IdSessione.messageCli.message.SESSIONE
 				);
+			}
 				if (respCall_IdSessione.successCli) {
 					if (respCall_IdSessione.messageCli.message) {
 						if (respCall_IdSessione.messageCli.message.ESITO === "0") {
@@ -343,12 +350,13 @@ const Carrello = () => {
 								const protocol = window.location.protocol ?? "https:";
 								const domain = window.location.hostname;
 								const port = window.location.port;
-
+								if (eCommerceConf.ModalitaSviluppo === true){
 								console.log(`Protocollo: ${protocol}`);
 								console.log(`Dominio: ${domain}`);
 								console.log(`Porta: ${port || "80"}`); // La porta può essere vuota se è la porta predefinita (80 per HTTP, 443 per HTTPS)
-								const infoToSendToStripe: any = [];
+								}
 
+								const infoToSendToStripe: any = [];
 								const obyPostDataCart = {
 									line_items: cartTommys?.TommysCart_OGGETTO.map(
 										(prodotto: any) => {
@@ -358,8 +366,10 @@ const Carrello = () => {
 											let importoFix: number;
 											importoFix = importoInCentesimi(prezzo as number);
 											//importoFix = 100;
+											if (eCommerceConf.ModalitaSviluppo === true){
 											console.log("CHK --- > prezzo : ", prezzo);
 											console.log("CHK --- > importoFix : ", importoFix);
+											}
 											infoToSendToStripe.push({
 												idSessioneTommys: idSessione ?? "NO ID SESSIONE",
 												descProd: prodotto?.DESC ?? "NO DESC",
@@ -384,8 +394,9 @@ const Carrello = () => {
 									success_url: `${protocol}//${domain}:${port}/auth/acquista/successPayment?SessionID=${idSessione}`,
 									cancel_url: `${protocol}//${domain}:${port}/auth/acquista/cancelPayment?SessionID=${idSessione}`,
 								};
-
+								if (eCommerceConf.ModalitaSviluppo === true){
 								console.log("CHK --- > obyPostDataCart : ", obyPostDataCart);
+								}
 								try {
 									const respCall: responseCall = await callNodeService(
 										"stripe/checkout-session",
@@ -411,7 +422,9 @@ const Carrello = () => {
 					);
 				}
 			} catch (error) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log("respCall: ", error);
+				}
 				handleError(
 					"Non abbiamo ricevuto l'ID sessione dal sistema di Tommys. Impossibile creare la sessione di pagamento. Ti invitiamo a riprovare più tardi o a contattare il tuo centro fitness per assistenza. Errore: " +
 						error

@@ -16,6 +16,7 @@ import {
 	ORARIO,
 } from "src/components/CommonTypesInterfaces";
 import { useAlertMe } from "src/components/layout/alert/AlertMeContext";
+import eCommerceConf from "eCommerceConf.json"
 
 interface ActivitySelectorProps {
 	activities: Activity[];
@@ -47,11 +48,6 @@ const ActivitySelector: React.FC<ActivitySelectorProps> = ({
 		}
 	}, [islimiteAttivitaSuperato]);
 
-	// const customClearButton = (
-	// 	<div onClick={() => console.log("Custom clear button clicked")}>
-	// 		Personalizzato
-	// 	</div>
-	// );
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	return (
@@ -94,14 +90,16 @@ const TimeList: React.FC<TimeListProps> = ({
 	orariSelezionati,
 	handleTimeSelection,
 }) => {
+	if (eCommerceConf.ModalitaSviluppo === true){
 	console.log("orariSelezionati: ", orariSelezionati);
 	console.log("attivitaSelezionata: ", attivitaSelezionata);
-	const theme = useTheme();
-	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	console.log(
 		"attivitaSelezionata.ORARI.ORARIO[0]: ",
 		attivitaSelezionata.ORARI.ORARIO[0]
 	);
+	}
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	{
 		if (attivitaSelezionata.ORARI.ORARIO[0] !== undefined) {
 			return (

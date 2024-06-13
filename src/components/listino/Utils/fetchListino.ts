@@ -31,11 +31,14 @@ const fetchListino = async (
 			(await respCall.messageCli.message?.prodotti) || null;
 
 		const listinoArray = listinoResponse.LISTINO || null;
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("fetchListino Array: ", listinoArray);
-
+		}
 		return { listino: listinoArray, error: null };
 	} catch (error: unknown) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log(error);
+		}
 		return { listino: null, error: error };
 	}
 };

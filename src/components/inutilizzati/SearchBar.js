@@ -4,7 +4,6 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
 export function SearchBar({ theme }) {
-	console.log("ThemeSearchBar: ", theme);
 	const Search = styled("div")(({ theme }) => ({
 		position: "relative",
 		borderRadius: theme.shape.borderRadius,

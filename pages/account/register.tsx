@@ -403,7 +403,9 @@ const SignUp = () => {
 	const dispatch = useDispatch(); // Usa il hook useDispatch per ottenere la funzione dispatch dallo store
 
 	const handleCaptchaError = async () => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("Si prega di completare il reCAPTCHA.");
+		}
 		const textAlert = (
 			<React.Fragment>
 				<h3>
@@ -415,12 +417,15 @@ const SignUp = () => {
 	};
 
 	const rinviaMailConferma = (myEmail: string) => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("METODO: Nuovo_Utente");
-
+		}
 		const fetchData = async () => {
 			const handleCallNodeService_Resp = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					}
 					if (msg_Resp.ESITO === 1) {
 						const textAlert = (
 							<React.Fragment>
@@ -481,7 +486,9 @@ const SignUp = () => {
 
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					}
 					if (msg_Resp) {
 						handleSuccess({ ESITO: 1, MESSAGE: msg_Resp });
 					} else {
@@ -562,14 +569,17 @@ const SignUp = () => {
 	};
 
 	const sendData = (data: UserData) => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("YES!");
 		console.log(data);
 		console.log("METODO: Nuovo_Utente");
+		}
 		const formattedDateOfBirth = dayjs(data.user?.dateOfBirth).format(
 			"YYYY-MM-DD"
 		);
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("formattedDateOfBirth: ", formattedDateOfBirth);
-
+		}
 		const cognome = data.user?.lastName ?? "";
 		const nome = data.user?.firstName ?? "";
 		const data_Nascita = formattedDateOfBirth ?? "";
@@ -602,7 +612,9 @@ const SignUp = () => {
 		const fetchData = async () => {
 			const handleCallNodeService_Resp = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					}
 					if (msg_Resp.ESITO === 1) {
 						const textAlert = (
 							<React.Fragment>
@@ -683,7 +695,9 @@ const SignUp = () => {
 
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					}
 					if (msg_Resp) {
 						handleSuccess({ ESITO: 1, MESSAGE: msg_Resp });
 					} else {

@@ -51,7 +51,9 @@ const Orari: React.FC = () => {
 	);
 
 	useEffect(() => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("OrariPage");
+		}
 		try {
 			setActualProduct({
 				codice: itemsCard.codice,
@@ -74,7 +76,9 @@ const Orari: React.FC = () => {
 				Tommys_Codice_Promo: itemsCard.abbonamento.CODPROMO,
 			});
 		} catch (error) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("ERROREEEEEEEE");
+			}
 			router.push(
 				`/blockPage?titolo=CARICAMENTO DATI ORARI&descrizione=Si è verificato un errore durante il recupero dei dati necessari. Se il problema persiste si prega di cottattare il proprio centro fitness.. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
 			);
@@ -83,20 +87,26 @@ const Orari: React.FC = () => {
 
 	useEffect(() => {
 		if (actualProduct?.codice !== null && !visualizzaComp) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("SCELTAF: ", itemsCard?.abbonamento?.SCELTAF);
 			console.log("FREQUENZAS: ", Number(itemsCard?.abbonamento?.FREQUENZAS));
+			}
 			if (
 				Number(itemsCard?.abbonamento?.SCELTAF) > 0 &&
 				Number(itemsCard?.abbonamento?.FREQUENZAS) > 0
 			) {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"SCELTAF è FREQUENZAS hanno un valore > 0  @@@ VISUALIZZARE IL COMPONENTE PER SCEGLIERE GLI ORARI"
 				);
+			}
 				setVisualizzaComp(true);
 			} else {
+				if (eCommerceConf.ModalitaSviluppo === true){
 				console.log(
 					"SCELTAF e/o FREQUENZAS hanno un valore <= 0  @@@ VADO DIRETTAMENTE AL RIEPILOGO"
 				);
+			}
 				setVisualizzaComp(false);
 				const newCart = clearCart(cart, dispatch);
 				addToCart(actualProduct, newCart, dispatch, authUser);

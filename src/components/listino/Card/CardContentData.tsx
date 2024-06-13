@@ -17,10 +17,7 @@ interface CardContentDataProps {
 }
 
 const CardContentData = ({ itemsCard }: CardContentDataProps) => {
-	// console.log("@@@ CardContentData ---> itemsCard: ", itemsCard);
-
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
-
 	const openModal = () => {
 		setIsModalOpen(true);
 	};
@@ -60,9 +57,6 @@ const CardContentData = ({ itemsCard }: CardContentDataProps) => {
 			setDescProdSmall(cardNote);
 			setDescProdFull("");
 		}
-
-		//console.log("XXXX - descProdSmall: ", descProdSmall.length);
-		//console.log("XXXX - descProdFull: ", descProdFull.length);
 	}, [itemsCard.note]);
 
 	return (

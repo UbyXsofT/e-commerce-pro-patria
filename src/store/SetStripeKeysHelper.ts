@@ -22,7 +22,9 @@ const SetStripeKeysHelper = async (
 
 	const handleSuccess = (msg_Resp: any) => {
 		//success
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("@@@@@@@@@@@@@ fetchStripeKey handleSuccess: ", msg_Resp);
+		}
 		try {
 			if (
 				msg_Resp.messageCli.message.stripeKeys !== null ||
@@ -44,12 +46,16 @@ const SetStripeKeysHelper = async (
 			}
 		} catch (error) {
 			//Errore assegnazione Stripe Key
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("SetStripeKeysHelper.... error: ", error);
+			}
 		}
 	};
 
 	const handleError = (error: any) => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("SetStripeKeysHelper.... error: ", error);
+		}
 	};
 
 	const obyPostData = {

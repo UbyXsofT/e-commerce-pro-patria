@@ -41,17 +41,21 @@ const fetchListinoAttivita = async ({
 
 		const listAttivitaResponse =
 			respCall.messageCli.message?.SELATTIVITA || null;
-		console.log(
-			"fetchListinoAttivita  listAttivitaResponse: ",
-			listAttivitaResponse
-		);
-
+		
 		const attivitaArray = listAttivitaResponse?.ATTIVITA || null;
-		console.log("fetchListinoAttivita  attivitaArray: ", attivitaArray);
+		if (eCommerceConf.ModalitaSviluppo === true){
+			console.log(
+				"fetchListinoAttivita  listAttivitaResponse: ",
+				listAttivitaResponse
+			);
+			console.log("fetchListinoAttivita  attivitaArray: ", attivitaArray);
+		}
 
 		return { listaAttivita: attivitaArray, error: null };
 	} catch (error) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log(error);
+		}
 		return { listaAttivita: null, error };
 	}
 };

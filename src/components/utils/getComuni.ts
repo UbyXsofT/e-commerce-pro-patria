@@ -11,19 +11,11 @@ const getComuni = async (
 		);
 		let jsonData = await response.json();
 		let ComuniPaesi = jsonData.concat(Paesi);
-
-		// let keyFulData = jsonData.map((comune, idx) => {
-		//   let updatedComune = { ...comune, key: idx };
-		//   return updatedComune;
-		// });
-
 		setComuni(ComuniPaesi);
 	} catch (error) {
 		let comuni = Comuni;
 		let ComuniPaesi: ComunePaese[] = comuni.concat(Paesi);
 		setComuni(ComuniPaesi);
-
-		console.log(error);
 	}
 };
 

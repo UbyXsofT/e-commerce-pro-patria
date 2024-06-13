@@ -1,8 +1,8 @@
 import { ObjectType } from "react-spring";
-
+import eCommerceConf from "eCommerceConf.json"
 // Funzione ricorsiva per contare Aree
 const countAree = (item: any[], tipo: string): number => {
-	//console.log("countAree item: ", item);
+	
 	switch (tipo) {
 		case "GRUPPO":
 			return item.reduce((acc: number, sede: any) => acc + sede.AREA.length, 0);
@@ -15,7 +15,7 @@ const countAree = (item: any[], tipo: string): number => {
 
 // // Funzione ricorsiva per contare Abbonamenti
 const countAbbonamenti = (item: any[], tipo: string): number => {
-	//console.log("countAbbonamenti item: ", item);
+	
 	switch (tipo) {
 		case "GRUPPO":
 			return item.reduce(
@@ -39,8 +39,9 @@ const countAbbonamenti = (item: any[], tipo: string): number => {
 
 // Funzione per ottenere il numero totale di Aree e Abbonamenti
 export default function getTotals(item: any, entityType: string) {
-	// console.log("getTotals item", item);
-	// console.log("getTotals entityType", entityType);
+	if (eCommerceConf.ModalitaSviluppo === true){
+	 console.log("getTotals entityType", entityType);
+	}
 	let numeroSedi = 0;
 	let numeroAree = 0;
 	let numeroAbbonamenti = 0;

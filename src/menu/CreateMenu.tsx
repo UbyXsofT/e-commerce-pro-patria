@@ -224,7 +224,6 @@ const CreateMenu = (tipoMenu: "menuDriverSX" | "menuUtenteDx") => {
 	};
 
 	const selectedMenu = menuOptions[tipoMenu];
-	// console.log(`${tipoMenu}: `, selectedMenu);
 	return selectedMenu;
 };
 

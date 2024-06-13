@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AlertMeContext from "./AlertMeContext";
 import hexToRGBA from "src/components/utils/hexToRGBA";
 import { ThemeManager } from "src/theme/ThemeManager";
+import eCommerceConf from "eCommerceConf.json"
 
 export function AlertMe() {
 	const { alertParams, setAlertParams } = React.useContext(AlertMeContext);
@@ -33,7 +34,9 @@ export function AlertMe() {
 		// ...
 		// Verifica se la proprietà 'route' è definita e, se sì, esegui un'azione basata su di essa
 		if (route) {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log(`Redirecting to ${route}`);
+			}
 			Router.push(route);
 		}
 		// Chiudi l'alert

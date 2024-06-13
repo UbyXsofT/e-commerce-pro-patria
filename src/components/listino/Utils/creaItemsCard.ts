@@ -1,10 +1,5 @@
-import {
-	Abbonamento,
-	Area,
-	Gruppo,
-	Sede,
-} from "src/components/CommonTypesInterfaces";
 import findInfoAbb from "./findInfoAbb";
+import eCommerceConf from "eCommerceConf.json"
 
 export default function createItemsCard(
 	tipo: string,
@@ -15,7 +10,6 @@ export default function createItemsCard(
 
 	try {
 		const infoAbb = findInfoAbb(itemsTipo, stepId);
-		//console.log("infoAbb: ", infoAbb);
 		switch (tipo) {
 			case "GRUPPO":
 				itemsCard = {
@@ -154,7 +148,9 @@ export default function createItemsCard(
 				break;
 		}
 	} catch (error) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log(error);
+		}
 	}
 
 	return itemsCard;

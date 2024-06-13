@@ -29,14 +29,14 @@ const fetchListinoOrari = async ({
 		);
 
 		const listOrariResponse = respCall.messageCli.message?.ORARI || null;
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("fetchListinoOrari  listOrariResponse: ", listOrariResponse);
-
-		//const orarioArray = listOrariResponse?.ORARIO || null;
-		//console.log("fetchListinoOrari  orarioArray: ", orarioArray);
-
+		}
 		return { listaAtvOrari: listOrariResponse, error: null };
 	} catch (error) {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log(error);
+		}
 		return { listaAtvOrari: null, error };
 	}
 };

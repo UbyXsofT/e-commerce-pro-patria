@@ -96,7 +96,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const [localEmail, setLocalEmail] = React.useState(EMAIL);
 
 	useEffect(() => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("*******user: ", user);
+		}
 		// Aggiorna le variabili locali quando lo stato di Redux cambia
 		setName(NOME);
 		setSurname(COGNOME);
@@ -144,12 +146,16 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 		const fetchData = async () => {
 			const handleCallNodeService_Resp = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("handleSuccess ESITO: ", msg_Resp.ESITO);
+					}
 					if (msg_Resp.ESITO === "1") {
 						//****** UTENTE
 						// Aggiorna lo stato dell'OGGETTO utente
 						try {
+							if (eCommerceConf.ModalitaSviluppo === true){
 							console.log("Aggiorna Redux AuthUser:");
+							}
 							const updatedProperties = {
 								INDIRIZZO: modifyAddress,
 								CITTA: modifyCity,
@@ -162,7 +168,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 							// Aggiorna solo le proprietà necessarie espandendo anche l'oggetto utente esistente
 							dispatch(setAuthUser({ ...user, ...updatedProperties }));
 						} catch (error) {
+							if (eCommerceConf.ModalitaSviluppo === true){
 							console.log("Aggiorna Redux AuthUser:", error);
+							}
 						}
 
 						setInterfaceState("read");
@@ -190,7 +198,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					}
 					if (msg_Resp) {
 						handleSuccess(msg_Resp);
 					} else {
@@ -255,7 +265,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 	const passwordCheck = (password: string) => {
 		const handleCaptchaError = async () => {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("Si prega di completare il reCAPTCHA.");
+			}
 			const textAlert = (
 				<React.Fragment>
 					<h3>
@@ -269,9 +281,13 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 		const fetchData = async () => {
 			const handleLoginResponse = (respCall: responseCall) => {
 				const handleSuccess = (msg_Resp: any) => {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("handleSuccess ISAUTH: ", msg_Resp.ISAUTH);
+					}
 					if (msg_Resp.ISAUTH === "1" && msg_Resp.ESITO === "1") {
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("****** origin: ", origin);
+						}
 						if (origin === "changePassword") {
 							setOrigin(null);
 							setWrongPassword(false);
@@ -297,7 +313,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 
 				const msg_Resp = respCall.messageCli.message;
 				if (respCall.successCli) {
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall.successCli: msg_Resp:", msg_Resp);
+					}
 					if (msg_Resp) {
 						handleSuccess(msg_Resp);
 					} else {
@@ -355,7 +373,9 @@ const AccountSettings = ({ _setLoading }: AccountSettingsProps) => {
 	const { showAlert } = useAlertMe();
 
 	const handleCaptchaError = async () => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("Si prega di completare il reCAPTCHA.");
+		}
 		const textAlert = (
 			<React.Fragment>
 				<h3>

@@ -41,7 +41,9 @@ const Step1 = ({
 	const { showAlert } = useAlertMe();
 
 	const handleCaptchaError = async () => {
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("Si prega di completare il reCAPTCHA.");
+		}
 		const textAlert = (
 			<React.Fragment>
 				<h3>

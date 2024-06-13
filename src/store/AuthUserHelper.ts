@@ -30,9 +30,11 @@ const AuthUserHelper = async (
 		if (accessToken || refreshToken) {
 			//TODO prima di mandarlo nella home, nel caso di un accesso per un utente che possiede un token salvato
 			//bisogna simulare un login passando i token alla chiamata login
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log(
 				"FORZO LA VERIFICA DEL TOKEN CON CHIAMATA AL SERVER PER EFFETTUARE UN LOGIN"
 			);
+		}
 			const fetchData = async (): Promise<AuthUserHelperReturn> => {
 				//setVisLoader(true);
 				const obyPostData = {
@@ -46,7 +48,9 @@ const AuthUserHelper = async (
 
 				try {
 					const respCall = await callNodeService("login", obyPostData, null);
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.log("respCall: ", respCall);
+					}
 					const msg_Resp = respCall.messageCli.message;
 
 					if (respCall.successCli) {
@@ -64,7 +68,9 @@ const AuthUserHelper = async (
 							//****** UTENTE
 							// Aggiorna lo stato dell'OGGETTO utente
 							try {
+								if (eCommerceConf.ModalitaSviluppo === true){
 								console.log("Aggiorna Redux AuthUser:", msg_Resp.respWCF);
+								}
 								dispatch(setAuthUser(msg_Resp.respWCF));
 								//Router.push("/auth/home");
 								return {
@@ -73,7 +79,9 @@ const AuthUserHelper = async (
 									response: msg_Resp.respWCF,
 								};
 							} catch (error) {
+								if (eCommerceConf.ModalitaSviluppo === true){
 								console.log("Aggiorna Redux AuthUser:", error);
+								}
 								return {
 									result: false,
 									route: "/account/login",
@@ -82,7 +90,9 @@ const AuthUserHelper = async (
 								};
 							}
 						} else {
+							if (eCommerceConf.ModalitaSviluppo === true){
 							console.log("msg_Resp: ", msg_Resp);
+							}
 							//   setRouterToPush("/account/login");
 							return {
 								result: false,
@@ -92,8 +102,9 @@ const AuthUserHelper = async (
 							//Router.push("/account/login");
 						}
 					} else {
+						if (eCommerceConf.ModalitaSviluppo === true){
 						console.log("CLI Failed");
-
+						}
 						return {
 							result: false,
 							route: "/account/login",
@@ -104,7 +115,9 @@ const AuthUserHelper = async (
 					}
 				} catch (error) {
 					//setVisLoader(false);
+					if (eCommerceConf.ModalitaSviluppo === true){
 					console.error("Errore nella chiamata:", error);
+					}
 					return {
 						result: false,
 						route: "/account/login",
@@ -118,8 +131,9 @@ const AuthUserHelper = async (
 
 			answer = newAnswer;
 		} else {
+			if (eCommerceConf.ModalitaSviluppo === true){
 			console.log("No Tokens");
-
+			}
 			answer = {
 				result: false,
 				route: "/account/login",
@@ -130,8 +144,9 @@ const AuthUserHelper = async (
 		}
 	} else {
 		// setRouterToPush(networkError);
+		if (eCommerceConf.ModalitaSviluppo === true){
 		console.log("No Auth Ecommerce");
-
+		}
 		answer = {
 			result: false,
 			route: networkError,
@@ -139,8 +154,9 @@ const AuthUserHelper = async (
 			response: null,
 		};
 	}
-
+	if (eCommerceConf.ModalitaSviluppo === true){
 	console.log(answer);
+	}
 
 	return answer;
 };

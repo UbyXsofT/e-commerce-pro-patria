@@ -71,11 +71,12 @@ const listaTemi = [
 
 export function ThemeManager() {
 	const projectTema = eCommerceConf.Tema;
-	// console.log("projectTema: ", projectTema);
-
 	const currTema = listaTemi.find((tema) => tema.key === projectTema);
 
-	//console.log(currTema?.value);
+	if (eCommerceConf.ModalitaSviluppo === true){
+		console.log("projectTema: ", projectTema);
+		console.log(currTema?.value);
+		}
 
 	return { currTema: currTema?.value || null };
 }
