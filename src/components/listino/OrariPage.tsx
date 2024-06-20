@@ -123,14 +123,14 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 		Cliente: string
 	) => {
 		//Cliente, CodeAbb,
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log(
-			"fetchAttivitaFromBackend itemsCard: ",
-			itemsCard,
-			" Cliente: ",
-			Cliente
-		);
-	}
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log(
+				"fetchAttivitaFromBackend itemsCard: ",
+				itemsCard,
+				" Cliente: ",
+				Cliente
+			);
+		}
 		const clienteKey = eCommerceConf.ClienteKey;
 		const IDCentro = eCommerceConf.IdCentro.toString();
 		const Abbonamento = itemsCard.abbonamento.CODABB;
@@ -149,8 +149,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 				SceltaA,
 				FrequenzaS,
 			} as obyPostAttivita);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("****** 1) DATA fetchListinoAttivita: ", data);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("****** 1) DATA fetchListinoAttivita: ", data);
 			}
 			let ChkArrayData = [];
 			// Verifica se listaAttivita è un array o un oggetto
@@ -174,8 +174,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 	};
 
 	const fetchOrariFromBackend = async (activityCode: any) => {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("fetchOrariFromBackend activityCode: ", activityCode);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("fetchOrariFromBackend activityCode: ", activityCode);
 		}
 		const clienteKey = eCommerceConf.ClienteKey;
 		const IDCentro = eCommerceConf.IdCentro.toString();
@@ -184,20 +184,21 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 			Cliente = authUser.USERID.toString();
 		}
 		const Attivita = activityCode.toString();
-
+		const Datarif = itemsCard?.abbonamento?.DATAINI.toString();
 		try {
 			const data = await fetchListinoOrari({
 				Cliente,
 				clienteKey,
 				IDCentro,
 				Attivita,
+				Datarif,
 			} as obyPostOrari);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log(
-				"****** 1) DATA fetchOrariFromBackend data.listaAtvOrari: ",
-				data.listaAtvOrari
-			);
-		}
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log(
+					"****** 1) DATA fetchOrariFromBackend data.listaAtvOrari: ",
+					data.listaAtvOrari
+				);
+			}
 			// Verifica se ORARIO è un oggetto anziché un array
 			if (!Array.isArray(data.listaAtvOrari?.ORARIO)) {
 				// Se è un oggetto, trasformalo in un array con un unico elemento
@@ -222,9 +223,9 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 
 	React.useEffect(() => {
 		setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("OrariPage");
-		console.log(itemsCard);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("OrariPage");
+			console.log(itemsCard);
 		}
 		if (authUser && itemsCard) {
 			fetchListaAttivitaFromBackend(itemsCard, authUser.USERID.toString());
@@ -253,11 +254,11 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 				let orariResponse: any = null;
 
 				if (parsedData === null) {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log(
-						"@@@ ORARI NON PRESENTI IN LOCAL STORAGE - EFFETTUO CHIAMATA API"
-					);
-				}
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log(
+							"@@@ ORARI NON PRESENTI IN LOCAL STORAGE - EFFETTUO CHIAMATA API"
+						);
+					}
 					//effettuo la chiamata API
 					orariResponse = await fetchOrariFromBackend(activity.CODATT);
 					// Salvare i dati in sessionStorage
@@ -266,8 +267,10 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 						JSON.stringify(orariResponse)
 					);
 				} else {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("@@@ ORARI PRESENTI IN LOCAL STORAGE - RECUPERO I DATI");
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log(
+							"@@@ ORARI PRESENTI IN LOCAL STORAGE - RECUPERO I DATI"
+						);
 					}
 					//recupero i dati orario dal sessionStorage
 					orariResponse = parsedData;
@@ -360,19 +363,18 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 
 	const handleConfirm = () => {
 		let dataToSendService = "";
-		
+
 		const activitiesWithTimes = Object.entries(selectedTimesMap).filter(
 			([_, { selectedOrari }]) => selectedOrari.length > 0
 		);
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("@@@ selectedTimesMap: ", selectedTimesMap);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("@@@ selectedTimesMap: ", selectedTimesMap);
 		}
 		if (activitiesWithTimes.length > 0) {
 			activitiesWithTimes.forEach(
 				([activityId, { activity, selectedOrari }], atvIndex) => {
-					
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("@@@ selectedOrari: ", selectedOrari);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("@@@ selectedOrari: ", selectedOrari);
 					}
 					selectedOrari.forEach((timeId, timeIndex) => {
 						dataToSendService += `[${activityId}][${timeId}]`;
@@ -380,8 +382,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 				}
 			);
 		}
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("dataToSendService: ", dataToSendService);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("dataToSendService: ", dataToSendService);
 		}
 		let infoAttivitaOrariHtml = "";
 		let infoAttivitaOrariString = "";
@@ -399,8 +401,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 				)
 				.filter((orario) => {
 					orario !== undefined;
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("orario: ", orario);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("orario: ", orario);
 					}
 					infoAttivitaOrariHtml += `<label style="font-weight: bold;" />-		${
 						orario?.GIORNO
@@ -450,8 +452,8 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 			addToCart(actualProduct, newCart, dispatch, authUser);
 			router.replace("/auth/acquista/riepilogo");
 		} else {
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("@@@ NO actualProduct : ", actualProduct);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("@@@ NO actualProduct : ", actualProduct);
 			}
 		}
 	}, [actualProduct]); // useEffect dipendente da actualProduct

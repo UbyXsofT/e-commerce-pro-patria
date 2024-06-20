@@ -348,6 +348,7 @@ export interface obyPostOrari {
 	Cliente: string;
 	IDCentro: string;
 	Attivita: string;
+	Datarif: string;
 }
 //-	ECommerce_Selezione(Cliente As String, Abbonamento As String, DataIni As String, Importo As String, SceltaA As String, FrequenzaS As String)
 // export interface obyPostSelezioneAbb {
