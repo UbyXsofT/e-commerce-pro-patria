@@ -16,6 +16,7 @@ const fetchListinoOrari = async ({
 	clienteKey,
 	IDCentro,
 	Attivita,
+	Datarif,
 }: obyPostOrari): Promise<{
 	listaAtvOrari: ListinoAtvOrari | null;
 	error: null | unknown;
@@ -24,18 +25,18 @@ const fetchListinoOrari = async ({
 	try {
 		const respCall: responseCall = await callNodeService(
 			"ecommerce-lista-orari",
-			{ Cliente, clienteKey, IDCentro, Attivita },
+			{ Cliente, clienteKey, IDCentro, Attivita, Datarif },
 			null
 		);
 
 		const listOrariResponse = respCall.messageCli.message?.ORARI || null;
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("fetchListinoOrari  listOrariResponse: ", listOrariResponse);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("fetchListinoOrari  listOrariResponse: ", listOrariResponse);
 		}
 		return { listaAtvOrari: listOrariResponse, error: null };
 	} catch (error) {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log(error);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log(error);
 		}
 		return { listaAtvOrari: null, error };
 	}
