@@ -53,6 +53,7 @@ import fetchListinoOrari from "./utils/fetchListinoOrari";
 import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
 import { array } from "prop-types";
 import chiaveRandom from "../utils/chiaveRandom";
+import dayjs from "dayjs";
 
 interface OrariPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -174,9 +175,6 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 	};
 
 	const fetchOrariFromBackend = async (activityCode: any) => {
-		if (eCommerceConf.ModalitaSviluppo === true) {
-			console.log("fetchOrariFromBackend activityCode: ", activityCode);
-		}
 		const clienteKey = eCommerceConf.ClienteKey;
 		const IDCentro = eCommerceConf.IdCentro.toString();
 		let Cliente = "";
@@ -184,7 +182,15 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 			Cliente = authUser.USERID.toString();
 		}
 		const Attivita = activityCode.toString();
-		const Datarif = itemsCard?.abbonamento?.DATAINI.toString();
+		const Datarif = itemsCard?.abbonamento?.DATAINI; //dayjs(itemsCard?.abbonamento?.DATAINI).locale("it").format("YYYY-MM-DD");
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("fetchOrariFromBackend cliente: ", Cliente);
+			console.log("fetchOrariFromBackend clienteKey: ", clienteKey);
+			console.log("fetchOrariFromBackend IDCentro: ", IDCentro);
+			console.log("fetchOrariFromBackend Attivita: ", activityCode);
+			console.log("fetchOrariFromBackend Datarif: ", Datarif);
+		}
+
 		try {
 			const data = await fetchListinoOrari({
 				Cliente,

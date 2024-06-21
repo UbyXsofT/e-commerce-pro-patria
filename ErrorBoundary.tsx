@@ -45,12 +45,27 @@ const ComponenteFunzione = () => {
 					marginBottom: 3,
 				}}
 			>
-				{eCommerceConf.MsgErrGenerico}
+				È possibile che si sia verificato un errore temporaneo. Per favore,
+				clicca sul bottone per procedere.
+			</Typography>
+			<Typography
+				variant="body1"
+				align="center"
+				sx={{
+					marginBottom: 3,
+				}}
+			>
+				Si potrebbe verificare un blocco della pagina in alcuni casi. Se
+				succede, prova a ricaricare la pagina nel browser. Grazie per la tua
+				comprensione!
 			</Typography>
 			<Button
 				variant="contained"
 				onClick={async () => {
-					router.push(`/auth/home`);
+					//router.push(`/auth/home`);
+					//router.push("/account/login");
+					router.push("/account/login");
+					router.push("/auth/home");
 				}}
 			>
 				Vai alla home page
@@ -61,8 +76,8 @@ const ComponenteFunzione = () => {
 
 //questo è ok
 const fetchData = async (error: Error, errorInfo: ErrorInfo) => {
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log("fetchData ERR", "START");
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log("fetchData ERR", "START");
 	}
 	//const user = useSelector((state: StoreState) => state.authUser);
 
@@ -85,16 +100,16 @@ const fetchData = async (error: Error, errorInfo: ErrorInfo) => {
 			obyPostErrore,
 			null
 		);
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("handleSuccess", respCall);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("handleSuccess", respCall);
 		}
 	} catch (error) {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("handleError", error);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("handleError", error);
 		}
 	} finally {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("handleFinally", "FINE");
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("handleFinally", "FINE");
 		}
 	}
 };
