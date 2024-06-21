@@ -15,6 +15,7 @@ export default function findInfoAbb(item: any, stepId: number) {
 		{ name: "convenzioni", tipo: "PROMO", valore: "2", stepId },
 		{ name: "sospensioni", tipo: "NOSOSP", valore: ">0", stepId },
 		{ name: "sceltaOrario", tipo: "SCELTAF", valore: ">0", stepId },
+		{ name: "frequenza", tipo: "FREQUENZAS", valore: ">0", stepId },
 	];
 
 	// Dichiarare un array per le informazioni
