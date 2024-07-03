@@ -59,18 +59,15 @@ type Step1Props = {
 	dateOfBirth: Date;
 	setDateOfBirth: React.Dispatch<React.SetStateAction<Date>>;
 	placeOfBirth: string;
-	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string | undefined>>;
+	setPlaceOfBirth: React.Dispatch<React.SetStateAction<string>>;
 	address: string;
 	setAddress: React.Dispatch<React.SetStateAction<string>>;
 	city: string;
-	setCity: React.Dispatch<React.SetStateAction<string | undefined>>;
+	setCity: React.Dispatch<React.SetStateAction<string>>;
 	cap: string;
-	setCap: React.Dispatch<React.SetStateAction<string | undefined>>;
+	setCap: React.Dispatch<React.SetStateAction<string>>;
 	province: string;
-	setProvince: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-	setProvinceOfBirth: React.Dispatch<
-		React.SetStateAction<string | null | undefined>
-	>;
+	setProvince: React.Dispatch<React.SetStateAction<string>>;
 	email?: string;
 	setEmail?: React.Dispatch<React.SetStateAction<string>>;
 	phoneNumber: string;
@@ -347,10 +344,13 @@ const Step1 = ({
 									label={"Luogo di Nascita"}
 									comuni={comuni}
 									placeOfBirth={placeOfBirth}
-									setPlaceOfBirth={setPlaceOfBirth}
+									setPlaceOfBirth={
+										setPlaceOfBirth as React.Dispatch<
+											React.SetStateAction<string | undefined>
+										>
+									}
 									selectedComune={selectedComune}
 									setSelectedComune={setSelectedComune}
-									setProvinceOfBirth={setProvince}
 									setCap={null}
 								/>
 								<FormHelperText>
@@ -395,11 +395,23 @@ const Step1 = ({
 									label={"Residenza"}
 									comuni={comuni}
 									placeOfBirth={city}
-									setPlaceOfBirth={setCity || null}
+									setPlaceOfBirth={
+										setCity as React.Dispatch<
+											React.SetStateAction<string | undefined>
+										>
+									}
 									selectedComune={comuneResidenza}
 									setSelectedComune={setComuneResidenza}
-									setProvinceOfBirth={setProvince}
-									setCap={setCap || null} // Fornisci null come valore di fallback
+									setProvinceOfBirth={
+										setProvince as React.Dispatch<
+											React.SetStateAction<string | undefined>
+										>
+									}
+									setCap={
+										setCap as React.Dispatch<
+											React.SetStateAction<string | undefined>
+										>
+									}
 								/>
 							</Grid>
 							<Grid

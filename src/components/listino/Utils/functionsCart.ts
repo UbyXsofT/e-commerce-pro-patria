@@ -57,8 +57,8 @@ export const removeFromCart = (
 	dispatch: Dispatch
 ): void => {
 	const user = cart.at(0);
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log("removeFromCart");
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log("removeFromCart");
 	}
 	let filteredCart = null;
 
@@ -86,8 +86,8 @@ export const addToCart = (
 	};
 
 	let user = cart.at(0);
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log("addToCart");
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log("addToCart");
 	}
 	user
 		? dispatch(
@@ -134,12 +134,12 @@ export const isInCart = (
 
 export const clearCart = (cart: Cart, dispatch: Dispatch): Cart => {
 	const user = cart.at(0);
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log("clearCart");
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log("clearCart");
 	}
 	if (user) {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("@@@ - OK: clearCart");
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("@@@ - OK: clearCart");
 		}
 		dispatch(setCart([{ userId: user.userId, cart: [] }]));
 		return [{ userId: user.userId, cart: [] }];
@@ -185,23 +185,23 @@ export const useUpdateCartTommys = async (
 		}
 	}
 
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log(
-		"*********************** -------- FORZO L'AGGIORNAMENTO DEL CARRELLO"
-	);
-	console.log("prevCartItemCount: ", prevCartItemCount);
-	console.log("cartTommys: ", cartTommys);
-	console.log("authEcommerce: ", authEcommerce);
-	console.log("authUser: ", authUser);
-	console.log("isAnError: ", isAnError);
-	console.log("isUpdated: ", isUpdated);
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log(
+			"*********************** -------- FORZO L'AGGIORNAMENTO DEL CARRELLO"
+		);
+		console.log("prevCartItemCount: ", prevCartItemCount);
+		console.log("cartTommys: ", cartTommys);
+		console.log("authEcommerce: ", authEcommerce);
+		console.log("authUser: ", authUser);
+		console.log("isAnError: ", isAnError);
+		console.log("isUpdated: ", isUpdated);
 	}
 	const fetchData = async () => {
 		// La tua logica per recuperare il carrello
 		try {
 			if (!authUser?.USERID) {
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("NO! USER ID");
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("NO! USER ID");
 				}
 				isAnError = true;
 				router.push("/account/login");
@@ -219,8 +219,8 @@ export const useUpdateCartTommys = async (
 					obyPostData,
 					null
 				);
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("respCall: ", respCall);
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("respCall: ", respCall);
 				}
 				const msg_Resp = respCall.messageCli.message;
 
@@ -228,8 +228,8 @@ export const useUpdateCartTommys = async (
 					if (msg_Resp && msg_Resp.CARRELLO) {
 						try {
 							const obyResp = msg_Resp.CARRELLO;
-							if (eCommerceConf.ModalitaSviluppo === true){
-							console.log("Aggiorna Redux CARRELLO:", obyResp);
+							if (eCommerceConf.ModalitaSviluppo === true) {
+								console.log("Aggiorna Redux CARRELLO:", obyResp);
 							}
 							let processTommysObysCart: CarrelloInTommys = {
 								TommysCart_OGGETTO: [],
@@ -244,8 +244,8 @@ export const useUpdateCartTommys = async (
 
 								let _items = oggettoArray.map(
 									(item: TommysOggettiCarrello): TommysOggettiCarrello => {
-										if (eCommerceConf.ModalitaSviluppo === true){
-										console.log("@ MAP item: ", item);
+										if (eCommerceConf.ModalitaSviluppo === true) {
+											console.log("@ MAP item: ", item);
 										}
 										return {
 											TIPO: item.TIPO,
@@ -274,24 +274,24 @@ export const useUpdateCartTommys = async (
 							} else {
 								updateIsUpdated("true");
 							}
-							if (eCommerceConf.ModalitaSviluppo === true){
-							console.log("@ CARRELLO TUTTO OK");
+							if (eCommerceConf.ModalitaSviluppo === true) {
+								console.log("@ CARRELLO TUTTO OK");
 							}
 						} catch (error) {
-							if (eCommerceConf.ModalitaSviluppo === true){
-							console.log("Aggiorna Redux CARRELLO ERRORE:", error);
+							if (eCommerceConf.ModalitaSviluppo === true) {
+								console.log("Aggiorna Redux CARRELLO ERRORE:", error);
 							}
 							isAnError = true;
 						}
 					} else {
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("msg_Resp: ", msg_Resp);
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("msg_Resp: ", msg_Resp);
 						}
 						isAnError = true;
 					}
 				} else {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("CLI Failed");
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("CLI Failed");
 					}
 					isAnError = true;
 				}
@@ -323,7 +323,7 @@ const inviaEmailCancellazione = async (
 	let esitoFetch: boolean | undefined = undefined; // Imposta il tipo della variabile
 	const currentDate: Date = dayjs();
 	const Today_formattedDate = currentDate.locale("it").format("DD-MM-YYYY");
-	
+
 	const fetchData = async () => {
 		try {
 			const obyPostData: obyPostDataEmailCancella = {
@@ -352,32 +352,32 @@ const inviaEmailCancellazione = async (
 				obyPostData,
 				null
 			);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("respCall: ", respCall);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("respCall: ", respCall);
 			}
 			const msg_Resp = respCall.messageCli.message;
 
 			if (respCall.successCli) {
 				if (msg_Resp) {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("msg_Resp invio-mail-cancellazione:", msg_Resp);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("msg_Resp invio-mail-cancellazione:", msg_Resp);
 					}
 					esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
 				} else {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("msg_Resp INVIO EMAIL: ", msg_Resp);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("msg_Resp INVIO EMAIL: ", msg_Resp);
 					}
 					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
 				}
 			} else {
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("CLI Failed INVIO EMAIL");
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("CLI Failed INVIO EMAIL");
 				}
 				esitoFetch = false; // Imposta l'esito su false se la chiamata API ha fallito
 			}
 		} catch (error) {
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.error("Errore nella chiamata INVIO EMAIL:", error);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.error("Errore nella chiamata INVIO EMAIL:", error);
 			}
 			esitoFetch = false; // Imposta l'esito su false se si è verificato un errore durante la chiamata
 		}
@@ -387,20 +387,20 @@ const inviaEmailCancellazione = async (
 		await fetchData(); // Attendiamo che fetchData() sia completato prima di proseguire
 		if (esitoFetch === true) {
 			//INVIO EMAIL INVIATA
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("@@@ fetch INVIO EMAIL POSITIVO!");
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("@@@ fetch INVIO EMAIL POSITIVO!");
 			}
 			return true;
 		} else {
 			// mostro errore
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("@@@ fetch INVIO EMAIL FALLITO!");
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("@@@ fetch INVIO EMAIL FALLITO!");
 			}
 			return false;
 		}
 	} catch (error) {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("Errore nell'esecuzione di fetchData INVIO EMAIL:", error);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("Errore nell'esecuzione di fetchData INVIO EMAIL:", error);
 		}
 		return false;
 	}
@@ -431,41 +431,41 @@ const eliminaObyCartTommys = async (
 				obyPostData,
 				null
 			);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("respCall: ", respCall);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("respCall: ", respCall);
 			}
 			const msg_Resp = respCall.messageCli.message;
 
 			if (respCall.successCli) {
 				if (msg_Resp && msg_Resp.CANCELLAZIONE) {
 					const obyResp = msg_Resp.CANCELLAZIONE;
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("obyResp CANCELLAZIONE:", obyResp);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("obyResp CANCELLAZIONE:", obyResp);
 					}
 					if (Number(obyResp.ESITO) === 1) {
 						emailCliente = obyResp.EMAILCLIENTE;
 						emailCentro = obyResp.EMAILCENTRO;
 						flagEmail = obyResp.FLAGEMAIL;
 						errMSG = obyResp.ERRMSG;
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("@ CANCELLAZIONE TUTTO OK");
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("@ CANCELLAZIONE TUTTO OK");
 						}
 						esitoFetch = true; // Imposta l'esito su true se l'operazione ha avuto successo
 					} else {
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("@ CANCELLAZIONE CON ESITO NEGATIVO");
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("@ CANCELLAZIONE CON ESITO NEGATIVO");
 						}
 						esitoFetch = false; // Imposta l'esito su false se l'operazione ha avuto esito negativo
 					}
 				} else {
-					if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("msg_Resp: ", msg_Resp);
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log("msg_Resp: ", msg_Resp);
 					}
 					esitoFetch = false; // Imposta l'esito su false se non è stata ricevuta una risposta valida
 				}
 			} else {
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("CLI Failed");
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("CLI Failed");
 				}
 				esitoFetch = false; // Imposta l'esito su false se la chiamata API ha fallito
 			}
@@ -479,12 +479,12 @@ const eliminaObyCartTommys = async (
 		await fetchData(); // Attendiamo che fetchData() sia completato prima di proseguire
 		if (esitoFetch === true) {
 			//provo ad inviare email
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("@@@ fetch POSITIVO!");
-			console.log("emailCliente: ", emailCliente);
-			console.log("emailCentro: ", emailCentro);
-			console.log("flagEmail: ", flagEmail);
-			console.log("errMSG: ", errMSG);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("@@@ fetch POSITIVO!");
+				console.log("emailCliente: ", emailCliente);
+				console.log("emailCentro: ", emailCentro);
+				console.log("flagEmail: ", flagEmail);
+				console.log("errMSG: ", errMSG);
 			}
 			const respInvioMail = await inviaEmailCancellazione(
 				emailCliente,
@@ -503,8 +503,8 @@ const eliminaObyCartTommys = async (
 				// Mostra errore
 				eliminazioneEsito = true;
 				invioEmailEsito = true;
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("@@@ fetch RIUSCITO MAIL!");
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("@@@ fetch RIUSCITO MAIL!");
 				}
 			}
 		} else {
@@ -512,9 +512,9 @@ const eliminaObyCartTommys = async (
 			invioEmailEsito = false;
 			errorMessage =
 				"Si è verificato un errore durante l'eliminazione dell'oggetto dal carrello. Se il problema persiste, la preghiamo di contattare il supporto clienti del suo centro fitness.";
-				if (eCommerceConf.ModalitaSviluppo === true){
+			if (eCommerceConf.ModalitaSviluppo === true) {
 				console.log("@@@ fetch FALLITO!");
-				}
+			}
 		}
 	} catch (error) {
 		eliminazioneEsito = false;
@@ -522,9 +522,9 @@ const eliminaObyCartTommys = async (
 		(errorMessage =
 			"Si è verificato un errore durante l'eliminazione dell'oggetto dal carrello. Se il problema persiste, la preghiamo di contattare il supporto clienti del suo centro fitness. ERRORE: "),
 			error;
-			if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("Errore nell'esecuzione di fetchData:", error);
-			}
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("Errore nell'esecuzione di fetchData:", error);
+		}
 	}
 };
 
@@ -538,8 +538,8 @@ export const removeFromCartTommys = async (
 	invioEmailEsito: boolean;
 	errorMessage: string | null;
 }> => {
-	if (eCommerceConf.ModalitaSviluppo === true){
-	console.log("removeFromCart");
+	if (eCommerceConf.ModalitaSviluppo === true) {
+		console.log("removeFromCart");
 	}
 	sessionStorage.setItem("isUpdated", "false");
 	let filteredCart: TommysOggettiCarrello[] = [];
@@ -574,8 +574,8 @@ export const removeFromCartTommys = async (
 	try {
 		// Attendiamo che tutte le promesse di eliminazione vengano risolte
 		await Promise.all(eliminazioniPromises);
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("TUTTE LE PROMESSE DI ELIMINAZIONE SONO STATE SODDISFATTE!");
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("TUTTE LE PROMESSE DI ELIMINAZIONE SONO STATE SODDISFATTE!");
 		}
 	} catch (error) {
 		// Gestisci eventuali errori nell'eliminazione dei prodotti
@@ -601,4 +601,3 @@ export const removeFromCartTommys = async (
 	// Restituisci gli esiti e il messaggio di errore, se presente
 	return { eliminazioneEsito, invioEmailEsito, errorMessage };
 };
-
