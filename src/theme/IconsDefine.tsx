@@ -21,6 +21,7 @@ import {
 	ErrorOutline,
 	DeleteRounded,
 	InfoRounded,
+	DisabledByDefault,
 } from "@mui/icons-material";
 
 const myIcons = {
@@ -46,6 +47,7 @@ const myIcons = {
 	ScheduleIcon: <Schedule />,
 	DeleteRoundedIcon: <DeleteRounded />,
 	InfoRoundedIcon: <InfoRounded />,
+	DisabledByDefaultIcon: <DisabledByDefault />,
 };
 
 export default myIcons;

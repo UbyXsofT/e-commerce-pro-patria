@@ -540,6 +540,7 @@ export interface obyPostDataEmailCancella {
 }
 
 export interface ORARIO {
+	DISP: String;
 	IDORARIO: string;
 	GIORNO: string;
 	ORAINIZIO: string;

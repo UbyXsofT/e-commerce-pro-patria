@@ -6,10 +6,8 @@ import { setListino, setLoading } from "src/store/actions";
 import {
 	Button,
 	Container,
-	Divider,
 	Grid,
 	IconButton,
-	Paper,
 	Tooltip,
 	Typography,
 	useMediaQuery,
@@ -27,7 +25,6 @@ import {
 	ActualProduct,
 	Activity,
 	ORARIO,
-	ORARI,
 	ActivitySelected,
 	obyPostAttivita,
 	obyPostOrari,
@@ -37,8 +34,6 @@ import myIcons from "src/theme/IconsDefine";
 import {
 	addToCart,
 	clearCart,
-	isInCart,
-	removeFromCart,
 } from "src/components/listino/utils/functionsCart";
 import { Router, useRouter } from "next/router";
 import {
@@ -50,10 +45,6 @@ import { Info } from "@mui/icons-material";
 import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttivita";
 import fetchListinoOrari from "./utils/fetchListinoOrari";
-import { ListinoAtvOrari, ListinoAtvOrariData } from "src/store/interfaces";
-import { array } from "prop-types";
-import chiaveRandom from "../utils/chiaveRandom";
-import dayjs from "dayjs";
 
 interface OrariPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -713,7 +704,7 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 										</Button>
 
 										<Button
-											disabled={quantiOrarioScelti === 0}
+											disabled={islimiteOrariSuperato === false}
 											color="success"
 											variant="contained"
 											onClick={handleConfirm}

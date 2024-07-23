@@ -1,9 +1,8 @@
 //ThemeManager.ts
-import eCommerceConf from "eCommerceConf.json";
 
 const listaTemi = [
 	{
-		key: "Default",
+		key: "Propatria",
 		value: {
 			Light: {
 				palette: {
@@ -67,16 +66,58 @@ const listaTemi = [
 			},
 		},
 	},
+	{
+		key: "Byteware",
+		value: {
+			Light: {
+				palette: {
+					mode: "light",
+					primary: {
+						main: "#424242",
+					},
+					secondary: {
+						main: "#ffa000",
+					},
+					background: {
+						default: "#fff",
+						paper: "#fff",
+					},
+					text: {
+						primary: "#1A1A1A",
+						secondary: "#373737",
+					},
+				},
+			},
+
+			Dark: {
+				palette: {
+					mode: "dark",
+					primary: {
+						main: "#fbc02d",
+					},
+					secondary: {
+						main: "#ff9800",
+					},
+					background: {
+						default: "#121212",
+						paper: "#121212",
+					},
+				},
+			},
+		},
+	},
 ];
+
+import eCommerceConf from "eCommerceConf.json";
 
 export function ThemeManager() {
 	const projectTema = eCommerceConf.Tema;
 	const currTema = listaTemi.find((tema) => tema.key === projectTema);
 
-	if (eCommerceConf.ModalitaSviluppo === true){
+	if (eCommerceConf.ModalitaSviluppo === true) {
 		console.log("projectTema: ", projectTema);
 		console.log(currTema?.value);
-		}
+	}
 
 	return { currTema: currTema?.value || null };
 }
