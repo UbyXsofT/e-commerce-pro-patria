@@ -195,7 +195,13 @@ const Carrello = () => {
 				if (eCommerceConf.ModalitaSviluppo === true) {
 					console.log("****************** handleError");
 				}
-				const formattedContent = error.replace(/\n/g, "<br>");
+
+				const strCheck = String(error);
+				const formattedContent = strCheck.trim().replace(/\\n/g, "<br>");
+				console.log(
+					"****************** XXXXXXXXXX VERIFICA: ",
+					formattedContent
+				);
 				//ERROR data
 				const textAlert = (
 					<React.Fragment>
