@@ -164,31 +164,43 @@ const Carrello = () => {
 	}, [cart]);
 
 	const callCheckDispRegistraInDB = (prodotto: ActualProduct) => {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("****************** callCheckDispRegistraInDB");
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("****************** callCheckDispRegistraInDB");
 		}
 		const fetchData = async () => {
 			setIsTimerActive(true);
 			const handleSuccess = (msg_Resp: any) => {
 				//success data
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("****************** handleSuccess msg_Resp: ", msg_Resp);
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("****************** fetchData");
+					console.log("****************** handleSuccess msg_Resp: ", msg_Resp);
+					console.log(
+						"****************** ERRMSG: ",
+						msg_Resp.messageCli.message.ESITO
+					);
 				}
 				if (msg_Resp.successCli === true) {
 					if (isTimerActive === false) {
-						router.push("/auth/acquista/carrello");
+						//fix 07/08/2024
+						if (msg_Resp.messageCli.message.ESITO === "1") {
+							router.push("/auth/acquista/carrello");
+						} else {
+							//
+							handleError(msg_Resp.messageCli.message.ERRMSG);
+						}
 					}
 				}
 			};
 			const handleError = (error: any) => {
-				if (eCommerceConf.ModalitaSviluppo === true){
-				console.log("****************** handleError");
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("****************** handleError");
 				}
+				const formattedContent = error.replace(/\n/g, "<br>");
 				//ERROR data
 				const textAlert = (
 					<React.Fragment>
 						<h3>
-							<strong>{error}</strong>
+							<strong dangerouslySetInnerHTML={{ __html: formattedContent }} />
 						</h3>
 					</React.Fragment>
 				);
@@ -247,8 +259,8 @@ const Carrello = () => {
 	};
 	const handleConfirm = (prodotto: any) => {
 		callCheckDispRegistraInDB(prodotto);
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log(prodotto);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log(prodotto);
 		}
 		//alert("gestire conferma");
 	};
