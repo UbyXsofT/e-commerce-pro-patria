@@ -153,6 +153,7 @@ const TimeList: React.FC<TimeListProps> = ({
 								{orariValidi.map((ORARIO, index) =>
 									ORARIO.DISP === "0" ? (
 										<Tooltip
+											key={ORARIO.IDORARIO ?? `tooltip${index}`}
 											title={
 												<span
 													style={{ display: "flex", flexDirection: "column" }}
@@ -167,7 +168,7 @@ const TimeList: React.FC<TimeListProps> = ({
 											}
 										>
 											<tr
-												key={ORARIO.IDORARIO ?? index}
+												key={ORARIO.IDORARIO ?? `tr${index}`}
 												style={{
 													backgroundColor:
 														ORARIO.DISP === "0" ? "red" : "transparent",
@@ -229,7 +230,7 @@ const TimeList: React.FC<TimeListProps> = ({
 										</Tooltip>
 									) : (
 										<tr
-											key={ORARIO.IDORARIO ?? index}
+											key={ORARIO.IDORARIO ?? `tr${index}`}
 											style={{
 												backgroundColor:
 													ORARIO.DISP === "0" ? "red" : "transparent",
