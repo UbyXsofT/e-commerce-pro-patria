@@ -190,7 +190,7 @@ const Carrello = () => {
 					if (isTimerActive === false) {
 						//fix 07/08/2024
 						if (msg_Resp.messageCli.message.ESITO === "1") {
-							router.push("/auth/acquista/carrello");
+							router.replace("/auth/acquista/carrello");
 						} else {
 							//
 							handleError(msg_Resp.messageCli.message.ERRMSG);
