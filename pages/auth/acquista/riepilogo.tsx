@@ -249,7 +249,7 @@ const Carrello = () => {
 				if (authEcommerce === true) {
 					//resetto la sessionStorage e riaggiorno il listino
 					sessionStorage.clear();
-					sessionStorage.setItem("isUpdated", "false");
+					//sessionStorage.setItem("isUpdated", "false");
 					sessionStorage.setItem("STEP", JSON.stringify([]));
 					try {
 						aggiornaListino();
@@ -277,8 +277,19 @@ const Carrello = () => {
 	const handleCancel = (prodotto: any) => {
 		// Implementa la logica per annullare le scelte dell'utente.
 		// torno su acquista cancellando tutte le scelte
-		removeFromCart(prodotto, cart, dispatch);
-		router.push("/auth/acquista/prodotti");
+		if (authEcommerce === true) {
+			//resetto la sessionStorage e riaggiorno il listino
+			sessionStorage.clear();
+			sessionStorage.setItem("STEP", JSON.stringify([]));
+			try {
+				aggiornaListino();
+			} catch (error) {
+				console.log("error aggiornaListino: ", error);
+			} finally {
+				removeFromCart(prodotto, cart, dispatch);
+				router.replace("/auth/acquista/prodotti");
+			}
+		}
 	};
 	const handleConfirm = (prodotto: any) => {
 		callCheckDispRegistraInDB(prodotto);
