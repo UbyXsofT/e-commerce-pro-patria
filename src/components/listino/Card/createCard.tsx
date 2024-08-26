@@ -78,8 +78,8 @@ export default function CreateCard(
 			// Recuperare i dati dell'attività e i suoi orari da sessionStorage
 			const storedData = sessionStorage.getItem("STEP");
 			const parsedData = storedData ? JSON.parse(storedData) : [];
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("---- >> STEP parsedData: ", parsedData);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("---- >> STEP parsedData: ", parsedData);
 			}
 			// Verificare se lo stepId è già presente nell'array
 			const existingStepIndex = parsedData.findIndex(
@@ -122,39 +122,42 @@ export default function CreateCard(
 					return;
 
 				case 2: //"SEDE"
-				if (eCommerceConf.ModalitaSviluppo === true){
-					console.log("@@@@>>>>STEP2 --- SEDE stepSelectOby : ", stepSelectOby);
-					console.log(
-						"listinoState.listino[GRUPPO]: ",
-						listinoState.listino["GRUPPO"]
-					);
-				}
-				
-				//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
+					if (eCommerceConf.ModalitaSviluppo === true) {
+						console.log(
+							"@@@@>>>>STEP2 --- SEDE stepSelectOby : ",
+							stepSelectOby
+						);
+						console.log(
+							"listinoState.listino[GRUPPO]: ",
+							listinoState.listino["GRUPPO"]
+						);
+					}
+
+					//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI O CODAREA OPPURE IDSEDE OPPURE CODGRUPPO
 					if (!gruppoDesideratoTrovato) {
 						//let codiceDaCercare = stepSelectOby.codice;
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP2 --- codiceDaCercare  <<<@@@@",
-							codiceDaCercare
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP2 --- codiceDaCercare  <<<@@@@",
+								codiceDaCercare
+							);
+						}
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
 							codiceDaCercare,
 							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("@@@@>>>>STEP2 --- PERCORSO  <<<@@@@", percorso);
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("@@@@>>>>STEP2 --- PERCORSO  <<<@@@@", percorso);
 						}
 						const sediDelGruppo = percorso?.SEDE;
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP2 --- sediDelGruppo  <<<@@@@",
-							sediDelGruppo
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP2 --- sediDelGruppo  <<<@@@@",
+								sediDelGruppo
+							);
+						}
 						if (
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
@@ -203,7 +206,6 @@ export default function CreateCard(
 										</div>
 									);
 								}
-								
 							});
 						} else {
 							//essendo cards a scelta obbligatoria per i gruppi disabilito il pulsante successivo
@@ -232,34 +234,33 @@ export default function CreateCard(
 					}
 					return;
 				case 3: //"AREA"
-					
 					//PER OTTENERE LE AREE HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI HO IDSEDE OPPURE CODGRUPPO
 					if (!sedeDesiderataTrovata) {
 						// let codiceDaCercare = stepSelectOby.codice; //codice della AREA desiderata
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP3 --- codiceDaCercare  <<<@@@@",
-							codiceDaCercare
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP3 --- codiceDaCercare  <<<@@@@",
+								codiceDaCercare
+							);
+						}
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
 							codiceDaCercare,
 							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
 
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("@@@@>>>>STEP3 ---  PERCORSO  <<<@@@@", percorso);
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("@@@@>>>>STEP3 ---  PERCORSO  <<<@@@@", percorso);
 						}
 						// Cerca il GRUPPO che contiene l'AREA desiderata
 						const areeDellaSede = percorso?.AREA;
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP3 --- areeDellaSede  <<<@@@@",
-							areeDellaSede
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP3 --- areeDellaSede  <<<@@@@",
+								areeDellaSede
+							);
+						}
 						if (
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
@@ -342,13 +343,12 @@ export default function CreateCard(
 					//PER OTTENERE GLI ABBONAMENTI HO BISOGNO DELLO STEP PRECEDENTE
 					//QUINDI O CODAREA OPPURE IDSEDE OPPURE CODGRUPPO
 					if (!areaDesiderataTrovata) {
-						
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP4 --- codiceDaCercare  <<<@@@@",
-							codiceDaCercare
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP4 --- codiceDaCercare  <<<@@@@",
+								codiceDaCercare
+							);
+						}
 
 						let percorso = trovaCodiceNextOby(
 							listinoState.listino,
@@ -356,17 +356,17 @@ export default function CreateCard(
 							["CODGRUPPO", "IDSEDE", "CODAREA", "CODABB"]
 						);
 
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log("@@@@>>>>STEP4 --- PERCORSO  <<<@@@@", percorso);
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log("@@@@>>>>STEP4 --- PERCORSO  <<<@@@@", percorso);
 						}
 						const abbonamentiDellArea = percorso?.ABBONAMENTO;
-						if (eCommerceConf.ModalitaSviluppo === true){
-						console.log(
-							"@@@@>>>>STEP4 --- abbonamentiDellArea  <<<@@@@",
-							abbonamentiDellArea,
-							storyStep_SubTitleComp.length
-						);
-					}
+						if (eCommerceConf.ModalitaSviluppo === true) {
+							console.log(
+								"@@@@>>>>STEP4 --- abbonamentiDellArea  <<<@@@@",
+								abbonamentiDellArea,
+								storyStep_SubTitleComp.length
+							);
+						}
 						if (
 							stepSelectOby.isClickNext === true &&
 							storyStep_SubTitleComp.length + 2 <= stepId
@@ -418,7 +418,6 @@ export default function CreateCard(
 							});
 							return;
 						} else {
-							
 							//TODO "A QUESTO PUNTO DOBBIAMO ANDARE DIRETTAMENTE ALL'ABBONAMENTO"
 							if (stepSelectOby.isClickNext === true) {
 								// setStepSelectOby((prevStepSelectOby) => ({
@@ -443,12 +442,12 @@ export default function CreateCard(
 	} else {
 		// Fai qualcosa quando "GRUPPO" non è un array o è vuoto
 		// Ad esempio, puoi impostare cardComponents su un valore predefinito o fare altre operazioni necessarie.
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("<--- E - R - R - O - R - E --->");
-		// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
-		console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("<--- E - R - R - O - R - E --->");
+			// Nel tuo componente o nell'area dove vuoi eseguire il fetch e aggiornare lo stato Redux
+			console.log("****** 1) ---- CHECK LISTINO: ", listinoState);
 		}
-		
+
 		if (listinoState.listino === null || listinoState.listino === undefined) {
 			try {
 				aggiornaListino();

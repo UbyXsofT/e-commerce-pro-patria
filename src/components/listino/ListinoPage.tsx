@@ -17,6 +17,7 @@ import { useSpring } from "react-spring";
 import HeadListinoPage from "src/components/listino/layout/HeadListinoPage";
 import CreateCard from "src/components/listino/card/createCard";
 import router from "next/router";
+import { useListino } from "src/hooks/useListino";
 
 const ListinoPage = () => {
 	const springPropsCards = useSpring({
@@ -46,59 +47,60 @@ const ListinoPage = () => {
 		[] as JSX.Element[]
 	);
 
-	const [isFetchingData, setIsFetchingData] = React.useState(
-		useSelector((state: StoreState) => state.loading)
-	);
+	// const [isFetchingData, setIsFetchingData] = React.useState(
+	// 	useSelector((state: StoreState) => state.loading)
+	// );
+
+	const { isFetchingData, aggiornaListino } = useListino();
+
 	React.useEffect(() => {
 		isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
 	}, [isFetchingData]);
 
-	const aggiornaListino = async () => {
-		//if (listinoState.listino === null) {
-		setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
-		try {
-			// Effettua la richiesta asincrona
-			const data = await fetchListino(authUser?.USERID);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("****** 2) DATA: ", data);
-			}
-			// Aggiorna lo stato Redux utilizzando la tua azione setListino
-			if (data.listino === null) {
-				setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
-				router.push(
-					`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati necessari. Se il problema persiste si prega di cottattare il proprio centro fitness.. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
-				);
-			} else {
-				dispatch(setListino({ listino: data.listino, error: null }));
-			}
+	// const aggiornaListino = async () => {
+	// 	setIsFetchingData(true); // Utilizza dispatch per inviare l'azione di setLoading
+	// 	try {
+	// 		// Effettua la richiesta asincrona
+	// 		const data = await fetchListino(authUser?.USERID);
+	// 		if (eCommerceConf.ModalitaSviluppo === true) {
+	// 			console.log("****** 2) DATA: ", data);
+	// 		}
+	// 		// Aggiorna lo stato Redux utilizzando la tua azione setListino
+	// 		if (data.listino === null) {
+	// 			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+	// 			router.push(
+	// 				`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati necessari. Se il problema persiste si prega di cottattare il proprio centro fitness.. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
+	// 			);
+	// 		} else {
+	// 			dispatch(setListino({ listino: data.listino, error: null }));
+	// 		}
 
-			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
-		} catch (error) {
-			// Gestisci eventuali errori durante la richiesta
-			console.error("Errore durante il fetch del listino:", error);
-			dispatch(
-				setListino({
-					listino: null,
-					error: error || "Errore sconosciuto",
-				})
-			);
-			setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
-		}
-		//}
-	};
+	// 		setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+	// 	} catch (error) {
+	// 		// Gestisci eventuali errori durante la richiesta
+	// 		console.error("Errore durante il fetch del listino:", error);
+	// 		dispatch(
+	// 			setListino({
+	// 				listino: null,
+	// 				error: error || "Errore sconosciuto",
+	// 			})
+	// 		);
+	// 		setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+	// 	}
+	// };
 
 	const aggiornaDatiStepInSessionStorage = (step: any) => {
 		///////////// ----------------
 		// Recuperare i dati dell'attività e i suoi orari da sessionStorage
 		const storedData = sessionStorage.getItem("STEP");
 		const parsedData = storedData ? JSON.parse(storedData) : [];
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("---- >> STEP parsedData LUNGHEZZA: ", parsedData.length);
-		console.log("---- >> STEP parsedData: ", parsedData);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("---- >> STEP parsedData LUNGHEZZA: ", parsedData.length);
+			console.log("---- >> STEP parsedData: ", parsedData);
 		}
 		if (Number(step.stepId) <= Number(parsedData.length)) {
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("*********** STO TORNANDO INDIETROOOO");
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("*********** STO TORNANDO INDIETROOOO");
 			}
 			return;
 		}
@@ -122,8 +124,8 @@ const ListinoPage = () => {
 			});
 		}
 
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("---- >> STEP parsedData after update: ", parsedData);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("---- >> STEP parsedData after update: ", parsedData);
 		}
 		// Salvare i dati aggiornati in sessionStorage
 		sessionStorage.setItem("STEP", JSON.stringify(parsedData));
@@ -138,9 +140,9 @@ const ListinoPage = () => {
 	};
 
 	React.useEffect(() => {
-		if (eCommerceConf.ModalitaSviluppo === true){
-		console.log("******* CAMBIO STEP SELECT OBY ***********");
-		console.log("@@@@@@ stepSelectOby: ", stepSelectOby);
+		if (eCommerceConf.ModalitaSviluppo === true) {
+			console.log("******* CAMBIO STEP SELECT OBY ***********");
+			console.log("@@@@@@ stepSelectOby: ", stepSelectOby);
 		}
 		aggiornaDatiStepInSessionStorage(stepSelectOby);
 
@@ -158,8 +160,8 @@ const ListinoPage = () => {
 				springPropsCards
 			);
 		} else {
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("*********** STO TORNANDO INDIETROOOO");
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("*********** STO TORNANDO INDIETROOOO");
 			}
 			setStepSelectOby((prev) => ({
 				...prev,
@@ -171,17 +173,23 @@ const ListinoPage = () => {
 			resettaDatiStepInSessionStorage();
 			//CANCELLO I DATI MEMORIZZATI DEGLI STEP
 			setStoryStep_SubTitleComp([]);
-			if (eCommerceConf.ModalitaSviluppo === true){
-			console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
+			if (eCommerceConf.ModalitaSviluppo === true) {
+				console.log("****** 0) ---- CHECK LISTINO: ", listinoState);
 			}
 			if (listinoState.listino === null) {
 				router.push(`/auth/acquista/prodotti`);
 				//aggiornaListino();
 			} else {
-				setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+				//setIsFetchingData(false); // Utilizza dispatch per inviare l'azione di setLoading
+				setLoading(false);
 				// router.push(`/auth/home`);
 			}
 		}
+
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth",
+		});
 	}, [stepSelectOby.stepId, listinoState.listino]);
 
 	return (

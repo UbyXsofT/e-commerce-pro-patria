@@ -53,6 +53,8 @@ import renderPrice from "src/components/utils/renderPrice";
 import myIcons from "src/theme/IconsDefine";
 import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import router from "next/router";
+import { stringify } from "qs";
+import { useListino } from "src/hooks/useListino";
 // export const renderPrice = (price: number): string =>
 // 	price?.toString().replace(".", ",");
 
@@ -73,6 +75,11 @@ const Carrello = () => {
 	const [isTimerActive, setIsTimerActive] = React.useState(false);
 
 	const progressRef = React.useRef(() => {});
+
+	const { isFetchingData, aggiornaListino } = useListino();
+	React.useEffect(() => {
+		isFetchingData ? dispatch(setLoading(true)) : dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading
+	}, [isFetchingData]);
 
 	React.useEffect(() => {
 		progressRef.current = () => {
@@ -240,7 +247,17 @@ const Carrello = () => {
 				handleError(error);
 			} finally {
 				if (authEcommerce === true) {
+					//resetto la sessionStorage e riaggiorno il listino
+					sessionStorage.clear();
 					sessionStorage.setItem("isUpdated", "false");
+					sessionStorage.setItem("STEP", JSON.stringify([]));
+					try {
+						aggiornaListino();
+					} catch (error) {
+						router.push(
+							`/blockPage?titolo=CARICAMENTO DATI LISTINO&descrizione=Si è verificato un errore durante il recupero dei dati dal servizio del centro fitness. Se il problema persiste si prega di cottattare il proprio centro fitness. &desc_azione=${eCommerceConf.MsgErrGenerico}&redirectTo=/`
+						);
+					}
 					useUpdateCartTommys(cartTommys, dispatch, authUser, authEcommerce);
 				}
 				dispatch(setLoading(false)); // Utilizza dispatch per inviare l'azione di setLoading

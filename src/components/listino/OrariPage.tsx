@@ -34,6 +34,7 @@ import myIcons from "src/theme/IconsDefine";
 import {
 	addToCart,
 	clearCart,
+	useUpdateCartTommys,
 } from "src/components/listino/utils/functionsCart";
 import { Router, useRouter } from "next/router";
 import {
@@ -45,6 +46,7 @@ import { Info } from "@mui/icons-material";
 import LegendaIcone from "src/components/listino/utils/LegendaIcone";
 import fetchListinoAttivita from "src/components/listino/utils/fetchListinoAttivita";
 import fetchListinoOrari from "./utils/fetchListinoOrari";
+import { useListino } from "src/hooks/useListino";
 
 interface OrariPageProps {
 	itemsCard: itemsCard; // Tipo dell'oggetto itemsCard
@@ -54,10 +56,15 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 	const [activitiesData, setActivitiesData] = React.useState<Activity[]>([]);
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	const authUser = useSelector((state: StoreState) => state.authUser);
+
 	const cart = useSelector((state: StoreState) => state.cart);
+	const authUser = useSelector((state: StoreState) => state.authUser);
+	const user = cart.at(0);
+	const cartTommys = useSelector((state: StoreState) => state.cartTommys);
+	const authEcommerce = useSelector((state: StoreState) => state.authEcommerce);
+	const { aggiornaListino } = useListino();
+
 	const router = useRouter();
-	const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 	const [isModalOpen, setIsModalOpen] = React.useState(false);
 	const openModal = () => {
 		setIsModalOpen(true);
@@ -242,7 +249,9 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 		if (activity) {
 			try {
 				// Effettua la chiamata al servizio di backend per ottenere gli orari (prima verifico in local storage)
-
+				if (eCommerceConf.ModalitaSviluppo === true) {
+					console.log("@@@ handleActivitySelection: ", activity);
+				}
 				// Recuperare i dati dell'attività i suoi orari da sessionStorage
 				const storedData = sessionStorage.getItem(
 					"attivitaData-" + activity.CODATT
@@ -278,9 +287,6 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 						...activity,
 						ORARI: orariResponse, // Assumi che la risposta contenga i dati degli orari nel formato desiderato
 					};
-
-					//console.error("updatedActivity:", updatedActivity);
-
 					// Imposta l'attività selezionata con gli orari
 					setSelectedActivity(updatedActivity);
 				}
@@ -458,7 +464,29 @@ const OrariPage: React.FC<OrariPageProps> = ({ itemsCard }) => {
 	const handleCancel = () => {
 		// Implementa la logica per annullare le scelte dell'utente.
 		// torno su acquista cancellando tutte le scelte
-		router.push("/auth/acquista/prodotti");
+		// sessionStorage.clear();
+		// //sessionStorage.setItem("isUpdated", "false");
+		// sessionStorage.setItem("STEP", JSON.stringify([]));
+		// try {
+		// 	aggiornaListino();
+		// } catch (error) {
+		// 	console.log("error: aggiornaListino", error);
+		// }
+
+		// router.push("/auth/acquista/prodotti");
+
+		if (authEcommerce === true) {
+			//resetto la sessionStorage e riaggiorno il listino
+			sessionStorage.clear();
+			sessionStorage.setItem("STEP", JSON.stringify([]));
+			try {
+				aggiornaListino();
+			} catch (error) {
+				console.log("error aggiornaListino: ", error);
+			} finally {
+				router.replace("/auth/acquista/prodotti");
+			}
+		}
 	};
 
 	React.useEffect(() => {
