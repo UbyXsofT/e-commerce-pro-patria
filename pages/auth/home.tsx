@@ -107,25 +107,31 @@ const Home = ({ setLoading }: HomeProps) => {
 									position: "relative",
 								}}
 							>
-								<div
-									style={{
-										width: "50%",
-										height: "50%",
-										position: "relative",
-										zIndex: 1,
-									}}
-								>
-									<Image
-										src="/images/LogoQ.png"
-										alt="Logo"
-										fill={true}
-										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-										style={{ objectFit: "contain" }}
-										//objectFit='contain'
-										priority={true}
-									/>
-								</div>
-								<Box sx={overlayStyle} />
+								{eCommerceConf.imgLogoInPage === true ? (
+									<>
+										<div
+											style={{
+												width: "50%",
+												height: "50%",
+												position: "relative",
+												zIndex: 1,
+											}}
+										>
+											<Image
+												src="/images/LogoQ.png"
+												alt="Logo"
+												fill={true}
+												sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+												style={{ objectFit: "contain" }}
+												//objectFit='contain'
+												priority={true}
+											/>
+										</div>
+										<Box sx={overlayStyle} />
+									</>
+								) : (
+									<></>
+								)}
 							</Grid>
 
 							<Grid

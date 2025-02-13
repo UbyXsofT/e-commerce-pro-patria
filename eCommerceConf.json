@@ -65,5 +65,6 @@
 			"TitoloPage": "Acquista riepilogo"
 		}
 	},
-	"imgWallpaper": false
+	"imgWallpaper": true,
+	"imgLogoInPage": false
 }
